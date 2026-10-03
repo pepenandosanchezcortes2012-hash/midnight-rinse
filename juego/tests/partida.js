@@ -537,6 +537,55 @@
       return m.icons.length + ' iconos; sw.js presente';
     }],
 
+    ['Caos: turnos completos apretando todo al azar (3 dificultades)', async function () {
+      var KEYS = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyC', 'KeyF', 'KeyJ', 'KeyB', 'KeyE', 'Digit1', 'Digit2', 'Digit3'];
+      var ACTIONS = ['blink', 'cigarro', 'petaca', 'porro'];
+      var report = [];
+      var seed = 12345;
+      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      var modes = ['tranquilo', 'normal', 'pesadilla'];
+      for (var mi = 0; mi < modes.length; mi += 1) {
+        var ctx = await load('?velocidad=8');
+        var sel = ctx.w.document.getElementById('opt-dificultad');
+        sel.value = modes[mi]; sel.dispatchEvent(new ctx.w.Event('input'));
+        start(ctx);
+        var g = ctx.g;
+        var frames = 0;
+        var travels = { bosque: 0, pasillo: 0 };
+        var held = {};
+        while (g.state === 'playing' && frames < 30 * 60 * 5) {
+          // Teclas que se mantienen o se sueltan al azar.
+          if (rnd() < 0.15) {
+            var k = KEYS[Math.floor(rnd() * KEYS.length)];
+            if (held[k]) { g.input.keys.delete(k); held[k] = false; } else { g.input.keys.add(k); g.input.pressed.add(k); held[k] = true; }
+          }
+          if (rnd() < 0.02) { g.input.actions.add(ACTIONS[Math.floor(rnd() * ACTIONS.length)]); }
+          g.input.mouseDX = (rnd() - 0.5) * 40; g.input.mouseDY = (rnd() - 0.5) * 20;
+          if (rnd() < 0.05) { g.input.buttonPressed = true; g.input.buttons = 1; } else if (rnd() < 0.08) { g.input.buttons = 0; }
+          if (rnd() < 0.004 && g.bosque.canTravel()) { if (g.bosque.go()) { travels.bosque += 1; } }
+          if (rnd() < 0.004 && g.pasillo.unlocked && g.pasillo.canTravel()) { if (g.pasillo.go()) { travels.pasillo += 1; } }
+          if (rnd() < 0.003) { g.gato.pet(); }
+          if (rnd() < 0.002 && g.bosque.outside) { g.bosque.takePage(Math.floor(rnd() * 6)); }
+          if (g.noteOpen && rnd() < 0.1) { g.closeNote(); }
+          if (g.question && rnd() < 0.02) { g.answerChoice(1 + Math.floor(rnd() * 3)); }
+          if (rnd() < 0.003) { g.pause(); step(ctx, 1); g.resume(); }
+          step(ctx, 1);
+          frames += 1;
+          var p = g.player.pos;
+          check(isFinite(p.x) && isFinite(p.z) && isFinite(g.player.yaw) && isFinite(g.dread) && isFinite(g.minutes),
+            modes[mi] + ': valor no numérico en el cuadro ' + frames);
+          var a = g.player.area || { minX: -8, maxX: 8, minZ: -5, maxZ: 5 };
+          check(p.x >= a.minX - 0.01 && p.x <= a.maxX + 0.01 && p.z >= a.minZ - 0.01 && p.z <= a.maxZ + 0.01,
+            modes[mi] + ': el jugador quedó fuera de su área en el cuadro ' + frames);
+          if (frames % 900 === 0) { await wait(0); }
+        }
+        check(g.state === 'ended', modes[mi] + ': el turno no terminó');
+        noErrors(ctx);
+        report.push(modes[mi] + ' ' + (frames / 30).toFixed(0) + ' s (bosque ' + travels.bosque + ', pasillo ' + travels.pasillo + ')');
+      }
+      return report.join(' · ');
+    }],
+
     ['Reiniciar todo borra solo lo del juego', async function () {
       var ctx = await load();
       ctx.g.ui.options.name = 'Prueba';

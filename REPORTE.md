@@ -268,6 +268,14 @@ El proyecto pasó por dos etapas:
 - **El guardado:** incluye el pasillo.
 - **Prueba nueva.** Resultado: 19/19.
 
+## 23. Prueba de caos
+- **Qué hace:** tres turnos completos (Tranquilo, Normal y Pesadilla) a velocidad ×8, apretando todo al azar con semilla fija:
+  - teclas mantenidas y soltadas, mirada, clics, consumibles y parpadeos;
+  - cruces al bosque y al pasillo, hojas y caricias al gato;
+  - pausas y respuestas al azar.
+- **Qué revisa en cada cuadro:** que no haya NaN y que el jugador nunca salga de su área. Al final, que el turno termine sin errores.
+- **Resultado:** 21 cruces al bosque y 19 al pasillo sin un solo fallo. 20/20.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
