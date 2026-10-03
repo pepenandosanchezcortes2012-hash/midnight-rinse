@@ -611,6 +611,28 @@
       return 'noche 2, 7 (respuesta secreta habilitada) y 9 (estática)';
     }],
 
+    ['Ahorro de batería: a lo más 30 cuadros por segundo', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var renders = 0;
+      var orig = g.retro.render.bind(g.retro);
+      g.retro.render = function (a, b, c) { renders += 1; return orig(a, b, c); };
+      ctx.w.requestAnimationFrame = function () { return 0; }; // el bucle lo movemos a mano
+      function run(saver) {
+        g.ui.options.batterySaver = saver;
+        renders = 0;
+        var t = 100000;
+        g.lastTime = t;
+        for (var i = 1; i <= 60; i += 1) { g.frame(t + i * 16.7); } // 1 s a 60 Hz
+        return renders;
+      }
+      var on = run(true);
+      var off = run(false);
+      check(on <= 31 && on >= 28, 'con ahorro dibujó ' + on + ' cuadros en 1 s');
+      check(off === 60, 'sin ahorro dibujó ' + off + ' cuadros en 1 s');
+      return 'con ahorro ' + on + ' cuadros/s, sin ahorro ' + off;
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

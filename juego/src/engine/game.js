@@ -212,6 +212,11 @@
     }
 
     frame(now) {
+      // Ahorro de batería: a lo más 30 cuadros por segundo (se salta el cuadro y el tiempo se acumula).
+      if (this.ui.options.batterySaver && now - this.lastTime < 31) {
+        requestAnimationFrame(this.frame.bind(this));
+        return;
+      }
       var dt = Math.min(0.05, Math.max(0, (now - this.lastTime) / 1000));
       this.lastTime = now;
       this.gamepad.poll(dt);

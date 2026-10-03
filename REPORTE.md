@@ -304,6 +304,11 @@ El proyecto pasó por dos etapas:
 - **Susurros:** si diste tu nombre, la mitad de las veces dicen tu nombre.
 - **Prueba nueva:** noches 2, 7 y 9. Resultado: 25/25.
 
+## 29. Rendimiento y ahorro de batería
+- **Medición en Chrome:** sala 1.0 ms de cálculo + 1.3 ms de render por cuadro; bosque y pasillo, ~0.5 ms cada uno. Hay margen de sobra incluso en celulares 6 a 8 veces más lentos.
+- **Opción «Ahorro de batería (30 FPS)»:** activada por defecto en pantallas táctiles. El bucle se salta cuadros y el tiempo se acumula.
+- **Prueba determinista:** 30 cuadros por segundo con ahorro y 60 sin él. Resultado: 26/26.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
