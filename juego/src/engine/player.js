@@ -9,6 +9,7 @@
 
   var V3 = THREE.Vector3;
   var U = MR.Util;
+  var ROOM = { minX: -8, maxX: 8, minZ: -5, maxZ: 5 }; // la sala de la lavandería
 
   function noRaycast(object) {
     object.traverse(function (o) { o.raycast = function () {}; });
@@ -232,8 +233,10 @@
           if (dist < min && dist > 1e-6) { p.x = c.x + ex / dist * min; p.z = c.z + ez / dist * min; }
         }
       }
-      p.x = U.clamp(p.x, -8 + r, 8 - r);
-      p.z = U.clamp(p.z, -5 + r, 5 - r);
+      // Límite del área donde estás: la sala, o el bosque (bosque.js cambia this.area al cruzar la puerta).
+      var a = this.area || ROOM;
+      p.x = U.clamp(p.x, a.minX + r, a.maxX - r);
+      p.z = U.clamp(p.z, a.minZ + r, a.maxZ - r);
     }
 
     _updateBlink(dt, input, factor) {

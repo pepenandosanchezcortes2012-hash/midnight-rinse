@@ -146,6 +146,26 @@ El proyecto pasó por dos etapas:
   - Desde la pausa, «Sí, reiniciar todo» recarga en el título con el nombre vacío, el volumen de fábrica (0.8), sin enlace de música y con el registro vacío.
   - Una clave ajena de otra app quedó intacta.
 
+## 10. Salir al bosque
+- **Cómo se llega:** botón «Salir al bosque» / «Volver a la lavandería» en la pausa (el texto cambia según dónde estés). También tocando la puerta de vidrio, o la puerta de la fachada desde afuera.
+- **Escenario (`world._forest`):**
+  - **Contenido:** 165 pinos low-poly unidos en dos geometrías (troncos y copas) y 26 rocas. Suelo, sendero hasta un claro, fachada con letrero, farola y una lavadora tocable en el claro.
+  - **Límites:** colisiones por tronco y bordes invisibles.
+  - **Texturas nuevas:** tierra, sendero, corteza, pino, ladrillo y roca.
+  - **Ubicación:** está a unos 100 m de la sala. Como la cámara ve 30 m, nunca se dibujan los dos a la vez.
+- **El cruce (`bosque.js`):**
+  - **Al cruzar:** fundido a negro y cambio de las 6 luces del shader, la luz ambiente y la niebla.
+  - **Luces de afuera:** brillo del interior por el vidrio, farola, foco del claro y la linterna del celular, que sigue al jugador.
+  - **Sonido:** más lluvia y viento; las lavadoras, el zumbido y la radio se oyen ahogados.
+  - **Lentes:** gotas de lluvia.
+- **Horror afuera:** ramas que crujen en la zona que no miras, búho y parpadeos de linterna. El Cliente Inmóvil se mueve entre 6 anclas del bosque, cerca de ti, cuando no lo ves; al volver, regresa a la entrada. Mientras tanto, la lavandería sigue generando charcos y puertas abiertas.
+- **Arreglo encontrado al probar:** `player._collide` forzaba la posición dentro de la sala, así que el primer paso afuera te habría devuelto adentro. Ahora el límite depende del área (`player.area`).
+- **Probado en Chrome:**
+  - **Cruces:** el clic real en el botón de la pausa saca al bosque; las dos puertas funcionan en ambos sentidos.
+  - **Movimiento y choques:** caminé 9 m por el sendero. Los pinos y el borde detienen, y no se puede rodear la fachada.
+  - **Lentes y horror:** los lentes se mojan y el Cliente Inmóvil te sigue y vuelve a la entrada.
+  - **Turno completo:** con 3 salidas al bosque, sin errores.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

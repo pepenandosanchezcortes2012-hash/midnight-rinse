@@ -35,6 +35,11 @@
       }
     }
 
+    /** Una gota de lluvia en el lente (afuera, en el bosque). */
+    drop() {
+      this._splat(Math.random() * this.w, Math.random() * this.h, U.rand(1.2, 2.6), U.rand(0.45, 0.85));
+    }
+
     _splat(cx, cy, r, amount) {
       for (var y = Math.max(0, Math.floor(cy - r)); y < Math.min(this.h, Math.ceil(cy + r)); y += 1) {
         for (var x = Math.max(0, Math.floor(cx - r)); x < Math.min(this.w, Math.ceil(cx + r)); x += 1) {

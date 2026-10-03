@@ -19,6 +19,7 @@ Terror liminal acogedor en primera persona, con estética PS1 a 320×240. **+18:
 | **B** | Cerrar los ojos (cuidado: lo que no ves puede moverse) |
 | **C** · **F** · **J** | Fumar un cigarro · beber de la petaca · fumar un porro |
 | **1 · 2 · 3** | Responder cuando alguien te habla |
+| **Clic en la puerta de vidrio** | Salir al bosque (y en la puerta de la fachada, volver) |
 | **H** | Guía de controles |
 | **Esc** | Pausa |
 
@@ -74,6 +75,16 @@ En la pantalla de título (y en la pausa; en el celular, con **tres dedos**) est
 
 Un turno dura unos 15 minutos reales. Para probar más rápido: `index.html?velocidad=4`.
 
+### El bosque
+Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en la pausa, y sales a un bosque de pinos bajo la lluvia.
+- **Qué hay afuera:** la fachada iluminada, una farola de sodio y un sendero que lleva a un claro… donde hay una lavadora encendida que no está conectada a nada.
+- **La linterna:** la del celular se enciende sola, y a veces parpadea.
+- **La lluvia** moja tus lentes. Sécalos con **E**, o con **dos dedos hacia abajo** en el celular.
+- **Sonidos:** ramas que crujen donde no miras y un búho a lo lejos.
+- **Si el Cliente Inmóvil ya llegó, te sigue entre los árboles** cuando no lo ves. Al volver, te espera en la entrada.
+- **El turno no se detiene:** mientras estás afuera nadie friega los charcos ni vigila las lavadoras.
+- **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
+
 ### Qué hacer durante el turno
 - **Lee la hoja del registro** sobre el mostrador. La imprime la impresora térmica a las 01:15… y cambia sola durante la noche.
 - **Friega el pasillo central** (entre las lavadoras y el banco): cada 45 minutos alguien revisa si hay charcos. El trapeador está en el almacén, al fondo a la izquierda.
@@ -110,6 +121,7 @@ midnight-rinse/
 │   │   ├── consumables.js         cigarro, petaca y porro (calman, pero con costo)
 │   │   ├── music.js               tu música (pestaña de YouTube Music o archivos) por la radio 3D
 │   │   ├── tele.js                la tele: reproductor de YouTube proyectado en 3D por un hueco del lienzo
+│   │   ├── bosque.js              salir al bosque: cruce, luces y niebla de afuera, linterna, lluvia en los lentes
 │   │   ├── world.js               la lavandería: geometría, colisiones, zonas y anclas
 │   │   ├── glasses.js             vaho de lentes: mapa de humedad de dos pasadas
 │   │   ├── gameplay.js            interacción táctil y sistemas (lavadoras, secadoras, charcos…)

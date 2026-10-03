@@ -16,6 +16,41 @@
     return geo;
   }
 
+  /**
+   * Une muchas piezas (árboles, rocas) en una sola geometría: un solo dibujo para todo el bosque, que en el
+   * celular importa. parts: [{geo, matrix, su, sv}] (su/sv repiten la textura).
+   */
+  function mergeParts(parts) {
+    var pos = [];
+    var nor = [];
+    var uvs = [];
+    var v = new V3();
+    var nm = new THREE.Matrix3();
+    parts.forEach(function (it) {
+      var g = it.geo.index ? it.geo.toNonIndexed() : it.geo;
+      var p = g.attributes.position;
+      var n = g.attributes.normal;
+      var u = g.attributes.uv;
+      nm.getNormalMatrix(it.matrix);
+      for (var i = 0; i < p.count; i += 1) {
+        v.fromBufferAttribute(p, i).applyMatrix4(it.matrix);
+        pos.push(v.x, v.y, v.z);
+        v.fromBufferAttribute(n, i).applyMatrix3(nm).normalize();
+        nor.push(v.x, v.y, v.z);
+        uvs.push(u.getX(i) * (it.su || 1), u.getY(i) * (it.sv || 1));
+      }
+    });
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+    geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    geo.computeBoundingSphere();
+    return geo;
+  }
+
+  /** Mesh que no participa en los rayos de interacción (decorado grande: suelo, árboles). */
+  function inert(mesh) { mesh.raycast = function () {}; return mesh; }
+
   class World {
     constructor(retro) {
       this.retro = retro;
@@ -62,6 +97,7 @@
       this._customer();
       this._lights();
       this._zones();
+      this._forest();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -307,6 +343,7 @@
         g.rotation.y = Math.PI;
         g.position.set(x, 1.2, 4.99);
         this.add(g);
+        this.interactive(g, 'salirBosque'); // la puerta de vidrio: salir al bosque
       }, this);
       this.box(0.06, 2.4, 0.08, m.metal, 0, 1.2, 4.97);
       this.collider(-1.6, 1.6, 4.92, 5.2);
@@ -459,6 +496,7 @@
         [-5.0, 2.92, -3.0, cold, 1.15, 7.5], [-1.0, 2.92, -3.0, cold, 1.05, 7.5], [3.5, 2.92, -3.0, cold, 1.05, 7.5],
         [-4.0, 2.92, 2.0, cold, 1.0, 7.5], [2.6, 2.92, 2.6, cold, 1.1, 8.0], [-7.3, 2.6, 3.6, new THREE.Color(1.0, 0.78, 0.5), 0.75, 3.6]
       ];
+      this.lightSpots = spots; // el bosque las reemplaza al salir y las restaura al volver
       spots.forEach(function (s, i) {
         R.setLight(i, new V3(s[0], s[1], s[2]), s[3], s[4], s[5]);
         if (i < 5) {
@@ -479,6 +517,231 @@
         entrada: { center: new V3(0.0, 1.2, 4.5), radius: 1.8 },
         almacen: { center: new V3(-7.3, 1.2, 3.5), radius: 1.2 },
         puerta_trasera: { center: new V3(6.8, 1.1, -4.7), radius: 0.9 }
+      };
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * El bosque, afuera de la lavandería. Vive lejos (z ≈ 100–150) para que nunca se dibuje a la vez que el
+     * interior (la cámara ve 30 m). Se llega por la puerta de vidrio; se vuelve por la puerta de la fachada.
+     * Fachada iluminada, farola, sendero entre pinos y un claro con una lavadora que no debería estar ahí.
+     */
+    _forest() {
+      var R = this.retro;
+      var m = this.mat;
+      var seed = 20261002;
+      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      function between(a, b) { return a + (b - a) * rnd(); }
+
+      var mt = {
+        ground: R.material({ texture: 'tierra' }),
+        path: R.material({ texture: 'sendero' }),
+        bark: R.material({ texture: 'corteza' }),
+        pine: R.material({ texture: 'pino' }),
+        brick: R.material({ texture: 'ladrillo' }),
+        rock: R.material({ texture: 'roca' }),
+        lit: R.material({ texture: 'glass', color: 0xdff0ff, emissive: 1.0 }),
+        lamp: R.material({ texture: 'white', color: 0xffb060, emissive: 1.2 }),
+        green: R.material({ texture: 'white', color: 0x7dff9a, emissive: 1.0 })
+      };
+
+      // Suelo y sendero hasta el claro.
+      mt.path.uniforms.uEmissive.value = 0.14; // el sendero se adivina en la oscuridad
+      var ground = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(46, 52, 23, 26), 15, 17), mt.ground);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.set(0, 0, 125);
+      this.add(inert(ground));
+      var route = [[0, 100.6], [0.4, 104], [-1.2, 108], [-1.6, 112], [0, 116], [2.4, 120], [3.2, 124], [2.2, 128], [3.4, 132], [5, 136], [6, 140]];
+      var pos = [];
+      var uvs = [];
+      var nor = [];
+      var along = 0;
+      for (var i = 0; i < route.length - 1; i += 1) {
+        var a = route[i];
+        var b = route[i + 1];
+        var dx = b[0] - a[0];
+        var dz = b[1] - a[1];
+        var len = Math.hypot(dx, dz);
+        var px = -dz / len * 0.8;
+        var pz = dx / len * 0.8;
+        var v0 = along / 1.6;
+        var v1 = (along + len) / 1.6;
+        along += len;
+        var q = [[a[0] - px, a[1] - pz, 0, v0], [a[0] + px, a[1] + pz, 1, v0], [b[0] + px, b[1] + pz, 1, v1], [b[0] - px, b[1] - pz, 0, v1]];
+        [0, 2, 1, 0, 3, 2].forEach(function (k) { pos.push(q[k][0], 0.015, q[k][1]); uvs.push(q[k][2], q[k][3]); nor.push(0, 1, 0); });
+      }
+      var pathGeo = new THREE.BufferGeometry();
+      pathGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      pathGeo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+      pathGeo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      this.add(inert(new THREE.Mesh(pathGeo, mt.path)));
+      var clearing = new THREE.Mesh(scaleUV(new THREE.CircleGeometry(4.6, 14), 3, 3), mt.path);
+      clearing.rotation.x = -Math.PI / 2;
+      clearing.position.set(6, 0.012, 140.5);
+      this.add(inert(clearing));
+
+      // Fachada de la lavandería (vista desde afuera), con su letrero y la puerta de vidrio iluminada.
+      this.add(inert(new THREE.Mesh(scaleUV(new THREE.BoxGeometry(16, 3.4, 0.3), 8, 1.7), mt.brick))).position.set(0, 1.7, 99.85);
+      this.box(16.4, 0.2, 0.7, m.dark, 0, 3.45, 100.05);
+      var doors = [];
+      [-0.8, 0.8].forEach(function (x) {
+        var g = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 2.4), mt.lit);
+        g.position.set(x, 1.2, 100.02);
+        this.add(g);
+        this.interactive(g, 'entrarLavanderia');
+        doors.push(g);
+      }, this);
+      this.box(0.06, 2.4, 0.08, m.metal, 0, 1.2, 100.05);
+      [-4.6, 4.6].forEach(function (x) {
+        var w = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.5), mt.lit);
+        w.position.set(x, 1.55, 100.02);
+        this.add(w);
+      }, this);
+      var sign = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.6), m.sign);
+      sign.position.set(0, 2.85, 100.03);
+      this.add(sign);
+      this.collider(-8.3, 8.3, 99.4, 100.3);
+
+      // Farola de sodio.
+      this.box(0.12, 4.0, 0.12, m.metal, -4.5, 2.0, 103.2);
+      this.box(0.5, 0.06, 0.06, m.metal, -4.27, 3.98, 103.2);
+      var lampHead = this.box(0.38, 0.12, 0.24, mt.lamp, -4.05, 3.92, 103.2);
+      this.collider(-4.65, -4.35, 103.05, 103.35);
+
+      // La lavadora del claro: encendida, sin cable, con su foco verde.
+      var wm = new THREE.Group();
+      wm.position.set(6.6, 0, 141.2);
+      wm.rotation.set(0, Math.atan2(5 - 6.6, 136 - 141.2), 0.07);
+      this.add(wm);
+      var body = this.box(0.62, 0.88, 0.62, R.material({ texture: 'washer', color: 0x9a927c }), 0, 0.44, 0, wm);
+      var port = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.04, 10), R.material({ texture: 'glass', color: 0x6fae84, emissive: 0.5 }));
+      port.rotation.x = Math.PI / 2;
+      port.position.set(0, 0.42, 0.32);
+      wm.add(port);
+      var wmLamp = this.box(0.05, 0.05, 0.02, mt.green, 0.2, 0.78, 0.32, wm);
+      this.interactive(body, 'lavadoraBosque');
+      this.interactive(port, 'lavadoraBosque');
+      this.collider(6.15, 7.05, 140.75, 141.65);
+
+      // Anclas del Cliente Inmóvil entre los árboles (de pie, mirando al sendero) y zonas de oclusión.
+      var zoneDefs = {
+        bosque_entrada: { center: new V3(-1, 1.2, 109), radius: 4.5 },
+        bosque_sendero: { center: new V3(1, 1.2, 119.5), radius: 5 },
+        bosque_fondo: { center: new V3(5, 1.2, 130), radius: 4 },
+        bosque_claro: { center: new V3(6, 1.2, 141.5), radius: 5 }
+      };
+      Object.keys(zoneDefs).forEach(function (k) { this.zones[k] = zoneDefs[k]; }, this);
+      function nearestRoute(x, z) {
+        var best = route[0];
+        var bd = Infinity;
+        route.forEach(function (r) { var d = Math.hypot(r[0] - x, r[1] - z); if (d < bd) { bd = d; best = r; } });
+        return best;
+      }
+      var spots = { bosque_a: [-3.6, 109.5], bosque_b: [4.4, 115.5], bosque_c: [-2.6, 123.5], bosque_d: [7.0, 129.5], bosque_e: [9.6, 139], bosque_f: [3.0, 145.5] };
+      var forestAnchors = [];
+      Object.keys(spots).forEach(function (name) {
+        var s = spots[name];
+        var t = nearestRoute(s[0], s[1]);
+        var zone = Object.keys(zoneDefs).reduce(function (best, k) {
+          var c = zoneDefs[k].center;
+          var d = Math.hypot(c.x - s[0], c.z - s[1]);
+          return d < best.d ? { k: k, d: d } : best;
+        }, { k: null, d: Infinity }).k;
+        this.anchors[name] = { x: s[0], z: s[1], rot: Math.atan2(-(t[0] - s[0]), -(t[1] - s[1])), seated: false, zone: zone };
+        forestAnchors.push(name);
+      }, this);
+
+      // Pinos (tronco + 3 conos) y rocas, unidos en pocas geometrías. Lejos del sendero, del claro y de las anclas.
+      function distToRoute(x, z) {
+        var best = Infinity;
+        for (var r = 0; r < route.length - 1; r += 1) {
+          var ax = route[r][0];
+          var az = route[r][1];
+          var bx = route[r + 1][0] - ax;
+          var bz = route[r + 1][1] - az;
+          var t = Math.max(0, Math.min(1, ((x - ax) * bx + (z - az) * bz) / (bx * bx + bz * bz)));
+          best = Math.min(best, Math.hypot(x - ax - bx * t, z - az - bz * t));
+        }
+        return best;
+      }
+      var trees = [];
+      var trunks = [];
+      var crowns = [];
+      var M4 = THREE.Matrix4;
+      var tries = 0;
+      while (trees.length < 165 && tries < 4000) {
+        tries += 1;
+        var x = between(-21.5, 21.5);
+        var z = between(101.2, 149.5);
+        if (z < 105 && Math.abs(x) < 9) { continue; }                 // explanada frente a la fachada
+        if (distToRoute(x, z) < 1.8) { continue; }
+        if (Math.hypot(x - 6, z - 140.5) < 5.2) { continue; }
+        if (Math.hypot(x + 4.5, z - 103.2) < 1.5) { continue; }
+        var blocked = false;
+        for (var n = 0; n < forestAnchors.length && !blocked; n += 1) {
+          var an = this.anchors[forestAnchors[n]];
+          if (Math.hypot(x - an.x, z - an.z) < 1.2) { blocked = true; }
+        }
+        for (var o = 0; o < trees.length && !blocked; o += 1) {
+          if (Math.hypot(x - trees[o][0], z - trees[o][1]) < 1.45) { blocked = true; }
+        }
+        if (blocked) { continue; }
+        var h = between(1.1, 1.8);
+        var r0 = between(0.13, 0.22);
+        var size = between(0.85, 1.25);
+        trees.push([x, z]);
+        trunks.push({ geo: new THREE.CylinderGeometry(r0 * 0.7, r0, h, 6), matrix: new M4().makeTranslation(x, h / 2, z), su: 1, sv: 2 });
+        for (var c = 0; c < 3; c += 1) {
+          var cr = (1.7 - c * 0.42) * size;
+          var ch = (2.1 - c * 0.25) * size;
+          var cy = h + c * 1.15 * size + ch / 2 - 0.25;
+          var rotY = new M4().makeRotationY(rnd() * Math.PI);
+          crowns.push({ geo: new THREE.ConeGeometry(cr, ch, 7), matrix: new M4().makeTranslation(x, cy, z).multiply(rotY), su: 3, sv: 2 });
+        }
+        this.collider(x - 0.25, x + 0.25, z - 0.25, z + 0.25);
+      }
+      var rocks = [];
+      for (var k = 0; k < 26; k += 1) {
+        var rx = between(-20, 20);
+        var rz = between(102, 149);
+        if (distToRoute(rx, rz) < 1.2 || (rz < 104.5 && Math.abs(rx) < 9)) { continue; }
+        var s = between(0.15, 0.5);
+        rocks.push({ geo: new THREE.DodecahedronGeometry(s, 0), matrix: new M4().makeTranslation(rx, s * 0.5, rz), su: 1, sv: 1 });
+      }
+      this.add(inert(new THREE.Mesh(mergeParts(trunks), mt.bark)));
+      this.add(inert(new THREE.Mesh(mergeParts(crowns), mt.pine)));
+      if (rocks.length) { this.add(inert(new THREE.Mesh(mergeParts(rocks), mt.rock))); }
+
+      // Bordes: no se puede salir del bosque (ni rodear la fachada).
+      this.collider(-23.5, -22.2, 98, 152);
+      this.collider(22.2, 23.5, 98, 152);
+      this.collider(-23.5, 23.5, 150.2, 152);
+      this.collider(-23.5, -8.2, 98, 100.3);
+      this.collider(8.2, 23.5, 98, 100.3);
+
+      this.forest = {
+        doors: doors,
+        litMaterial: mt.lit,
+        lampMaterial: mt.lamp,
+        washerLamp: wmLamp,
+        lampHead: lampHead,
+        anchors: forestAnchors,
+        zones: Object.keys(zoneDefs),
+        trees: trees.length,
+        spawnOutside: { x: 0, z: 101.6, yaw: Math.PI },
+        spawnInside: { x: 0, z: 4.2, yaw: 0 },
+        flashlight: 4,
+        bounds: { minX: -20, maxX: 20, minZ: 101, maxZ: 148 },          // dónde puede reaparecer el cliente
+        area: { minX: -22.2, maxX: 22.2, minZ: 100.3, maxZ: 150.2 },    // por dónde puedes caminar
+        // [x, y, z, color, intensidad, alcance] por ranura de luz (0–5) mientras estás afuera.
+        lights: [
+          [-2.5, 1.8, 101.4, new THREE.Color(0.86, 0.93, 1.0), 0.9, 7.0],   // brillo del interior por el vidrio
+          [2.5, 1.8, 101.4, new THREE.Color(0.86, 0.93, 1.0), 0.9, 7.0],
+          [-4.05, 3.8, 103.2, new THREE.Color(1.0, 0.62, 0.3), 1.3, 12.0],  // farola de sodio
+          [6.6, 1.1, 141.6, new THREE.Color(0.5, 1.0, 0.6), 0.9, 6.0],      // la lavadora del claro
+          [0, 1.6, 101.6, new THREE.Color(1.0, 0.95, 0.85), 1.1, 8.5],      // linterna del celular (sigue al jugador)
+          [0, -100, 0, new THREE.Color(0, 0, 0), 0, 1]
+        ]
       };
     }
   }

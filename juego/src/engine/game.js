@@ -48,6 +48,7 @@
       this.music = new MR.MusicLink(this);
       this.ui.bindMusic(this.music);
       this.tele = new MR.Tele(this);
+      this.bosque = new MR.Bosque(this);
       this.ui.bindTele(this.tele);
       this.touch = new MR.TouchControls(this);
       this.tilt = new MR.Tilt();
@@ -131,6 +132,12 @@
       this.ui.showPause(true);
     }
 
+    /** Botón de la pausa «Salir al bosque» / «Volver a la lavandería»: reanuda y cruza la puerta. */
+    travelFromPause() {
+      if (this.state === 'paused') { this.resume(); }
+      return this.bosque.go();
+    }
+
     /** H en plena partida: pausa, suelta el ratón y abre la guía de controles. */
     openGuide() {
       this.pause();
@@ -153,7 +160,7 @@
       this.lastTime = now;
       if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); }
       this.retro.render(this.world.scene, this.player.camera, {
-        blink: this.state === 'ended' ? 1 : this.player.blink.amount,
+        blink: this.state === 'ended' ? 1 : Math.max(this.player.blink.amount, this.bosque.fade),
         dread: this.dread,
         time: now / 1000,
         flash: this.horror.flash,
@@ -212,9 +219,10 @@
       var extra = [];
       var cc = this.horror.customerCollider();
       if (cc) { extra.push(cc); }
+      this.bosque.update(dt);
       this.player.update(dt, input, {
         look: !this.noteOpen && !dialing && !this.wipe.active,
-        move: !this.noteOpen,
+        move: !this.noteOpen && !this.bosque.travel,
         slow: this.gameplay.mopHeld,
         sensitivity: this.options.sensitivity,
         extraColliders: extra,
@@ -222,6 +230,7 @@
         sway: sway,
         blinkFactor: this.consumables.blinkFactor()
       });
+      this.bosque.light();
       if (this.player.blinkStarted) { this.stats.parpadeos += 1; }
 
       this.consumables.update(dt);
@@ -234,6 +243,7 @@
       this.horror.flash = Math.max(0, this.horror.flash - dt * 2);
       this.music.update(dt);
       this.audio.update({
+        outdoor: this.bosque.outdoor,
         high: this.consumables.high,
         mixMode: this.options.mixMode,
         musicProximity: this.music.proximity,
@@ -506,7 +516,8 @@
         'Charcos fregados: ' + s.charcos,
         'Parpadeos: ' + s.parpadeos,
         'Cigarros: ' + this.consumables.used.cigarros + ' · Tragos de la petaca: ' + this.consumables.used.tragos +
-          ' · Porros: ' + this.consumables.used.porros
+          ' · Porros: ' + this.consumables.used.porros,
+        'Salidas al bosque: ' + this.bosque.visits
       ];
       document.body.classList.remove('jugando');
       this.tilt.stop();

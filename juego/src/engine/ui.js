@@ -27,6 +27,7 @@
       // Guía de controles: desde el título y desde la pausa; Esc la cierra.
       $('btn-guia').addEventListener('click', function () { self.showGuide(true); });
       $('btn-guia-pausa').addEventListener('click', function () { self.showGuide(true); });
+      $('btn-bosque').addEventListener('click', function () { game.travelFromPause(); });
       $('btn-guia-cerrar').addEventListener('click', function () { self.showGuide(false); });
       $('guia-tab-escritorio').addEventListener('click', function () { self._guideTab('escritorio'); });
       $('guia-tab-tactil').addEventListener('click', function () { self._guideTab('tactil'); });
@@ -148,6 +149,9 @@
     showPause(on) {
       this.el.pause.hidden = !on;
       if (!on) { $('guia').hidden = true; }
+      if (on && this.game.bosque) {
+        $('btn-bosque').textContent = this.game.bosque.outside ? 'Volver a la lavandería' : 'Salir al bosque';
+      }
     }
 
     /** Abre la guía en la pestaña del dispositivo que estás usando (se puede cambiar a la otra). */

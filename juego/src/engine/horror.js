@@ -117,10 +117,18 @@
       var interval = 34 / (mult * (1 + g.dread * 0.8) * g.consumables.paranoia()) * (g.collapsed ? 0.6 : 1);
       this.nextEvent = U.rand(0.7, 1.3) * interval;
 
-      var table = [['apagon', 3], ['charco', 2], ['puerta_lavadora', 2], ['secadora_sola', 2], ['puerta_trasera', 1], ['trapeador_movido', 1]];
-      if (this.customer.present) {
-        table.push(['huellas', 1], ['mano_vidrio', 1]);
-        if (g.talked) { table.push(['cliente_mueve', 0.6 + g.stats.mirada * 0.5]); }
+      var outside = g.bosque && g.bosque.outside;
+      var table;
+      if (outside) {
+        // En el bosque: ramas, la linterna, el búho… y la lavandería sigue cambiando sola a tus espaldas.
+        table = [['rama', 3], ['linterna', 1.5], ['buho', 1], ['apagon', 1], ['charco', 0.8], ['puerta_lavadora', 0.6], ['secadora_sola', 0.6]];
+        if (this.customer.present) { table.push(['cliente_bosque', 2.5 + g.stats.mirada * 0.5]); }
+      } else {
+        table = [['apagon', 3], ['charco', 2], ['puerta_lavadora', 2], ['secadora_sola', 2], ['puerta_trasera', 1], ['trapeador_movido', 1]];
+        if (this.customer.present) {
+          table.push(['huellas', 1], ['mano_vidrio', 1]);
+          if (g.talked) { table.push(['cliente_mueve', 0.6 + g.stats.mirada * 0.5]); }
+        }
       }
       if (g.whispers) { table.push(['susurro', 4]); }
       else if (g.consumables.high > 0.5) { table.push(['susurro', 1.5]); } // paranoia: susurros fuera de hora
@@ -152,6 +160,20 @@
         case 'susurro': {
           var zones = ['lavadoras', 'secadoras', 'almacen', 'entrada', 'puerta_trasera', 'banco'];
           this.schedule('susurro', U.pick(zones), 0);
+          break;
+        }
+        case 'rama': this.schedule('rama', U.pick(this.world.forest.zones), 0); break;
+        case 'buho': this.schedule('buho', U.pick(this.world.forest.zones), 0); break;
+        case 'linterna': this.schedule('linterna', U.pick(this.world.forest.zones), 1); break;
+        case 'cliente_bosque': {
+          // Te sigue: elige entre las 3 anclas del bosque más cercanas a ti (nunca la misma).
+          var p = this.game.player.pos;
+          var anchors = this.world.anchors;
+          var near = this.world.forest.anchors.filter(function (n) { return n !== this.customer.anchor; }, this)
+            .sort(function (a, b) { return Math.hypot(anchors[a].x - p.x, anchors[a].z - p.z) - Math.hypot(anchors[b].x - p.x, anchors[b].z - p.z); })
+            .slice(0, 3);
+          var dest = U.pick(near);
+          this.schedule('cliente_mueve', anchors[dest].zone, 3, { to: dest });
           break;
         }
         case 'cliente_mueve': {
@@ -242,6 +264,20 @@
             w.mop.rotation.set(0, Math.random() * Math.PI, Math.PI / 2 - 0.06);
           }
           break;
+        case 'rama': {
+          var rc = this.zones[zoneName].center;
+          var toBranch = this.tmp.copy(rc).sub(g.player.camera.position);
+          var rRight = new V3(1, 0, 0).applyEuler(g.player.camera.rotation);
+          audio.rama(U.clamp(rRight.dot(toBranch.normalize()), -1, 1));
+          g.dread = Math.min(1, g.dread + 0.03);
+          break;
+        }
+        case 'buho': audio.buho(); break;
+        case 'linterna': {
+          var fl = w.forest.flashlight;
+          this.flickers[fl] = Math.max(this.flickers[fl], U.rand(0.6, 1.8));
+          break;
+        }
         case 'susurro': {
           var center = this.zones[zoneName].center;
           var toZone = this.tmp.copy(center).sub(g.player.camera.position);
@@ -291,8 +327,10 @@
       if (fwd.lengthSq() < 1e-6) { fwd.set(0, 0, -1); }
       fwd.normalize();
       var p = player.pos;
-      var x = U.clamp(p.x - fwd.x * 1.4, -7.6, 7.6);
-      var z = U.clamp(p.z - fwd.z * 1.4, -4.0, 4.6);
+      // Límites de donde estés: la lavandería o el bosque.
+      var bounds = this.game.bosque && this.game.bosque.outside ? this.world.forest.bounds : { minX: -7.6, maxX: 7.6, minZ: -4.0, maxZ: 4.6 };
+      var x = U.clamp(p.x - fwd.x * 1.4, bounds.minX, bounds.maxX);
+      var z = U.clamp(p.z - fwd.z * 1.4, bounds.minZ, bounds.maxZ);
       var c = this.world.customer;
       var rot = Math.atan2(-(p.x - x), -(p.z - z));
       c.group.position.set(x, 0, z);

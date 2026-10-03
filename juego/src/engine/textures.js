@@ -241,6 +241,83 @@
       x.fillStyle = '#ffffff';
       x.fillRect(0, 0, 4, 4);
       return c;
+    },
+    // --- Bosque ---------------------------------------------------------------------------------
+    tierra: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#3a3324';
+      x.fillRect(0, 0, 32, 32);
+      var s = 5;
+      for (var i = 0; i < 70; i += 1) {
+        s = (s * 16807) % 2147483647;
+        var px = s % 32;
+        s = (s * 16807) % 2147483647;
+        var py = s % 32;
+        x.fillStyle = i % 3 ? '#2f4a26' : '#4d4330'; // matas de pasto y hojas muertas
+        x.fillRect(px, py, 1 + (i % 2), 2);
+      }
+      noise(x, 32, 32, 30, 61);
+      return c;
+    },
+    sendero: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#5b4d39';
+      x.fillRect(0, 0, 32, 32);
+      x.fillStyle = '#7a6a52';
+      [[4, 6], [20, 3], [12, 18], [27, 22], [6, 27]].forEach(function (p) { x.fillRect(p[0], p[1], 3, 2); });
+      x.fillStyle = '#3b3226';
+      [[15, 9], [2, 15], [24, 13], [18, 28]].forEach(function (p) { x.fillRect(p[0], p[1], 4, 1); });
+      noise(x, 32, 32, 26, 67);
+      return c;
+    },
+    corteza: function () {
+      var c = canvas(16, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#3b2c20';
+      x.fillRect(0, 0, 16, 32);
+      x.fillStyle = '#261c14';
+      for (var i = 0; i < 16; i += 3) { x.fillRect(i, 0, 1, 32); }
+      noise(x, 16, 32, 34, 71);
+      return c;
+    },
+    pino: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#1d3322';
+      x.fillRect(0, 0, 32, 32);
+      x.fillStyle = '#142619';
+      for (var r = 0; r < 32; r += 4) { x.fillRect(0, r, 32, 1); }
+      x.fillStyle = '#2b4a2f';
+      for (var k = 0; k < 32; k += 6) { x.fillRect(k, 0, 1, 32); }
+      noise(x, 32, 32, 30, 73);
+      return c;
+    },
+    ladrillo: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#4a4440';
+      x.fillRect(0, 0, 32, 32);
+      x.fillStyle = '#7a4636';
+      for (var row = 0; row < 4; row += 1) {
+        for (var col = 0; col < 3; col += 1) {
+          var off = row % 2 ? 5 : 0;
+          x.fillRect((col * 11 + off) % 33, row * 8 + 1, 10, 6);
+        }
+      }
+      noise(x, 32, 32, 24, 79);
+      return c;
+    },
+    roca: function () {
+      var c = canvas(16, 16);
+      var x = c.getContext('2d');
+      x.fillStyle = '#5c5d5a';
+      x.fillRect(0, 0, 16, 16);
+      x.fillStyle = '#3f4a3a';
+      x.fillRect(0, 10, 16, 6); // musgo
+      noise(x, 16, 16, 40, 83);
+      return c;
     }
   };
 

@@ -100,7 +100,7 @@
 
       // Ambiente: lluvia, zumbido fluorescente, drone.
       this.rain = this._loop(this.white, [['bandpass', 1500, 0.6], ['lowpass', 3800, 0.7]], 0.05);
-      this._loop(this.brown, [['lowpass', 260, 0.7]], 0.05);
+      this.wind = this._loop(this.brown, [['lowpass', 260, 0.7]], 0.05); // retumbo; afuera, viento
       this.hum = ctx.createGain();
       this.hum.gain.value = 0.012;
       this.hum.connect(this.master);
@@ -210,17 +210,22 @@
     update(s) {
       if (!this.ctx) { return; }
       var washerLevel = Math.min(1, s.washers / 3);
-      this._set(this.washers.gain.gain, 0.03 + washerLevel * 0.12);
-      this._set(this.dryers.gain.gain, Math.min(1, s.dryers / 2) * 0.05);
+      // Afuera (bosque): la lavandería se oye ahogada tras los muros; la lluvia y el viento, de frente.
+      var out = s.outdoor || 0;
+      var walls = 1 - 0.85 * out;
+      this._set(this.washers.gain.gain, (0.03 + washerLevel * 0.12) * walls);
+      this._set(this.dryers.gain.gain, Math.min(1, s.dryers / 2) * 0.05 * walls);
+      this._set(this.rain.gain.gain, 0.05 + out * 0.13, 0.6);
+      this._set(this.wind.gain.gain, 0.05 + out * 0.07, 0.6);
       var prox = s.collapse ? 0 : s.radioProximity;
       // Modo mezcla: la radio del juego se calla para que suene tu música desde otra app.
-      this._set(this.radioGain.gain, s.mixMode ? 0 : prox * 0.22);
+      this._set(this.radioGain.gain, s.mixMode ? 0 : prox * 0.22 * (1 - 0.9 * out));
       this._set(this.reverbSend.gain, (s.high || 0) * 0.55, 0.6);
       // La estática solo se esconde si estás sintonizado en alguna estación (94.1 o tu 99.9).
       var tuned = Math.max(prox, s.musicProximity || 0);
       this._set(this.staticNoise.gain.gain, (1 - tuned) * (s.collapse ? 0.08 : 0.045));
       this._set(this.infra.gain, (1 - washerLevel) * (0.18 + s.dread * 0.5));
-      this._set(this.hum.gain, 0.012 * s.lightLevel);
+      this._set(this.hum.gain, 0.012 * s.lightLevel * (1 - 0.9 * out));
       this._set(this.muffle.frequency, s.eyesClosed ? 700 : 18000, 0.05);
       this._set(this.pad.gain, 0.03 + s.dread * 0.04);
       this._scheduleMusic(prox);
@@ -303,6 +308,18 @@
     mop() { this._burst(this.pink, 'bandpass', 900, 1.2, 0.35, 0.12, 0); }
     buzz() { this._tone(118, 0.25, 0.06, 'sawtooth'); }
     door() { this._tone(160, 0.9, 0.05, 'sawtooth', 90); this._burst(this.brown, 'lowpass', 300, 0.7, 0.5, 0.25); }
+    /** Bosque: una rama que cruje (dos chasquidos secos), con paneo. */
+    rama(pan) {
+      this._burst(this.white, 'bandpass', 1900, 2.2, 0.08, 0.32, pan);
+      var self = this;
+      setTimeout(function () { self._burst(self.white, 'bandpass', 1300, 2.0, 0.14, 0.26, pan); }, 90 + Math.random() * 120);
+    }
+    /** Bosque: un búho lejano (dos ululatos). */
+    buho() {
+      this._tone(410, 0.34, 0.035, 'sine', 370);
+      var self = this;
+      setTimeout(function () { self._tone(400, 0.5, 0.03, 'sine', 350); }, 520);
+    }
     lint() { this._burst(this.white, 'bandpass', 2500, 0.6, 0.2, 0.06); }
 
     // ---- Consumibles ----
