@@ -142,6 +142,33 @@
       this.ui.showPause(true);
     }
 
+    /**
+     * Pantalla de título: la cámara recorre despacio la lavandería (de la entrada hacia las lavadoras y de
+     * regreso) y un fluorescente titila de vez en cuando. Al empezar el turno, player.update toma el control.
+     */
+    _attract(dt) {
+      this.attractT = (this.attractT || 0) + dt;
+      var t = this.attractT;
+      var cam = this.player.camera;
+      var k = (Math.sin(t * 0.045 - 1.2) + 1) / 2;
+      cam.position.set(-5.2 + k * 8.6, 1.55 + Math.sin(t * 0.21) * 0.04, 2.7 - Math.sin(t * 0.03) * 0.6);
+      cam.lookAt(cam.position.x * 0.55 - 0.6, 1.0, -4.4);
+      // Fluorescente que titila (sin depender de opciones: en el título aún no hay turno).
+      this.attractFlicker = (this.attractFlicker || 0) - dt;
+      if (this.attractFlicker <= 0) {
+        this.attractFlicker = 4 + Math.random() * 7;
+        this.attractBlink = 0.12 + Math.random() * 0.25;
+      }
+      if (this.attractBlink > 0) {
+        this.attractBlink -= dt;
+        this.retro.setLightFactor(1, Math.random() < 0.5 ? 0.15 : 0.8);
+        this.world.panels[1].material.uniforms.uEmissive.value = 0.4;
+      } else {
+        this.retro.setLightFactor(1, 1);
+        this.world.panels[1].material.uniforms.uEmissive.value = 1.2;
+      }
+    }
+
     /** Botón de la pausa «Salir al bosque» / «Volver a la lavandería»: reanuda y cruza la puerta. */
     travelFromPause() {
       if (this.state === 'paused') { this.resume(); }
@@ -169,7 +196,7 @@
       var dt = Math.min(0.05, Math.max(0, (now - this.lastTime) / 1000));
       this.lastTime = now;
       this.gamepad.poll(dt);
-      if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); }
+      if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); this._attract(dt); }
       this.retro.render(this.world.scene, this.player.camera, {
         blink: this.state === 'ended' ? 1 : Math.max(this.player.blink.amount, this.bosque.fade),
         dread: this.dread,

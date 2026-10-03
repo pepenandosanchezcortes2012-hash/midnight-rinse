@@ -302,3 +302,7 @@ body.mando .solo-mando { display: block !important; }
 .logros .marca { color: #3a3c42; }
 .logros li.hecho .marca { color: var(--acento); }
 .opciones select { font-family: var(--fuente); background: #111317; color: var(--tinta); border: 1px solid #3a3c42; padding: 4px 6px; }
+
+/* Título: la lavandería se ve arriba (la cámara la recorre) y el texto queda sobre fondo oscuro abajo. */
+#titulo { background: linear-gradient(rgba(3, 4, 6, 0.35), rgba(3, 4, 6, 0.72) 30%, rgba(3, 4, 6, 0.95) 55%); }
+#titulo h1 { text-shadow: 3px 3px 0 #3a2f0a, 0 0 18px rgba(0, 0, 0, 0.9); }
