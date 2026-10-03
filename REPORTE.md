@@ -323,6 +323,11 @@ El proyecto pasó por dos etapas:
   - recordatorios que aparecen según avanza la noche (no mirarlo a la cara, la hora si contestaste el teléfono, la puerta trasera y los fusibles, las hojas del bosque).
 - **Prueba nueva.** Resultado: 28/28.
 
+## 32. Él te observa
+- **Qué hace:** mientras su zona no está a la vista (o parpadeas), la cabeza del Cliente Inmóvil gira despacio hacia ti, hasta ±75°. Al mirarlo, se queda donde quedó; al cambiar de lugar, vuelve al frente.
+- **Regla de la mirada:** usa ahora hacia dónde mira la cabeza.
+- **Prueba nueva.** Resultado: 29/29.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

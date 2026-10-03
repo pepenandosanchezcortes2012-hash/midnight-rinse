@@ -41,6 +41,7 @@
       this.stareFlagged = false;
       this.backDoorTarget = 0;
       this.nearTimer = 2;
+      this.headYaw = 0; // la cabeza gira hacia ti cuando no lo miras
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -103,6 +104,7 @@
         this.shake.body.position.x = this.shake.t > 0 ? this.shake.baseX + (Math.random() - 0.5) * 0.035 : this.shake.baseX;
         if (this.shake.t <= 0) { this.shake = null; }
       }
+      this._watch(dt, player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -382,6 +384,7 @@
       this.customer.seated = a.seated;
       this.customer.rot = a.rot;
       this.customer.behind = false;
+      this._setHead(0);
     }
 
     placeBehindPlayer(player) {
@@ -408,6 +411,7 @@
       this.customer.seated = false;
       this.customer.rot = rot;
       this.customer.behind = true;
+      this._setHead(0);
       this._stepsIfNear(true, true);
     }
 
@@ -439,7 +443,7 @@
       var dist = toHead.length();
       toHead.divideScalar(dist);
       var angle = Math.acos(U.clamp(forward.dot(toHead), -1, 1)) * 180 / Math.PI;
-      var rot = this.customer.rot;
+      var rot = this.customer.rot + this.headYaw; // hacia donde mira su cabeza
       var faceDir = new V3(-Math.sin(rot), 0, -Math.cos(rot));
       var faceVisible = faceDir.dot(new V3(-toHead.x, 0, -toHead.z).normalize()) > 0.3;
       var staring = angle < C.STARE_ANGLE_DEG && dist < C.STARE_DISTANCE && faceVisible;
@@ -453,6 +457,28 @@
         this.stareTime = Math.max(0, this.stareTime - dt * 2);
         if (this.stareTime === 0) { this.stareFlagged = false; }
       }
+    }
+
+    /**
+     * Te observa: mientras su zona no está a la vista (o parpadeas), su cabeza gira despacio hacia ti
+     * (hasta ±75°). Cuando vuelves a mirarlo, la cabeza se queda donde quedó.
+     */
+    _watch(dt, player) {
+      if (!this.customer.present) { this._setHead(0); return; }
+      var unseen = this.zoneVisible(this.customer.zone) === 0 || player.eyesClosed;
+      if (!unseen) { return; }
+      var pos = this.world.customer.group.position;
+      var want = Math.atan2(-(player.pos.x - pos.x), -(player.pos.z - pos.z)) - this.customer.rot;
+      while (want > Math.PI) { want -= Math.PI * 2; }
+      while (want < -Math.PI) { want += Math.PI * 2; }
+      want = U.clamp(want, -1.3, 1.3);
+      this._setHead(this.headYaw + (want - this.headYaw) * Math.min(1, dt * 1.2));
+    }
+
+    _setHead(yaw) {
+      this.headYaw = yaw;
+      this.world.seatedHead.rotation.y = yaw;
+      this.world.standingHead.rotation.y = yaw;
     }
 
     /** De pie a menos de 3 m: una pulsación sorda cada 3–5 s, como un paso que no ves. */

@@ -671,6 +671,29 @@
       return 'charcos, lavadoras y filtros al día';
     }],
 
+    ['Él te observa: la cabeza gira cuando no lo miras', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var h = g.horror;
+      h.placeCustomer('banco'); h.customer.present = true;
+      check(Math.abs(h.headYaw) < 1e-6, 'la cabeza no empezó al frente');
+      // Detrás y a la derecha de él, mirando hacia otro lado (el banco queda fuera de la vista).
+      g.player.pos.set(2, 0, 3); g.player.yaw = Math.PI; g.player.pitch = 0;
+      step(ctx, 30 * 5);
+      check(h.zoneVisible('banco') === 0, 'el banco seguía a la vista');
+      check(h.headYaw < -1.0 && Math.abs(g.world.seatedHead.rotation.y - h.headYaw) < 1e-6, 'la cabeza no giró hacia ti (' + h.headYaw.toFixed(2) + ')');
+      // Al mirarlo, la cabeza se queda donde quedó.
+      var y0 = h.headYaw;
+      g.player.yaw = Math.atan2(-(-3.5 - 2), -(0.62 - 3)); step(ctx, 30);
+      check(h.zoneVisible('banco') > 0 && Math.abs(h.headYaw - y0) < 1e-6, 'la cabeza se movió mientras lo mirabas');
+      // Al cambiar de lugar, vuelve al frente.
+      h.placeCustomer('mostrador');
+      check(Math.abs(h.headYaw) < 1e-6, 'la cabeza no volvió al frente al moverse');
+      noErrors(ctx);
+      return 'giró ' + (y0 * 180 / Math.PI).toFixed(0) + '° hacia ti mientras no mirabas';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);
