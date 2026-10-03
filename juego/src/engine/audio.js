@@ -323,6 +323,12 @@
     mop() { this._burst(this.pink, 'bandpass', 900, 1.2, 0.35, 0.12, 0); }
     buzz() { this._tone(118, 0.25, 0.06, 'sawtooth'); }
     door() { this._tone(160, 0.9, 0.05, 'sawtooth', 90); this._burst(this.brown, 'lowpass', 300, 0.7, 0.5, 0.25); }
+    /** Logro: la campanita de fin de ciclo de una secadora. */
+    ding() {
+      this._tone(1046, 0.5, 0.05, 'sine');
+      var self = this;
+      setTimeout(function () { self._tone(1568, 0.7, 0.04, 'sine'); }, 160);
+    }
     /** Bosque: una rama que cruje (dos chasquidos secos), con paneo. */
     rama(pan) {
       this._burst(this.white, 'bandpass', 1900, 2.2, 0.08, 0.32, pan);

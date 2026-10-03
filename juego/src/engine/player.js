@@ -140,7 +140,8 @@
         var sens = 0.0022 * ctx.sensitivity;
         var touchSens = 0.0048 * ctx.sensitivity;
         this.yaw -= input.mouseDX * sens + input.touchLookDX * touchSens;
-        this.pitch = U.clamp(this.pitch - input.mouseDY * sens - input.touchLookDY * touchSens, -1.35, 1.35);
+        var inv = ctx.invertY ? -1 : 1; // opción «Invertir el eje vertical»
+        this.pitch = U.clamp(this.pitch - (input.mouseDY * sens + input.touchLookDY * touchSens) * inv, -1.35, 1.35);
       }
 
       // Teclado (digital) + joystick invisible (analógico); la velocidad se suaviza para caminar con fluidez.

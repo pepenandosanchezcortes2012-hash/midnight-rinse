@@ -211,6 +211,15 @@ El proyecto pasó por dos etapas:
 - **Resumen final:** cuenta las hojas.
 - **Prueba nueva:** una hoja tocada de verdad con un rayo, el contador en la lavadora y el tercer final. Resultado: 13/13.
 
+## 16. Logros y opciones de vista
+- **Logros (`logros.js`):** 13 en total, 3 de ellos ocultos.
+  - **Al conseguir uno:** subtítulo «★ Logro», campanita de secadora y vibración.
+  - **Panel en el título:** los ocultos aparecen como «???» hasta conseguirlos.
+  - **Guardado:** en `midnight-rinse/logros`; «Reiniciar todo» los borra.
+  - **Cuándo se dan:** al terminar el turno (final bueno, malo o del bosque; pasillo impecable; ojos al suelo; paranoia), en el bosque, con las hojas, el relámpago, la tele, la radio a las 02:40 y las seis lavadoras.
+- **Opciones nuevas:** campo de visión (55–95°), invertir el eje vertical y tamaño de subtítulos (Normal, Grande y Enorme).
+- **Prueba nueva.** Resultado: 14/14.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -57,7 +57,7 @@
 
     _loadOptions() {
       var defaults = { subtitles: true, voices: true, reduceFlashes: false, crosshair: false, meta: false, sensitivity: 1.2, volume: 0.8, name: '',
-        vibration: true, gyro: true, lofi: true, mixMode: false, teleLink: '' };
+        vibration: true, gyro: true, lofi: true, mixMode: false, teleLink: '', fov: 70, invertY: false, subsScale: 1 };
       try {
         var saved = JSON.parse(window.localStorage.getItem(OPTIONS_KEY) || '{}');
         return Object.assign(defaults, saved);
@@ -76,7 +76,8 @@
       var map = [['opt-subtitulos', 'subtitles', 'checked'], ['opt-voces', 'voices', 'checked'], ['opt-destellos', 'reduceFlashes', 'checked'],
         ['opt-mira', 'crosshair', 'checked'], ['opt-meta', 'meta', 'checked'], ['opt-sensibilidad', 'sensitivity', 'value'],
         ['opt-volumen', 'volume', 'value'], ['opt-nombre', 'name', 'value'], ['opt-vibracion', 'vibration', 'checked'],
-        ['opt-giroscopio', 'gyro', 'checked'], ['opt-lofi', 'lofi', 'checked'], ['opt-mezcla', 'mixMode', 'checked']];
+        ['opt-giroscopio', 'gyro', 'checked'], ['opt-lofi', 'lofi', 'checked'], ['opt-mezcla', 'mixMode', 'checked'],
+        ['opt-fov', 'fov', 'value'], ['opt-invertir', 'invertY', 'checked'], ['opt-subs-tam', 'subsScale', 'value']];
       map.forEach(function (m) {
         var input = $(m[0]);
         input[m[2]] = o[m[1]];
@@ -88,6 +89,7 @@
           if (m[1] === 'vibration') { MR.Haptics.enabled = o.vibration; if (o.vibration) { MR.Haptics.pulse(25); } }
           if (m[1] === 'lofi' && self.game.music) { self.game.music.setLofi(o.lofi); }
           if (m[1] === 'mixMode') { MR.Game.audioSession(o.mixMode); }
+          if (m[1] === 'fov' || m[1] === 'subsScale') { self.applyView(); }
           self._saveOptions();
         });
       });
@@ -106,6 +108,37 @@
       if (show) {
         this.el.realTime.textContent = 'Son las ' + MR.Util.clockText(h * 60 + now.getMinutes()) + '. Deberías estar durmiendo.';
       }
+    }
+
+    /** Campo de visión y tamaño de subtítulos (se llama al arrancar y al cambiar la opción). */
+    applyView() {
+      var o = this.options;
+      document.documentElement.style.setProperty('--subs-escala', String(o.subsScale || 1));
+      var cam = this.game.player && this.game.player.camera;
+      if (cam && o.fov) { cam.fov = o.fov; cam.updateProjectionMatrix(); }
+    }
+
+    /** Panel de logros de la pantalla de título. */
+    renderLogros(logros) {
+      $('logros-cuenta').textContent = logros.count() + '/' + logros.total();
+      var list = $('logros-lista');
+      list.textContent = '';
+      logros.view().forEach(function (l) {
+        var li = document.createElement('li');
+        li.className = l.hecho ? 'hecho' : '';
+        var mark = document.createElement('span');
+        mark.className = 'marca';
+        mark.textContent = l.hecho ? '★' : '☆';
+        var body = document.createElement('span');
+        var b = document.createElement('b');
+        b.textContent = l.titulo;
+        body.appendChild(b);
+        body.appendChild(document.createElement('br'));
+        body.appendChild(document.createTextNode(l.desc));
+        li.appendChild(mark);
+        li.appendChild(body);
+        list.appendChild(li);
+      });
     }
 
     /** Panel "Tu música": YouTube Music (captura de pestaña) o archivos del dispositivo. */

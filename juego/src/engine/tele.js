@@ -180,6 +180,7 @@
         var d = this.player.getVideoData ? this.player.getVideoData() : null;
         this.title = d && d.title ? d.title : '';
         this.errors = 0;
+        if (this.game.logros) { this.game.logros.unlock('tele'); }
         this._setStatus('Sonando en la tele' + (this.title ? ': «' + this.title + '»' : '') + '.');
       } else if (s === S.PAUSED) {
         this._setStatus('En pausa' + (this.title ? ': «' + this.title + '»' : '') + '.');

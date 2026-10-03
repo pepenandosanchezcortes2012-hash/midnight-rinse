@@ -177,6 +177,7 @@
       });
       if (!best) { return; }
       h._placeAt(best.name);
+      g.logros.unlock('relampago');
       g.dread = Math.min(1, g.dread + 0.12);
       g.stats.relampagos = (g.stats.relampagos || 0) + 1;
     }

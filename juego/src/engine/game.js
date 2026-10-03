@@ -51,6 +51,9 @@
       this.bosque = new MR.Bosque(this);
       this.clima = new MR.Clima(this);
       this.gamepad = new MR.GamepadControls(this);
+      this.logros = new MR.Logros(this);
+      this.ui.renderLogros(this.logros);
+      this.ui.applyView();
       this.ui.bindTele(this.tele);
       this.touch = new MR.TouchControls(this);
       this.tilt = new MR.Tilt();
@@ -228,6 +231,7 @@
         move: !this.noteOpen && !this.bosque.travel,
         slow: this.gameplay.mopHeld,
         sensitivity: this.options.sensitivity,
+        invertY: this.options.invertY,
         extraColliders: extra,
         hands: hands,
         sway: sway,
@@ -235,6 +239,7 @@
       });
       this.bosque.light();
       this.clima.update(dt, this.player.time);
+      if (this.gameplay.washers.every(function (w) { return w.running; })) { this.logros.unlock('lavadoras'); }
       if (this.player.blinkStarted) { this.stats.parpadeos += 1; }
 
       this.consumables.update(dt);
@@ -278,6 +283,7 @@
       if (this._crossed(prev, C.RADIO_HOST)) {
         var prox = this.gameplay.radioProximity;
         if (prox > 0.35) {
+          this.logros.unlock('radio');
           var line = 'Son las dos y cuarenta en Radio Nocturna, noventa y cuatro punto uno. Para quienes siguen despiertos: ' +
             'si esta noche alguien les pregunta la hora, respondan con cuidado.';
           this.ui.subtitle('[Radio] ' + line, 9);
@@ -439,6 +445,7 @@
     }
 
     onCustomerAppeared() {
+      this.flags.customerSeen = true;
       this.ui.subtitle('(Alguien está sentado en el banco amarillo. No lo oíste entrar.)', 5);
     }
 
@@ -527,6 +534,13 @@
       document.body.classList.remove('jugando');
       this.tilt.stop();
       this.music.disconnect(true);
+      // Logros del final del turno.
+      var L = this.logros;
+      L.unlock('primer_turno');
+      if (reason === 'bosque') { L.unlock('final_bosque'); } else if (good) { L.unlock('final_bueno'); } else { L.unlock('bucle'); }
+      if (s.pasillo === 0 && s.filtro === 0) { L.unlock('pulcro'); }
+      if (this.flags.customerSeen && s.mirada === 0) { L.unlock('ojos_al_suelo'); }
+      if (this.consumables.used.porros >= 3) { L.unlock('paranoia'); }
       if (reason === 'bosque') {
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {

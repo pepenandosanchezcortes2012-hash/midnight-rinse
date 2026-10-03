@@ -137,6 +137,7 @@
       var h = g.horror;
       if (toOutside) {
         this.visits += 1;
+        g.logros.unlock('bosque');
         if (this.firstTime) {
           this.firstTime = false;
           g.ui.subtitle('(Afuera llueve. El bosque empieza donde se acaba la luz de la farola.)', 5);
@@ -171,6 +172,7 @@
       g.noteOpen = true;
       g.ui.showNote(p.texto, 'HOJA MOJADA DEL REGISTRO · ' + p.firma.toUpperCase());
       var n = this.pagesFound();
+      g.logros.unlock('hoja');
       g.ui.subtitle(n < 6 ? '(Hojas del registro: ' + n + ' de 6.)' : '(Tienes las seis hojas. La lavadora del claro te espera.)', 4);
     }
 

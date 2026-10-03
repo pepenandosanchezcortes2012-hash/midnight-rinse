@@ -110,8 +110,11 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Sintoniza la radio** del mostrador en la 94.1. A las 02:40 habla el locutor.
 - **Las reglas del registro importan.** Hay dos finales.
 
+### Logros
+Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y se guardan en tu navegador. Ejemplos: terminar el turno, sintonizar la radio cuando habla el locutor, tener las seis lavadoras en marcha a la vez, que un relámpago lo revele, el tercer final…
+
 ### Accesibilidad y privacidad (pantalla de título)
-- Subtítulos (activados), voces sintetizadas del navegador (opcionales), **reducir destellos de luz**, punto de mira opcional, sensibilidad y volumen.
+- Subtítulos (activados) con **tres tamaños**, voces sintetizadas del navegador (opcionales), **reducir destellos de luz**, punto de mira opcional, sensibilidad, **campo de visión**, **invertir el eje vertical** y volumen.
 - **Capa meta-diegética (opcional y avisada):** puede usar la hora real de tu computadora. Si juegas entre las 02:00 y las 05:00, las anomalías se triplican.
 - **Tu nombre en los susurros:** opcional. Lo escribes tú y no sale de tu navegador. El juego no lee tu nombre de usuario del sistema.
 - El registro del turno **persiste entre partidas** y nunca retrocede. Se puede borrar desde la pantalla de título.

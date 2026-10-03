@@ -303,6 +303,36 @@
       return '6/6 hojas → «' + ctx.w.MR.HISTORIA.final.titulo + '»';
     }],
 
+    ['Logros y opciones de vista', async function () {
+      localStorage.removeItem('midnight-rinse/logros'); // las pruebas anteriores ya desbloquean algunos
+      var ctx = await load();
+      var g = ctx.g;
+      var d = ctx.w.document;
+      check(/^0\//.test(d.getElementById('logros-cuenta').textContent), 'los logros no empiezan en cero: ' + d.getElementById('logros-cuenta').textContent);
+      check(d.querySelectorAll('#logros-lista li').length === ctx.w.MR.Logros.LIST.length, 'el panel no lista todos los logros');
+      check(/\?\?\?/.test(d.getElementById('logros-lista').textContent), 'los ocultos no se ven como ???');
+      // Opciones: campo de visión, invertir eje y subtítulos.
+      var fov = d.getElementById('opt-fov');
+      fov.value = '85'; fov.dispatchEvent(new ctx.w.Event('input'));
+      check(g.player.camera.fov === 85, 'el campo de visión no cambió');
+      var tam = d.getElementById('opt-subs-tam');
+      tam.value = '1.65'; tam.dispatchEvent(new ctx.w.Event('input'));
+      check(ctx.w.getComputedStyle(d.documentElement).getPropertyValue('--subs-escala').trim() === '1.65', 'el tamaño de subtítulos no cambió');
+      var inv = d.getElementById('opt-invertir');
+      inv.checked = true; inv.dispatchEvent(new ctx.w.Event('input'));
+      start(ctx);
+      var p0 = g.player.pitch;
+      g.input.touchLookDY = 20; step(ctx, 1);
+      check(g.player.pitch > p0, 'invertir el eje vertical no funcionó');
+      // Un logro se consigue, se guarda y aparece en el panel.
+      g.bosque.go(); step(ctx, 40);
+      check(g.logros.has('bosque'), 'no se desbloqueó «Aire fresco»');
+      check(/^1\//.test(d.getElementById('logros-cuenta').textContent), 'el contador no subió');
+      check(JSON.parse(localStorage.getItem('midnight-rinse/logros') || '{}').bosque, 'el logro no se guardó');
+      noErrors(ctx);
+      return 'FOV 85, subtítulos ×1.65, eje invertido, logro guardado';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

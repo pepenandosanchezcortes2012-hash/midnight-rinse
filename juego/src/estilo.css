@@ -99,7 +99,7 @@ body.tactil .solo-escritorio { display: none !important; }
   transform: translateX(-50%);
   max-width: min(780px, 90vw);
   text-align: center;
-  font-size: clamp(14px, 2.1vw, 20px);
+  font-size: calc(clamp(14px, 2.1vw, 20px) * var(--subs-escala, 1));
   line-height: 1.35;
   color: #f2eedf;
   text-shadow: 0 0 3px #000, 0 0 6px #000;
@@ -293,3 +293,12 @@ h2 { margin: 0; font-size: clamp(24px, 4vw, 40px); color: var(--acento); letter-
 .foco-mando { outline: 3px solid var(--acento) !important; outline-offset: 3px; }
 .solo-mando { display: none !important; }
 body.mando .solo-mando { display: block !important; }
+
+/* Logros. */
+.logros { list-style: none; padding: 0; margin: 8px 0 0; }
+.logros li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; padding: 5px 0; border-bottom: 1px solid #1c1e22; color: var(--tenue); font-size: 13px; }
+.logros li b { color: var(--tinta); font-size: 14px; }
+.logros li.hecho b { color: var(--acento); }
+.logros .marca { color: #3a3c42; }
+.logros li.hecho .marca { color: var(--acento); }
+.opciones select { font-family: var(--fuente); background: #111317; color: var(--tinta); border: 1px solid #3a3c42; padding: 4px 6px; }
