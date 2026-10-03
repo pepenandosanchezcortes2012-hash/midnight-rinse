@@ -309,6 +309,11 @@ El proyecto pasó por dos etapas:
 - **Opción «Ahorro de batería (30 FPS)»:** activada por defecto en pantallas táctiles. El bucle se salta cuadros y el tiempo se acumula.
 - **Prueba determinista:** 30 cuadros por segundo con ahorro y 60 sin él. Resultado: 26/26.
 
+## 30. Ambiente en la pantalla de título
+- **Qué suena:** con el primer toque o tecla en el título empieza el ambiente (lluvia, retumbo, zumbido y drone) al 60 % del volumen; al empezar el turno sube al normal.
+- **Botón:** «Instalar en el teléfono» pasa a «Instalar la app».
+- **Prueba nueva.** Resultado: 27/27.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

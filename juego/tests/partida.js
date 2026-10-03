@@ -633,6 +633,20 @@
       return 'con ahorro ' + on + ' cuadros/s, sin ahorro ' + off;
     }],
 
+    ['Ambiente sonoro en la pantalla de título', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      check(!g.audio.ambience, 'sonaba antes de tocar nada');
+      ctx.w.dispatchEvent(new ctx.w.Event('pointerdown'));
+      check(g.audio.ambience && g.audio.ctx && g.state === 'title', 'el primer toque no encendió el ambiente');
+      var vol = g.ui.options.volume;
+      check(Math.abs(g.audio.master.gain.value - vol * 0.6) < 0.01, 'el título no suena más bajito');
+      start(ctx);
+      check(Math.abs(g.audio.master.gain.value - vol) < 0.01, 'al empezar no subió al volumen normal');
+      noErrors(ctx);
+      return 'lluvia y zumbido al primer toque, a ' + Math.round(vol * 60) + ' % del volumen';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

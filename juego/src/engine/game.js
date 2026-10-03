@@ -81,6 +81,10 @@
       ['pointerdown', 'keydown', 'touchstart'].forEach(function (type) {
         window.addEventListener(type, function () {
           if (self.state === 'playing' && self.audio.ctx && self.audio.ctx.state === 'suspended') { self.audio.ctx.resume(); }
+          // Pantalla de título: con el primer toque empieza el ambiente (lluvia, zumbido, drone), más bajito.
+          if (self.state === 'title' && !self.audio.ambience) {
+            try { self.audio.start(self.ui.options.volume * 0.6, false); } catch (e) { /* sin audio */ }
+          }
         });
       });
       // Si la pestaña o la app pasan a segundo plano (llamada, notificación), el turno se pausa.
