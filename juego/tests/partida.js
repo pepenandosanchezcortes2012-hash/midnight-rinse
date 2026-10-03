@@ -274,6 +274,35 @@
       return 'menú, Start, sticks, cruceta, B, pausa, guía y ' + pad.rumbles + ' vibraciones';
     }],
 
+    ['Historia del bosque: seis hojas y el tercer final', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var d = ctx.w.document;
+      g.bosque.go(); step(ctx, 40);
+      // La primera hoja se puede tocar de verdad (rayo desde la cámara).
+      g.player.pos.set(1.4, 0, 104.7); g.player.yaw = Math.PI; g.player.pitch = -1.0; step(ctx, 1);
+      var cam = g.player.camera;
+      var v = g.world.forest.pages[0].getWorldPosition(new ctx.w.THREE.Vector3()).project(cam);
+      var t = g.gameplay.targetAt(cam, new ctx.w.THREE.Vector2(v.x, v.y));
+      check(t && t.kind === 'paginaBosque' && t.index === 0, 'la hoja 1 no se puede tocar');
+      g.gameplay._begin(t, g.input);
+      check(g.noteOpen && /HOJA MOJADA/.test(d.querySelector('#nota .encabezado').textContent), 'no se leyó la hoja');
+      g.closeNote();
+      // Con menos de seis, la lavadora no abre; con las seis, tercer final.
+      g.bosque.touchWasher();
+      check(/1 de 6/.test(d.getElementById('subtitulos').textContent), 'la lavadora no dijo cuántas faltan');
+      for (var i = 1; i < 6; i += 1) { g.bosque.takePage(i); g.closeNote(); }
+      check(g.bosque.pagesFound() === 6, 'no se contaron las seis hojas');
+      g.bosque.touchWasher();
+      step(ctx, 30 * 4);
+      check(g.state === 'ended', 'no terminó el turno');
+      check(d.getElementById('final-titulo').textContent === ctx.w.MR.HISTORIA.final.titulo, 'no fue el tercer final');
+      // El registro del mostrador vuelve a su encabezado normal.
+      noErrors(ctx);
+      return '6/6 hojas → «' + ctx.w.MR.HISTORIA.final.titulo + '»';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

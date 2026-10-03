@@ -500,7 +500,8 @@
     }
 
     // ---------------------------------------------------------------------------------------------
-    end() {
+    /** Fin del turno. reason = 'bosque' para el tercer final (las seis hojas en la lavadora del claro). */
+    end(reason) {
       if (this.state === 'ended') { return; }
       this.state = 'ended';
       if (this.question) { this.question = null; this.stats.respuesta = 'sin_respuesta'; }
@@ -521,12 +522,14 @@
         'Parpadeos: ' + s.parpadeos,
         'Cigarros: ' + this.consumables.used.cigarros + ' · Tragos de la petaca: ' + this.consumables.used.tragos +
           ' · Porros: ' + this.consumables.used.porros,
-        'Salidas al bosque: ' + this.bosque.visits
+        'Salidas al bosque: ' + this.bosque.visits + ' · Hojas del registro: ' + this.bosque.pagesFound() + ' de 6'
       ];
       document.body.classList.remove('jugando');
       this.tilt.stop();
       this.music.disconnect(true);
-      if (good) {
+      if (reason === 'bosque') {
+        this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
+      } else if (good) {
         this.ui.showEnd('05:12 · Turno terminado',
           'Las lavadoras se detienen una por una. Afuera sigue lloviendo, pero la puerta por fin abre. El banco amarillo está vacío y seco.',
           summary);

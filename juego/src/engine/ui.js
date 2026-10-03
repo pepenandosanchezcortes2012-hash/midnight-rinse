@@ -204,8 +204,10 @@
       });
     }
 
-    showNote(text) {
+    /** La hoja vista de cerca: el registro del mostrador o una hoja mojada del bosque (con su firma). */
+    showNote(text, header) {
       this.el.noteText.textContent = text || '(hoja en blanco)';
+      this.el.note.querySelector('.encabezado').textContent = header || 'REGISTRO DE TURNO · LAVANDERÍA LA ESPUMA';
       this.el.note.hidden = false;
     }
 

@@ -99,6 +99,7 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Sonidos:** ramas que crujen donde no miras y un búho a lo lejos.
 - **Si el Cliente Inmóvil ya llegó, te sigue entre los árboles** cuando no lo ves. Al volver, te espera en la entrada.
 - **El turno no se detiene:** mientras estás afuera nadie friega los charcos ni vigila las lavadoras.
+- **Seis hojas mojadas del registro** están tiradas cerca del sendero: son de quienes hicieron este turno antes que tú y cuentan qué pasa aquí. Si las juntas todas, la lavadora del claro abre un **tercer final**.
 - **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
 
 ### Qué hacer durante el turno

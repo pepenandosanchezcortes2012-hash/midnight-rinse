@@ -623,6 +623,24 @@
       this.interactive(port, 'lavadoraBosque');
       this.collider(6.15, 7.05, 140.75, 141.65);
 
+      // Seis hojas mojadas del registro, cerca del sendero (la última, sobre la lavadora del claro).
+      var pageMat = R.material({ texture: 'paper', color: 0xcfc8b0, emissive: 0.35 });
+      var pages = [];
+      [[1.4, 105.5], [-2.7, 113.5], [4.2, 125.5], [1.2, 129.4], [6.2, 135.0]].forEach(function (p, i) {
+        var pg = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.28), pageMat);
+        pg.rotation.set(-Math.PI / 2, 0, i * 1.3 + 0.4);
+        pg.position.set(p[0], 0.025, p[1]);
+        this.add(pg);
+        this.interactive(pg, 'paginaBosque', i);
+        pages.push(pg);
+      }, this);
+      var last = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.28), pageMat);
+      last.rotation.set(-Math.PI / 2, 0, 0.3);
+      last.position.set(0.05, 0.885, -0.05);
+      wm.add(last);
+      this.interactive(last, 'paginaBosque', 5);
+      pages.push(last);
+
       // Anclas del Cliente Inmóvil entre los árboles (de pie, mirando al sendero) y zonas de oclusión.
       var zoneDefs = {
         bosque_entrada: { center: new V3(-1, 1.2, 109), radius: 4.5 },
@@ -720,6 +738,7 @@
       this.collider(8.2, 23.5, 98, 100.3);
 
       this.forest = {
+        pages: pages,
         doors: doors,
         litMaterial: mt.lit,
         lampMaterial: mt.lamp,

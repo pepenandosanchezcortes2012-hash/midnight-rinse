@@ -59,6 +59,10 @@
 
     update(dt) {
       var g = this.game;
+      if (this.endTimer > 0) {
+        this.endTimer -= dt;
+        if (this.endTimer <= 0 && this.onEndTimer) { this.onEndTimer(); return; }
+      }
       if (this.travel) {
         if (this.travel.phase === 'cierra') {
           this.fade = Math.min(1, this.fade + dt / FADE_IN);
@@ -151,9 +155,45 @@
       }
     }
 
-    /** Tocar la lavadora del claro. */
+    /** Hojas del registro encontradas en este turno. */
+    pagesFound() { return this.found ? this.found.filter(Boolean).length : 0; }
+
+    /** Recoger la hoja i: se lee de cerca y desaparece del bosque. */
+    takePage(i) {
+      var g = this.game;
+      this.found = this.found || [false, false, false, false, false, false];
+      if (this.found[i]) { return; }
+      this.found[i] = true;
+      this.f.pages[i].visible = false;
+      var p = MR.HISTORIA.paginas[i];
+      g.audio.click();
+      MR.Haptics.pulse(15);
+      g.noteOpen = true;
+      g.ui.showNote(p.texto, 'HOJA MOJADA DEL REGISTRO · ' + p.firma.toUpperCase());
+      var n = this.pagesFound();
+      g.ui.subtitle(n < 6 ? '(Hojas del registro: ' + n + ' de 6.)' : '(Tienes las seis hojas. La lavadora del claro te espera.)', 4);
+    }
+
+    /** Tocar la lavadora del claro (con las seis hojas: el tercer final). */
     touchWasher() {
       var g = this.game;
+      var n = this.pagesFound();
+      if (n === 6 && !this.ending) {
+        this.ending = true;
+        g.ui.subtitle('(Abres la tapa. El uniforme deja de girar. Metes las seis hojas, una por una.)', 4);
+        g.audio.door();
+        MR.Haptics.pulse([60, 80, 60, 80, 120]);
+        g.dread = Math.min(1, g.dread + 0.2);
+        var self = this;
+        this.endTimer = 3.2;
+        this.onEndTimer = function () { self.game.end('bosque'); };
+        return;
+      }
+      if (n > 0) {
+        g.ui.subtitle('(La tapa no abre. Llevas ' + n + ' de 6 hojas del registro.)', 4);
+        g.audio.click();
+        return;
+      }
       var lines = [
         '(Está tibia. Adentro gira ropa empapada… es un uniforme como el tuyo.)',
         '(No está conectada a nada. Aun así, sigue lavando.)',

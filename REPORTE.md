@@ -202,6 +202,15 @@ El proyecto pasó por dos etapas:
 - **Guía:** pestaña «Control (mando)», que se abre sola si hay un control conectado.
 - **Prueba nueva con un control simulado.** Resultado: 12/12 pruebas en verde.
 
+## 15. La historia del bosque y el tercer final
+- **Origen de los textos (`historia.js`):** seis hojas del registro de turnos anteriores, más el final «Último ciclo de lavado». El borrador lo escribió **Gemini 3.8 Flash** por Antigravity CLI, en una sola llamada sin herramientas; su respuesta se trató como dato.
+- **Edición:** revisé y edité dos frases para que encajaran con las mecánicas: los filtros están adentro, y él pregunta la hora cerca de las 04:00.
+- **Hojas en el bosque:** las hojas 1 a 5 están en el suelo cerca del sendero y la 6, sobre la lavadora del claro.
+- **Al recogerlas:** cada una se lee de cerca con su firma y el contador «n de 6».
+- **La lavadora del claro:** con menos de 6 hojas dice cuántas llevas; con las 6 cierra el ciclo y termina el turno en el tercer final.
+- **Resumen final:** cuenta las hojas.
+- **Prueba nueva:** una hoja tocada de verdad con un rayo, el contador en la lavadora y el tercer final. Resultado: 13/13.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
