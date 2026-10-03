@@ -30,7 +30,13 @@
       $('btn-guia-cerrar').addEventListener('click', function () { self.showGuide(false); });
       $('guia-tab-escritorio').addEventListener('click', function () { self._guideTab('escritorio'); });
       $('guia-tab-tactil').addEventListener('click', function () { self._guideTab('tactil'); });
+      // Reiniciar todo: primero una pantalla de confirmación (no una ventana del navegador).
+      $('btn-reiniciar').addEventListener('click', function () { self.showReset(true); });
+      $('btn-reiniciar-pausa').addEventListener('click', function () { self.showReset(true); });
+      $('btn-reiniciar-no').addEventListener('click', function () { self.showReset(false); });
+      $('btn-reiniciar-si').addEventListener('click', function () { self.resetAll(); });
       window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !$('reiniciar').hidden) { e.preventDefault(); self.showReset(false); return; }
         if (e.key === 'Escape' && !$('guia').hidden) { e.preventDefault(); self.showGuide(false); return; }
         // H en la pantalla de título o en la pausa (en plena partida la maneja game.js). No al escribir en un campo.
         var typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
@@ -151,6 +157,37 @@
         this._guideTab(document.body.classList.contains('tactil') ? 'tactil' : 'escritorio');
         $('guia').scrollTop = 0;
         $('btn-guia-cerrar').focus({ preventScroll: true });
+      }
+    }
+
+    showReset(on) {
+      $('reiniciar').hidden = !on;
+      if (on) { $('btn-reiniciar-no').focus({ preventScroll: true }); }
+    }
+
+    /**
+     * Borra TODO lo que el juego guarda en este navegador (claves "midnight-rinse/…": registro del turno,
+     * opciones y enlace de la música), corta la música y recarga la página desde cero.
+     */
+    resetAll() {
+      var g = this.game;
+      try { g.music.disconnect(true); } catch (e) { /* sin música */ }
+      try { if (g.tele.player && g.tele.player.destroy) { g.tele.player.destroy(); } } catch (e) { /* sin tele */ }
+      try { g.shift.reset(); } catch (e) { /* almacenamiento no disponible */ }
+      try {
+        var keys = [];
+        for (var i = 0; i < window.localStorage.length; i += 1) {
+          var k = window.localStorage.key(i);
+          if (k && k.indexOf('midnight-rinse/') === 0) { keys.push(k); }
+        }
+        keys.forEach(function (k) { window.localStorage.removeItem(k); });
+      } catch (e) { /* almacenamiento no disponible */ }
+      this._saveOptions = function () {}; // que ningún guardado posterior vuelva a escribir las opciones viejas
+      var reload = function () { window.location.reload(); };
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().then(reload, reload);
+      } else {
+        reload();
       }
     }
 

@@ -87,6 +87,7 @@ Un turno dura unos 15 minutos reales. Para probar más rápido: `index.html?velo
 - **Capa meta-diegética (opcional y avisada):** puede usar la hora real de tu computadora. Si juegas entre las 02:00 y las 05:00, las anomalías se triplican.
 - **Tu nombre en los susurros:** opcional. Lo escribes tú y no sale de tu navegador. El juego no lee tu nombre de usuario del sistema.
 - El registro del turno **persiste entre partidas** y nunca retrocede. Se puede borrar desde la pantalla de título.
+- **Reiniciar todo** (botón rojo en el título y en la pausa): pide confirmación y deja el juego como la primera vez. Borra el registro del turno, las opciones y el enlace de tu música, y solo toca lo que guarda este juego en tu navegador.
 
 ## Estructura
 
