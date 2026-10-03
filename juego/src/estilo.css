@@ -141,6 +141,7 @@ h1 {
 }
 h2 { margin: 0; font-size: clamp(24px, 4vw, 40px); color: var(--acento); letter-spacing: 0.1em; }
 .sub { margin: 0 0 8px; color: var(--tenue); letter-spacing: 0.3em; }
+.noche { margin: -4px 0 6px; color: #ff9c7a; letter-spacing: 0.25em; font-size: 13px; }
 .aviso { color: #ff9c7a; margin: 0; }
 .advertencia { color: var(--tenue); font-size: 13px; max-width: 640px; }
 .controles { color: var(--tenue); font-size: 14px; max-width: 760px; }

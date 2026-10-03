@@ -571,6 +571,19 @@
       return 'cuarta respuesta → se va y no vuelve; logro «La hora verdadera»';
     }],
 
+    ['Contador de noches en el título', async function () {
+      localStorage.removeItem('midnight-rinse/noches');
+      var ctx = await load();
+      check(ctx.w.document.getElementById('noche').hidden, 'la primera noche ya mostraba contador');
+      start(ctx);
+      ctx.g.end();
+      check(localStorage.getItem('midnight-rinse/noches') === '1', 'no contó la noche');
+      var ctx2 = await load();
+      var el = ctx2.w.document.getElementById('noche');
+      check(!el.hidden && el.textContent === 'Noche 2', 'el título no dice «Noche 2» (' + el.textContent + ')');
+      return 'Noche 2 tras un turno';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

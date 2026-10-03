@@ -22,6 +22,7 @@
       $('btn-comenzar').addEventListener('click', function () { self._saveOptions(); game.start(); });
       $('btn-continuar-turno').addEventListener('click', function () { self._saveOptions(); game.continueShift(); });
       this.refreshContinue();
+      this.refreshNight();
       $('btn-continuar').addEventListener('click', function () { game.resume(); });
       $('btn-abandonar').addEventListener('click', function () { MR.Partida.clear(); window.location.reload(); });
       $('btn-volver').addEventListener('click', function () { window.location.reload(); });
@@ -114,6 +115,15 @@
       if (show) {
         this.el.realTime.textContent = 'Son las ' + MR.Util.clockText(h * 60 + now.getMinutes()) + '. Deberías estar durmiendo.';
       }
+    }
+
+    /** «Noche n»: cuántos turnos llevas (se guarda en midnight-rinse/noches). */
+    refreshNight() {
+      var n = 0;
+      try { n = parseInt(window.localStorage.getItem('midnight-rinse/noches') || '0', 10) || 0; } catch (e) { n = 0; }
+      var el = $('noche');
+      el.hidden = n < 1;
+      el.textContent = 'Noche ' + (n + 1);
     }
 
     /** Botón «Continuar turno (02:47 · Normal)» si hay un turno guardado. */

@@ -594,6 +594,10 @@
       if (this.state === 'ended') { return; }
       this.state = 'ended';
       MR.Partida.clear();
+      try {
+        var nights = (parseInt(window.localStorage.getItem('midnight-rinse/noches') || '0', 10) || 0) + 1;
+        window.localStorage.setItem('midnight-rinse/noches', String(nights));
+      } catch (e) { /* sin almacenamiento */ }
       if (this.question) { this.question = null; this.stats.respuesta = 'sin_respuesta'; }
       this.ui.hideChoices();
       this.closeNote();

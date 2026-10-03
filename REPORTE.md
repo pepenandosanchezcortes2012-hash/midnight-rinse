@@ -293,6 +293,11 @@ El proyecto pasó por dos etapas:
 - **Logro oculto:** «La hora verdadera».
 - **Prueba nueva.** Resultado: 23/23.
 
+## 27. Contador de noches y título más limpio
+- **Noche n:** el título muestra «Noche n» con los turnos terminados (`midnight-rinse/noches`). «Reiniciar todo» lo borra.
+- **Opciones:** el panel empieza cerrado.
+- **Prueba nueva.** Resultado: 24/24.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
