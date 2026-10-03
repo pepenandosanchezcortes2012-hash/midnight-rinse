@@ -49,6 +49,7 @@
       this.ui.bindMusic(this.music);
       this.tele = new MR.Tele(this);
       this.bosque = new MR.Bosque(this);
+      this.clima = new MR.Clima(this);
       this.ui.bindTele(this.tele);
       this.touch = new MR.TouchControls(this);
       this.tilt = new MR.Tilt();
@@ -231,6 +232,7 @@
         blinkFactor: this.consumables.blinkFactor()
       });
       this.bosque.light();
+      this.clima.update(dt, this.player.time);
       if (this.player.blinkStarted) { this.stats.parpadeos += 1; }
 
       this.consumables.update(dt);

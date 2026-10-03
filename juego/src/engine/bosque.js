@@ -35,8 +35,12 @@
         fogFar: sh.uFogFar.value,
         fogColor: sh.uFogColor.value.clone()
       };
+      this.outAmbient = new THREE.Vector3(0.035, 0.04, 0.06);
       this.tmp = new THREE.Vector3();
     }
+
+    /** Luz ambiente de base donde estés (el clima le suma los relámpagos). */
+    baseAmbient() { return this.outside ? this.outAmbient : this.inside.ambient; }
 
     /** ¿Se puede cruzar ahora? (no con la hoja abierta, una pregunta en curso o un cruce a medias). */
     canTravel() {
@@ -105,7 +109,7 @@
       var spots = toOutside ? this.f.lights : this.world.lightSpots;
       spots.forEach(function (s, i) { R.setLight(i, new THREE.Vector3(s[0], s[1], s[2]), s[3], s[4], s[5]); });
       if (toOutside) {
-        sh.uAmbient.value.set(0.035, 0.04, 0.06);
+        sh.uAmbient.value.copy(this.outAmbient);
         sh.uFogNear.value = 2.5;
         sh.uFogFar.value = 15.0;
         sh.uFogColor.value.set(0.01, 0.012, 0.018);
@@ -118,6 +122,7 @@
       var spawn = toOutside ? this.f.spawnOutside : this.f.spawnInside;
       var p = g.player;
       p.area = toOutside ? this.f.area : null; // null = la sala
+      p.surface = toOutside ? 'tierra' : null;  // pasos sobre tierra mojada
       p.pos.set(spawn.x, 0, spawn.z);
       p.vel.set(0, 0, 0);
       p.yaw = spawn.yaw;

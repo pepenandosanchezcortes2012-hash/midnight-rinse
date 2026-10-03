@@ -176,7 +176,7 @@
         var sign = Math.sin(this.bobPhase) >= 0 ? 1 : -1;
         if (sign !== this.lastStepSign) {
           this.lastStepSign = sign;
-          this.audio.step(sign * 0.2);
+          this.audio.step(sign * 0.2, this.surface);
         }
       }
 

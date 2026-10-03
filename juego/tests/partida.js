@@ -198,6 +198,32 @@
       return 'en ' + h.customer.anchor + ' a ' + h.distanceToCustomer(g.player).toFixed(1) + ' m';
     }],
 
+    ['Tormenta: lluvia visible afuera, relámpago y trueno', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      check(!g.clima.mesh.visible, 'la lluvia se ve adentro');
+      g.bosque.go(); step(ctx, 40);
+      check(g.clima.mesh.visible, 'no llueve afuera');
+      var thunder = 0;
+      var orig = g.audio.trueno.bind(g.audio);
+      g.audio.trueno = function (v, m) { thunder += 1; return orig(v, m); };
+      var amb0 = g.retro.shared.uAmbient.value.x;
+      g.clima.nextBolt = 0;
+      step(ctx, 2);
+      var peak = g.retro.shared.uAmbient.value.x;
+      check(peak > amb0 + 0.2, 'el relámpago no iluminó el bosque (' + amb0.toFixed(2) + ' → ' + peak.toFixed(2) + ')');
+      step(ctx, 30 * 5);
+      check(thunder === 1, 'el trueno sonó ' + thunder + ' veces');
+      check(Math.abs(g.retro.shared.uAmbient.value.x - amb0) < 0.01, 'la luz no volvió a la normalidad');
+      // Con «Reducir destellos»: un solo resplandor suave.
+      g.options.reduceFlashes = true;
+      g.clima.bolt = null; g.clima.nextBolt = 0; step(ctx, 1);
+      check(g.clima.bolt.flashes.length === 1 && g.clima.bolt.flashes[0][2] < 0.6, 'no respetó «Reducir destellos»');
+      noErrors(ctx);
+      return 'luz ambiente ' + amb0.toFixed(2) + ' → ' + peak.toFixed(2) + '; 1 trueno; modo suave OK';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

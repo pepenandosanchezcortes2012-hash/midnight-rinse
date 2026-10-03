@@ -182,6 +182,14 @@ El proyecto pasó por dos etapas:
   - Lo demás va a la red primero; YouTube no pasa por el service worker.
 - **Botón «Instalar en el teléfono»** (`beforeinstallprompt`) y, en iPhone, instrucciones para Compartir → Agregar a pantalla de inicio.
 
+## 13. Tormenta
+- **`clima.js`:** la lluvia son 1400 hilos en una caja que sigue a la cámara, con caída y viento calculados en el shader en un solo dibujo.
+- **Relámpagos:** 1 a 3 destellos que suben la luz ambiente; adentro solo brillan las puertas de vidrio. El trueno llega 1 a 4 s después, y adentro se oye ahogado.
+- **Susto:** el 40 % de los relámpagos en el bosque revela al Cliente Inmóvil en un ancla delante de ti, entre 4 y 12 m.
+- **«Reducir destellos»:** un solo resplandor suave.
+- **Pasos:** sobre tierra mojada suenan distinto.
+- **Prueba nueva:** lluvia solo afuera, el relámpago ilumina (0.04 → 0.31), un trueno, vuelta a la normalidad y modo suave. Resultado: 11/11 pruebas en verde.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

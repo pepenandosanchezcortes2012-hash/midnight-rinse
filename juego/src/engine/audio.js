@@ -302,7 +302,22 @@
     // ---- Efectos táctiles ----
     click() { this._tone(1900, 0.018, 0.09, 'square'); this._burst(this.white, 'highpass', 3000, 0.7, 0.02, 0.05); }
     coin() { this._tone(2400, 0.25, 0.08); var self = this; setTimeout(function () { self._tone(3150, 0.3, 0.06); }, 70); }
-    step(pan) { this._burst(this.brown, 'lowpass', 180, 0.8, 0.09, 0.35, pan); }
+    /** Paso: baldosa (adentro) o tierra mojada (bosque: más grave y con un chapoteo). */
+    step(pan, surface) {
+      if (surface === 'tierra') {
+        this._burst(this.brown, 'lowpass', 240, 0.8, 0.13, 0.3, pan);
+        this._burst(this.white, 'bandpass', 1300, 1.6, 0.07, 0.05, pan);
+        return;
+      }
+      this._burst(this.brown, 'lowpass', 180, 0.8, 0.09, 0.35, pan);
+    }
+    /** Trueno: retumbo largo (y un chasquido si cayó cerca). Adentro, ahogado por los muros. */
+    trueno(vol, muffled) {
+      var v = Math.min(1, vol);
+      this._burst(this.brown, 'lowpass', muffled ? 80 : 120, 0.7, 3.8, 0.7 * v);
+      this._burst(this.brown, 'lowpass', muffled ? 60 : 90, 0.6, 5.0, 0.45 * v);
+      if (v > 0.85 && !muffled) { this._burst(this.white, 'lowpass', 1600, 0.6, 0.6, 0.35 * v); }
+    }
     thud() { this._tone(70, 0.5, 0.35, 'sine', 40); this._burst(this.brown, 'lowpass', 120, 0.8, 0.4, 0.5); }
     drip(pan) { this._tone(1500, 0.12, 0.05, 'sine', 600); }
     mop() { this._burst(this.pink, 'bandpass', 900, 1.2, 0.35, 0.12, 0); }

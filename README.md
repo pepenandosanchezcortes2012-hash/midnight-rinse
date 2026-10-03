@@ -85,6 +85,7 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Qué hay afuera:** la fachada iluminada, una farola de sodio y un sendero que lleva a un claro… donde hay una lavadora encendida que no está conectada a nada.
 - **La linterna:** la del celular se enciende sola, y a veces parpadea.
 - **La lluvia** moja tus lentes. Sécalos con **E**, o con **dos dedos hacia abajo** en el celular.
+- **Tormenta:** lluvia que cae a tu alrededor y relámpagos que iluminan todo el bosque, con truenos segundos después. A veces el relámpago revela que *él* estaba entre los árboles, delante de ti. Con «Reducir destellos de luz» activado, el relámpago es un resplandor suave.
 - **Sonidos:** ramas que crujen donde no miras y un búho a lo lejos.
 - **Si el Cliente Inmóvil ya llegó, te sigue entre los árboles** cuando no lo ves. Al volver, te espera en la entrada.
 - **El turno no se detiene:** mientras estás afuera nadie friega los charcos ni vigila las lavadoras.
