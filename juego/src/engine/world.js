@@ -179,6 +179,10 @@
         doorPivot.add(door);
         var handle = this.box(0.04, 0.1, 0.04, m.dark, 0.4, 0, 0.03, doorPivot);
         this.interactive(door, 'washerDoor', i);
+        var porthole = new THREE.Mesh(new THREE.CircleGeometry(0.16, 12), m.glass);
+        porthole.position.set(0.22, 0, 0.025);
+        doorPivot.add(porthole);
+        this.interactive(porthole, 'washerDoor', i);
         this.interactive(handle, 'washerDoor', i);
         var drum = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.04, 0.02), m.dark);
         drum.position.set(x, 0.5, -4.13);
@@ -196,7 +200,7 @@
         this.interactive(slot, 'washerCoin', i);
 
         var lamp = this.box(0.04, 0.04, 0.02, this.retro.material({ texture: 'white', color: 0x3a5a3a, emissive: 0.2 }), x, 0.93, -4.11);
-        this.washers.push({ x: x, body: body, doorPivot: doorPivot, drum: drum, dial: dial, slot: slot, lamp: lamp });
+        this.washers.push({ porthole: porthole, x: x, body: body, doorPivot: doorPivot, drum: drum, dial: dial, slot: slot, lamp: lamp });
       }
       this.collider(-7.25, -1.25, -5, -4.08);
     }

@@ -370,6 +370,15 @@ El proyecto pasó por dos etapas:
 - **Qué cambia:** al salir el café, un vaso de cartón aparece en la mano derecha y se levanta durante 2.2 s, con la pose ajustada para que el vaso quede a la vista.
 - **Resultado:** 32/32.
 
+## 39. Reflejos en el vidrio de las lavadoras
+- **Vidrio:** cada lavadora tiene ahora un ojo de buey de vidrio (que también brilla con los relámpagos).
+- **El susto:**
+  - **Cuándo:** al acercarte a menos de 1.5 m y empezar a mirar el vidrio. Pasa con un 12 % de probabilidad, o un 30 % desde la noche 2 o con pavor alto, y luego espera de 60 a 120 s antes de poder repetirse.
+  - **Qué se ve:** durante 0.45 s, una silueta de sombrero con ojos pálidos (lo que está detrás de ti), con susurro y vibración.
+  - **Si él ya llegó:** aparece a tu espalda en el siguiente parpadeo.
+- **Logro oculto:** «Detrás de ti».
+- **Prueba nueva.** Resultado: 33/33.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

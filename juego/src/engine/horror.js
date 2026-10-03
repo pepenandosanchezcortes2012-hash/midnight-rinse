@@ -42,6 +42,10 @@
       this.backDoorTarget = 0;
       this.nearTimer = 2;
       this.headYaw = 0; // la cabeza gira hacia ti cuando no lo miras
+      this.reflection = null;  // { washer, t } mientras se ve el reflejo
+      this.reflectCooldown = 20;
+      this.lastHover = null;
+      this.reflectMat = this.game.retro.material({ texture: 'reflejo', emissive: 0.4 });
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -104,6 +108,7 @@
         this.shake.body.position.x = this.shake.t > 0 ? this.shake.baseX + (Math.random() - 0.5) * 0.035 : this.shake.baseX;
         if (this.shake.t <= 0) { this.shake = null; }
       }
+      this._reflection(dt, player);
       this._watch(dt, player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
@@ -474,6 +479,40 @@
       while (want < -Math.PI) { want += Math.PI * 2; }
       want = U.clamp(want, -1.3, 1.3);
       this._setHead(this.headYaw + (want - this.headYaw) * Math.min(1, dt * 1.2));
+    }
+
+    /**
+     * Reflejos: al acercarte a mirar el vidrio de una lavadora, a veces ves una silueta de sombrero detrás de ti.
+     * Si él ya llegó, estará a tu espalda en el siguiente parpadeo.
+     */
+    _reflection(dt, player) {
+      var g = this.game;
+      var w = this.world;
+      this.reflectCooldown -= dt;
+      if (this.reflection) {
+        this.reflection.t -= dt;
+        if (this.reflection.t <= 0) {
+          w.washers[this.reflection.washer].porthole.material = w.mat.glass;
+          this.reflection = null;
+        }
+        return;
+      }
+      var hv = g.gameplay.hover;
+      var key = hv && hv.kind === 'washerDoor' ? hv.index : null;
+      var started = key !== null && key !== this.lastHover;
+      this.lastHover = key;
+      if (!started || this.reflectCooldown > 0) { return; }
+      var wx = w.washers[key].x;
+      if (Math.hypot(player.pos.x - wx, player.pos.z + 4.1) > 1.5) { return; }
+      if (Math.random() > ((g.night || 1) >= 2 || g.dread > 0.3 ? 0.3 : 0.12)) { return; }
+      this.reflection = { washer: key, t: 0.45 };
+      this.reflectCooldown = U.rand(60, 120);
+      w.washers[key].porthole.material = this.reflectMat;
+      g.audio.whisper(0);
+      MR.Haptics.pulse([30, 20, 60]);
+      g.dread = Math.min(1, g.dread + 0.08);
+      if (g.logros) { g.logros.unlock('reflejo'); }
+      if (this.customer.present) { this.schedule('cliente_detras', 'jugador', 6); }
     }
 
     _setHead(yaw) {

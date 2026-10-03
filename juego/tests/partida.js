@@ -765,6 +765,31 @@
       return 'noche 1: registro y lavadoras · noche 5: ninguna';
     }],
 
+    ['Reflejo en el vidrio de una lavadora', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var h = g.horror;
+      var wsh = g.world.washers[2];
+      h.placeCustomer('banco'); h.customer.present = true;
+      // Frente a la lavadora 3, mirando su vidrio.
+      var eyeY = ctx.w.MR.Config.PLAYER_HEIGHT;
+      g.player.pos.set(wsh.x, 0, -3.2); g.player.yaw = 0;
+      g.player.pitch = -Math.atan2(eyeY - 0.5, 4.09 - 3.2); step(ctx, 1);
+      h.reflectCooldown = 0; h.lastHover = null;
+      var rnd = ctx.w.Math.random; ctx.w.Math.random = function () { return 0; };
+      var pending0 = h.zones.jugador.dispatcher.pending();
+      step(ctx, 2);
+      ctx.w.Math.random = rnd;
+      check(g.gameplay.hover && g.gameplay.hover.kind === 'washerDoor', 'no estaba mirando el vidrio (' + JSON.stringify(g.gameplay.hover) + ')');
+      check(wsh.porthole.material === h.reflectMat, 'no apareció el reflejo');
+      check(h.zones.jugador.dispatcher.pending() > pending0, 'no quedó programado que él aparezca detrás');
+      step(ctx, 20);
+      check(wsh.porthole.material === g.world.mat.glass, 'el reflejo no desapareció');
+      noErrors(ctx);
+      return 'silueta en el vidrio 0.45 s y él detrás en el siguiente parpadeo';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

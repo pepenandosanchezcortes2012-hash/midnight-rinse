@@ -335,6 +335,22 @@
       noise(x, 16, 32, 22, 97);
       return c;
     },
+    reflejo: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#1d2c3a';
+      x.fillRect(0, 0, 32, 32);
+      x.fillStyle = '#05070a';
+      x.fillRect(9, 9, 14, 2);   // ala del sombrero
+      x.fillRect(12, 4, 8, 5);   // copa
+      x.fillRect(13, 11, 6, 7);  // cabeza
+      x.fillRect(6, 18, 20, 14); // hombros
+      x.fillStyle = '#c8c4b4';
+      x.fillRect(14, 13, 1, 1);  // ojos
+      x.fillRect(17, 13, 1, 1);
+      noise(x, 32, 32, 18, 101);
+      return c;
+    },
     roca: function () {
       var c = canvas(16, 16);
       var x = c.getContext('2d');
