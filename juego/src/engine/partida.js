@@ -30,7 +30,7 @@
         stats: copy(g.stats),
         player: { x: g.player.pos.x, z: g.player.pos.z, yaw: g.player.yaw, pitch: g.player.pitch },
         bosque: { outside: g.bosque.outside, visits: g.bosque.visits, found: (g.bosque.found || []).slice() },
-        consumables: { cigarettes: c.cigarettes, sips: c.sips, joints: c.joints, used: copy(c.used), tipsy: c.tipsy, high: c.high },
+        consumables: { cigarettes: c.cigarettes, sips: c.sips, joints: c.joints, used: copy(c.used), tipsy: c.tipsy, high: c.high, awake: c.awake },
         gameplay: {
           coins: gp.coins, trayCoins: gp.trayCoins, mopHeld: gp.mopHeld, nextPuddle: gp.nextPuddle,
           puddleActive: gp.puddleActive.slice(), radioRaw: gp.radioRaw,
@@ -71,7 +71,8 @@
       // Consumibles.
       var c = g.consumables;
       c.cigarettes = d.consumables.cigarettes; c.sips = d.consumables.sips; c.joints = d.consumables.joints;
-      c.used = copy(d.consumables.used); c.tipsy = d.consumables.tipsy; c.high = d.consumables.high;
+      c.used = Object.assign({ cafes: 0 }, copy(d.consumables.used)); c.tipsy = d.consumables.tipsy; c.high = d.consumables.high;
+      c.awake = d.consumables.awake || 0;
       g.ui.updateConsumables(c);
       // Lavandería.
       gp.coins = d.gameplay.coins;

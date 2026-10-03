@@ -276,6 +276,11 @@ El proyecto pasó por dos etapas:
 - **Qué revisa en cada cuadro:** que no haya NaN y que el jugador nunca salga de su área. Al final, que el turno termine sin errores.
 - **Resultado:** 21 cruces al bosque y 19 al pasillo sin un solo fallo. 20/20.
 
+## 24. Máquina de café y evaluación del gerente
+- **Café:** una moneda. Tras 2.5 s, `awake` sube 0.6, baja con el tiempo y alarga el intervalo entre parpadeos hasta ×1.8. Logro «Turno largo» con 3 cafés.
+- **Evaluación:** `100 − 15·faltas − (25 incorrecta | 12 sin respuesta) + 5·hojas + 15 (final del bosque) + 10 (final bueno) + 2·charcos` (máx. 10). Letra A–F con comentario del gerente en la pantalla final y en el resumen.
+- **Prueba nueva.** Resultado: 21/21.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

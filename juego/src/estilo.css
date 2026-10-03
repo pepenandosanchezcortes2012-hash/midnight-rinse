@@ -286,6 +286,9 @@ h2 { margin: 0; font-size: clamp(24px, 4vw, 40px); color: var(--acento); letter-
 #dialogo-opciones li:hover { color: #fff; }
 
 #final-texto { max-width: 640px; font-size: 18px; }
+.nota-final { display: flex; align-items: center; gap: 16px; max-width: 640px; text-align: left; border: 1px solid #2a2c31; padding: 10px 16px; }
+#final-letra { font-size: 56px; font-weight: bold; color: var(--acento); text-shadow: 3px 3px 0 #3a2f0a; min-width: 1.2em; text-align: center; }
+#final-gerente { color: var(--tinta); font-size: 15px; font-style: italic; }
 #final-resumen { list-style: none; padding: 0; color: var(--tenue); }
 #final-resumen li { margin: 4px 0; }
 

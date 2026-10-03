@@ -301,6 +301,12 @@
 
     hideChoices() { this.el.dialog.hidden = true; }
 
+    /** La nota del gerente (A–F) en la pantalla final. */
+    showGrade(letter, comment) {
+      $('final-letra').textContent = letter;
+      $('final-gerente').textContent = comment;
+    }
+
     showEnd(title, text, summary) {
       this.el.endTitle.textContent = title;
       this.el.endText.textContent = text;

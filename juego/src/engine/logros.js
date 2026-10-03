@@ -24,6 +24,7 @@
     { id: 'gato', titulo: 'Pelusa', desc: 'Acaricia al gato de la lavandería.' },
     { id: 'pesadilla', titulo: 'Turno de pesadilla', desc: 'Consigue que la puerta abra en dificultad Pesadilla.', oculto: true },
     { id: 'fusibles', titulo: 'Electricista', desc: 'Restablece los fusibles del pasillo de servicio.' },
+    { id: 'cafe', titulo: 'Turno largo', desc: 'Tómate tres cafés de máquina en un mismo turno.' },
     { id: 'casillero', titulo: 'Ya tenías casillero', desc: 'Abre el último casillero del pasillo.', oculto: true }
   ];
 

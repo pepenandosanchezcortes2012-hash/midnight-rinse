@@ -501,6 +501,35 @@
       return 'abre 03:00, entra, camina, casillero con tu nombre, fusibles, él al fondo y regreso';
     }],
 
+    ['Máquina de café y evaluación del gerente', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var c = g.consumables;
+      var d = ctx.w.document;
+      // La máquina se puede tocar de verdad.
+      g.player.pos.set(-3.2, 0, 3.4); g.player.yaw = Math.PI; g.player.pitch = -0.1; step(ctx, 1);
+      var t = g.gameplay.targetAt(g.player.camera, new ctx.w.THREE.Vector2(0, 0));
+      check(t && t.kind === 'cafe', 'la máquina de café no se puede tocar (' + (t && t.kind) + ')');
+      g.gameplay.coins = 0;
+      c.tryCoffee();
+      check(/moneda/.test(d.getElementById('subtitulos').textContent) && c.brewing === 0, 'sin monedas no avisó');
+      g.gameplay.coins = 2;
+      var bf0 = c.blinkFactor();
+      g.gameplay._begin(t, g.input);
+      step(ctx, 30 * 3);
+      check(c.used.cafes === 1 && g.gameplay.coins === 1 && c.awake > 0.5 && c.blinkFactor() > bf0, 'el café no hizo efecto');
+      // Evaluación: un turno perfecto saca A.
+      g.stats.respuesta = 'correcta'; g.stats.mirada = 0; g.stats.pasillo = 0; g.stats.filtro = 0;
+      g.end();
+      check(d.getElementById('final-letra').textContent === 'A', 'un turno perfecto no sacó A (' + d.getElementById('final-letra').textContent + ')');
+      check(/Evaluación del turno: A/.test(d.getElementById('final-resumen').textContent), 'el resumen no muestra la evaluación');
+      // Y uno desastroso, F.
+      check(ctx.w.MR.Game.grade(100 - 15 * 6 - 25)[0] === 'F', 'la escala de notas no da F');
+      noErrors(ctx);
+      return 'café: 1 moneda, parpadeo ×' + (c.blinkFactor() / bf0).toFixed(2) + '; turno perfecto = A';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

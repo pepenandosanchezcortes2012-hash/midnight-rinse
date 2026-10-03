@@ -126,6 +126,10 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Sintoniza la radio** del mostrador en la 94.1. A las 02:40 habla el locutor.
 - **Las reglas del registro importan.** Hay dos finales.
 
+### Máquina de café y evaluación
+- **Máquina de café**, junto a la entrada: **una moneda** por un vaso. Te despierta y parpadeas menos durante un rato, pero esa moneda ya no va a una lavadora.
+- **Evaluación del gerente:** al final del turno te califica de **A a F**, con un comentario. Las faltas restan; las hojas encontradas, los charcos fregados y los buenos finales suman.
+
 ### Continuar turno
 El turno se guarda solo cada 10 segundos y al pausar o salir de la app; sirve si te llaman o el teléfono cierra el juego. En la pantalla de título aparece **«Continuar turno (02:47 · Normal)»**.
 - **Qué se guarda:** la hora, dónde estabas (también en el bosque), las lavadoras, los charcos, tus monedas, el trapeador, la radio, los consumibles, las hojas y dónde estaba *él*.

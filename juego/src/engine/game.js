@@ -595,7 +595,7 @@
         'Charcos fregados: ' + s.charcos,
         'Parpadeos: ' + s.parpadeos,
         'Cigarros: ' + this.consumables.used.cigarros + ' · Tragos de la petaca: ' + this.consumables.used.tragos +
-          ' · Porros: ' + this.consumables.used.porros,
+          ' · Porros: ' + this.consumables.used.porros + ' · Cafés: ' + this.consumables.used.cafes,
         'Salidas al bosque: ' + this.bosque.visits + ' · Hojas del registro: ' + this.bosque.pagesFound() + ' de 6',
         'Caricias a Pelusa: ' + this.gato.pets + ' · Bufidos de alarma: ' + this.gato.hisses,
         'Pasillo de servicio: ' + this.pasillo.visits + (this.pasillo.visits === 1 ? ' visita' : ' visitas') +
@@ -604,6 +604,13 @@
       document.body.classList.remove('jugando');
       this.tilt.stop();
       this.music.disconnect(true);
+      // Evaluación del gerente: 100 puntos menos las faltas, más lo que encontraste.
+      var score = 100 - 15 * (s.mirada + s.pasillo + s.filtro) -
+        (s.respuesta === 'incorrecta' ? 25 : (s.respuesta === 'correcta' ? 0 : 12)) +
+        5 * this.bosque.pagesFound() + (reason === 'bosque' ? 15 : 0) + (good ? 10 : 0) + Math.min(10, s.charcos * 2);
+      var grade = MR.Game.grade(score);
+      summary.unshift('Evaluación del turno: ' + grade[0] + ' (' + Math.max(0, Math.round(score)) + ' puntos)');
+      this.grade = grade[0];
       // Logros del final del turno.
       var L = this.logros;
       L.unlock('primer_turno');
@@ -612,6 +619,7 @@
       if (s.pasillo === 0 && s.filtro === 0) { L.unlock('pulcro'); }
       if (this.flags.customerSeen && s.mirada === 0) { L.unlock('ojos_al_suelo'); }
       if (this.consumables.used.porros >= 3) { L.unlock('paranoia'); }
+      this.ui.showGrade(grade[0], grade[1]);
       if (reason === 'bosque') {
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {
@@ -632,6 +640,15 @@
    */
   Game.audioSession = function (mix) {
     try { if (navigator.audioSession) { navigator.audioSession.type = mix ? 'ambient' : 'auto'; } } catch (e) { /* no soportado */ }
+  };
+
+  /** Letra y comentario del gerente según los puntos del turno. */
+  Game.grade = function (score) {
+    if (score >= 100) { return ['A', 'Empleado del mes. Tu foto ya está junto al cambiador. Nadie recuerda haberla tomado.']; }
+    if (score >= 80) { return ['B', 'Buen turno. El pasillo brilla. Casi no se nota lo que pasó.']; }
+    if (score >= 60) { return ['C', 'Pasable. Hay pelusa en un filtro y alguien dejó huellas en el vidrio.']; }
+    if (score >= 40) { return ['D', 'El gerente quiere hablar contigo. Mañana. A la una y diez.']; }
+    return ['F', 'No vuelvas mañana… aunque siempre vuelves.'];
   };
 
   MR.Game = Game;

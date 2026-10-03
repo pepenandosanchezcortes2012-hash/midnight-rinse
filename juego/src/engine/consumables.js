@@ -25,7 +25,9 @@
       this.drinkTotal = 2.6;
       this.tipsy = 0;
       this.high = 0;
-      this.used = { cigarros: 0, tragos: 0, porros: 0 };
+      this.used = { cigarros: 0, tragos: 0, porros: 0, cafes: 0 };
+      this.awake = 0;     // café: parpadeas menos
+      this.brewing = 0;   // segundos hasta que sale el café
       this.inhaleMarks = [];
       this.exhale = -1;
     }
@@ -61,6 +63,19 @@
       this.joints -= 1;
       this.used.porros += 1;
       this._light('porro');
+    }
+
+    /** Máquina de café: una moneda; en 2.5 s sale el vaso y te despierta (parpadeas menos un rato). */
+    tryCoffee() {
+      var g = this.game;
+      if (this.brewing > 0) { return; }
+      if (g.gameplay.coins < 1) { g.ui.subtitle('(Necesitas una moneda. El cambiador está junto a la entrada.)', 3); return; }
+      g.gameplay.coins -= 1;
+      this.brewing = 2.5;
+      g.audio.coin();
+      g.audio.buzz();
+      MR.Haptics.pulse([25, 60, 10, 30, 10]);
+      g.ui.subtitle('(La máquina zumba y escupe un vaso de cartón.)', 2.5);
     }
 
     tryFlask() {
@@ -117,6 +132,18 @@
           g.ui.subtitle(this.tipsy > 0.7 ? '(Todo se mece un poco. Parpadeas más de la cuenta.)' : '(Un trago tibio. Te calma.)', 3);
         }
       }
+      if (this.brewing > 0) {
+        this.brewing = Math.max(0, this.brewing - dt);
+        if (this.brewing === 0) {
+          g.audio.sip();
+          this.awake = Math.min(1, this.awake + 0.6);
+          this.used.cafes += 1;
+          g.dread = Math.max(0, g.dread - 0.04);
+          g.ui.subtitle('(Café de máquina. Sabe a cartón, pero te despierta.)', 3.5);
+          if (this.used.cafes >= 3 && g.logros) { g.logros.unlock('cafe'); }
+        }
+      }
+      this.awake = Math.max(0, this.awake - dt / 150);
       this.tipsy = Math.max(0, this.tipsy - dt / 90);
       this.high = Math.max(0, this.high - dt / 150);
     }
@@ -133,7 +160,7 @@
     }
 
     /** Factor del intervalo entre parpadeos automáticos (menor = parpadeas más). */
-    blinkFactor() { return 1 - 0.55 * this.tipsy; }
+    blinkFactor() { return (1 - 0.55 * this.tipsy) * (1 + 0.8 * this.awake); }
 
     /** El porro estira el tiempo del turno (hasta un 18 % más lento). */
     timeScale() { return 1 - 0.18 * this.high; }

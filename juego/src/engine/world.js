@@ -91,6 +91,7 @@
       this._bench();
       this._counter();
       this._tv();
+      this._cafe();
       this._entrance();
       this._closet();
       this._puddles();
@@ -335,6 +336,29 @@
       this.interactive(screen, 'tele');
       this.interactive(knob, 'teleCanal');
       this.tv = { group: tv, screen: screen, anchor: anchor, knob: knob, led: led, width: 0.48, height: 0.36 };
+    }
+
+    /** Máquina de café junto a la entrada (una moneda: te despierta y parpadeas menos). */
+    _cafe() {
+      var R = this.retro;
+      var body = this.box(0.75, 1.85, 0.55, R.material({ texture: 'metal', color: 0x8a2a24 }), -3.2, 0.925, 4.72);
+      var panel = MR.Textures.dynamic(32, 48);
+      var x = panel.ctx;
+      x.fillStyle = '#1a0d0a'; x.fillRect(0, 0, 32, 48);
+      x.fillStyle = '#ffd27a'; x.font = 'bold 9px monospace'; x.textAlign = 'center';
+      x.fillText('CAFÉ', 16, 12);
+      x.fillStyle = '#c8a070'; x.fillRect(9, 18, 14, 14);
+      x.fillStyle = '#5a3a20'; x.fillRect(11, 20, 10, 10);
+      x.fillStyle = '#ffd27a'; x.font = '7px monospace'; x.fillText('$1', 16, 42);
+      panel.texture.needsUpdate = true;
+      var face = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.75), R.material({ map: panel.texture, emissive: 0.9 }));
+      face.rotation.y = Math.PI;
+      face.position.set(-3.2, 1.3, 4.44);
+      this.add(face);
+      var slot = this.box(0.06, 0.1, 0.03, this.mat.dark, -2.98, 0.95, 4.43);
+      this.box(0.3, 0.22, 0.04, this.mat.dark, -3.2, 0.45, 4.43);
+      [body, face, slot].forEach(function (mesh) { this.interactive(mesh, 'cafe'); }, this);
+      this.collider(-3.6, -2.8, 4.42, 5);
     }
 
     _entrance() {

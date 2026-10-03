@@ -151,6 +151,7 @@
       if (kind === 'lavadoraBosque') { this.game.bosque.touchWasher(); return; }
       if (kind === 'paginaBosque') { this.game.bosque.takePage(target.index); return; }
       if (kind === 'gato') { this.game.gato.pet(); return; }
+      if (kind === 'cafe') { this.game.consumables.tryCoffee(); return; }
       if (kind === 'volverSala') { this.game.pasillo.go(); return; }
       if (kind === 'casillero') { this.game.pasillo.locker(target.index); return; }
       if (kind === 'fusibles') { this.game.pasillo.fuseBox(); return; }

@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" href="iconos/favicon-32.png">
   <link rel="apple-touch-icon" href="iconos/apple-touch-icon.png">
   <title>Midnight Rinse · Turno de Medianoche</title>
-  <link rel="stylesheet" href="src/estilo.css?v=20261003101501">
+  <link rel="stylesheet" href="src/estilo.css?v=20261003101906">
 </head>
 <body>
   <!-- Capa de la tele: el reproductor de YouTube vive DETRÁS del lienzo y se ve por el hueco de la pantalla. -->
@@ -168,6 +168,7 @@
       <div class="g-fila"><div class="g-ctl"><span class="tecla">C</span></div><div class="g-acc">Cigarro <span class="g-nota">(calma poco a poco; el humo empaña)</span></div></div>
       <div class="g-fila"><div class="g-ctl"><span class="tecla">F</span></div><div class="g-acc">Petaca <span class="g-nota">(necesitas la mano libre; marea y parpadeas más)</span></div></div>
       <div class="g-fila"><div class="g-ctl"><span class="tecla">J</span></div><div class="g-acc">Porro <span class="g-nota">(el tiempo se estira… y llega la paranoia)</span></div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en la máquina de café</div><div class="g-acc">Café por una moneda <span class="g-nota">(parpadeas menos un rato)</span></div></div>
       <h3>Tu música</h3>
       <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en la tele</div><div class="g-acc">Pausar o reanudar tu música</div></div>
       <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en su perilla</div><div class="g-acc">Siguiente canción</div></div>
@@ -279,45 +280,46 @@
   <section id="final" class="pantalla" hidden>
     <h2 id="final-titulo"></h2>
     <p id="final-texto"></p>
+    <div id="final-nota" class="nota-final"><span id="final-letra"></span><span id="final-gerente"></span></div>
     <ul id="final-resumen"></ul>
     <button id="btn-volver" class="boton">Volver al inicio</button>
   </section>
 
-  <script src="vendor/three.min.js?v=20261003101501"></script>
+  <script src="vendor/three.min.js?v=20261003101906"></script>
   <!-- Núcleo verificado (ports exactos de core/midnight_rinse_core) -->
-  <script src="src/core/dispatcher.js?v=20261003101501"></script>
-  <script src="src/core/bayer.js?v=20261003101501"></script>
-  <script src="src/core/vertexSnap.js?v=20261003101501"></script>
-  <script src="src/core/steppedHold.js?v=20261003101501"></script>
-  <script src="src/core/detentDial.js?v=20261003101501"></script>
-  <script src="src/core/clockAnomaly.js?v=20261003101501"></script>
-  <script src="src/core/shiftLog.js?v=20261003101501"></script>
+  <script src="src/core/dispatcher.js?v=20261003101906"></script>
+  <script src="src/core/bayer.js?v=20261003101906"></script>
+  <script src="src/core/vertexSnap.js?v=20261003101906"></script>
+  <script src="src/core/steppedHold.js?v=20261003101906"></script>
+  <script src="src/core/detentDial.js?v=20261003101906"></script>
+  <script src="src/core/clockAnomaly.js?v=20261003101906"></script>
+  <script src="src/core/shiftLog.js?v=20261003101906"></script>
   <!-- Motor del juego -->
-  <script src="src/engine/config.js?v=20261003101501"></script>
-  <script src="src/engine/util.js?v=20261003101501"></script>
-  <script src="src/engine/textures.js?v=20261003101501"></script>
-  <script src="src/engine/retro.js?v=20261003101501"></script>
-  <script src="src/engine/audio.js?v=20261003101501"></script>
-  <script src="src/engine/input.js?v=20261003101501"></script>
-  <script src="src/engine/world.js?v=20261003101501"></script>
-  <script src="src/engine/player.js?v=20261003101501"></script>
-  <script src="src/engine/glasses.js?v=20261003101501"></script>
-  <script src="src/engine/gameplay.js?v=20261003101501"></script>
-  <script src="src/engine/horror.js?v=20261003101501"></script>
-  <script src="src/engine/touch.js?v=20261003101501"></script>
-  <script src="src/engine/consumables.js?v=20261003101501"></script>
-  <script src="src/engine/music.js?v=20261003101501"></script>
-  <script src="src/engine/tele.js?v=20261003101501"></script>
-  <script src="src/engine/historia.js?v=20261003101501"></script>
-  <script src="src/engine/bosque.js?v=20261003101501"></script>
-  <script src="src/engine/pasillo.js?v=20261003101501"></script>
-  <script src="src/engine/clima.js?v=20261003101501"></script>
-  <script src="src/engine/gamepad.js?v=20261003101501"></script>
-  <script src="src/engine/logros.js?v=20261003101501"></script>
-  <script src="src/engine/gato.js?v=20261003101501"></script>
-  <script src="src/engine/partida.js?v=20261003101501"></script>
-  <script src="src/engine/ui.js?v=20261003101501"></script>
-  <script src="src/engine/game.js?v=20261003101501"></script>
-  <script src="src/main.js?v=20261003101501"></script>
+  <script src="src/engine/config.js?v=20261003101906"></script>
+  <script src="src/engine/util.js?v=20261003101906"></script>
+  <script src="src/engine/textures.js?v=20261003101906"></script>
+  <script src="src/engine/retro.js?v=20261003101906"></script>
+  <script src="src/engine/audio.js?v=20261003101906"></script>
+  <script src="src/engine/input.js?v=20261003101906"></script>
+  <script src="src/engine/world.js?v=20261003101906"></script>
+  <script src="src/engine/player.js?v=20261003101906"></script>
+  <script src="src/engine/glasses.js?v=20261003101906"></script>
+  <script src="src/engine/gameplay.js?v=20261003101906"></script>
+  <script src="src/engine/horror.js?v=20261003101906"></script>
+  <script src="src/engine/touch.js?v=20261003101906"></script>
+  <script src="src/engine/consumables.js?v=20261003101906"></script>
+  <script src="src/engine/music.js?v=20261003101906"></script>
+  <script src="src/engine/tele.js?v=20261003101906"></script>
+  <script src="src/engine/historia.js?v=20261003101906"></script>
+  <script src="src/engine/bosque.js?v=20261003101906"></script>
+  <script src="src/engine/pasillo.js?v=20261003101906"></script>
+  <script src="src/engine/clima.js?v=20261003101906"></script>
+  <script src="src/engine/gamepad.js?v=20261003101906"></script>
+  <script src="src/engine/logros.js?v=20261003101906"></script>
+  <script src="src/engine/gato.js?v=20261003101906"></script>
+  <script src="src/engine/partida.js?v=20261003101906"></script>
+  <script src="src/engine/ui.js?v=20261003101906"></script>
+  <script src="src/engine/game.js?v=20261003101906"></script>
+  <script src="src/main.js?v=20261003101906"></script>
 </body>
 </html>
