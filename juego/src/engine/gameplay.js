@@ -293,8 +293,10 @@
     _toggleDoor(i) {
       var w = this.washers[i];
       if (w.running) { this.say('locked' + i, '(La puerta está trabada mientras lava.)', 3); MR.Haptics.pulse(12); return; }
-      w.doorTarget = w.doorTarget > 0.5 ? 0 : 1.25;
+      var opening = w.doorTarget <= 0.5;
+      w.doorTarget = opening ? 1.25 : 0;
       this.audio.door();
+      if (opening && this.game.objetos) { this.game.objetos.onDoorOpen(w); }
       MR.Haptics.pulse(HAPTIC.door);
     }
 
@@ -333,7 +335,7 @@
         if (w.running) {
           w.remaining -= gameMinutesDelta;
           w.mesh.drum.rotation.z += dt * 6;
-          if (w.remaining <= 0) { w.running = false; self.audio.buzz(); }
+          if (w.remaining <= 0) { w.running = false; self.audio.buzz(); if (self.game.objetos) { self.game.objetos.onCycleEnd(w); } }
         }
         w.mesh.lamp.material.uniforms.uEmissive.value = w.running ? 1.6 : (w.credit ? 0.8 : 0.1);
         w.mesh.lamp.material.uniforms.uColor.value.setHex(w.running ? 0x55ff66 : (w.credit ? 0xffcc44 : 0x3a5a3a));

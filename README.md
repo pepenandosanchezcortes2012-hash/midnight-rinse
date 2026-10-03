@@ -158,6 +158,9 @@ En **Opciones → Dificultad**:
 - **Normal:** el juego original, hasta 3 faltas.
 - **Pesadilla:** sustos casi el doble de seguidos, 2 cigarros, 2 tragos y 1 porro. Solo se perdona **una** falta para el final bueno.
 
+### Objetos perdidos
+Cuando una lavadora termina su ciclo, a veces queda **algo olvidado** adentro. Abre la puerta para encontrarlo. Hay **12 objetos**, algunos normales y otros no tanto, y se guardan en una colección permanente (**Objetos perdidos**, en la pantalla de título).
+
 ### Logros
 Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y se guardan en tu navegador. Ejemplos: terminar el turno, sintonizar la radio cuando habla el locutor, tener las seis lavadoras en marcha a la vez, que un relámpago lo revele, el tercer final…
 

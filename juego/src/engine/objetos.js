@@ -1,0 +1,81 @@
+/**
+ * Objetos perdidos: cuando una lavadora termina su ciclo, a veces queda algo olvidado entre la ropa. Si abres la
+ * puerta, lo encuentras. La colección es permanente (midnight-rinse/objetos) y se ve en la pantalla de título.
+ * «Reiniciar todo» la borra.
+ */
+(function (MR) {
+  'use strict';
+
+  var KEY = 'midnight-rinse/objetos';
+
+  var LIST = [
+    { id: 'calcetin', nombre: 'Un calcetín de niño', desc: 'Seco, aunque el ciclo acaba de terminar.' },
+    { id: 'anillo', nombre: 'Un anillo de matrimonio', desc: 'Grabado por dentro: «14·10». La misma fecha de la primera hoja del bosque.' },
+    { id: 'moneda', nombre: 'Una moneda extranjera', desc: 'De ningún país que conozcas. Cabe justo en la ranura.' },
+    { id: 'boton', nombre: 'Un botón de abrigo', desc: 'Negro, enorme. Huele a tierra mojada.' },
+    { id: 'ticket', nombre: 'Un ticket de 1987', desc: 'Lavandería La Espuma. Turno de 01:10 a 05:12. La letra es la tuya.' },
+    { id: 'reloj', nombre: 'Un reloj de pulsera', desc: 'Detenido a las 05:13. No tiene corona para darle cuerda.' },
+    { id: 'gafete', nombre: 'Un gafete desteñido', desc: 'Solo se lee la inicial: R. La foto está raspada.' },
+    { id: 'hoja_pino', nombre: 'Una aguja de pino', desc: 'En el centro del tambor. Ninguna ventana da al bosque.' },
+    { id: 'llave', nombre: 'Una llave pequeña', desc: 'Con una etiqueta: «casillero 7».' },
+    { id: 'diente', nombre: 'Un diente de leche', desc: 'En una bolsita de plástico con tu nombre de niño.' },
+    { id: 'polaroid', nombre: 'Una foto instantánea', desc: 'Tú, dormido en el banco amarillo. Tomada desde muy cerca.' },
+    { id: 'nota', nombre: 'Una nota doblada', desc: 'Con letra apretada: «No te voy a dejar salir. Me gusta tu compañía».' }
+  ];
+
+  class Objetos {
+    constructor(game) {
+      this.game = game;
+      this.got = this._load();
+      this.foundTonight = 0;
+    }
+
+    _load() {
+      try { return JSON.parse(window.localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; }
+    }
+
+    _save() {
+      try { window.localStorage.setItem(KEY, JSON.stringify(this.got)); } catch (e) { /* sin almacenamiento */ }
+    }
+
+    count() { return Object.keys(this.got).length; }
+    total() { return LIST.length; }
+
+    /** Al terminar un ciclo: 35 % de que quede algo adentro (prefiere lo que aún no tienes). */
+    onCycleEnd(washer) {
+      if (washer.item || Math.random() > 0.35) { return; }
+      var missing = LIST.filter(function (o) { return !this.got[o.id]; }, this);
+      var pool = missing.length ? missing : LIST;
+      washer.item = pool[Math.floor(Math.random() * pool.length)].id;
+    }
+
+    /** Al abrir la puerta de una lavadora detenida: si había algo, lo encuentras. */
+    onDoorOpen(washer) {
+      if (!washer.item) { return false; }
+      var def = LIST.filter(function (o) { return o.id === washer.item; })[0];
+      washer.item = null;
+      var g = this.game;
+      var isNew = !this.got[def.id];
+      if (isNew) { this.got[def.id] = g.night || 1; this._save(); }
+      this.foundTonight += 1;
+      g.ui.subtitle('(Entre la ropa húmeda: ' + def.nombre.toLowerCase() + '. ' + def.desc + ')' + (isNew ? '' : ' (Ya tenías uno igual.)'), 7);
+      g.audio.ding();
+      MR.Haptics.pulse([15, 30, 15]);
+      g.ui.renderObjetos(this);
+      if (g.logros && this.count() >= 6) { g.logros.unlock('objetos'); }
+      return true;
+    }
+
+    /** Lista para la pantalla de título (lo que no has encontrado, como «???»). */
+    view() {
+      var got = this.got;
+      return LIST.map(function (o) {
+        var have = !!got[o.id];
+        return { titulo: have ? o.nombre : '???', desc: have ? o.desc + ' (noche ' + got[o.id] + ')' : 'Algún ciclo lo dejará.', hecho: have };
+      });
+    }
+  }
+
+  Objetos.LIST = LIST;
+  MR.Objetos = Objetos;
+})(window.MR = window.MR || {});

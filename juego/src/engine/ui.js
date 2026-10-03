@@ -145,6 +145,32 @@
       if (cam && o.fov) { cam.fov = o.fov; cam.updateProjectionMatrix(); }
     }
 
+    /** Panel de objetos perdidos (misma presentación que los logros). */
+    renderObjetos(objetos) {
+      $('objetos-cuenta').textContent = objetos.count() + '/' + objetos.total();
+      this._renderList($('objetos-lista'), objetos.view(), '◆', '◇');
+    }
+
+    _renderList(list, items, on, off) {
+      list.textContent = '';
+      items.forEach(function (l) {
+        var li = document.createElement('li');
+        li.className = l.hecho ? 'hecho' : '';
+        var mark = document.createElement('span');
+        mark.className = 'marca';
+        mark.textContent = l.hecho ? on : off;
+        var body = document.createElement('span');
+        var b = document.createElement('b');
+        b.textContent = l.titulo;
+        body.appendChild(b);
+        body.appendChild(document.createElement('br'));
+        body.appendChild(document.createTextNode(l.desc));
+        li.appendChild(mark);
+        li.appendChild(body);
+        list.appendChild(li);
+      });
+    }
+
     /** Panel de logros de la pantalla de título. */
     renderLogros(logros) {
       $('logros-cuenta').textContent = logros.count() + '/' + logros.total();

@@ -54,7 +54,9 @@
       this.gamepad = new MR.GamepadControls(this);
       this.gato = new MR.Gato(this);
       this.logros = new MR.Logros(this);
+      this.objetos = new MR.Objetos(this);
       this.ui.renderLogros(this.logros);
+      this.ui.renderObjetos(this.objetos);
       this.ui.applyView();
       this.ui.bindTele(this.tele);
       this.touch = new MR.TouchControls(this);
@@ -743,7 +745,8 @@
         'Cigarros: ' + this.consumables.used.cigarros + ' · Tragos de la petaca: ' + this.consumables.used.tragos +
           ' · Porros: ' + this.consumables.used.porros + ' · Cafés: ' + this.consumables.used.cafes,
         'Salidas al bosque: ' + this.bosque.visits + ' · Hojas del registro: ' + this.bosque.pagesFound() + ' de 6',
-        'Caricias a Pelusa: ' + this.gato.pets + ' · Bufidos de alarma: ' + this.gato.hisses,
+        'Caricias a Pelusa: ' + this.gato.pets + ' · Bufidos de alarma: ' + this.gato.hisses +
+          ' · Objetos perdidos encontrados: ' + this.objetos.foundTonight,
         'Pasillo de servicio: ' + this.pasillo.visits + (this.pasillo.visits === 1 ? ' visita' : ' visitas') +
           ' · Fusibles: ' + (this.pasillo.fuses ? 'restablecidos' : 'sin tocar')
       ];

@@ -35,7 +35,7 @@
         gameplay: {
           coins: gp.coins, trayCoins: gp.trayCoins, mopHeld: gp.mopHeld, nextPuddle: gp.nextPuddle,
           puddleActive: gp.puddleActive.slice(), radioRaw: gp.radioRaw,
-          washers: gp.washers.map(function (w) { return { running: w.running, remaining: w.remaining, credit: w.credit, doorTarget: w.doorTarget }; }),
+          washers: gp.washers.map(function (w) { return { running: w.running, remaining: w.remaining, credit: w.credit, doorTarget: w.doorTarget, item: w.item || null }; }),
           dryers: gp.dryers.map(function (d) { return { running: d.running, lint: d.lint, overheated: d.overheated, stopIn: d.stopIn }; })
         },
         horror: { present: h.customer.present, anchor: h.customer.anchor, nextEvent: h.nextEvent },

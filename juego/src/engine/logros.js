@@ -27,6 +27,7 @@
     { id: 'cafe', titulo: 'Turno largo', desc: 'Tómate tres cafés de máquina en un mismo turno.' },
     { id: 'secreto', titulo: 'La hora verdadera', desc: 'Dile la hora que nadie más sabe.', oculto: true },
     { id: 'reflejo', titulo: 'Detrás de ti', desc: 'Velo en el vidrio de una lavadora.', oculto: true },
+    { id: 'objetos', titulo: 'Objetos perdidos', desc: 'Encuentra seis objetos olvidados en las lavadoras.' },
     { id: 'casillero', titulo: 'Ya tenías casillero', desc: 'Abre el último casillero del pasillo.', oculto: true }
   ];
 

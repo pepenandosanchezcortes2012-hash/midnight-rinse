@@ -384,6 +384,12 @@ El proyecto pasó por dos etapas:
 - **Sonido de cada final:** campanita y puerta en el bueno, golpe y zumbido en el malo, trueno y campanita en el del bosque.
 - **Prueba determinista del fundido.** Resultado: 34/34.
 
+## 41. Objetos perdidos
+- **`objetos.js`:** al terminar un ciclo, un 35 % de probabilidad de que quede un objeto (prefiere los que no tienes). Abrir la puerta de la lavadora lo encuentra.
+- **Colección:** 12 objetos guardados en `midnight-rinse/objetos`, con la noche en que lo encontraste. Panel en el título con «???» para los que faltan.
+- **Recompensas:** logro «Objetos perdidos» con 6, conteo en el resumen final y el objeto pendiente en el guardado de partida.
+- **Prueba nueva.** Resultado: 35/35.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

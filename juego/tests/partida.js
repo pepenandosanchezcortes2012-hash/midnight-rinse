@@ -812,6 +812,27 @@
       return 'fundido 0 → ' + mid.toFixed(2) + ' → 1; texto con transición';
     }],
 
+    ['Objetos perdidos: un ciclo deja algo y se guarda en la colección', async function () {
+      localStorage.removeItem('midnight-rinse/objetos');
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var w = g.gameplay.washers[0];
+      w.running = true; w.remaining = 0.2; w.doorTarget = 0; w.item = null;
+      var rnd = ctx.w.Math.random; ctx.w.Math.random = function () { return 0; };
+      step(ctx, 30 * 3);
+      ctx.w.Math.random = rnd;
+      check(!w.running && w.item, 'el ciclo no dejó nada');
+      g.gameplay._toggleDoor(0);
+      var subs = ctx.w.document.getElementById('subtitulos').textContent;
+      check(/Entre la ropa húmeda/.test(subs) && !w.item, 'al abrir la puerta no apareció el objeto');
+      check(g.objetos.count() === 1 && JSON.parse(localStorage.getItem('midnight-rinse/objetos')), 'no se guardó en la colección');
+      check(/^1\//.test(ctx.w.document.getElementById('objetos-cuenta').textContent), 'el panel no se actualizó');
+      noErrors(ctx);
+      localStorage.removeItem('midnight-rinse/objetos');
+      return 'encontrado y guardado (1/' + g.objetos.total() + ')';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);
