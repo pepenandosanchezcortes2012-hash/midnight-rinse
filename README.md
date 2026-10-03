@@ -90,6 +90,13 @@ En la pantalla de título (y en la pausa; en el celular, con **tres dedos**) est
 
 Un turno dura unos 15 minutos reales. Para probar más rápido: `index.html?velocidad=4`.
 
+### Pelusa, el gato
+Un gato negro vive en la lavandería.
+- **Su vida:** duerme sobre una secadora, el banco o el mostrador, baja de un salto, camina por la sala y se sienta a mirarte.
+- **Acariciarlo:** tócalo y ronronea; baja el pavor y el teléfono o el control vibra con el ronroneo.
+- **Es tu alarma:** si el Cliente Inmóvil anda de pie cerca de él, **se eriza, bufa del lado donde está y huye**.
+- **El bosque:** no sale, porque llueve; te espera junto a la puerta y maúlla cuando vuelves.
+
 ### El bosque
 Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en la pausa, y sales a un bosque de pinos bajo la lluvia.
 - **Qué hay afuera:** la fachada iluminada, una farola de sodio y un sendero que lleva a un claro… donde hay una lavadora encendida que no está conectada a nada.

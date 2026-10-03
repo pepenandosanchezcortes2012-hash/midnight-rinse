@@ -149,6 +149,7 @@
       if (kind === 'salirBosque' || kind === 'entrarLavanderia') { this.game.bosque.go(); return; }
       if (kind === 'lavadoraBosque') { this.game.bosque.touchWasher(); return; }
       if (kind === 'paginaBosque') { this.game.bosque.takePage(target.index); return; }
+      if (kind === 'gato') { this.game.gato.pet(); return; }
       if (kind === 'teleCanal') { this.game.tele.next(); return; }
       if (kind === 'puddle' && !this.mopHeld) {
         this.say('nomop', '(Necesitas el trapeador. Está en el almacén, al fondo a la izquierda.)');

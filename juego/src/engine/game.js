@@ -51,6 +51,7 @@
       this.bosque = new MR.Bosque(this);
       this.clima = new MR.Clima(this);
       this.gamepad = new MR.GamepadControls(this);
+      this.gato = new MR.Gato(this);
       this.logros = new MR.Logros(this);
       this.ui.renderLogros(this.logros);
       this.ui.applyView();
@@ -245,6 +246,7 @@
       this.consumables.update(dt);
       this.gameplay.update(dt, dMin, this.minutes);
       this.horror.update(dt, this.player);
+      this.gato.update(dt);
       this._beats(prevMinutes);
       this._question(dt);
       this._dread(dt);
@@ -529,7 +531,8 @@
         'Parpadeos: ' + s.parpadeos,
         'Cigarros: ' + this.consumables.used.cigarros + ' · Tragos de la petaca: ' + this.consumables.used.tragos +
           ' · Porros: ' + this.consumables.used.porros,
-        'Salidas al bosque: ' + this.bosque.visits + ' · Hojas del registro: ' + this.bosque.pagesFound() + ' de 6'
+        'Salidas al bosque: ' + this.bosque.visits + ' · Hojas del registro: ' + this.bosque.pagesFound() + ' de 6',
+        'Caricias a Pelusa: ' + this.gato.pets + ' · Bufidos de alarma: ' + this.gato.hisses
       ];
       document.body.classList.remove('jugando');
       this.tilt.stop();

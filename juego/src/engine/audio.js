@@ -323,6 +323,59 @@
     mop() { this._burst(this.pink, 'bandpass', 900, 1.2, 0.35, 0.12, 0); }
     buzz() { this._tone(118, 0.25, 0.06, 'sawtooth'); }
     door() { this._tone(160, 0.9, 0.05, 'sawtooth', 90); this._burst(this.brown, 'lowpass', 300, 0.7, 0.5, 0.25); }
+    /** Gato: maullido (tono que sube y baja con un filtro que imita la boca). */
+    miau(pan) {
+      var ctx = this.ctx;
+      if (!ctx) { return; }
+      var t = ctx.currentTime;
+      var o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(470, t);
+      o.frequency.linearRampToValueAtTime(720, t + 0.18);
+      o.frequency.linearRampToValueAtTime(520, t + 0.5);
+      var f = ctx.createBiquadFilter();
+      f.type = 'bandpass'; f.Q.value = 5;
+      f.frequency.setValueAtTime(900, t);
+      f.frequency.linearRampToValueAtTime(1700, t + 0.2);
+      f.frequency.linearRampToValueAtTime(1000, t + 0.5);
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.09, t + 0.06);
+      g.gain.exponentialRampToValueAtTime(0.0005, t + 0.55);
+      var p = ctx.createStereoPanner();
+      p.pan.value = pan || 0;
+      o.connect(f); f.connect(g); g.connect(p); p.connect(this.master);
+      o.start(t); o.stop(t + 0.6);
+    }
+    /** Gato: ronroneo (retumbo grave pulsando a ~26 Hz). */
+    ronroneo() {
+      var ctx = this.ctx;
+      if (!ctx) { return; }
+      var t = ctx.currentTime;
+      var src = ctx.createBufferSource();
+      src.buffer = this.brown;
+      var f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 220;
+      var am = ctx.createGain();
+      am.gain.value = 0;
+      var lfo = ctx.createOscillator();
+      lfo.frequency.value = 26;
+      var depth = ctx.createGain();
+      depth.gain.value = 0.5;
+      lfo.connect(depth); depth.connect(am.gain);
+      var env = ctx.createGain();
+      env.gain.setValueAtTime(0.0001, t);
+      env.gain.exponentialRampToValueAtTime(0.5, t + 0.3);
+      env.gain.setValueAtTime(0.5, t + 2.2);
+      env.gain.exponentialRampToValueAtTime(0.0005, t + 2.9);
+      src.connect(f); f.connect(am); am.connect(env); env.connect(this.master);
+      src.start(t); lfo.start(t); src.stop(t + 3); lfo.stop(t + 3);
+    }
+    /** Gato: bufido (siseo agudo), con paneo: te dice de qué lado está lo que lo asustó. */
+    bufido(pan) {
+      this._burst(this.white, 'highpass', 2600, 0.7, 0.75, 0.22, pan);
+      this._burst(this.white, 'bandpass', 4200, 1.2, 0.5, 0.1, pan);
+    }
     /** Logro: la campanita de fin de ciclo de una secadora. */
     ding() {
       this._tone(1046, 0.5, 0.05, 'sine');

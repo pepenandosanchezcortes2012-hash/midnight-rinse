@@ -220,6 +220,16 @@ El proyecto pasó por dos etapas:
 - **Opciones nuevas:** campo de visión (55–95°), invertir el eje vertical y tamaño de subtítulos (Normal, Grande y Enorme).
 - **Prueba nueva.** Resultado: 14/14.
 
+## 17. Pelusa, el gato
+- **`gato.js`:** red de 9 puntos en el piso con caminos rectos que no cruzan muebles (búsqueda en anchura) y 3 lugares altos a los que salta en arco: secadora, banco y mostrador.
+- **Estados y animación:** duerme, sentado (voltea la cabeza hacia él o hacia ti), camina, salta, se eriza y huye. Animación a 12 Hz.
+- **Acariciarlo:** ronroneo con modulación a 26 Hz, el pavor baja 0.08, vibración y logro «Pelusa».
+- **Alarma:** si él está de pie a menos de 3.5 m, el gato bufa con paneo y huye al punto más lejano.
+- **El bosque:** el gato espera junto a la puerta y maúlla al volver.
+- **Sonidos procedurales:** maullido (diente de sierra con filtro que imita la boca), ronroneo y bufido.
+- **Resumen final:** caricias y bufidos.
+- **Prueba nueva:** 90 s caminando sin atravesar ningún mueble, el bufido y la huida a 7.6 m. Resultado: 15/15.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

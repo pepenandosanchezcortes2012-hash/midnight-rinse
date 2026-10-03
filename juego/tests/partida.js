@@ -333,6 +333,51 @@
       return 'FOV 85, subtítulos ×1.65, eje invertido, logro guardado';
     }],
 
+    ['Pelusa, el gato: duerme, se deja acariciar, camina sin atravesar muebles y avisa', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var cat = g.gato;
+      check(cat.state === 'duerme' && cat.perch === 'secadora', 'no empezó dormido en la secadora');
+      var d0 = g.dread = 0.3;
+      g.gameplay._begin({ kind: 'gato', index: 0 }, g.input);
+      check(cat.pets === 1 && g.dread < d0 && g.logros.has('gato'), 'acariciarlo no funcionó');
+      // Que camine un buen rato: nunca dentro de un mueble ni fuera de la sala.
+      var inside = 0;
+      var colliders = g.world.colliders.filter(function (c) { return c.maxZ < 50; });
+      for (var i = 0; i < 30 * 90; i += 1) {
+        if (cat.state === 'duerme' || cat.state === 'sentado') { cat.timer = Math.min(cat.timer, 0.5); }
+        step(ctx, 1);
+        var p = cat.position();
+        if (p.y < 0.05) {
+          colliders.forEach(function (c) { if (p.x > c.minX + 0.05 && p.x < c.maxX - 0.05 && p.z > c.minZ + 0.05 && p.z < c.maxZ - 0.05) { inside += 1; } });
+        }
+        check(Math.abs(p.x) < 8 && Math.abs(p.z) < 5, 'el gato salió de la sala');
+      }
+      check(inside === 0, 'el gato atravesó muebles ' + inside + ' cuadros');
+      // Alarma: él de pie junto al gato.
+      cat.state = 'sentado'; cat.perch = null; cat.timer = 30;
+      cat.mesh.root.position.set(-1, 0, -2); cat.node = 'F2';
+      var hisses = 0;
+      var orig = g.audio.bufido.bind(g.audio);
+      g.audio.bufido = function (pan) { hisses += 1; return orig(pan); };
+      g.horror.customer.present = true;
+      g.horror._placeAt('lavadoras_mira');
+      g.world.customer.group.position.set(-1.5, 0, -2.6);
+      g.horror.customer.seated = false;
+      step(ctx, 15);
+      check(hisses === 1 && (cat.state === 'eriza' || cat.state === 'huye'), 'no bufó (estado ' + cat.state + ')');
+      step(ctx, 30 * 4);
+      var away = Math.hypot(cat.position().x + 1.5, cat.position().z + 2.6);
+      check(away > 3, 'no huyó lejos (a ' + away.toFixed(1) + ' m)');
+      // Afuera: te espera junto a la puerta.
+      g.horror.customer.present = false;
+      g.bosque.go(); step(ctx, 40);
+      check(cat.waitingDoor && cat.position().z > 3.5, 'no te esperó en la puerta');
+      noErrors(ctx);
+      return 'acariciado, 90 s caminando sin atravesar nada, bufó y huyó a ' + away.toFixed(1) + ' m';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

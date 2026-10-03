@@ -20,7 +20,8 @@
     { id: 'lavadoras', titulo: 'Ruido blanco', desc: 'Ten las seis lavadoras funcionando a la vez.' },
     { id: 'pulcro', titulo: 'Pasillo impecable', desc: 'Termina un turno sin faltas en el pasillo ni en los filtros.' },
     { id: 'ojos_al_suelo', titulo: 'Ojos al suelo', desc: 'Termina un turno con él presente sin mirarlo nunca a la cara.' },
-    { id: 'paranoia', titulo: 'Paranoia', desc: 'Fuma los tres porros en un mismo turno.' }
+    { id: 'paranoia', titulo: 'Paranoia', desc: 'Fuma los tres porros en un mismo turno.' },
+    { id: 'gato', titulo: 'Pelusa', desc: 'Acaricia al gato de la lavandería.' }
   ];
 
   class Logros {
