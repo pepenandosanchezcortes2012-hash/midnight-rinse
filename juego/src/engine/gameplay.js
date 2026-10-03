@@ -370,7 +370,7 @@
       if (this.phoneRinging && performance.now() > this.phoneRingUntil) {
         this.phoneRinging = false;
         this.audio.setRinging(false);
-        this.game.onPhoneMissed();
+        if (this.phoneGhost) { this.phoneGhost = false; } else { this.game.onPhoneMissed(); }
       }
       if (this.receiptAnim >= 0) {
         this.receiptAnim = Math.min(1, this.receiptAnim + dt / 2);
@@ -413,7 +413,9 @@
       });
     }
 
-    ring(seconds) {
+    /** El teléfono suena unos segundos. ghost = la llamada fantasma (dos timbrazos y nada). */
+    ring(seconds, ghost) {
+      this.phoneGhost = !!ghost;
       this.phoneRinging = true;
       this.phoneRingUntil = performance.now() + seconds * 1000;
       this.audio.setRinging(true);

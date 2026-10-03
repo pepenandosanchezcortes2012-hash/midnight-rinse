@@ -361,6 +361,9 @@
       this.handprint.position.set(0.55, 1.45, 4.97);
       this.handprint.visible = false;
       this.add(this.handprint);
+      // La misma mano, pero por DENTRO del vidrio de una lavadora (evento «mano_lavadora»).
+      this.washerHand = new THREE.Mesh(new THREE.PlaneGeometry(0.17, 0.17), this.handprint.material);
+      this.washerHand.visible = false;
 
       // Huellas mojadas desde la entrada hasta el banco (evento).
       this.footprints = new THREE.Group();

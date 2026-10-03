@@ -249,6 +249,14 @@ El proyecto pasó por dos etapas:
 - **Cuándo se borra:** al terminar, al empezar un turno nuevo o al abandonar.
 - **Prueba nueva:** se guarda a las 03:20 en el bosque, se recarga y todo vuelve igual. Resultado: 17/17.
 
+## 21. Sustos nuevos en la lavandería
+- **Cuatro eventos más en el director, cada uno en la zona que no estás mirando:**
+  - **Radio sola:** se sintoniza sola en la 94.1 y susurra «…no lo mires a la cara…».
+  - **Golpe en la secadora:** golpe por dentro y la máquina tiembla.
+  - **Llamada fantasma:** el teléfono suena dos veces; si contestas, solo se oye una lavadora.
+  - **Mano en la lavadora:** una mano por dentro del vidrio de una lavadora durante 70 s.
+- **Prueba nueva.** Resultado: 18/18.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

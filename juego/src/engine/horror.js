@@ -98,6 +98,11 @@
       }
 
       this._director(dt);
+      if (this.shake) {
+        this.shake.t -= dt;
+        this.shake.body.position.x = this.shake.t > 0 ? this.shake.baseX + (Math.random() - 0.5) * 0.035 : this.shake.baseX;
+        if (this.shake.t <= 0) { this.shake = null; }
+      }
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -125,7 +130,9 @@
         table = [['rama', 3], ['linterna', 1.5], ['buho', 1], ['apagon', 1], ['charco', 0.8], ['puerta_lavadora', 0.6], ['secadora_sola', 0.6]];
         if (this.customer.present) { table.push(['cliente_bosque', 2.5 + g.stats.mirada * 0.5]); }
       } else {
-        table = [['apagon', 3], ['charco', 2], ['puerta_lavadora', 2], ['secadora_sola', 2], ['puerta_trasera', 1], ['trapeador_movido', 1]];
+        table = [['apagon', 3], ['charco', 2], ['puerta_lavadora', 2], ['secadora_sola', 2], ['puerta_trasera', 1], ['trapeador_movido', 1],
+          ['radio_sola', 1], ['golpe_secadora', 1.5], ['mano_lavadora', 1]];
+        if (!g.gameplay.phoneRinging && g.minutes > MR.Config.PHONE_RINGS + 10) { table.push(['telefono_breve', 0.8]); }
         if (this.customer.present) {
           table.push(['huellas', 1], ['mano_vidrio', 1]);
           if (g.talked) { table.push(['cliente_mueve', 0.6 + g.stats.mirada * 0.5]); }
@@ -163,6 +170,10 @@
           this.schedule('susurro', U.pick(zones), 0);
           break;
         }
+        case 'radio_sola': this.schedule('radio_sola', 'mostrador', 1); break;
+        case 'golpe_secadora': this.schedule('golpe_secadora', 'secadoras', 1, { index: Math.floor(Math.random() * 4) }); break;
+        case 'telefono_breve': this.schedule('telefono_breve', 'mostrador', 1); break;
+        case 'mano_lavadora': this.schedule('mano_lavadora', 'lavadoras', 2, { index: Math.floor(Math.random() * 6) }); break;
         case 'rama': this.schedule('rama', U.pick(this.world.forest.zones), 0); break;
         case 'buho': this.schedule('buho', U.pick(this.world.forest.zones), 0); break;
         case 'linterna': this.schedule('linterna', U.pick(this.world.forest.zones), 1); break;
@@ -274,6 +285,34 @@
           break;
         }
         case 'buho': audio.buho(); break;
+        case 'radio_sola': {
+          // La radio se sintoniza sola en la 94.1 y, entre la estática, alguien susurra.
+          gp.tuneTo(MR.Config.RADIO_STATION);
+          audio.whisper(this._panTo(this.zones.mostrador.center, g.player));
+          g.ui.subtitle('(La radio cambia sola de estación. Entre la estática: «…no lo mires a la cara…».)', 5);
+          g.dread = Math.min(1, g.dread + 0.06);
+          break;
+        }
+        case 'golpe_secadora': {
+          // Algo golpea por dentro de una secadora: la máquina tiembla.
+          var dr = gp.dryers[e.index];
+          this.shake = { body: dr.mesh.body, baseX: dr.mesh.x, t: 0.7 };
+          audio.thud();
+          MR.Haptics.pulse([50, 40, 50]);
+          g.dread = Math.min(1, g.dread + 0.05);
+          break;
+        }
+        case 'telefono_breve': if (!gp.phoneRinging) { gp.ring(5.5, true); } break;
+        case 'mano_lavadora': {
+          // Una mano por DENTRO del vidrio de una lavadora.
+          var hand = w.washerHand;
+          w.washers[e.index].doorPivot.add(hand);
+          hand.position.set(0.22, 0.02, 0.04);
+          hand.visible = true;
+          this.later(70, 'mano_lavadora_fin', 'lavadoras', 0);
+          break;
+        }
+        case 'mano_lavadora_fin': w.washerHand.visible = false; break;
         case 'linterna': {
           var fl = w.forest.flashlight;
           this.flickers[fl] = Math.max(this.flickers[fl], U.rand(0.6, 1.8));
@@ -289,6 +328,13 @@
         }
         default: break;
       }
+    }
+
+    /** Paneo (−1 … 1) de un punto respecto a la cabeza del jugador. */
+    _panTo(point, player) {
+      var to = this.tmp.copy(point).sub(player.camera.position);
+      var right = new V3(1, 0, 0).applyEuler(player.camera.rotation);
+      return U.clamp(right.dot(to.normalize()), -1, 1);
     }
 
     /** Pasos del Cliente Inmóvil cuando se reubica cerca: audio grave y vibración sorda y pesada. */

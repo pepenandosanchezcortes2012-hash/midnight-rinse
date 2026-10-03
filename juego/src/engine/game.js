@@ -514,7 +514,14 @@
     }
 
     onPhoneAnswered() {
-      var line = 'No lo mires a la cara. Si te pregunta la hora... faltan cinco minutos para las seis. Faltan cinco minutos para las seis.';
+      if (this.gameplay.phoneGhost) {
+        this.gameplay.phoneGhost = false;
+        this.ui.subtitle('(Del otro lado solo se oye una lavadora girando. Luego, alguien cuelga.)', 5);
+        this.audio.thud();
+        this.dread = Math.min(1, this.dread + 0.08);
+        return;
+      }
+      var line ='No lo mires a la cara. Si te pregunta la hora... faltan cinco minutos para las seis. Faltan cinco minutos para las seis.';
       this.ui.subtitle('[Teléfono] ' + line, 9);
       this.audio.speak(line, 'telefono');
       this.flags.phone = true;

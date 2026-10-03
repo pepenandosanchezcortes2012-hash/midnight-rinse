@@ -444,6 +444,31 @@
       return 'continuó a las 03:20 en el bosque con 2 hojas, monedas, lavadoras, él y consumibles';
     }],
 
+    ['Sustos nuevos: radio sola, golpe en la secadora, llamada fantasma y mano en la lavadora', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var h = g.horror;
+      var subs = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      g.gameplay.tuneTo(101.3);
+      h._apply({ type: 'radio_sola' }, 'mostrador');
+      check(Math.abs(g.gameplay.radioFreq - 94.1) < 0.05 && /no lo mires/.test(subs()), 'la radio no se sintonizó sola');
+      var x0 = g.gameplay.dryers[1].mesh.body.position.x;
+      h._apply({ type: 'golpe_secadora', index: 1 }, 'secadoras');
+      step(ctx, 3);
+      var moved = g.gameplay.dryers[1].mesh.body.position.x !== x0;
+      step(ctx, 30);
+      check(moved && g.gameplay.dryers[1].mesh.body.position.x === x0, 'la secadora no tembló o no volvió a su lugar');
+      h._apply({ type: 'telefono_breve' }, 'mostrador');
+      check(g.gameplay.phoneRinging && g.gameplay.phoneGhost, 'el teléfono fantasma no sonó');
+      g.gameplay._phone();
+      check(/lavadora girando/.test(subs()) && !g.flags.phone, 'la llamada fantasma no se contestó bien');
+      h._apply({ type: 'mano_lavadora', index: 2 }, 'lavadoras');
+      check(g.world.washerHand.visible && g.world.washerHand.parent === g.world.washers[2].doorPivot, 'no apareció la mano en la lavadora 3');
+      noErrors(ctx);
+      return 'los cuatro eventos funcionan';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);
