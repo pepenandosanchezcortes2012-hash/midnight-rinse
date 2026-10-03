@@ -28,6 +28,7 @@
       this.used = { cigarros: 0, tragos: 0, porros: 0, cafes: 0 };
       this.awake = 0;     // café: parpadeas menos
       this.brewing = 0;   // segundos hasta que sale el café
+      this.coffee = 0;    // segundos con el vaso en la mano
       this.inhaleMarks = [];
       this.exhale = -1;
     }
@@ -136,6 +137,7 @@
         this.brewing = Math.max(0, this.brewing - dt);
         if (this.brewing === 0) {
           g.audio.sip();
+          this.coffee = 2.2;
           this.awake = Math.min(1, this.awake + 0.6);
           this.used.cafes += 1;
           g.dread = Math.max(0, g.dread - 0.04);
@@ -143,6 +145,7 @@
           if (this.used.cafes >= 3 && g.logros) { g.logros.unlock('cafe'); }
         }
       }
+      this.coffee = Math.max(0, this.coffee - dt);
       this.awake = Math.max(0, this.awake - dt / 150);
       this.tipsy = Math.max(0, this.tipsy - dt / 90);
       this.high = Math.max(0, this.high - dt / 150);
@@ -179,6 +182,8 @@
         toMouth: left > 0 && (phase < 1.0 || nearInhale),
         ember: left > 0 ? (nearInhale ? 2.2 : 0.9 + U.rand(0, 0.2)) : 0,
         drinking: this.drink > 0,
+        coffee: this.coffee > 0,
+        coffeeLift: this.coffee > 0 ? Math.min(1, (2.2 - this.coffee) / 0.5) * Math.min(1, this.coffee / 0.4) : 0,
         drinkLift: this.drink > 0 ? Math.min(1, (this.drinkTotal - this.drink) / 0.6) : 0
       };
     }

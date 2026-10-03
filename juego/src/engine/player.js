@@ -106,6 +106,17 @@
       this.flask.position.set(0, 0.02, -0.06);
       this.flask.visible = false;
       this.right.add(this.flask);
+      // Vaso de cartón del café de máquina.
+      this.cup = new THREE.Group();
+      var cupGeo = new THREE.CylinderGeometry(0.036, 0.028, 0.09, 8);
+      this.cup.add(new THREE.Mesh(cupGeo, w.retro.material({ texture: 'white', color: 0xe8dcc0 })));
+      var coffeeTop = new THREE.Mesh(new THREE.CircleGeometry(0.033, 8), w.retro.material({ texture: 'white', color: 0x3b2414, emissive: 0.1 }));
+      coffeeTop.rotation.x = -Math.PI / 2;
+      coffeeTop.position.y = 0.04;
+      this.cup.add(coffeeTop);
+      this.cup.position.set(0, 0.06, -0.1);
+      this.cup.visible = false;
+      this.right.add(this.cup);
       for (var p = 0; p < 4; p += 1) {
         var puff = w.box(0.06, 0.06, 0.06, w.retro.material({ texture: 'white', color: 0x8c8c8c, emissive: 0.45 }), 0, 0, 0, this.camera);
         puff.visible = false;
@@ -312,6 +323,10 @@
         var lift = c.drinkLift;
         pose.r = [U.lerp(0.2, 0.06, lift), U.lerp(-0.25, -0.1, lift), U.lerp(-0.42, -0.26, lift), U.lerp(0.15, -0.9, lift), -0.1];
       }
+      if (c.coffee) {
+        var cl = c.coffeeLift;
+        pose.r = [U.lerp(0.2, 0.07, cl), U.lerp(-0.25, -0.15, cl), U.lerp(-0.42, -0.31, cl), U.lerp(0.1, -0.5, cl), -0.1];
+      }
       if (h.wiping) {
         pose.l = [-0.02 + h.wipeX * 0.12, -0.02 + h.wipeY * 0.09, -0.24, -1.2, 0.2];
       }
@@ -327,6 +342,7 @@
       this.ember.material.uniforms.uEmissive.value = c.ember || 0;
       this.jointEmber.material.uniforms.uEmissive.value = c.ember || 0;
       this.flask.visible = !!c.drinking;
+      this.cup.visible = !!c.coffee;
     }
   }
 

@@ -366,6 +366,10 @@ El proyecto pasó por dos etapas:
 - **Sombrero:** de ala ancha, hijo de la cabeza, así que gira con ella cuando te observa. También lo lleva sentado.
 - **Resultado:** 32/32.
 
+## 38. El vaso de café en la mano
+- **Qué cambia:** al salir el café, un vaso de cartón aparece en la mano derecha y se levanta durante 2.2 s, con la pose ajustada para que el vaso quede a la vista.
+- **Resultado:** 32/32.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
