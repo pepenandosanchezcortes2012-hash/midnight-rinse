@@ -298,6 +298,12 @@ El proyecto pasó por dos etapas:
 - **Opciones:** el panel empieza cerrado.
 - **Prueba nueva.** Resultado: 24/24.
 
+## 28. Radio por noche y susurros
+- **Origen:** `MR.HISTORIA.radio`, 8 transmisiones (la 1 es la original y las 2 a 8 son un borrador de Gemini 3.8 Flash, revisado), y `MR.HISTORIA.susurros`, 16 susurros (cambié uno que empujaba a una falta).
+- **Cómo se elige:** la transmisión depende de la noche (`game.night`). La noche 7 revela «las cinco y trece» y habilita la respuesta secreta; después de la noche 8 solo hay estática.
+- **Susurros:** si diste tu nombre, la mitad de las veces dicen tu nombre.
+- **Prueba nueva:** noches 2, 7 y 9. Resultado: 25/25.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

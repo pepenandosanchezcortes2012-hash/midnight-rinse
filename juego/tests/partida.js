@@ -584,6 +584,33 @@
       return 'Noche 2 tras un turno';
     }],
 
+    ['Radio por noche: la noche 7 revela la hora verdadera; después, estática', async function () {
+      async function nightRadio(n) {
+        localStorage.setItem('midnight-rinse/noches', String(n - 1));
+        var ctx = await load();
+        start(ctx);
+        var g = ctx.g;
+        g.gameplay.tuneTo(94.1);
+        step(ctx, 2);
+        g.minutes = ctx.w.MR.Config.RADIO_HOST - 0.05;
+        step(ctx, 10);
+        var subs = ctx.w.document.getElementById('subtitulos').textContent;
+        g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+        g._ask();
+        var options = ctx.w.document.querySelectorAll('#dialogo-opciones li').length;
+        noErrors(ctx);
+        return { subs: subs, options: options, night: g.night };
+      }
+      var n2 = await nightRadio(2);
+      var n7 = await nightRadio(7);
+      var n9 = await nightRadio(9);
+      localStorage.removeItem('midnight-rinse/noches');
+      check(/tambores/.test(n2.subs) && n2.options === 3, 'la noche 2 no tuvo su transmisión');
+      check(/cinco y trece/.test(n7.subs) && n7.options === 4, 'la noche 7 no reveló la hora o no habilitó la respuesta');
+      check(/solo estática/.test(n9.subs), 'después de la noche 8 no quedó estática');
+      return 'noche 2, 7 (respuesta secreta habilitada) y 9 (estática)';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

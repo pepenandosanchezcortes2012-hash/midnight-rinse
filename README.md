@@ -118,6 +118,12 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Seis hojas mojadas del registro** están tiradas cerca del sendero: son de quienes hicieron este turno antes que tú y cuentan qué pasa aquí. Si las juntas todas, la lavadora del claro abre un **tercer final**.
 - **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
 
+### Noche tras noche
+El juego cuenta tus noches («Noche 3» en el título).
+- **La radio:** a las 02:40, en la **94.1**, el locutor de Radio Nocturna dice algo distinto cada noche y la historia avanza. Escúchalo hasta la noche 7. Después de la 8 solo queda estática.
+- **Los susurros** también cambian.
+- **La respuesta secreta:** con las seis hojas, tu casillero o lo que dice la radio, aparece una cuarta respuesta cuando él te pregunta la hora…
+
 ### Qué hacer durante el turno
 - **Lee la hoja del registro** sobre el mostrador. La imprime la impresora térmica a las 01:15… y cambia sola durante la noche.
 - **Friega el pasillo central** (entre las lavadoras y el banco): cada 45 minutos alguien revisa si hay charcos. El trapeador está en el almacén, al fondo a la izquierda.

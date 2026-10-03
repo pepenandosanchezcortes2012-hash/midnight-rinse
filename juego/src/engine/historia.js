@@ -21,6 +21,37 @@
       { firma: 'Turno del 19 de noviembre · A.',
         texto: 'Si encontraste las seis hojas del registro, llévalas a la lavadora entre los pinos antes de las 05:12. Abre la tapa y mételas todas con el uniforme que gira. Es la única forma de cortar el ciclo. No dejes que te vea hacerlo.' }
     ],
+    // Radio Nocturna 94.1 a las 02:40: una transmisión distinta por noche (la 1 es la original). Borrador de
+    // Gemini 3.8 Flash, revisado. Después de la noche 8 solo queda estática.
+    radio: [
+      'Son las dos y cuarenta en Radio Nocturna, noventa y cuatro punto uno. Para quienes siguen despiertos: si esta noche alguien les pregunta la hora, respondan con cuidado.',
+      'Son las dos y cuarenta en Radio Nocturna. Saludos a quien nos sintoniza entre el olor a jabón y centrifugados. No dejes que se apaguen los tambores; el silencio trae visitas.',
+      'Son las dos y cuarenta en Radio Nocturna, bajo esta lluvia interminable. Si miras por el cristal, verás que los árboles crecieron demasiado cerca. Mejor concéntrate en fregar el pasillo.',
+      'Son las dos y cuarenta aquí en Radio Nocturna. Me pregunto cuántos nombres caben en siete casilleros de metal oxidado. El tuyo ya estaba grabado antes de que llegaras, querido oyente.',
+      'Son las dos y cuarenta en Radio Nocturna. Dicen que en el claro del bosque una máquina sin cable sigue lavando tu ropa. No vayas a buscarla; el zumbido tiene hambre esta noche.',
+      'Son las dos y cuarenta en Radio Nocturna. Tu reloj siempre se rinde a las cinco y doce, pero la noche no termina ahí. Falta un minuto que nadie te pagará jamás.',
+      'Son las dos y cuarenta en Radio Nocturna. Grábate bien este secreto: la hora verdadera son las cinco y trece. Si logras ver ese minuto en tu reloj, tal vez vuelvas a casa.',
+      'Son las dos y cuarenta en Radio Nocturna, y esta es nuestra última transmisión para ti. Ya reconoces al hombre del abrigo, ¿verdad? Buen turno eterno, amigo; de aquí ya nadie sale.'
+    ],
+    // Susurros (uno cambiado a mano para no empujar al jugador a una falta).
+    susurros: [
+      '…no levantes la vista…',
+      '…gira sin corriente…',
+      '…limpia el filtro rápido…',
+      '…el abrigo huele a tierra…',
+      '…no lo mires al rostro…',
+      '…el agua viene turbia…',
+      '…tapa el zumbido grave…',
+      '…los árboles tocan el vidrio…',
+      '…pregunta siempre lo mismo…',
+      '…tu nombre ya estaba ahí…',
+      '…cinco y doce para siempre…',
+      '…la hora verdadera vendrá…',
+      '…cinco y trece no llega…',
+      '…el banco amarillo está frío…',
+      '…siete ya se quedaron…',
+      '…nadie vendrá a relevarte…'
+    ],
     final: {
       titulo: 'Último ciclo de lavado',
       texto: 'Metes las seis páginas empapadas en el tambor y la máquina traga la tinta disuelta con un crujido metálico. El zumbido grave se apaga de golpe junto con los pinos, devolviéndote al pavimento frío de la avenida. Tu reloj de pulsera por fin marca las 05:13.'

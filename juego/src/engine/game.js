@@ -128,6 +128,7 @@
       if (this.music.connected()) { this.gameplay.tuneTo(MR.MusicLink.STATION); }
       this.state = 'playing';
       this.lastTime = performance.now();
+      try { this.night = (parseInt(window.localStorage.getItem('midnight-rinse/noches') || '0', 10) || 0) + 1; } catch (e) { this.night = 1; }
       this.saveTimer = 10;
       if (saved) {
         MR.Partida.restore(this, saved);
@@ -341,10 +342,16 @@
         var prox = this.gameplay.radioProximity;
         if (prox > 0.35) {
           this.logros.unlock('radio');
-          var line = 'Son las dos y cuarenta en Radio Nocturna, noventa y cuatro punto uno. Para quienes siguen despiertos: ' +
-            'si esta noche alguien les pregunta la hora, respondan con cuidado.';
-          this.ui.subtitle('[Radio] ' + line, 9);
-          this.audio.speak(line, 'locutor');
+          var scripts = MR.HISTORIA.radio;
+          var n = this.night || 1;
+          if (n > scripts.length) {
+            this.ui.subtitle('[Radio: solo estática. En la 94.1 ya nadie habla.]', 6);
+          } else {
+            var line = scripts[n - 1];
+            this.ui.subtitle('[Radio] ' + line, 10);
+            this.audio.speak(line, 'locutor');
+            if (/cinco y trece/.test(line)) { this.flags.heardTrueTime = true; } // la noche 7 revela la hora verdadera
+          }
         } else if (prox > 0.05) {
           this.ui.subtitle('[Radio: una voz entre la estática. No se entiende.]', 4);
         }
@@ -418,9 +425,12 @@
       this.audio.speak(q, 'cliente');
       var choices = ['Son ' + real + '.', 'Faltan cinco minutos para las seis.', '(No responder.)'];
       // Respuesta secreta: si leíste las seis hojas del bosque o abriste tu casillero, ya sabes la hora verdadera.
-      if (this.bosque.pagesFound() >= 6 || this.flags.ownLocker) { choices.push('Son las cinco y trece. Ya terminó.'); }
+      if (this._knowsTrueTime()) { choices.push('Son las cinco y trece. Ya terminó.'); }
       this.ui.showChoices('Cliente: «' + q + '»', choices);
     }
+
+    /** ¿Sabes la hora verdadera? (las seis hojas, tu casillero o la radio de la noche 7). */
+    _knowsTrueTime() { return this.bosque.pagesFound() >= 6 || !!this.flags.ownLocker || !!this.flags.heardTrueTime; }
 
     _tickQuestion(dt) {
       var q = this.question;
@@ -441,7 +451,7 @@
       if (input.hit('Digit1') || input.hit('Numpad1')) { this._answer(1); }
       else if (input.hit('Digit2') || input.hit('Numpad2')) { this._answer(2); }
       else if (input.hit('Digit3') || input.hit('Numpad3')) { this._answer(3); }
-      else if ((input.hit('Digit4') || input.hit('Numpad4')) && (this.bosque.pagesFound() >= 6 || this.flags.ownLocker)) { this._answer(4); }
+      else if ((input.hit('Digit4') || input.hit('Numpad4')) && this._knowsTrueTime()) { this._answer(4); }
     }
 
     _answer(choice) {
@@ -524,16 +534,17 @@
       this.ui.subtitle('(Alguien está sentado en el banco amarillo. No lo oíste entrar.)', 5);
     }
 
+    /** Un susurro: una frase suelta o, si diste tu nombre, a veces tu nombre. */
     onWhisper() {
       var name = this.options.name;
-      var lines = ['(susurros)', '(susurros detrás de las máquinas)', '(alguien susurra cerca del agua)'];
-      if (name) {
-        var whispered = '...' + name + '...';
-        this.ui.subtitle('(susurros: «' + whispered + '»)', 3);
+      if (name && Math.random() < 0.5) {
+        this.ui.subtitle('(susurros: «…' + name + '…»)', 3);
         this.audio.speak(name, 'susurro');
-      } else {
-        this.ui.subtitle(U.pick(lines), 3);
+        return;
       }
+      var w = U.pick(MR.HISTORIA.susurros);
+      this.ui.subtitle('(susurros: «' + w + '»)', 3);
+      this.audio.speak(w.replace(/…/g, ''), 'susurro');
     }
 
     onPhoneAnswered() {
