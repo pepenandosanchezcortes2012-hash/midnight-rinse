@@ -49,6 +49,7 @@
     FILTER_CLEAN_SECONDS: 1.5,
     WASHER_CYCLE_MIN: 30,
     COINS_PER_PRESS: 4,
+    BACKDOOR_OPENS: 180, // 03:00: la puerta trasera queda entreabierta (pasillo de servicio)
     DEBUG_SPEED: speed
   };
 

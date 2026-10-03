@@ -22,7 +22,9 @@
     { id: 'ojos_al_suelo', titulo: 'Ojos al suelo', desc: 'Termina un turno con él presente sin mirarlo nunca a la cara.' },
     { id: 'paranoia', titulo: 'Paranoia', desc: 'Fuma los tres porros en un mismo turno.' },
     { id: 'gato', titulo: 'Pelusa', desc: 'Acaricia al gato de la lavandería.' },
-    { id: 'pesadilla', titulo: 'Turno de pesadilla', desc: 'Consigue que la puerta abra en dificultad Pesadilla.', oculto: true }
+    { id: 'pesadilla', titulo: 'Turno de pesadilla', desc: 'Consigue que la puerta abra en dificultad Pesadilla.', oculto: true },
+    { id: 'fusibles', titulo: 'Electricista', desc: 'Restablece los fusibles del pasillo de servicio.' },
+    { id: 'casillero', titulo: 'Ya tenías casillero', desc: 'Abre el último casillero del pasillo.', oculto: true }
   ];
 
   class Logros {

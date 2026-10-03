@@ -161,13 +161,14 @@
       var tick = this.stepAcc >= STEP;
       if (tick) { this.stepAcc = 0; }
 
-      // Mientras estás en el bosque, te espera junto a la puerta.
-      if (g.bosque && g.bosque.outside) {
+      // Mientras estás en el bosque o en el pasillo, te espera junto a la puerta por la que saliste.
+      var away = g.bosque && g.bosque.outside;
+      var back = g.pasillo && g.pasillo.inside;
+      if (away || back) {
         if (!this.waitingDoor) {
           this.waitingDoor = true;
           this.jump = null; this.route = [];
-          root.position.set(0.6, 0, 4.1);
-          root.rotation.y = 0;
+          if (back) { root.position.set(6.4, 0, -3.4); root.rotation.y = Math.PI; } else { root.position.set(0.6, 0, 4.1); root.rotation.y = 0; }
           this.node = 'F4';
           this.perch = null;
           this.state = 'sentado';

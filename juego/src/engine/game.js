@@ -49,6 +49,7 @@
       this.ui.bindMusic(this.music);
       this.tele = new MR.Tele(this);
       this.bosque = new MR.Bosque(this);
+      this.pasillo = new MR.Pasillo(this);
       this.clima = new MR.Clima(this);
       this.gamepad = new MR.GamepadControls(this);
       this.gato = new MR.Gato(this);
@@ -188,6 +189,7 @@
     /** Botón de la pausa «Salir al bosque» / «Volver a la lavandería»: reanuda y cruza la puerta. */
     travelFromPause() {
       if (this.state === 'paused') { this.resume(); }
+      if (this.pasillo.inside) { return this.pasillo.go(); } // desde el pasillo, el botón regresa a la sala
       return this.bosque.go();
     }
 
@@ -214,7 +216,7 @@
       this.gamepad.poll(dt);
       if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); this._attract(dt); }
       this.retro.render(this.world.scene, this.player.camera, {
-        blink: this.state === 'ended' ? 1 : Math.max(this.player.blink.amount, this.bosque.fade),
+        blink: this.state === 'ended' ? 1 : Math.max(this.player.blink.amount, this.bosque.fade, this.pasillo.fade),
         dread: this.dread,
         time: now / 1000,
         flash: this.horror.flash,
@@ -274,9 +276,10 @@
       var cc = this.horror.customerCollider();
       if (cc) { extra.push(cc); }
       this.bosque.update(dt);
+      this.pasillo.update(dt);
       this.player.update(dt, input, {
         look: !this.noteOpen && !dialing && !this.wipe.active,
-        move: !this.noteOpen && !this.bosque.travel,
+        move: !this.noteOpen && !this.bosque.travel && !this.pasillo.travel,
         slow: this.gameplay.mopHeld,
         sensitivity: this.options.sensitivity,
         invertY: this.options.invertY,
@@ -305,6 +308,7 @@
       this.music.update(dt);
       this.audio.update({
         outdoor: this.bosque.outdoor,
+        muffled: this.pasillo.muffle,
         high: this.consumables.high,
         mixMode: this.options.mixMode,
         musicProximity: this.music.proximity,
@@ -331,6 +335,7 @@
         this.flags.registryText = text;
         this.ui.refreshRegistry();
       }
+      if (this._crossed(prev, C.BACKDOOR_OPENS)) { this.pasillo.unlock(); }
       if (this._crossed(prev, C.CUSTOMER_APPEARS)) { this.horror.schedule('cliente_aparece', 'banco', 9); }
       if (this._crossed(prev, C.RADIO_HOST)) {
         var prox = this.gameplay.radioProximity;
@@ -592,7 +597,9 @@
         'Cigarros: ' + this.consumables.used.cigarros + ' · Tragos de la petaca: ' + this.consumables.used.tragos +
           ' · Porros: ' + this.consumables.used.porros,
         'Salidas al bosque: ' + this.bosque.visits + ' · Hojas del registro: ' + this.bosque.pagesFound() + ' de 6',
-        'Caricias a Pelusa: ' + this.gato.pets + ' · Bufidos de alarma: ' + this.gato.hisses
+        'Caricias a Pelusa: ' + this.gato.pets + ' · Bufidos de alarma: ' + this.gato.hisses,
+        'Pasillo de servicio: ' + this.pasillo.visits + (this.pasillo.visits === 1 ? ' visita' : ' visitas') +
+          ' · Fusibles: ' + (this.pasillo.fuses ? 'restablecidos' : 'sin tocar')
       ];
       document.body.classList.remove('jugando');
       this.tilt.stop();

@@ -125,7 +125,11 @@
 
       var outside = g.bosque && g.bosque.outside;
       var table;
-      if (outside) {
+      if (g.pasillo && g.pasillo.inside) {
+        // En el pasillo de servicio: la bombilla… y la lavandería sigue cambiando sola.
+        table = [['bombilla', 2.5], ['apagon', 0.8], ['charco', 0.6], ['puerta_lavadora', 0.6], ['golpe_secadora', 1]];
+        if (this.customer.present) { table.push(['cliente_pasillo', 2.5 + g.stats.mirada * 0.5]); }
+      } else if (outside) {
         // En el bosque: ramas, la linterna, el búho… y la lavandería sigue cambiando sola a tus espaldas.
         table = [['rama', 3], ['linterna', 1.5], ['buho', 1], ['apagon', 1], ['charco', 0.8], ['puerta_lavadora', 0.6], ['secadora_sola', 0.6]];
         if (this.customer.present) { table.push(['cliente_bosque', 2.5 + g.stats.mirada * 0.5]); }
@@ -168,6 +172,13 @@
         case 'susurro': {
           var zones = ['lavadoras', 'secadoras', 'almacen', 'entrada', 'puerta_trasera', 'banco'];
           this.schedule('susurro', U.pick(zones), 0);
+          break;
+        }
+        case 'bombilla': this.schedule('bombilla', U.pick(this.world.pasillo.zones), 1); break;
+        case 'cliente_pasillo': {
+          var pa = this.world.pasillo.anchors.filter(function (n) { return n !== this.customer.anchor; }, this);
+          var pto = U.pick(pa);
+          this.schedule('cliente_mueve', this.world.anchors[pto].zone, 3, { to: pto });
           break;
         }
         case 'radio_sola': this.schedule('radio_sola', 'mostrador', 1); break;
@@ -239,7 +250,8 @@
           w.customer.group.visible = false;
           break;
         case 'apagon':
-          this.flickers[e.light] = Math.max(this.flickers[e.light], e.seconds);
+          // Con los fusibles restablecidos (pasillo de servicio), los apagones duran la mitad.
+          this.flickers[e.light] = Math.max(this.flickers[e.light], e.seconds * (g.pasillo && g.pasillo.fuses ? 0.5 : 1));
           audio.buzz();
           break;
         case 'apagon_total':
@@ -259,7 +271,7 @@
           audio.door();
           this.later(60, 'cierra_trasera', 'puerta_trasera', 0);
           break;
-        case 'cierra_trasera': this.backDoorTarget = 0; break;
+        case 'cierra_trasera': this.backDoorTarget = g.pasillo && g.pasillo.unlocked ? -0.3 : 0; break;
         case 'huellas':
           w.footprints.visible = true;
           this.later(90, 'huellas_secan', 'entrada', 0);
@@ -285,6 +297,10 @@
           break;
         }
         case 'buho': audio.buho(); break;
+        case 'bombilla':
+          this.flickers[0] = Math.max(this.flickers[0], U.rand(0.5, 1.6));
+          audio.buzz();
+          break;
         case 'radio_sola': {
           // La radio se sintoniza sola en la 94.1 y, entre la estática, alguien susurra.
           gp.tuneTo(MR.Config.RADIO_STATION);
@@ -375,7 +391,9 @@
       fwd.normalize();
       var p = player.pos;
       // Límites de donde estés: la lavandería o el bosque.
-      var bounds = this.game.bosque && this.game.bosque.outside ? this.world.forest.bounds : { minX: -7.6, maxX: 7.6, minZ: -4.0, maxZ: 4.6 };
+      var gm = this.game;
+      var bounds = gm.pasillo && gm.pasillo.inside ? this.world.pasillo.bounds :
+        (gm.bosque && gm.bosque.outside ? this.world.forest.bounds : { minX: -7.6, maxX: 7.6, minZ: -4.0, maxZ: 4.6 });
       var x = U.clamp(p.x - fwd.x * 1.4, bounds.minX, bounds.maxX);
       var z = U.clamp(p.z - fwd.z * 1.4, bounds.minZ, bounds.maxZ);
       var c = this.world.customer;

@@ -90,6 +90,15 @@ En la pantalla de título (y en la pausa; en el celular, con **tres dedos**) est
 
 Un turno dura unos 15 minutos reales. Para probar más rápido: `index.html?velocidad=4`.
 
+### El pasillo de servicio
+A las **03:00** se oye un clic: la **puerta trasera**, junto a las secadoras, queda entreabierta. Detrás hay un pasillo con:
+- una bombilla que titila;
+- una tubería que gotea;
+- la caldera;
+- **siete casilleros**: R., E., S., D., T., A. (las mismas iniciales de las hojas del bosque)… y el último tiene **tu nombre**.
+
+Si restableces la **caja de fusibles**, los apagones del resto del turno duran la mitad. Él también puede esperarte al fondo, junto a la caldera.
+
 ### Pelusa, el gato
 Un gato negro vive en la lavandería.
 - **Su vida:** duerme sobre una secadora, el banco o el mostrador, baja de un salto, camina por la sala y se sienta a mirarte.

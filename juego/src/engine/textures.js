@@ -309,6 +309,32 @@
       noise(x, 32, 32, 24, 79);
       return c;
     },
+    concreto: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#5a5b58';
+      x.fillRect(0, 0, 32, 32);
+      x.fillStyle = '#4a4b48';
+      x.fillRect(0, 15, 32, 1);
+      x.fillRect(15, 0, 1, 32);
+      x.fillStyle = '#3f4a52'; // mancha de humedad
+      x.fillRect(4, 20, 9, 7);
+      noise(x, 32, 32, 30, 89);
+      return c;
+    },
+    casillero: function () {
+      var c = canvas(16, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#56645d';
+      x.fillRect(0, 0, 16, 32);
+      x.fillStyle = '#3a4540';
+      for (var i = 0; i < 4; i += 1) { x.fillRect(4, 3 + i * 2, 8, 1); } // rejillas
+      x.fillRect(0, 0, 1, 32);
+      x.fillStyle = '#9a9a90';
+      x.fillRect(12, 16, 2, 3); // manija
+      noise(x, 16, 32, 22, 97);
+      return c;
+    },
     roca: function () {
       var c = canvas(16, 16);
       var x = c.getContext('2d');

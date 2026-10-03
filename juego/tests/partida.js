@@ -469,6 +469,38 @@
       return 'los cuatro eventos funcionan';
     }],
 
+    ['Pasillo de servicio: se abre a las 03:00, casilleros, fusibles y regreso', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var subs = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      g.gameplay._begin({ kind: 'backDoor', index: 0 }, g.input);
+      check(!g.pasillo.travel && /cerrada con llave/.test(subs()), 'la puerta trasera no estaba cerrada antes de las 03:00');
+      g.minutes = 179.9; step(ctx, 30);
+      check(g.pasillo.unlocked && /entreabierta/.test(subs()), 'la puerta no se abrió a las 03:00');
+      g.ui.options.name = 'Prueba';
+      g.gameplay._begin({ kind: 'backDoor', index: 0 }, g.input); step(ctx, 40);
+      check(g.pasillo.inside && g.player.pos.x > 58, 'no entró al pasillo');
+      g.input.keys.add('KeyW'); step(ctx, 60); g.input.keys.delete('KeyW');
+      check(g.pasillo.inside && g.player.pos.z < 4 && g.player.pos.x > 58.5 && g.player.pos.x < 61.5, 'caminar en el pasillo falló');
+      check(g.gato.waitingDoor && g.gato.position().z < -3, 'el gato no esperó junto a la puerta trasera');
+      g.pasillo.locker(6);
+      check(/tu nombre/.test(subs()) && g.logros.has('casillero'), 'el último casillero no funcionó');
+      g.pasillo.fuseBox();
+      check(g.pasillo.fuses && g.logros.has('fusibles'), 'los fusibles no se restablecieron');
+      g.horror.flickers[3] = 0;
+      g.horror._apply({ type: 'apagon', light: 3, seconds: 2 }, 'mostrador');
+      check(Math.abs(g.horror.flickers[3] - 1) < 0.01, 'con fusibles el apagón no duró la mitad');
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g.horror._scheduleKind('cliente_pasillo'); g.player.forceBlink(); step(ctx, 20);
+      check(/^pasillo_/.test(g.horror.customer.anchor || ''), 'él no apareció en el pasillo (' + g.horror.customer.anchor + ')');
+      g.gameplay._begin({ kind: 'volverSala', index: 0 }, g.input); step(ctx, 40);
+      check(!g.pasillo.inside && g.player.pos.z < -3.5 && Math.abs(g.player.pos.x - 6.8) < 0.5, 'no volvió a la sala junto a la puerta trasera');
+      check(Math.abs(g.retro.shared.uFogFar.value - 17) < 0.01, 'la niebla de la sala no volvió');
+      noErrors(ctx);
+      return 'abre 03:00, entra, camina, casillero con tu nombre, fusibles, él al fondo y regreso';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

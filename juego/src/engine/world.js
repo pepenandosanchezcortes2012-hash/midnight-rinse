@@ -98,6 +98,7 @@
       this._lights();
       this._zones();
       this._forest();
+      this._pasillo();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -520,6 +521,134 @@
         entrada: { center: new V3(0.0, 1.2, 4.5), radius: 1.8 },
         almacen: { center: new V3(-7.3, 1.2, 3.5), radius: 1.2 },
         puerta_trasera: { center: new V3(6.8, 1.1, -4.7), radius: 0.9 }
+      };
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * El pasillo de servicio, detrás de la puerta trasera (se abre a las 03:00). Vive lejos (x ≈ 60) para no
+     * dibujarse con la sala. Bombilla, tubería que gotea, caldera al fondo, la caja de fusibles y siete casilleros
+     * con las iniciales de quienes escribieron las hojas del bosque… y el tuyo.
+     */
+    _pasillo() {
+      var R = this.retro;
+      var m = this.mat;
+      var X = 60;
+      var conc = R.material({ texture: 'concreto' });
+      var floor = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(3, 12.2, 3, 12), 2, 8), conc);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.set(X, 0, 0.1);
+      this.add(inert(floor));
+      var ceil = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(3, 12.2, 3, 12), 2, 8), conc);
+      ceil.rotation.x = Math.PI / 2;
+      ceil.position.set(X, 2.6, 0.1);
+      this.add(inert(ceil));
+      var wallMat = R.material({ texture: 'concreto', color: 0xb8bdb6 });
+      [[X - 1.5, Math.PI / 2], [X + 1.5, -Math.PI / 2]].forEach(function (wdef) {
+        var wall = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(12.2, 2.6, 12, 3), 8, 2), wallMat);
+        wall.rotation.y = wdef[1];
+        wall.position.set(wdef[0], 1.3, 0.1);
+        this.add(inert(wall));
+      }, this);
+      var far = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(3, 2.6, 3, 3), 2, 2), wallMat);
+      far.position.set(X, 1.3, -6);
+      this.add(inert(far));
+      var near = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(3, 2.6, 3, 3), 2, 2), wallMat);
+      near.rotation.y = Math.PI;
+      near.position.set(X, 1.3, 6.2);
+      this.add(inert(near));
+      // La puerta por la que entraste (de vuelta a la sala).
+      var door = this.box(0.9, 2.1, 0.05, m.wood, X, 1.05, 6.15);
+      this.interactive(door, 'volverSala');
+      this.collider(X - 3, X - 1.45, -7, 7.5);
+      this.collider(X + 1.45, X + 3, -7, 7.5);
+      this.collider(X - 3, X + 3, -7.5, -5.95);
+      this.collider(X - 3, X + 3, 6.1, 7.5);
+
+      // Siete casilleros: R., E., S., D., T., A. (las hojas del bosque)… y el tuyo.
+      var lockerMat = R.material({ texture: 'casillero' });
+      var initials = ['R.', 'E.', 'S.', 'D.', 'T.', 'A.', 'TÚ'];
+      var lockers = [];
+      var lastLabel = null;
+      initials.forEach(function (txt, i) {
+        var z = 4.3 - i * 0.55;
+        var box = this.box(0.45, 1.9, 0.5, lockerMat, X - 1.27, 0.95, z);
+        this.interactive(box, 'casillero', i);
+        var label = MR.Textures.dynamic(32, 12);
+        label.ctx.fillStyle = '#e8e1cc';
+        label.ctx.fillRect(0, 0, 32, 12);
+        label.ctx.fillStyle = '#2b2a26';
+        label.ctx.font = 'bold 10px monospace';
+        label.ctx.textAlign = 'center';
+        label.ctx.fillText(txt, 16, 10);
+        label.texture.needsUpdate = true;
+        var plate = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.15), R.material({ map: label.texture, emissive: 0.35 }));
+        plate.rotation.y = Math.PI / 2;
+        plate.position.set(X - 1.04, 1.72, z);
+        this.add(plate);
+        lockers.push(box);
+        if (i === initials.length - 1) { lastLabel = label; }
+      }, this);
+      this.collider(X - 1.5, X - 1.02, 0.7, 4.6);
+
+      // Tubería que gotea sobre un charco.
+      var pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 3, 8), m.metal);
+      pipe.rotation.z = Math.PI / 2;
+      pipe.position.set(X, 2.42, -1.5);
+      this.add(inert(pipe));
+      var drip = new THREE.Mesh(new THREE.CircleGeometry(0.45, 10), m.water);
+      drip.rotation.x = -Math.PI / 2;
+      drip.position.set(X + 0.3, 0.012, -1.5);
+      this.add(inert(drip));
+
+      // Caldera con su llama, y la caja de fusibles.
+      var boilerMat = R.material({ texture: 'metal', color: 0x6a6660 });
+      this.box(1.3, 1.9, 0.8, boilerMat, X, 0.95, -5.5);
+      var flameMat = R.material({ texture: 'white', color: 0xff7a2a, emissive: 1.4 });
+      var flame = new THREE.Mesh(new THREE.PlaneGeometry(0.26, 0.16), flameMat);
+      flame.position.set(X, 0.5, -5.09);
+      this.add(flame);
+      var flue = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.7, 8), m.metal);
+      flue.position.set(X, 2.25, -5.5);
+      this.add(inert(flue));
+      this.collider(X - 0.65, X + 0.65, -6, -5.08);
+      var fuse = this.box(0.12, 0.55, 0.4, R.material({ texture: 'metal', color: 0x8a8d90 }), X + 1.43, 1.5, -3);
+      var fuseLed = this.box(0.02, 0.04, 0.04, R.material({ texture: 'white', color: 0xff3020, emissive: 1.3 }), X + 1.36, 1.72, -2.88);
+      this.interactive(fuse, 'fusibles');
+      this.interactive(fuseLed, 'fusibles');
+      // Bombilla colgando.
+      this.box(0.01, 0.25, 0.01, m.dark, X, 2.48, 0.8);
+      var bulb = this.box(0.08, 0.1, 0.08, R.material({ texture: 'white', color: 0xffe2a8, emissive: 1.3 }), X, 2.3, 0.8);
+
+      // Anclas y zonas del Cliente Inmóvil.
+      this.anchors.pasillo_fondo = { x: X, z: -4.4, rot: Math.PI, seated: false, zone: 'pasillo_fondo' };
+      this.anchors.pasillo_puerta = { x: X + 0.9, z: 5.3, rot: Math.atan2(0.9, 9.3), seated: false, zone: 'pasillo_puerta' };
+      this.zones.pasillo_fondo = { center: new V3(X, 1.2, -4.5), radius: 1.8 };
+      this.zones.pasillo_puerta = { center: new V3(X + 0.6, 1.2, 5.2), radius: 1.4 };
+      this.zones.pasillo_casilleros = { center: new V3(X - 1.1, 1.2, 2.6), radius: 2.2 };
+
+      this.pasillo = {
+        door: door,
+        lockers: lockers,
+        lastLabel: lastLabel,
+        fuseLed: fuseLed,
+        flame: flameMat,
+        bulb: bulb,
+        anchors: ['pasillo_fondo', 'pasillo_puerta'],
+        zones: ['pasillo_fondo', 'pasillo_puerta', 'pasillo_casilleros'],
+        spawnInside: { x: X, z: 5.4, yaw: 0 },
+        spawnOutside: { x: 6.8, z: -4.0, yaw: Math.PI },
+        area: { minX: X - 1.5, maxX: X + 1.5, minZ: -6, maxZ: 6.2 },
+        bounds: { minX: X - 1.2, maxX: X + 1.2, minZ: -4.8, maxZ: 5.6 },
+        ambient: new V3(0.05, 0.05, 0.06),
+        lights: [
+          [X, 2.25, 0.8, new THREE.Color(1.0, 0.85, 0.6), 1.15, 7.5],     // bombilla
+          [X, 0.6, -4.6, new THREE.Color(1.0, 0.5, 0.2), 0.8, 4.5],       // caldera
+          [X + 1.2, 1.6, -2.9, new THREE.Color(1.0, 0.2, 0.15), 0.25, 1.6], // foco de los fusibles
+          [0, -100, 0, new THREE.Color(0, 0, 0), 0, 1],
+          [0, -100, 0, new THREE.Color(0, 0, 0), 0, 1],
+          [0, -100, 0, new THREE.Color(0, 0, 0), 0, 1]
+        ]
       };
     }
 

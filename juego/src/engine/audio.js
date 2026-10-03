@@ -212,20 +212,20 @@
       var washerLevel = Math.min(1, s.washers / 3);
       // Afuera (bosque): la lavandería se oye ahogada tras los muros; la lluvia y el viento, de frente.
       var out = s.outdoor || 0;
-      var walls = 1 - 0.85 * out;
+      var walls = 1 - 0.85 * Math.max(out, (s.muffled || 0) * 0.8); // bosque o pasillo de servicio
       this._set(this.washers.gain.gain, (0.03 + washerLevel * 0.12) * walls);
       this._set(this.dryers.gain.gain, Math.min(1, s.dryers / 2) * 0.05 * walls);
       this._set(this.rain.gain.gain, 0.05 + out * 0.13, 0.6);
       this._set(this.wind.gain.gain, 0.05 + out * 0.07, 0.6);
       var prox = s.collapse ? 0 : s.radioProximity;
       // Modo mezcla: la radio del juego se calla para que suene tu música desde otra app.
-      this._set(this.radioGain.gain, s.mixMode ? 0 : prox * 0.22 * (1 - 0.9 * out));
+      this._set(this.radioGain.gain, s.mixMode ? 0 : prox * 0.22 * walls);
       this._set(this.reverbSend.gain, (s.high || 0) * 0.55, 0.6);
       // La estática solo se esconde si estás sintonizado en alguna estación (94.1 o tu 99.9).
       var tuned = Math.max(prox, s.musicProximity || 0);
       this._set(this.staticNoise.gain.gain, (1 - tuned) * (s.collapse ? 0.08 : 0.045));
       this._set(this.infra.gain, (1 - washerLevel) * (0.18 + s.dread * 0.5));
-      this._set(this.hum.gain, 0.012 * s.lightLevel * (1 - 0.9 * out));
+      this._set(this.hum.gain, 0.012 * s.lightLevel * walls);
       this._set(this.muffle.frequency, s.eyesClosed ? 700 : 18000, 0.05);
       this._set(this.pad.gain, 0.03 + s.dread * 0.04);
       this._scheduleMusic(prox);
@@ -375,6 +375,23 @@
     bufido(pan) {
       this._burst(this.white, 'highpass', 2600, 0.7, 0.75, 0.22, pan);
       this._burst(this.white, 'bandpass', 4200, 1.2, 0.5, 0.1, pan);
+    }
+    /** Pasillo: una gota que cae en el charco. */
+    gota(pan) {
+      var ctx = this.ctx;
+      if (!ctx) { return; }
+      var t = ctx.currentTime;
+      var o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(1500 + Math.random() * 500, t);
+      o.frequency.exponentialRampToValueAtTime(520, t + 0.09);
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.06, t);
+      g.gain.exponentialRampToValueAtTime(0.0005, t + 0.16);
+      var p = ctx.createStereoPanner();
+      p.pan.value = pan || 0;
+      o.connect(g); g.connect(p); p.connect(this.master);
+      o.start(t); o.stop(t + 0.2);
     }
     /** Logro: la campanita de fin de ciclo de una secadora. */
     ding() {

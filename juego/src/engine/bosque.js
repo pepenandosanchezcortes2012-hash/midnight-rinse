@@ -40,12 +40,17 @@
     }
 
     /** Luz ambiente de base donde estés (el clima le suma los relámpagos). */
-    baseAmbient() { return this.outside ? this.outAmbient : this.inside.ambient; }
+    baseAmbient() {
+      var p = this.game.pasillo;
+      if (p && p.inside) { return p.p.ambient; }
+      return this.outside ? this.outAmbient : this.inside.ambient;
+    }
 
     /** ¿Se puede cruzar ahora? (no con la hoja abierta, una pregunta en curso o un cruce a medias). */
     canTravel() {
       var g = this.game;
-      return g.state === 'playing' && !this.travel && !g.noteOpen && !g.question;
+      var p = g.pasillo;
+      return g.state === 'playing' && !this.travel && !g.noteOpen && !g.question && !(p && (p.inside || p.travel));
     }
 
     /** Cruza la puerta: afuera si estás adentro, adentro si estás afuera. */

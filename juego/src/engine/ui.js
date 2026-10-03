@@ -200,7 +200,8 @@
       this.el.pause.hidden = !on;
       if (!on) { $('guia').hidden = true; }
       if (on && this.game.bosque) {
-        $('btn-bosque').textContent = this.game.bosque.outside ? 'Volver a la lavandería' : 'Salir al bosque';
+        var away = this.game.bosque.outside || (this.game.pasillo && this.game.pasillo.inside);
+        $('btn-bosque').textContent = away ? 'Volver a la lavandería' : 'Salir al bosque';
       }
     }
 

@@ -257,6 +257,17 @@ El proyecto pasó por dos etapas:
   - **Mano en la lavadora:** una mano por dentro del vidrio de una lavadora durante 70 s.
 - **Prueba nueva.** Resultado: 18/18.
 
+## 22. El pasillo de servicio
+- **`world._pasillo` y `pasillo.js`:** zona aparte (x ≈ 60) con concreto, bombilla, tubería con goteo, caldera con llama, caja de fusibles y 7 casilleros.
+- **Casilleros:** tienen las iniciales de las hojas del bosque más el tuyo, con el nombre de las opciones o «TÚ».
+- **Cuándo se abre:** a las 03:00 (`C.BACKDOOR_OPENS`), con un clic, y la puerta queda entreabierta.
+- **El cruce:** fundido como el del bosque, con sus propias luces, ambiente y niebla; las lavadoras y la radio se oyen ahogadas.
+- **Horror en el pasillo:** la bombilla titila y él aparece al fondo o junto a la puerta. Al salir, regresa a las secadoras.
+- **Fusibles:** al restablecerlos, los apagones duran la mitad (logro «Electricista»). El último casillero da el logro oculto «Ya tenías casillero».
+- **El gato:** te espera junto a la puerta trasera.
+- **El guardado:** incluye el pasillo.
+- **Prueba nueva.** Resultado: 19/19.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

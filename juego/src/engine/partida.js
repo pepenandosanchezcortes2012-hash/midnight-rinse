@@ -38,7 +38,8 @@
           dryers: gp.dryers.map(function (d) { return { running: d.running, lint: d.lint, overheated: d.overheated, stopIn: d.stopIn }; })
         },
         horror: { present: h.customer.present, anchor: h.customer.anchor, nextEvent: h.nextEvent },
-        gato: { pets: g.gato.pets, hisses: g.gato.hisses }
+        gato: { pets: g.gato.pets, hisses: g.gato.hisses },
+        pasillo: { unlocked: g.pasillo.unlocked, inside: g.pasillo.inside, visits: g.pasillo.visits, fuses: g.pasillo.fuses }
       };
     },
 
@@ -103,6 +104,12 @@
       }
       if (d.bosque.outside) { b._swap(true); b.firstTime = false; }
       b.visits = d.bosque.visits;
+      if (d.pasillo) {
+        if (d.pasillo.unlocked) { g.pasillo.unlock(true); }
+        if (d.pasillo.fuses) { g.pasillo.fuses = true; g.world.pasillo.fuseLed.material.uniforms.uColor.value.setHex(0x40ff60); }
+        if (d.pasillo.inside) { g.pasillo._swap(true); g.pasillo.firstTime = false; }
+        g.pasillo.visits = d.pasillo.visits;
+      }
       g.gato.pets = d.gato.pets;
       g.gato.hisses = d.gato.hisses;
       // Jugador (después del cruce, que lo pone en la puerta).

@@ -136,6 +136,7 @@
       if (kind === 'changer') { this._changer(); return; }
       if (kind === 'changerTray') { this._pickTray(); return; }
       if (kind === 'washerDoor') { this._toggleDoor(target.index); return; }
+      if (kind === 'backDoor' && this.game.pasillo.unlocked) { this.game.pasillo.go(); return; }
       if (kind === 'backDoor') {
         this.audio.door();
         MR.Haptics.pulse([30, 50, 30]);
@@ -150,6 +151,9 @@
       if (kind === 'lavadoraBosque') { this.game.bosque.touchWasher(); return; }
       if (kind === 'paginaBosque') { this.game.bosque.takePage(target.index); return; }
       if (kind === 'gato') { this.game.gato.pet(); return; }
+      if (kind === 'volverSala') { this.game.pasillo.go(); return; }
+      if (kind === 'casillero') { this.game.pasillo.locker(target.index); return; }
+      if (kind === 'fusibles') { this.game.pasillo.fuseBox(); return; }
       if (kind === 'teleCanal') { this.game.tele.next(); return; }
       if (kind === 'puddle' && !this.mopHeld) {
         this.say('nomop', '(Necesitas el trapeador. Está en el almacén, al fondo a la izquierda.)');
