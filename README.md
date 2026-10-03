@@ -133,6 +133,7 @@ El juego cuenta tus noches («Noche 3» en el título).
 - **La respuesta secreta:** con las seis hojas, tu casillero o lo que dice la radio, aparece una cuarta respuesta cuando él te pregunta la hora…
 
 ### Qué hacer durante el turno
+- **Primeras noches:** si te atoras, el juego te da una **pista** suave (una sola vez cada una), en las noches 1 y 2 o siempre en Tranquilo.
 - **¿No sabes qué falta?** Toca la **tablilla de tareas** del mostrador, junto a la radio. Dice la hora, cuántos charcos hay y cuándo es la próxima revisión, cuántas lavadoras funcionan y qué tan llenos están los filtros, más recordatorios.
 - **Lee la hoja del registro** sobre el mostrador. La imprime la impresora térmica a las 01:15… y cambia sola durante la noche.
 - **Friega el pasillo central** (entre las lavadoras y el banco): cada 45 minutos alguien revisa si hay charcos. El trapeador está en el almacén, al fondo a la izquierda.

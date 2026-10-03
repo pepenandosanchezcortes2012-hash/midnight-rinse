@@ -346,6 +346,8 @@
       this.gameplay.update(dt, dMin, this.minutes);
       this.horror.update(dt, this.player);
       this.gato.update(dt);
+      this.hintTimer = (this.hintTimer || 0) - dt;
+      if (this.hintTimer <= 0) { this.hintTimer = 1; this._hints(); }
       // Guardado automático (Continuar turno).
       this.saveTimer -= dt;
       if (this.saveTimer <= 0) { this.saveTimer = 10; MR.Partida.save(this); }
@@ -618,8 +620,36 @@
     answerChoice(n) { if (this.question) { this._answer(n); } }
 
     openNote() {
+      this.flags.readNote = true;
       this.noteOpen = true;
       this.ui.showNote(this.shift.currentText());
+    }
+
+    /**
+     * Pistas para quien empieza (noches 1 y 2, o siempre en Tranquilo): un empujón suave, una sola vez cada una,
+     * solo si te ve atorado.
+     */
+    _hints() {
+      if (!((this.night || 1) <= 2 || this.options.difficulty === 'tranquilo')) { return; }
+      var C = MR.Config;
+      var gp = this.gameplay;
+      var f = this.flags;
+      var said = f.hints = f.hints || {};
+      var self = this;
+      function hint(id, when, text) {
+        if (said[id] || !when) { return; }
+        said[id] = true;
+        self.ui.subtitle('(Pista: ' + text + ')', 6);
+      }
+      hint('registro', this.minutes > C.SHIFT_START + 12 && !f.readNote, 'la hoja del registro está sobre el mostrador. Tócala para leer las reglas.');
+      hint('lavadoras', this.minutes > C.SHIFT_START + 25 && gp.washers.filter(function (w) { return w.running; }).length < 3,
+        'pon a lavar. Saca monedas del cambiador junto a la entrada, mételas en la ranura y gira la perilla. Su ruido tapa el zumbido.');
+      var next = C.MOP_CHECKS.filter(function (m) { return m > self.minutes; })[0];
+      hint('charcos', next && next - this.minutes < 15 && gp.activePuddles() >= 2 && !gp.mopHeld,
+        'hay charcos en el pasillo y pronto revisan. El trapeador está en el almacén, al fondo a la izquierda.');
+      hint('filtro', gp.dryers.some(function (d) { return d.lint > 0.7; }),
+        'una secadora tiene el filtro lleno de pelusa. Mantén presionado sobre el filtro para limpiarlo.');
+      hint('tablilla', this.minutes > C.SHIFT_START + 45, 'la tablilla del mostrador te dice qué falta.');
     }
 
     /** Tablilla de tareas del mostrador: el estado del turno (no hay HUD). */

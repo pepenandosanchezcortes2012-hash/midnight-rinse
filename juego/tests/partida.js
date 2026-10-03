@@ -742,6 +742,29 @@
       return 'amanece en el título; de noche al empezar';
     }],
 
+    ['Pistas para quien empieza (y no para los veteranos)', async function () {
+      async function run(night) {
+        localStorage.setItem('midnight-rinse/noches', String(night - 1));
+        var ctx = await load();
+        start(ctx);
+        var g = ctx.g;
+        var C = ctx.w.MR.Config;
+        g.minutes = C.SHIFT_START + 13; step(ctx, 35);
+        var a = ctx.w.document.getElementById('subtitulos').textContent;
+        g.gameplay.washers.forEach(function (w) { w.running = false; });
+        g.minutes = C.SHIFT_START + 26; step(ctx, 35);
+        var b = ctx.w.document.getElementById('subtitulos').textContent;
+        noErrors(ctx);
+        return { registro: /Pista: la hoja del registro/.test(a), lavadoras: /Pista: pon a lavar/.test(b), hints: Object.keys(g.flags.hints || {}).length };
+      }
+      var first = await run(1);
+      var veteran = await run(5);
+      localStorage.removeItem('midnight-rinse/noches');
+      check(first.registro && first.lavadoras, 'la primera noche no dio pistas');
+      check(veteran.hints === 0, 'la noche 5 dio pistas');
+      return 'noche 1: registro y lavadoras · noche 5: ninguna';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);
