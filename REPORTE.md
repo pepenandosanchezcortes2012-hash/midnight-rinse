@@ -281,6 +281,10 @@ El proyecto pasó por dos etapas:
 - **Evaluación:** `100 − 15·faltas − (25 incorrecta | 12 sin respuesta) + 5·hojas + 15 (final del bosque) + 10 (final bueno) + 2·charcos` (máx. 10). Letra A–F con comentario del gerente en la pantalla final y en el resumen.
 - **Prueba nueva.** Resultado: 21/21.
 
+## 25. Compartir resultado
+- **Qué hace:** botón en la pantalla final. Usa Web Share (menú del teléfono) o, si no está, copia al portapapeles. El texto lleva la nota, la dificultad, el final y las hojas encontradas, más el enlace a la carpeta del juego.
+- **Prueba nueva.** Resultado: 22/22.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

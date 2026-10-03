@@ -530,6 +530,24 @@
       return 'café: 1 moneda, parpadeo ×' + (c.blinkFactor() / bf0).toFixed(2) + '; turno perfecto = A';
     }],
 
+    ['Compartir resultado al final del turno', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      g.stats.respuesta = 'correcta';
+      g.bosque.found = [true, true, false, false, false, false];
+      g.end();
+      var shared = null;
+      Object.defineProperty(ctx.w.navigator, 'share', { configurable: true, value: function (data) { shared = data; return Promise.resolve(); } });
+      ctx.w.document.getElementById('btn-compartir').click();
+      check(shared && /Saqué [A-F] en Midnight Rinse/.test(shared.text), 'no compartió el texto');
+      check(/2 de 6 hojas/.test(shared.text), 'el texto no menciona las hojas');
+      var dir = ctx.w.location.origin + ctx.w.location.pathname.replace(/[^/]*$/, '');
+      check(shared.url === dir, 'el enlace no apunta a la carpeta del juego: ' + shared.url);
+      noErrors(ctx);
+      return 'compartido con nota ' + g.grade + ' y 2 de 6 hojas';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

@@ -25,6 +25,7 @@
       $('btn-continuar').addEventListener('click', function () { game.resume(); });
       $('btn-abandonar').addEventListener('click', function () { MR.Partida.clear(); window.location.reload(); });
       $('btn-volver').addEventListener('click', function () { window.location.reload(); });
+      $('btn-compartir').addEventListener('click', function () { self.share(); });
       $('btn-borrar-registro').addEventListener('click', function () { game.shift.reset(); self.refreshRegistry(); });
       // Guía de controles: desde el título y desde la pausa; Esc la cierra.
       $('btn-guia').addEventListener('click', function () { self.showGuide(true); });
@@ -300,6 +301,35 @@
     }
 
     hideChoices() { this.el.dialog.hidden = true; }
+
+    /** Texto para compartir el resultado del turno. */
+    shareText() {
+      var g = this.game;
+      var title = this.el.endTitle.textContent;
+      var diff = g.diff ? g.diff.nombre : 'Normal';
+      var pages = g.bosque.pagesFound();
+      return 'Saqué ' + (g.grade || '?') + ' en Midnight Rinse (' + diff + '): «' + title + '».' +
+        (pages ? ' Encontré ' + pages + ' de 6 hojas en el bosque.' : '') +
+        ' ¿Aguantas el turno de medianoche?';
+    }
+
+    /** Compartir: menú del teléfono (Web Share) o, si no hay, copiar al portapapeles. */
+    share() {
+      var text = this.shareText();
+      var url = location.origin + location.pathname.replace(/[^/]*$/, '');
+      var status = $('compartir-estado');
+      if (navigator.share) {
+        navigator.share({ title: 'Midnight Rinse', text: text, url: url }).catch(function () { /* cancelado */ });
+        return;
+      }
+      var full = text + ' ' + url;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(full).then(function () { status.textContent = 'Copiado. Pégalo donde quieras.'; },
+          function () { status.textContent = full; });
+      } else {
+        status.textContent = full;
+      }
+    }
 
     /** La nota del gerente (A–F) en la pantalla final. */
     showGrade(letter, comment) {
