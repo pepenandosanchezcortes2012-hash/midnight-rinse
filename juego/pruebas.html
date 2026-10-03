@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Midnight Rinse · Pruebas</title>
+  <style>
+    :root { --fondo: #050608; --tinta: #d9d4c3; --tenue: #8d8a7d; --ok: #8fe08a; --mal: #ff8a7a; --acento: #e2c84b; }
+    body { margin: 0; padding: 16px; background: var(--fondo); color: var(--tinta); font-family: "Courier New", monospace; }
+    h1 { color: var(--acento); font-size: 22px; margin: 0 0 6px; }
+    p { color: var(--tenue); margin: 0 0 12px; font-size: 13px; }
+    button { font-family: inherit; font-size: 15px; padding: 8px 18px; background: #1a1c20; color: var(--acento); border: 2px solid var(--acento); cursor: pointer; }
+    #resumen { margin: 12px 0; font-size: 16px; }
+    ol { padding-left: 22px; }
+    li { margin: 6px 0; line-height: 1.4; }
+    .ok { color: var(--ok); }
+    .mal { color: var(--mal); }
+    .det { color: var(--tenue); font-size: 12px; display: block; }
+    iframe { width: 480px; height: 360px; max-width: 100%; border: 1px solid #2a2c31; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Pruebas automáticas</h1>
+  <p>Carga el juego en el marco de abajo y lo juega solo: arranque, guía, consumibles, tele, bosque, un turno completo y «Reiniciar todo». No toca tus datos guardados: los respalda y los restaura al final.</p>
+  <button id="correr" type="button">Correr pruebas</button>
+  <div id="resumen"></div>
+  <ol id="lista"></ol>
+  <iframe id="marco" title="Juego bajo prueba"></iframe>
+  <script src="tests/partida.js"></script>
+</body>
+</html>

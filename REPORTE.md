@@ -166,6 +166,22 @@ El proyecto pasó por dos etapas:
   - **Lentes y horror:** los lentes se mojan y el Cliente Inmóvil te sigue y vuelve a la entrada.
   - **Turno completo:** con 3 salidas al bosque, sin errores.
 
+## 11. Pruebas de partida automáticas
+- **Qué es:** `juego/pruebas.html` + `juego/tests/partida.js`. Cargan el juego real en un iframe y lo juegan paso a paso con `g.update(1/30)`, que no depende de la velocidad de la máquina. Respaldan y restauran el `localStorage` del juego.
+- **Resultado:** 10 pruebas, todas en verde en unos 4 s.
+
+## 12. App instalable (PWA)
+- **Archivos:**
+  - `manifest.webmanifest`: pantalla completa, horizontal y fondo oscuro.
+  - Iconos pixel art generados con `herramientas/iconos.py`: una lavadora con dos ojos en el agua. Incluye versión *maskable*, `apple-touch-icon` y favicon.
+  - `sw.js`, el service worker que hace funcionar el modo sin internet.
+- **Estrategia del service worker:**
+  - Al instalarse lee `index.html` y guarda todo lo que necesita, así funciona sin internet desde la primera visita (33 archivos).
+  - La página va primero a la red, para recibir actualizaciones.
+  - Los recursos con `?v=` salen de la caché y se borran sus versiones viejas.
+  - Lo demás va a la red primero; YouTube no pasa por el service worker.
+- **Botón «Instalar en el teléfono»** (`beforeinstallprompt`) y, en iPhone, instrucciones para Compartir → Agregar a pantalla de inicio.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

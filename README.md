@@ -23,6 +23,11 @@ Terror liminal acogedor en primera persona, con estética PS1 a 320×240. **+18:
 | **H** | Guía de controles |
 | **Esc** | Pausa |
 
+### Instálalo como app
+- **Android y Chrome:** en la pantalla de título aparece **«Instalar en el teléfono»**.
+- **iPhone:** toca **Compartir → Agregar a pantalla de inicio**.
+- **Cómo queda:** con su icono, en pantalla completa y en horizontal. **Funciona sin internet** desde la primera visita, excepto la tele de YouTube, que sí necesita conexión.
+
 ### En el celular (Zero-HUD: pantalla 100 % limpia)
 Abre `juego/index.html` en el navegador del teléfono (o publícalo en cualquier hosting estático) y juega en horizontal. No hay joysticks dibujados ni botones:
 
@@ -145,6 +150,13 @@ midnight-rinse/
 - **El horror por oclusión.** `horror.js` le da a cada zona de la lavandería su propio `Dispatcher`. En cada cuadro, la visibilidad de la zona sale del frustum de la cámara, y `tick(visibilidad, ojosCerrados)` solo dispara los eventos de esa zona si nadie la mira o si parpadeas. La zona "jugador" (detrás de ti) solo se activa al parpadear.
 - **La estética PS1 es la misma matemática del núcleo.** El shader de los materiales aplica la fórmula de `vertex_snap` por vértice, y el postproceso aplica la de `bayer_rgb555` por píxel. Las manos pasan por `SteppedHold(15)`, y las perillas son `DetentDial`.
 - **Sin HUD.** La información está en el mundo: el reloj de pared, la hoja del registro, la pantalla de la radio, la luz de cada lavadora, las monedas en tu mano y el vapor de las secadoras.
+
+## Pruebas de partida
+
+Abre `juego/pruebas.html` (en local o en GitHub Pages) y pulsa **Correr pruebas**: el juego se juega solo en un marco.
+- **Qué cubre:** arranque, lienzo opaco, guía de controles, consumibles, enlaces de la tele, bosque (salir, caminar, chocar, volver), el Cliente Inmóvil en el bosque, un turno completo, la app instalable y «Reiniciar todo».
+- **Tus datos:** respalda y restaura lo que tengas guardado.
+- **Modo automático:** `pruebas.html?auto` arranca solo.
 
 ## Publicar una versión nueva
 
