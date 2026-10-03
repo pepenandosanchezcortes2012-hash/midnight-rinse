@@ -311,3 +311,14 @@ body.mando .solo-mando { display: block !important; }
 /* Título: la lavandería se ve arriba (la cámara la recorre) y el texto queda sobre fondo oscuro abajo. */
 #titulo { background: linear-gradient(rgba(3, 4, 6, 0.35), rgba(3, 4, 6, 0.72) 30%, rgba(3, 4, 6, 0.95) 55%); }
 #titulo h1 { text-shadow: 3px 3px 0 #3a2f0a, 0 0 18px rgba(0, 0, 0, 0.9); }
+
+/* Barras de desplazamiento oscuras (pantallas con mucho contenido en el celular). */
+.pantalla { scrollbar-color: #3a3c42 transparent; scrollbar-width: thin; }
+.pantalla::-webkit-scrollbar { width: 8px; }
+.pantalla::-webkit-scrollbar-thumb { background: #3a3c42; border-radius: 4px; }
+/* Teléfono en horizontal (poca altura): menos espacio entre elementos. */
+@media (max-height: 460px) {
+  .pantalla { padding-top: 3vh; gap: 10px; }
+  h1 { font-size: clamp(28px, 6vw, 48px); }
+  .boton { padding: 8px 18px; font-size: 16px; }
+}

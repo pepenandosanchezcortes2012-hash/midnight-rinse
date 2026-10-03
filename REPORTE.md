@@ -328,6 +328,13 @@ El proyecto pasó por dos etapas:
 - **Regla de la mirada:** usa ahora hacia dónde mira la cabeza.
 - **Prueba nueva.** Resultado: 29/29.
 
+## 33. Revisión de diseño en tamaño de celular
+- **Cómo se revisó:** el título, la pausa y la guía en un marco de 844×390 (teléfono en horizontal).
+- **Pausa:** pasa a cuatro filas compactas, porque «Reiniciar todo» quedaba cortado.
+- **En pantallas bajas:** menos espacio entre elementos y botones un poco más chicos.
+- **Barras de desplazamiento:** oscuras.
+- **Resultado:** 29/29.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
