@@ -154,6 +154,7 @@ El turno se guarda solo cada 10 segundos y al pausar o salir de la app; sirve si
 
 ### Dificultad
 En **Opciones → Dificultad**:
+- **Paseo:** sin él, sin sustos y sin faltas. Solo para explorar la lavandería, el bosque y el pasillo, buscar objetos y leer la historia.
 - **Tranquilo:** sustos espaciados, 8 cigarros, 6 tragos y 4 porros. Los lentes se empañan más lento y se perdonan hasta 6 faltas.
 - **Normal:** el juego original, hasta 3 faltas.
 - **Pesadilla:** sustos casi el doble de seguidos, 2 cigarros, 2 tragos y 1 porro. Solo se perdona **una** falta para el final bueno.

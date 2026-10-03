@@ -392,7 +392,7 @@
         this.ui.refreshRegistry();
       }
       if (this._crossed(prev, C.BACKDOOR_OPENS)) { this.pasillo.unlock(); }
-      if (this._crossed(prev, C.CUSTOMER_APPEARS)) { this.horror.schedule('cliente_aparece', 'banco', 9); }
+      if (this._crossed(prev, C.CUSTOMER_APPEARS) && !this.diff.sinSustos) { this.horror.schedule('cliente_aparece', 'banco', 9); }
       if (this._crossed(prev, C.RADIO_HOST)) {
         var prox = this.gameplay.radioProximity;
         if (prox > 0.35) {
@@ -566,7 +566,7 @@
 
     // ---------------------------------------------------------------------------------------------
     infraction(kind) {
-      if (kind === 'respuesta') { return; }
+      if (kind === 'respuesta' || (this.diff && this.diff.sinSustos)) { return; }
       this.stats[kind] = (this.stats[kind] || 0) + 1;
     }
 
@@ -775,7 +775,9 @@
       if (reason !== 'bosque') {
         if (good) { this.audio.ding(); this.audio.door(); } else { this.audio.thud(); this.audio.buzz(); }
       }
-      if (reason === 'bosque') {
+      if (diff.sinSustos && reason !== 'bosque') {
+        this.ui.showEnd('05:12 · Paseo nocturno', 'Recorriste la lavandería, el bosque y el pasillo sin que nadie te mirara. Afuera sigue lloviendo. Esta vez fue solo un paseo.', summary);
+      } else if (reason === 'bosque') {
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {
         this.ui.showEnd('05:12 · Turno terminado',

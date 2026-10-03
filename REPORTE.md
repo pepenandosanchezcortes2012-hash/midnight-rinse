@@ -394,6 +394,11 @@ El proyecto pasó por dos etapas:
 - **`archivo.js`:** guarda de forma permanente las hojas encontradas y las transmisiones de radio escuchadas (`midnight-rinse/archivo`). Panel en el título agrupado por hojas y radio; las entradas encontradas se releen en la vista de la hoja.
 - **Prueba nueva.** Resultado: 36/36.
 
+## 43. Modo Paseo
+- **Qué es:** la dificultad «Paseo» (`sinSustos`): el director del horror no actúa, él no aparece (ni se programa) y no hay faltas. Termina con el final «Paseo nocturno». Sirve para explorar sin miedo, buscar objetos y leer la historia.
+- **Opción renombrada:** «Sensibilidad del ratón» pasa a «Sensibilidad de la mirada», porque también aplica al celular y al control.
+- **Prueba nueva:** un turno completo en Paseo, sin él, sin sustos ni faltas. Resultado: 37/37.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

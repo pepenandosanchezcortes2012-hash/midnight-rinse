@@ -123,6 +123,7 @@
     _director(dt) {
       var g = this.game;
       if (g.minutes < MR.Config.SHIFT_START + 5) { return; }
+      if (g.diff && g.diff.sinSustos) { return; } // modo Paseo
       this.nextEvent -= dt;
       if (this.nextEvent > 0) { return; }
       var mult = g.anomalyMultiplier();
@@ -230,7 +231,7 @@
       this.firedLog.push({ type: e.type, zone: zoneName, minute: Math.floor(g.minutes) });
       switch (e.type) {
         case 'cliente_aparece':
-          if (!this.customer.present && !g.flags.secreto) {
+          if (!this.customer.present && !g.flags.secreto && !(g.diff && g.diff.sinSustos)) {
             this.placeCustomer('banco');
             this.customer.present = true;
             audio.thud();

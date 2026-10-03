@@ -856,6 +856,30 @@
       return 'hoja 3 y radio de la noche 1 guardadas y releídas desde el título';
     }],
 
+    ['Modo Paseo: sin él, sin sustos y sin faltas', async function () {
+      var ctx = await load('?velocidad=8');
+      var sel = ctx.w.document.getElementById('opt-dificultad');
+      sel.value = 'paseo'; sel.dispatchEvent(new ctx.w.Event('input'));
+      start(ctx);
+      var g = ctx.g;
+      var fired = 0;
+      var frames = 0;
+      while (g.state === 'playing' && frames < 30 * 60 * 5) {
+        step(ctx, 1); frames += 1;
+        if (g.horror.customer.present) { break; }
+        if (frames % 900 === 0) { await wait(0); }
+      }
+      var firedList = g.horror.firedLog.filter(function (e) { return !/^(cierra|vidrio|huellas_secan|mano_lavadora_fin)/.test(e.type); });
+      fired = firedList.length;
+      check(!g.horror.customer.present, 'él apareció en modo Paseo');
+      check(fired === 0, 'hubo ' + fired + ' sustos en modo Paseo: ' + firedList.map(function (e) { return e.type; }).join(', '));
+      check(g.stats.pasillo === 0 && g.stats.filtro === 0, 'hubo faltas en modo Paseo');
+      check(g.state === 'ended' && /Paseo nocturno/.test(ctx.w.document.getElementById('final-titulo').textContent), 'no terminó con el final del paseo');
+      noErrors(ctx);
+      localStorage.removeItem('midnight-rinse/opciones');
+      return 'turno completo sin él, sin sustos ni faltas';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);
