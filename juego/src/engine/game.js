@@ -112,6 +112,7 @@
     /** Empieza el turno; con saved, lo continúa desde el guardado. */
     start(saved) {
       this.options = this.ui.options;
+      this._dawn(false); // de vuelta a la noche
       this.diff = MR.DIFICULTAD[this.options.difficulty] || MR.DIFICULTAD.normal;
       this.consumables.cigarettes = this.diff.cigarros;
       this.consumables.sips = this.diff.tragos;
@@ -180,6 +181,8 @@
       var k = (Math.sin(t * 0.045 - 1.2) + 1) / 2;
       cam.position.set(-5.2 + k * 8.6, 1.55 + Math.sin(t * 0.21) * 0.04, 2.7 - Math.sin(t * 0.03) * 0.6);
       cam.lookAt(cam.position.x * 0.55 - 0.6, 1.0, -4.4);
+      // Si ya cerraste el ciclo (tercer final), en el título amanece.
+      if (this.logros && this.logros.has('final_bosque')) { this._dawn(true); return; }
       // Fluorescente que titila (sin depender de opciones: en el título aún no hay turno).
       this.attractFlicker = (this.attractFlicker || 0) - dt;
       if (this.attractFlicker <= 0) {
@@ -193,6 +196,37 @@
       } else {
         this.retro.setLightFactor(1, 1);
         this.world.panels[1].material.uniforms.uEmissive.value = 1.2;
+      }
+    }
+
+    /**
+     * Amanecer en la pantalla de título (recompensa del tercer final): luz cálida por la puerta de vidrio,
+     * fluorescentes apagados. on = false lo deshace al empezar el turno.
+     */
+    _dawn(on) {
+      if (on === !!this.dawnOn) { return; }
+      this.dawnOn = on;
+      var sh = this.retro.shared;
+      var glass = this.world.mat.glass.uniforms;
+      var base = this.bosque.inside;
+      if (on) {
+        this.dawnGlass = glass.uColor.value.clone();
+        sh.uAmbient.value.set(0.34, 0.29, 0.24);
+        sh.uFogColor.value.set(0.22, 0.18, 0.14);
+        glass.uColor.value.setRGB(1.0, 0.86, 0.62);
+        glass.uEmissive.value = 1.3;
+        for (var i = 0; i < 6; i += 1) { this.retro.setLightFactor(i, 0.12); this.world.panels[i].material.uniforms.uEmissive.value = 0.15; }
+        var n = document.getElementById('noche');
+        n.hidden = false;
+        n.textContent = 'Amaneció. Pero esta noche vuelves.';
+        n.classList.add('amanecer');
+        document.getElementById('titulo').classList.add('amanecer');
+      } else {
+        sh.uAmbient.value.copy(base.ambient);
+        sh.uFogColor.value.copy(base.fogColor);
+        if (this.dawnGlass) { glass.uColor.value.copy(this.dawnGlass); }
+        glass.uEmissive.value = 0.35;
+        for (var j = 0; j < 6; j += 1) { this.retro.setLightFactor(j, 1); }
       }
     }
 

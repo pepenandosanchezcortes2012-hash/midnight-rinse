@@ -142,6 +142,7 @@ h1 {
 h2 { margin: 0; font-size: clamp(24px, 4vw, 40px); color: var(--acento); letter-spacing: 0.1em; }
 .sub { margin: 0 0 8px; color: var(--tenue); letter-spacing: 0.3em; }
 .noche { margin: -4px 0 6px; color: #ff9c7a; letter-spacing: 0.25em; font-size: 13px; }
+.noche.amanecer { color: #ffd9a0; letter-spacing: 0.12em; font-style: italic; }
 .aviso { color: #ff9c7a; margin: 0; }
 .advertencia { color: var(--tenue); font-size: 13px; max-width: 640px; }
 .controles { color: var(--tenue); font-size: 14px; max-width: 760px; }
@@ -322,3 +323,4 @@ body.mando .solo-mando { display: block !important; }
   h1 { font-size: clamp(28px, 6vw, 48px); }
   .boton { padding: 8px 18px; font-size: 16px; }
 }
+#titulo.amanecer { background: linear-gradient(rgba(40, 30, 18, 0.1), rgba(14, 10, 6, 0.55) 32%, rgba(3, 4, 6, 0.93) 58%); }

@@ -728,6 +728,20 @@
       return 'inundación (charcos ×2), luna llena (sin lluvia, más luz) y el gato a las 03:00';
     }],
 
+    ['Amanecer en el título tras el tercer final', async function () {
+      localStorage.setItem('midnight-rinse/logros', JSON.stringify({ final_bosque: Date.now() }));
+      var ctx = await load();
+      var g = ctx.g;
+      g._attract(0.016);
+      var n = ctx.w.document.getElementById('noche');
+      check(g.dawnOn && g.retro.shared.uAmbient.value.x > 0.3 && /Amaneció/.test(n.textContent), 'no amaneció en el título');
+      start(ctx);
+      check(!g.dawnOn && Math.abs(g.retro.shared.uAmbient.value.x - g.bosque.inside.ambient.x) < 1e-6, 'al empezar no volvió la noche');
+      noErrors(ctx);
+      localStorage.removeItem('midnight-rinse/logros');
+      return 'amanece en el título; de noche al empezar';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

@@ -348,6 +348,14 @@ El proyecto pasó por dos etapas:
   - la prueba de «él te observa» desactiva el parpadeo, porque al parpadear también gira, a propósito.
 - **Resultado:** 30/30.
 
+## 35. Amanecer en el título
+- **Qué cambia:** tras conseguir el tercer final (logro «Último ciclo»), la pantalla de título amanece:
+  - luz ambiente cálida y niebla ámbar;
+  - la puerta de vidrio iluminada por la mañana y los fluorescentes apagados;
+  - debajo del logo, «Amaneció. Pero esta noche vuelves.».
+- **Al empezar el turno:** vuelve la noche.
+- **Prueba nueva.** Resultado: 31/31.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
