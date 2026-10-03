@@ -335,6 +335,19 @@ El proyecto pasó por dos etapas:
 - **Barras de desplazamiento:** oscuras.
 - **Resultado:** 29/29.
 
+## 34. Noches especiales
+- **`MR.NOCHES_ESPECIALES`:** con un 55 % de probabilidad, el turno trae un modificador, que se anuncia con la nota del gerente y aparece en la tablilla, el resumen y el guardado:
+  - **Inundación:** charcos ×2.
+  - **Apagones:** apagones ×3.
+  - **Niebla:** vaho ×1.5 y niebla del bosque a 9 m.
+  - **Luna llena:** sin lluvia ni tormenta; ambiente más claro con cielo y niebla azul oscuro.
+  - **¿Y el gato?:** Pelusa aparece a las 03:00, dormido en el mostrador.
+- **Para pruebas:** `?noche=<clave>` fuerza una noche y `?noche=ninguna`, una normal. El arnés de pruebas usa siempre `ninguna` para ser determinista.
+- **Arreglos al probar:**
+  - con luna llena ya no puede dispararse un relámpago pendiente;
+  - la prueba de «él te observa» desactiva el parpadeo, porque al parpadear también gira, a propósito.
+- **Resultado:** 30/30.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

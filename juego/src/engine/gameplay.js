@@ -366,7 +366,7 @@
       this.nextPuddle -= gameMinutesDelta;
       if (this.nextPuddle <= 0) {
         this.spawnPuddle();
-        this.nextPuddle = this.collapsed ? U.rand(2, 4) : U.rand(6, 10) / (1 + this.game.dread);
+        this.nextPuddle = (this.collapsed ? U.rand(2, 4) : U.rand(6, 10) / (1 + this.game.dread)) / (this.game.mod === 'inundacion' ? 2 : 1);
       }
 
       this.radioFreq = 88 + this.radioRaw / 720 * 20;

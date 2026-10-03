@@ -101,7 +101,8 @@
       var out = g.bosque.outside;
       var cam = g.player.camera;
       var u = this.mesh.material.uniforms;
-      this.mesh.visible = out;
+      var clear = g.mod === 'luna';
+      this.mesh.visible = out && !clear;
       if (out) {
         u.uTime.value = time;
         u.uCam.value.copy(cam.position);
@@ -109,8 +110,8 @@
       }
 
       // Tormenta.
-      this.nextBolt -= dt;
-      if (!this.bolt && this.nextBolt <= 0) { this._startBolt(); }
+      if (!clear) { this.nextBolt -= dt; }
+      if (!clear && !this.bolt && this.nextBolt <= 0) { this._startBolt(); }
       var f = 0;
       if (this.bolt) {
         var b = this.bolt;

@@ -119,14 +119,23 @@
       spots.forEach(function (s, i) { R.setLight(i, new THREE.Vector3(s[0], s[1], s[2]), s[3], s[4], s[5]); });
       if (toOutside) {
         sh.uAmbient.value.copy(this.outAmbient);
-        sh.uFogNear.value = 2.5;
-        sh.uFogFar.value = 15.0;
+        var mod = g.mod;
+        sh.uFogNear.value = mod === 'niebla' ? 1.5 : 2.5;
+        sh.uFogFar.value = mod === 'niebla' ? 9.0 : (mod === 'luna' ? 20.0 : 15.0);
+        if (mod === 'luna') {
+          // Luna llena: noche clara, cielo y niebla azul oscuro (los pinos se recortan contra el cielo).
+          sh.uAmbient.value.set(0.08, 0.09, 0.13);
+          this.outAmbient.set(0.08, 0.09, 0.13);
+          sh.uFogColor.value.set(0.035, 0.045, 0.085);
+          R.renderer.setClearColor(new THREE.Color(0.035, 0.045, 0.085), 1);
+        }
         sh.uFogColor.value.set(0.01, 0.012, 0.018);
       } else {
         sh.uAmbient.value.copy(this.inside.ambient);
         sh.uFogNear.value = this.inside.fogNear;
         sh.uFogFar.value = this.inside.fogFar;
         sh.uFogColor.value.copy(this.inside.fogColor);
+        R.renderer.setClearColor(0x000000, 1);
       }
       var spawn = toOutside ? this.f.spawnOutside : this.f.spawnInside;
       var p = g.player;

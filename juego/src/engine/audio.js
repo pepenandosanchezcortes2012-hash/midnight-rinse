@@ -215,7 +215,7 @@
       var walls = 1 - 0.85 * Math.max(out, (s.muffled || 0) * 0.8); // bosque o pasillo de servicio
       this._set(this.washers.gain.gain, (0.03 + washerLevel * 0.12) * walls);
       this._set(this.dryers.gain.gain, Math.min(1, s.dryers / 2) * 0.05 * walls);
-      this._set(this.rain.gain.gain, 0.05 + out * 0.13, 0.6);
+      this._set(this.rain.gain.gain, s.clearSky ? 0.012 : 0.05 + out * 0.13, 0.6);
       this._set(this.wind.gain.gain, 0.05 + out * 0.07, 0.6);
       var prox = s.collapse ? 0 : s.radioProximity;
       // Modo mezcla: la radio del juego se calla para que suene tu música desde otra app.

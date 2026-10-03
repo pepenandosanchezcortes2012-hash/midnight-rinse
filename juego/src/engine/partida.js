@@ -21,6 +21,7 @@
         v: VERSION,
         savedAt: Date.now(),
         difficulty: g.options.difficulty || 'normal',
+        mod: g.mod || null,
         minutes: g.minutes,
         dread: g.dread,
         collapsed: g.collapsed,
@@ -61,6 +62,7 @@
     /** Aplica una foto a un turno recién empezado (game.start() ya corrió). */
     restore: function (g, d) {
       var gp = g.gameplay;
+      g.mod = d.mod || null;
       g.minutes = d.minutes;
       g.dread = d.dread;
       g.talked = d.talked;

@@ -54,6 +54,18 @@
   };
 
   /**
+   * Noches especiales: a veces (más o menos la mitad de las noches) el turno trae un modificador, con una nota
+   * del gerente en la tablilla. Se puede forzar con ?noche=<clave> (pruebas).
+   */
+  MR.NOCHES_ESPECIALES = {
+    inundacion: { nombre: 'Inundación', nota: 'Se reventó una tubería del pasillo de servicio. Va a haber más charcos de lo normal.' },
+    apagones: { nombre: 'Noche de apagones', nota: 'La compañía de luz avisó de baja tensión. Si se apagan las luces, no salgas a revisar.' },
+    niebla: { nombre: 'Niebla', nota: 'Hay niebla. Los lentes se te van a empañar más; lleva un trapo.' },
+    luna: { nombre: 'Luna llena', nota: 'Por fin dejó de llover. Luna llena. Dicen que así se ve todo… también lo que no quieres ver.' },
+    sin_gato: { nombre: '¿Y el gato?', nota: '¿Has visto a Pelusa? No vino a comer.' }
+  };
+
+  /**
    * Dificultad (opción de la pantalla de título):
    * horror = cuántas veces más seguido actúa el director del horror; faltas = máximo para el final bueno;
    * cigarros/tragos/porros = consumibles del turno; vaho = qué tan rápido se empañan los lentes.

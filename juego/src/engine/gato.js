@@ -142,6 +142,7 @@
     /** Acariciar. */
     pet() {
       var g = this.game;
+      if (!this.mesh.root.visible) { return; }
       if (this.petCooldown > 0) { g.ui.subtitle('(Pelusa te ignora con mucha dignidad.)', 2.5); return; }
       this.petCooldown = 15;
       this.pets += 1;
@@ -161,6 +162,12 @@
       var tick = this.stepAcc >= STEP;
       if (tick) { this.stepAcc = 0; }
 
+      // Noche «¿Y el gato?»: no está hasta las 03:00; entonces aparece dormido en el mostrador.
+      if (g.mod === 'sin_gato') {
+        var hidden = g.minutes < 180;
+        if (hidden) { root.visible = false; return; }
+        if (!root.visible) { root.visible = true; this._placeAtPerch('mostrador'); this.state = 'duerme'; this.timer = 40; }
+      }
       // Mientras estás en el bosque o en el pasillo, te espera junto a la puerta por la que saliste.
       var away = g.bosque && g.bosque.outside;
       var back = g.pasillo && g.pasillo.inside;

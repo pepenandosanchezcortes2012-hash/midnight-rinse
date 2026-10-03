@@ -51,7 +51,9 @@
           setTimeout(poll, 50);
         })();
       };
-      marco.src = 'index.html' + (query || '') + ((query || '').indexOf('?') >= 0 ? '&' : '?') + 'prueba=' + Date.now();
+      var q = query || '';
+      if (q.indexOf('noche=') < 0) { q += (q.indexOf('?') >= 0 ? '&' : '?') + 'noche=ninguna'; } // pruebas deterministas
+      marco.src = 'index.html' + q + '&prueba=' + Date.now();
     });
   }
 
@@ -685,13 +687,45 @@
       check(h.headYaw < -1.0 && Math.abs(g.world.seatedHead.rotation.y - h.headYaw) < 1e-6, 'la cabeza no giró hacia ti (' + h.headYaw.toFixed(2) + ')');
       // Al mirarlo, la cabeza se queda donde quedó.
       var y0 = h.headYaw;
-      g.player.yaw = Math.atan2(-(-3.5 - 2), -(0.62 - 3)); step(ctx, 30);
+      g.player.yaw = Math.atan2(-(-3.5 - 2), -(0.62 - 3));
+      g.player.blink.timer = 99; // sin parpadear (si parpadeas, también gira: es a propósito)
+      step(ctx, 30);
       check(h.zoneVisible('banco') > 0 && Math.abs(h.headYaw - y0) < 1e-6, 'la cabeza se movió mientras lo mirabas');
       // Al cambiar de lugar, vuelve al frente.
       h.placeCustomer('mostrador');
       check(Math.abs(h.headYaw) < 1e-6, 'la cabeza no volvió al frente al moverse');
       noErrors(ctx);
       return 'giró ' + (y0 * 180 / Math.PI).toFixed(0) + '° hacia ti mientras no mirabas';
+    }],
+
+    ['Noches especiales: inundación, luna llena y ¿y el gato?', async function () {
+      // Inundación: los charcos salen el doble de rápido.
+      var ctx = await load('?noche=inundacion');
+      start(ctx);
+      var g = ctx.g;
+      check(g.mod === 'inundacion' && /tubería/.test(ctx.w.document.getElementById('subtitulos').textContent), 'no avisó de la inundación');
+      g.gameplay.nextPuddle = 0; g.dread = 0; step(ctx, 1);
+      check(g.gameplay.nextPuddle <= 5.01, 'los charcos no salen más rápido (' + g.gameplay.nextPuddle.toFixed(1) + ' min)');
+      noErrors(ctx);
+      // Luna llena: sin lluvia ni relámpagos, el bosque más claro.
+      var ctx2 = await load('?noche=luna');
+      start(ctx2);
+      var g2 = ctx2.g;
+      g2.bosque.go(); step(ctx2, 40);
+      g2.clima.nextBolt = 0; step(ctx2, 5);
+      check(!g2.clima.mesh.visible && !g2.clima.bolt, 'con luna llena llovió o hubo relámpago');
+      check(g2.retro.shared.uAmbient.value.x > 0.07, 'el bosque no está más claro con luna');
+      noErrors(ctx2);
+      // ¿Y el gato?: no está hasta las 03:00.
+      var ctx3 = await load('?noche=sin_gato');
+      start(ctx3);
+      var g3 = ctx3.g;
+      step(ctx3, 3);
+      check(!g3.gato.mesh.root.visible, 'el gato estaba aunque no vino');
+      g3.minutes = 180.5; step(ctx3, 3);
+      check(g3.gato.mesh.root.visible && g3.gato.perch === 'mostrador', 'el gato no apareció en el mostrador a las 03:00');
+      noErrors(ctx3);
+      return 'inundación (charcos ×2), luna llena (sin lluvia, más luz) y el gato a las 03:00';
     }],
 
     ['Turno completo con salidas al bosque', async function () {

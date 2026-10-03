@@ -118,6 +118,14 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Seis hojas mojadas del registro** están tiradas cerca del sendero: son de quienes hicieron este turno antes que tú y cuentan qué pasa aquí. Si las juntas todas, la lavadora del claro abre un **tercer final**.
 - **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
 
+### Noches especiales
+Más o menos la mitad de las noches traen algo distinto, con una **nota del gerente** al empezar y en la tablilla:
+- **Inundación:** charcos el doble de rápido.
+- **Noche de apagones:** las luces fallan mucho más seguido.
+- **Niebla:** los lentes se empañan más y en el bosque casi no se ve.
+- **Luna llena:** no llueve; el bosque está despejado, con cielo azul oscuro.
+- **¿Y el gato?:** Pelusa no aparece hasta las 03:00.
+
 ### Noche tras noche
 El juego cuenta tus noches («Noche 3» en el título).
 - **La radio:** a las 02:40, en la **94.1**, el locutor de Radio Nocturna dice algo distinto cada noche y la historia avanza. Escúchalo hasta la noche 7. Después de la 8 solo queda estática.

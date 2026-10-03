@@ -134,6 +134,10 @@
       this.lastTime = performance.now();
       try { this.night = (parseInt(window.localStorage.getItem('midnight-rinse/noches') || '0', 10) || 0) + 1; } catch (e) { this.night = 1; }
       this.saveTimer = 10;
+      // Noche especial (o normal). ?noche=<clave> la fuerza (pruebas).
+      var forced = (location.search.match(/[?&]noche=([a-z_]+)/) || [])[1];
+      var mods = Object.keys(MR.NOCHES_ESPECIALES);
+      this.mod = forced === 'ninguna' ? null : (forced && MR.NOCHES_ESPECIALES[forced] ? forced : (Math.random() < 0.45 ? null : U.pick(mods)));
       if (saved) {
         MR.Partida.restore(this, saved);
         return;
@@ -142,6 +146,7 @@
       this.ui.subtitle('01:10. Turno de noche en la Lavandería La Espuma.', 5);
       this.ui.subtitle('La hoja del registro está sobre el mostrador.', 5);
       this.ui.subtitle(this.touchUI ? '(Tres dedos: pausa y guía de controles.)' : '(H: guía de controles · Esc: pausa.)', 6);
+      if (this.mod) { this.ui.subtitle('(Nota del gerente en la tablilla: «' + MR.NOCHES_ESPECIALES[this.mod].nota + '»)', 8); }
     }
 
     /** Móvil: pantalla completa y horizontal (si el navegador lo permite; si no, se juega igual). */
@@ -319,6 +324,7 @@
       this.audio.update({
         outdoor: this.bosque.outdoor,
         muffled: this.pasillo.muffle,
+        clearSky: this.mod === 'luna',
         high: this.consumables.high,
         mixMode: this.options.mixMode,
         musicProximity: this.music.proximity,
@@ -594,6 +600,7 @@
       var ok = function (b) { return b ? '✔ ' : '☐ '; };
       var lines = [
         'Son las ' + U.clockText(Math.floor(mins)) + '.',
+        this.mod ? 'Nota del gerente: ' + MR.NOCHES_ESPECIALES[this.mod].nota : 'Noche normal. Que siga así.',
         '',
         ok(puddles < 3) + 'Pasillo central: ' + puddles + (puddles === 1 ? ' charco' : ' charcos') +
           (next ? ' (revisión a las ' + U.clockText(next) + '; con 3 o más es falta).' : ' (ya no hay más revisiones).'),
@@ -624,7 +631,7 @@
         h += 0.012;
         if (Math.hypot(p.x - d.mesh.x, p.z + 4.2) < 2.6) { h += 0.07; }
       });
-      return h * (this.diff ? this.diff.vaho : 1);
+      return h * (this.diff ? this.diff.vaho : 1) * (this.mod === 'niebla' ? 1.5 : 1);
     }
 
     _dread(dt) {
@@ -657,7 +664,8 @@
       var good = s.respuesta === 'correcta' && faults <= diff.faltas;
       var answer = { correcta: 'correcta', incorrecta: 'incorrecta', sin_respuesta: 'sin respuesta', no_pregunto: 'nunca te la preguntó' }[s.respuesta];
       var summary = [
-        'Dificultad: ' + diff.nombre + ' (faltas permitidas para el final bueno: ' + diff.faltas + ')',
+        'Dificultad: ' + diff.nombre + ' (faltas permitidas para el final bueno: ' + diff.faltas + ')' +
+          (this.mod ? ' · Noche especial: ' + MR.NOCHES_ESPECIALES[this.mod].nombre : ''),
         'Respuesta a la hora: ' + answer,
         'Miradas a su cara después de la advertencia: ' + s.mirada,
         'Revisiones del pasillo con charcos: ' + s.pasillo + ' de ' + MR.Config.MOP_CHECKS.length,
