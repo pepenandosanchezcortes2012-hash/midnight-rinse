@@ -121,6 +121,19 @@ El proyecto pasó por dos etapas:
   - Cada pestaña tiene 15 filas.
   - Ninguna prueba dio errores.
 
+## 8. Arreglo: «no me deja abrir el menú de controles»
+- **Causa más probable: caché mezclada.**
+  - Al recargar, Chrome baja el `index.html` nuevo (que ya trae el botón) pero reutiliza el `ui.js` viejo de la caché, que no sabía abrir la guía.
+  - Resultado: el botón aparecía y no hacía nada.
+  - **Arreglo:** `juego/herramientas/sellar_version.py` sella los 27 scripts y estilos con `?v=<fecha-hora>`. Una página nueva siempre baja sus scripts nuevos.
+- **El botón estaba escondido** al final del título, debajo de Opciones y Música. Ahora está junto a «Comenzar turno».
+- **Tecla H** en la computadora: abre la guía desde el título, la pausa o en plena partida. En partida pausa y suelta el ratón. No se activa al escribir en un campo de texto.
+- **Probado en Chrome con mouse y teclado reales:**
+  - El clic en el botón del título abre la guía, Esc la cierra y H la abre.
+  - Escribir «Hugo» en el campo de nombre no la abre.
+  - Los tres dedos pausan, y el clic real en «Guía de controles» de la pausa abre la guía.
+  - H en partida pausa y abre la guía (probado inyectando la tecla, porque la pestaña de prueba en segundo plano no recibe teclas durante la partida).
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

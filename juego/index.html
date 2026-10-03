@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#050608">
   <title>Midnight Rinse · Turno de Medianoche</title>
-  <link rel="stylesheet" href="src/estilo.css">
+  <link rel="stylesheet" href="src/estilo.css?v=20261002223641">
 </head>
 <body>
   <!-- Capa de la tele: el reproductor de YouTube vive DETRÁS del lienzo y se ve por el hueco de la pantalla. -->
@@ -48,7 +48,10 @@
     <h1>MIDNIGHT RINSE</h1>
     <p class="sub">Turno de Medianoche</p>
     <p id="aviso-hora-real" class="aviso" hidden></p>
-    <button id="btn-comenzar" class="boton">Comenzar turno</button>
+    <div class="botones-titulo">
+      <button id="btn-comenzar" class="boton">Comenzar turno</button>
+      <button id="btn-guia" class="boton secundario" type="button">Guía de controles</button>
+    </div>
     <details class="opciones" open>
       <summary>Opciones</summary>
       <label><input type="checkbox" id="opt-subtitulos" checked> Subtítulos</label>
@@ -91,8 +94,7 @@
       <p id="musica-estado" class="nota">Sin conectar.</p>
       <button id="btn-desconectar-musica" class="boton secundario" type="button">Desconectar</button>
     </details>
-    <button id="btn-guia" class="boton secundario" type="button">Guía de controles</button>
-    <p class="controles solo-escritorio"><span class="tecla">W</span><span class="tecla">A</span><span class="tecla">S</span><span class="tecla">D</span> caminar · <span class="tecla ancha">ratón</span> mirar · <span class="tecla ancha">clic</span> usar · <span class="tecla">Esc</span> pausa y guía</p>
+    <p class="controles solo-escritorio"><span class="tecla">W</span><span class="tecla">A</span><span class="tecla">S</span><span class="tecla">D</span> caminar · <span class="tecla ancha">ratón</span> mirar · <span class="tecla ancha">clic</span> usar · <span class="tecla">H</span> guía de controles · <span class="tecla">Esc</span> pausa</p>
     <p class="controles solo-tactil">Pulgar izquierdo: caminar · pulgar derecho: mirar · toca los objetos · <b>tres dedos</b>: pausa y guía. Juega en horizontal.</p>
     <p class="advertencia">+18 · Terror psicológico, luces que parpadean y sonidos graves. Contiene consumo de tabaco, alcohol y cannabis (ficción). El registro del turno persiste entre partidas.</p>
   </section>
@@ -135,6 +137,7 @@
       <div class="g-fila"><div class="g-ctl">perilla de la radio</div><div class="g-acc"><b>94.1</b> el locutor · <b>99.9</b> tu música</div></div>
       <h3>Hablar y menú</h3>
       <div class="g-fila"><div class="g-ctl"><span class="tecla">1</span><span class="tecla">2</span><span class="tecla">3</span></div><div class="g-acc">Responder cuando alguien te habla</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla">H</span></div><div class="g-acc">Abrir esta guía en cualquier momento</div></div>
       <div class="g-fila"><div class="g-ctl"><span class="tecla">Esc</span></div><div class="g-acc">Pausa: soltar el ratón, cambiar la música y abrir esta guía</div></div>
     </div>
 
@@ -205,33 +208,33 @@
     <button id="btn-volver" class="boton">Volver al inicio</button>
   </section>
 
-  <script src="vendor/three.min.js"></script>
+  <script src="vendor/three.min.js?v=20261002223641"></script>
   <!-- Núcleo verificado (ports exactos de core/midnight_rinse_core) -->
-  <script src="src/core/dispatcher.js"></script>
-  <script src="src/core/bayer.js"></script>
-  <script src="src/core/vertexSnap.js"></script>
-  <script src="src/core/steppedHold.js"></script>
-  <script src="src/core/detentDial.js"></script>
-  <script src="src/core/clockAnomaly.js"></script>
-  <script src="src/core/shiftLog.js"></script>
+  <script src="src/core/dispatcher.js?v=20261002223641"></script>
+  <script src="src/core/bayer.js?v=20261002223641"></script>
+  <script src="src/core/vertexSnap.js?v=20261002223641"></script>
+  <script src="src/core/steppedHold.js?v=20261002223641"></script>
+  <script src="src/core/detentDial.js?v=20261002223641"></script>
+  <script src="src/core/clockAnomaly.js?v=20261002223641"></script>
+  <script src="src/core/shiftLog.js?v=20261002223641"></script>
   <!-- Motor del juego -->
-  <script src="src/engine/config.js"></script>
-  <script src="src/engine/util.js"></script>
-  <script src="src/engine/textures.js"></script>
-  <script src="src/engine/retro.js"></script>
-  <script src="src/engine/audio.js"></script>
-  <script src="src/engine/input.js"></script>
-  <script src="src/engine/world.js"></script>
-  <script src="src/engine/player.js"></script>
-  <script src="src/engine/glasses.js"></script>
-  <script src="src/engine/gameplay.js"></script>
-  <script src="src/engine/horror.js"></script>
-  <script src="src/engine/touch.js"></script>
-  <script src="src/engine/consumables.js"></script>
-  <script src="src/engine/music.js"></script>
-  <script src="src/engine/tele.js"></script>
-  <script src="src/engine/ui.js"></script>
-  <script src="src/engine/game.js"></script>
-  <script src="src/main.js"></script>
+  <script src="src/engine/config.js?v=20261002223641"></script>
+  <script src="src/engine/util.js?v=20261002223641"></script>
+  <script src="src/engine/textures.js?v=20261002223641"></script>
+  <script src="src/engine/retro.js?v=20261002223641"></script>
+  <script src="src/engine/audio.js?v=20261002223641"></script>
+  <script src="src/engine/input.js?v=20261002223641"></script>
+  <script src="src/engine/world.js?v=20261002223641"></script>
+  <script src="src/engine/player.js?v=20261002223641"></script>
+  <script src="src/engine/glasses.js?v=20261002223641"></script>
+  <script src="src/engine/gameplay.js?v=20261002223641"></script>
+  <script src="src/engine/horror.js?v=20261002223641"></script>
+  <script src="src/engine/touch.js?v=20261002223641"></script>
+  <script src="src/engine/consumables.js?v=20261002223641"></script>
+  <script src="src/engine/music.js?v=20261002223641"></script>
+  <script src="src/engine/tele.js?v=20261002223641"></script>
+  <script src="src/engine/ui.js?v=20261002223641"></script>
+  <script src="src/engine/game.js?v=20261002223641"></script>
+  <script src="src/main.js?v=20261002223641"></script>
 </body>
 </html>

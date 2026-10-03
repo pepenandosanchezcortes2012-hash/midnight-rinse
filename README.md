@@ -6,7 +6,7 @@ Terror liminal acogedor en primera persona, con estética PS1 a 320×240. **+18:
 
 **Doble clic en `juego/index.html`.** No necesita instalación, servidor ni internet: Three.js r128 va incluido en `juego/vendor/`. Funciona en Chrome, Edge o Firefox con WebGL. Usa audífonos.
 
-**Guía de controles dentro del juego:** botón en la pantalla de título y en la pausa (**Esc** en la computadora, **tres dedos** en el celular). Tiene teclas dibujadas, un esquema de gestos y pestañas para teclado o celular.
+**Guía de controles dentro del juego:** botón junto a «Comenzar turno» y en la pausa; en la computadora también con la tecla **H** en cualquier momento. En el celular se llega con **tres dedos** (pausa). Tiene teclas dibujadas, un esquema de gestos y pestañas para teclado o celular.
 
 | Control | Acción |
 | :--- | :--- |
@@ -19,6 +19,7 @@ Terror liminal acogedor en primera persona, con estética PS1 a 320×240. **+18:
 | **B** | Cerrar los ojos (cuidado: lo que no ves puede moverse) |
 | **C** · **F** · **J** | Fumar un cigarro · beber de la petaca · fumar un porro |
 | **1 · 2 · 3** | Responder cuando alguien te habla |
+| **H** | Guía de controles |
 | **Esc** | Pausa |
 
 ### En el celular (Zero-HUD: pantalla 100 % limpia)
@@ -131,6 +132,14 @@ midnight-rinse/
 - **El horror por oclusión.** `horror.js` le da a cada zona de la lavandería su propio `Dispatcher`. En cada cuadro, la visibilidad de la zona sale del frustum de la cámara, y `tick(visibilidad, ojosCerrados)` solo dispara los eventos de esa zona si nadie la mira o si parpadeas. La zona "jugador" (detrás de ti) solo se activa al parpadear.
 - **La estética PS1 es la misma matemática del núcleo.** El shader de los materiales aplica la fórmula de `vertex_snap` por vértice, y el postproceso aplica la de `bayer_rgb555` por píxel. Las manos pasan por `SteppedHold(15)`, y las perillas son `DetentDial`.
 - **Sin HUD.** La información está en el mundo: el reloj de pared, la hoja del registro, la pantalla de la radio, la luz de cada lavadora, las monedas en tu mano y el vapor de las secadoras.
+
+## Publicar una versión nueva
+
+Antes de subir cambios, sella `index.html` para que los navegadores no mezclen scripts nuevos con viejos de la caché (GitHub Pages guarda cada archivo 10 minutos):
+
+```bash
+py juego/herramientas/sellar_version.py   # añade ?v=<fecha-hora> a todos los scripts y estilos
+```
 
 ## Verificación
 

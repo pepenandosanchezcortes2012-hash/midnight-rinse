@@ -109,7 +109,7 @@
       this.lastTime = performance.now();
       this.ui.subtitle('01:10. Turno de noche en la Lavandería La Espuma.', 5);
       this.ui.subtitle('La hoja del registro está sobre el mostrador.', 5);
-      this.ui.subtitle(this.touchUI ? '(Tres dedos: pausa y guía de controles.)' : '(Esc: pausa y guía de controles.)', 6);
+      this.ui.subtitle(this.touchUI ? '(Tres dedos: pausa y guía de controles.)' : '(H: guía de controles · Esc: pausa.)', 6);
     }
 
     /** Móvil: pantalla completa y horizontal (si el navegador lo permite; si no, se juega igual). */
@@ -129,6 +129,13 @@
       this.audio.pause();
       this.touch.reset();
       this.ui.showPause(true);
+    }
+
+    /** H en plena partida: pausa, suelta el ratón y abre la guía de controles. */
+    openGuide() {
+      this.pause();
+      if (document.exitPointerLock && document.pointerLockElement) { document.exitPointerLock(); }
+      this.ui.showGuide(true);
     }
 
     resume() {
@@ -179,6 +186,7 @@
       this.whispers = MR.whispersActive(this.clock()) || (this.options.meta && MR.whispersActive(new Date()));
 
       if (input.hit('Escape') || input.action('pausa')) { this.pause(); return; }
+      if (input.hit('KeyH')) { this.openGuide(); return; }
       if (this.noteOpen && input.buttonPressed) { this.closeNote(); input.buttonPressed = false; }
       this._answerKeys(input);
       if (input.action('blink')) { this.player.forceBlink(); }

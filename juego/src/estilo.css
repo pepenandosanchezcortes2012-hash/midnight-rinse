@@ -183,6 +183,8 @@ h2 { margin: 0; font-size: clamp(24px, 4vw, 40px); color: var(--acento); letter-
 .boton:disabled { opacity: 0.4; cursor: not-allowed; }
 #pausa-musica { width: min(560px, 100%); }
 
+.botones-titulo { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; }
+
 /* Teclas dibujadas (guía y título). */
 .tecla {
   display: inline-block;

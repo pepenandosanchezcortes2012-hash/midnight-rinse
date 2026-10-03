@@ -31,7 +31,10 @@
       $('guia-tab-escritorio').addEventListener('click', function () { self._guideTab('escritorio'); });
       $('guia-tab-tactil').addEventListener('click', function () { self._guideTab('tactil'); });
       window.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && !$('guia').hidden) { e.preventDefault(); self.showGuide(false); }
+        if (e.key === 'Escape' && !$('guia').hidden) { e.preventDefault(); self.showGuide(false); return; }
+        // H en la pantalla de título o en la pausa (en plena partida la maneja game.js). No al escribir en un campo.
+        var typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+        if (e.code === 'KeyH' && !typing && game.state !== 'playing') { self.showGuide($('guia').hidden); }
       });
       // Móvil: tocar la hoja la deja; tocar una respuesta la elige.
       this.el.note.addEventListener('click', function () { if (game.noteOpen) { game.closeNote(); } });
