@@ -57,7 +57,8 @@
 
     _loadOptions() {
       var defaults = { subtitles: true, voices: true, reduceFlashes: false, crosshair: false, meta: false, sensitivity: 1.2, volume: 0.8, name: '',
-        vibration: true, gyro: true, lofi: true, mixMode: false, teleLink: '', fov: 70, invertY: false, subsScale: 1 };
+        vibration: true, gyro: true, lofi: true, mixMode: false, teleLink: '', fov: 70, invertY: false, subsScale: 1,
+        difficulty: 'normal' };
       try {
         var saved = JSON.parse(window.localStorage.getItem(OPTIONS_KEY) || '{}');
         return Object.assign(defaults, saved);
@@ -77,13 +78,15 @@
         ['opt-mira', 'crosshair', 'checked'], ['opt-meta', 'meta', 'checked'], ['opt-sensibilidad', 'sensitivity', 'value'],
         ['opt-volumen', 'volume', 'value'], ['opt-nombre', 'name', 'value'], ['opt-vibracion', 'vibration', 'checked'],
         ['opt-giroscopio', 'gyro', 'checked'], ['opt-lofi', 'lofi', 'checked'], ['opt-mezcla', 'mixMode', 'checked'],
-        ['opt-fov', 'fov', 'value'], ['opt-invertir', 'invertY', 'checked'], ['opt-subs-tam', 'subsScale', 'value']];
+        ['opt-fov', 'fov', 'value'], ['opt-invertir', 'invertY', 'checked'], ['opt-subs-tam', 'subsScale', 'value'],
+        ['opt-dificultad', 'difficulty', 'value']];
       map.forEach(function (m) {
         var input = $(m[0]);
         input[m[2]] = o[m[1]];
         input.addEventListener('input', function () {
           var v = input[m[2]];
-          o[m[1]] = m[2] === 'value' && m[1] !== 'name' ? parseFloat(v) : (m[1] === 'name' ? String(v).trim().slice(0, 24) : v);
+          var text = m[1] === 'name' || m[1] === 'difficulty'; // opciones de texto (no números)
+          o[m[1]] = m[2] === 'value' && !text ? parseFloat(v) : (m[1] === 'name' ? String(v).trim().slice(0, 24) : v);
           if (m[1] === 'meta') { self.refreshRealTime(); }
           if (m[1] === 'volume') { self.game.audio.setVolume(o.volume); }
           if (m[1] === 'vibration') { MR.Haptics.enabled = o.vibration; if (o.vibration) { MR.Haptics.pulse(25); } }

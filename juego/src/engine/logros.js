@@ -21,7 +21,8 @@
     { id: 'pulcro', titulo: 'Pasillo impecable', desc: 'Termina un turno sin faltas en el pasillo ni en los filtros.' },
     { id: 'ojos_al_suelo', titulo: 'Ojos al suelo', desc: 'Termina un turno con él presente sin mirarlo nunca a la cara.' },
     { id: 'paranoia', titulo: 'Paranoia', desc: 'Fuma los tres porros en un mismo turno.' },
-    { id: 'gato', titulo: 'Pelusa', desc: 'Acaricia al gato de la lavandería.' }
+    { id: 'gato', titulo: 'Pelusa', desc: 'Acaricia al gato de la lavandería.' },
+    { id: 'pesadilla', titulo: 'Turno de pesadilla', desc: 'Consigue que la puerta abra en dificultad Pesadilla.', oculto: true }
   ];
 
   class Logros {

@@ -114,7 +114,8 @@
       this.nextEvent -= dt;
       if (this.nextEvent > 0) { return; }
       var mult = g.anomalyMultiplier();
-      var interval = 34 / (mult * (1 + g.dread * 0.8) * g.consumables.paranoia()) * (g.collapsed ? 0.6 : 1);
+      var level = g.diff ? g.diff.horror : 1; // dificultad
+      var interval = 34 / (mult * level * (1 + g.dread * 0.8) * g.consumables.paranoia()) * (g.collapsed ? 0.6 : 1);
       this.nextEvent = U.rand(0.7, 1.3) * interval;
 
       var outside = g.bosque && g.bosque.outside;

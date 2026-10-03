@@ -98,6 +98,10 @@
 
     start() {
       this.options = this.ui.options;
+      this.diff = MR.DIFICULTAD[this.options.difficulty] || MR.DIFICULTAD.normal;
+      this.consumables.cigarettes = this.diff.cigarros;
+      this.consumables.sips = this.diff.tragos;
+      this.consumables.joints = this.diff.porros;
       this.ui.hideTitle();
       MR.Game.audioSession(this.options.mixMode);
       this.audio.start(this.options.volume, this.options.voices);
@@ -496,7 +500,7 @@
         h += 0.012;
         if (Math.hypot(p.x - d.mesh.x, p.z + 4.2) < 2.6) { h += 0.07; }
       });
-      return h;
+      return h * (this.diff ? this.diff.vaho : 1);
     }
 
     _dread(dt) {
@@ -520,9 +524,11 @@
       this.input.unlock();
       var s = this.stats;
       var faults = s.mirada + s.pasillo + s.filtro + (s.respuesta === 'incorrecta' ? 2 : (s.respuesta === 'correcta' ? 0 : 1));
-      var good = s.respuesta === 'correcta' && faults <= 3;
+      var diff = this.diff || MR.DIFICULTAD.normal;
+      var good = s.respuesta === 'correcta' && faults <= diff.faltas;
       var answer = { correcta: 'correcta', incorrecta: 'incorrecta', sin_respuesta: 'sin respuesta', no_pregunto: 'nunca te la preguntó' }[s.respuesta];
       var summary = [
+        'Dificultad: ' + diff.nombre + ' (faltas permitidas para el final bueno: ' + diff.faltas + ')',
         'Respuesta a la hora: ' + answer,
         'Miradas a su cara después de la advertencia: ' + s.mirada,
         'Revisiones del pasillo con charcos: ' + s.pasillo + ' de ' + MR.Config.MOP_CHECKS.length,
@@ -541,6 +547,7 @@
       var L = this.logros;
       L.unlock('primer_turno');
       if (reason === 'bosque') { L.unlock('final_bosque'); } else if (good) { L.unlock('final_bueno'); } else { L.unlock('bucle'); }
+      if (good && reason !== 'bosque' && diff === MR.DIFICULTAD.pesadilla) { L.unlock('pesadilla'); }
       if (s.pasillo === 0 && s.filtro === 0) { L.unlock('pulcro'); }
       if (this.flags.customerSeen && s.mirada === 0) { L.unlock('ojos_al_suelo'); }
       if (this.consumables.used.porros >= 3) { L.unlock('paranoia'); }

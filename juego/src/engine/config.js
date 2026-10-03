@@ -51,4 +51,15 @@
     COINS_PER_PRESS: 4,
     DEBUG_SPEED: speed
   };
+
+  /**
+   * Dificultad (opción de la pantalla de título):
+   * horror = cuántas veces más seguido actúa el director del horror; faltas = máximo para el final bueno;
+   * cigarros/tragos/porros = consumibles del turno; vaho = qué tan rápido se empañan los lentes.
+   */
+  MR.DIFICULTAD = {
+    tranquilo: { nombre: 'Tranquilo', horror: 0.55, faltas: 6, cigarros: 8, tragos: 6, porros: 4, vaho: 0.7 },
+    normal: { nombre: 'Normal', horror: 1, faltas: 3, cigarros: 5, tragos: 4, porros: 3, vaho: 1 },
+    pesadilla: { nombre: 'Pesadilla', horror: 1.8, faltas: 1, cigarros: 2, tragos: 2, porros: 1, vaho: 1.4 }
+  };
 })(window.MR = window.MR || {});

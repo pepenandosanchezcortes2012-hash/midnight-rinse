@@ -230,6 +230,12 @@ El proyecto pasó por dos etapas:
 - **Resumen final:** caricias y bufidos.
 - **Prueba nueva:** 90 s caminando sin atravesar ningún mueble, el bufido y la huida a 7.6 m. Resultado: 15/15.
 
+## 18. Dificultad
+- **`MR.DIFICULTAD` (en `config.js`):** cada nivel ajusta la frecuencia del director del horror (×0.55, ×1 o ×1.8), las faltas permitidas para el final bueno (6, 3 o 1), los consumibles y la velocidad del vaho.
+- **Dónde se ve:** la opción está en la pantalla de título y el nivel aparece en el resumen final.
+- **Logro oculto:** «Turno de pesadilla».
+- **Prueba nueva:** Tranquilo perdona 5 faltas y Pesadilla no perdona 2; eventos cada ~20 s contra ~6 s. Resultado: 16/16.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

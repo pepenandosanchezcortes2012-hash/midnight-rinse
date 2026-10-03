@@ -378,6 +378,34 @@
       return 'acariciado, 90 s caminando sin atravesar nada, bufó y huyó a ' + away.toFixed(1) + ' m';
     }],
 
+    ['Dificultad: Tranquilo perdona, Pesadilla no', async function () {
+      async function play(mode, faults) {
+        var ctx = await load();
+        var d = ctx.w.document;
+        var sel = d.getElementById('opt-dificultad');
+        sel.value = mode; sel.dispatchEvent(new ctx.w.Event('input'));
+        start(ctx);
+        var g = ctx.g;
+        var counts = [g.consumables.cigarettes, g.consumables.sips, g.consumables.joints].join('/');
+        // Frecuencia del director: intervalo medio de 40 sorteos.
+        var sum = 0;
+        for (var i = 0; i < 40; i += 1) { g.horror.nextEvent = 0; g.minutes = 200; g.horror._director(0.001); sum += g.horror.nextEvent; }
+        g.stats.respuesta = 'correcta'; g.stats.pasillo = faults; g.stats.mirada = 0; g.stats.filtro = 0;
+        g.end();
+        noErrors(ctx);
+        return { counts: counts, interval: sum / 40, title: d.getElementById('final-titulo').textContent };
+      }
+      var calm = await play('tranquilo', 5);
+      var hell = await play('pesadilla', 2);
+      check(calm.counts === '8/6/4', 'consumibles de Tranquilo: ' + calm.counts);
+      check(hell.counts === '2/2/1', 'consumibles de Pesadilla: ' + hell.counts);
+      check(/05:12/.test(calm.title), 'Tranquilo no perdonó 5 faltas (' + calm.title + ')');
+      check(!/05:12/.test(hell.title), 'Pesadilla perdonó 2 faltas');
+      check(hell.interval < calm.interval * 0.5, 'Pesadilla no es más intensa (' + hell.interval.toFixed(1) + ' s vs ' + calm.interval.toFixed(1) + ' s)');
+      localStorage.removeItem('midnight-rinse/opciones');
+      return 'consumibles 8/6/4 vs 2/2/1; eventos cada ' + calm.interval.toFixed(0) + ' s vs ' + hell.interval.toFixed(0) + ' s';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

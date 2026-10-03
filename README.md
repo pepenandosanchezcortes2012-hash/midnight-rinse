@@ -117,6 +117,12 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Sintoniza la radio** del mostrador en la 94.1. A las 02:40 habla el locutor.
 - **Las reglas del registro importan.** Hay dos finales.
 
+### Dificultad
+En **Opciones → Dificultad**:
+- **Tranquilo:** sustos espaciados, 8 cigarros, 6 tragos y 4 porros. Los lentes se empañan más lento y se perdonan hasta 6 faltas.
+- **Normal:** el juego original, hasta 3 faltas.
+- **Pesadilla:** sustos casi el doble de seguidos, 2 cigarros, 2 tragos y 1 porro. Solo se perdona **una** falta para el final bueno.
+
 ### Logros
 Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y se guardan en tu navegador. Ejemplos: terminar el turno, sintonizar la radio cuando habla el locutor, tener las seis lavadoras en marcha a la vez, que un relámpago lo revele, el tercer final…
 
