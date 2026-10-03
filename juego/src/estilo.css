@@ -267,7 +267,8 @@ h2 { margin: 0; font-size: clamp(24px, 4vw, 40px); color: var(--acento); letter-
   padding: 10px 28px;
 }
 .papel .encabezado { padding-top: 26px; font-size: 13px; letter-spacing: 0.12em; border-bottom: 1px dashed #9a937e; }
-#nota-texto { font-size: clamp(17px, 2.6vw, 22px); font-style: italic; padding-top: 22px; padding-bottom: 22px; min-height: 140px; }
+#nota-texto { font-size: clamp(17px, 2.6vw, 22px); font-style: italic; padding-top: 22px; padding-bottom: 22px; min-height: 140px; white-space: pre-line; }
+#nota.tareas #nota-texto { font-style: normal; font-size: clamp(14px, 2vw, 18px); text-align: left; line-height: 1.55; }
 .papel .pie { font-size: 12px; color: #77705c; padding-bottom: 22px; }
 
 #dialogo {

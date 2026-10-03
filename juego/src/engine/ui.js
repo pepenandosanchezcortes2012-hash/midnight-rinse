@@ -266,7 +266,8 @@
     }
 
     /** La hoja vista de cerca: el registro del mostrador o una hoja mojada del bosque (con su firma). */
-    showNote(text, header) {
+    showNote(text, header, cls) {
+      this.el.note.classList.toggle('tareas', cls === 'tareas');
       this.el.noteText.textContent = text || '(hoja en blanco)';
       this.el.note.querySelector('.encabezado').textContent = header || 'REGISTRO DE TURNO · LAVANDERÍA LA ESPUMA';
       this.el.note.hidden = false;

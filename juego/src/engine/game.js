@@ -582,6 +582,34 @@
       this.ui.showNote(this.shift.currentText());
     }
 
+    /** Tablilla de tareas del mostrador: el estado del turno (no hay HUD). */
+    openTasks() {
+      var C = MR.Config;
+      var gp = this.gameplay;
+      var mins = this.minutes;
+      var next = C.MOP_CHECKS.filter(function (m) { return m > mins; })[0];
+      var puddles = gp.activePuddles();
+      var running = gp.washers.filter(function (w) { return w.running; }).length;
+      var worst = gp.dryers.reduce(function (best, d, i) { return d.lint > best.lint ? { lint: d.lint, i: i } : best; }, { lint: -1, i: 0 });
+      var ok = function (b) { return b ? '✔ ' : '☐ '; };
+      var lines = [
+        'Son las ' + U.clockText(Math.floor(mins)) + '.',
+        '',
+        ok(puddles < 3) + 'Pasillo central: ' + puddles + (puddles === 1 ? ' charco' : ' charcos') +
+          (next ? ' (revisión a las ' + U.clockText(next) + '; con 3 o más es falta).' : ' (ya no hay más revisiones).'),
+        ok(running >= 3) + 'Lavadoras funcionando: ' + running + ' de 6 (con 3 o más, su ruido tapa el zumbido).',
+        ok(worst.lint < 0.7) + 'Filtros de pelusa: el más lleno, secadora ' + (worst.i + 1) + ' al ' + Math.round(Math.min(1, worst.lint) * 100) + ' %.'
+      ];
+      if (this.flags.customerSeen) { lines.push('• No le mires la cara al cliente del banco.'); }
+      lines.push(this.flags.phone ? '• Si te pregunta la hora: «Faltan cinco minutos para las seis».' : '• Si alguien te pregunta la hora, responde con cuidado.');
+      if (this.pasillo.unlocked) { lines.push('• La puerta trasera quedó entreabierta.' + (this.pasillo.fuses ? '' : ' Los fusibles están allá.')); }
+      var pages = this.bosque.pagesFound();
+      if (pages > 0 || this.bosque.visits > 0) { lines.push('• Hojas del registro en el bosque: ' + pages + ' de 6.'); }
+      this.noteOpen = true;
+      this.ui.showNote(lines.join('\n'), 'TAREAS DEL TURNO · TABLILLA DEL MOSTRADOR', 'tareas');
+      this.audio.click();
+    }
+
     closeNote() {
       this.noteOpen = false;
       this.ui.hideNote();

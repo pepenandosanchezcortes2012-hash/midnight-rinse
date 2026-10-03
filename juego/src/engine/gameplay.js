@@ -146,6 +146,7 @@
       if (kind === 'mopStand') { this._toggleMop(); return; }
       if (kind === 'phone') { this._phone(); return; }
       if (kind === 'note') { this.game.openNote(); return; }
+      if (kind === 'tareas') { this.game.openTasks(); return; }
       if (kind === 'tele') { this.game.tele.togglePlay(); return; }
       if (kind === 'salirBosque' || kind === 'entrarLavanderia') { this.game.bosque.go(); return; }
       if (kind === 'lavadoraBosque') { this.game.bosque.touchWasher(); return; }

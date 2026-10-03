@@ -280,6 +280,13 @@
       paperPivot.scale.y = 0.001;
       this.receipt = paperPivot;
 
+      // Tablilla de tareas (estado del turno, sin HUD).
+      var board = this.box(0.24, 0.015, 0.32, this.mat.wood, 5.62, 1.055, 1.72);
+      board.rotation.y = 0.25;
+      var sheet = this.box(0.2, 0.01, 0.26, this.mat.paper, 0, 0.012, 0.01, board);
+      this.box(0.08, 0.02, 0.03, this.mat.metal, 0, 0.015, -0.14, board);
+      this.interactive(board, 'tareas');
+      this.interactive(sheet, 'tareas');
       // La hoja del registro sobre el mostrador.
       var note = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.28), m.paper);
       note.rotation.x = -Math.PI / 2;

@@ -314,6 +314,15 @@ El proyecto pasó por dos etapas:
 - **Botón:** «Instalar en el teléfono» pasa a «Instalar la app».
 - **Prueba nueva.** Resultado: 27/27.
 
+## 31. Tablilla de tareas
+- **Qué es:** una tablilla física en el mostrador (sin HUD) que abre una hoja con el estado del turno:
+  - hora;
+  - charcos y próxima revisión (falta con 3 o más);
+  - lavadoras funcionando;
+  - el filtro de pelusa más lleno;
+  - recordatorios que aparecen según avanza la noche (no mirarlo a la cara, la hora si contestaste el teléfono, la puerta trasera y los fusibles, las hojas del bosque).
+- **Prueba nueva.** Resultado: 28/28.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

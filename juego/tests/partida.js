@@ -647,6 +647,30 @@
       return 'lluvia y zumbido al primer toque, a ' + Math.round(vol * 60) + ' % del volumen';
     }],
 
+    ['Tablilla de tareas en el mostrador', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var d = ctx.w.document;
+      g.player.pos.set(5.62, 0, 1.2); g.player.yaw = Math.PI; g.player.pitch = -0.75; step(ctx, 1);
+      var boardMesh = g.world.interactables.filter(function (m) { return m.userData.interact.kind === 'tareas'; })[0];
+      var v = boardMesh.getWorldPosition(new ctx.w.THREE.Vector3()).project(g.player.camera);
+      var t = g.gameplay.targetAt(g.player.camera, new ctx.w.THREE.Vector2(v.x, v.y));
+      check(t && t.kind === 'tareas', 'la tablilla no se puede tocar (' + (t && t.kind) + ')');
+      g.gameplay.puddleActive = g.gameplay.puddleActive.map(function (v, i) { return i < 3; });
+      g.gameplay.washers.forEach(function (w, i) { w.running = i < 4; });
+      g.gameplay._begin(t, g.input);
+      var text = d.getElementById('nota-texto').textContent;
+      check(g.noteOpen && /TAREAS DEL TURNO/.test(d.querySelector('#nota .encabezado').textContent), 'no se abrió la tablilla');
+      check(/☐ Pasillo central: 3 charcos/.test(text), 'no marcó los charcos pendientes');
+      check(/✔ Lavadoras funcionando: 4 de 6/.test(text), 'no contó las lavadoras');
+      g.closeNote();
+      g.openNote();
+      check(!d.getElementById('nota').classList.contains('tareas'), 'el registro quedó con el estilo de la tablilla');
+      noErrors(ctx);
+      return 'charcos, lavadoras y filtros al día';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);
