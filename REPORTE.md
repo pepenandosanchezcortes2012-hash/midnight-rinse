@@ -379,6 +379,11 @@ El proyecto pasó por dos etapas:
 - **Logro oculto:** «Detrás de ti».
 - **Prueba nueva.** Resultado: 33/33.
 
+## 40. Transición a los finales
+- **Fundido:** al terminar, el mundo se desvanece en 3 s en vez de irse a negro de golpe, el audio se apaga en ~3 s y el texto final aparece con una transición CSS.
+- **Sonido de cada final:** campanita y puerta en el bueno, golpe y zumbido en el malo, trueno y campanita en el del bosque.
+- **Prueba determinista del fundido.** Resultado: 34/34.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

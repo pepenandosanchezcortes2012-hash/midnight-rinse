@@ -200,10 +200,10 @@
     setVolume(v) { this.volume = v; if (this.ctx) { this._set(this.master.gain, v, 0.05); } }
     pause() { if (this.ctx) { this.ctx.suspend(); } if (window.speechSynthesis) { window.speechSynthesis.pause(); } }
     resume() { if (this.ctx) { this.ctx.resume(); } if (window.speechSynthesis) { window.speechSynthesis.resume(); } }
-    stopAll() {
+    stopAll(fadeSeconds) {
       if (window.speechSynthesis) { window.speechSynthesis.cancel(); }
       this.ringing = false;
-      if (this.ctx) { this._set(this.master.gain, 0, 0.4); }
+      if (this.ctx) { this._set(this.master.gain, 0, (fadeSeconds || 1.2) / 3); }
     }
 
     /** Estado continuo por cuadro. */

@@ -790,6 +790,28 @@
       return 'silueta en el vidrio 0.45 s y él detrás en el siguiente parpadeo';
     }],
 
+    ['Transición a los finales: fundido de 3 s', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var fx = null;
+      var orig = g.retro.render.bind(g.retro);
+      g.retro.render = function (a, b, c) { fx = c; return orig(a, b, c); };
+      ctx.w.requestAnimationFrame = function () { return 0; };
+      g.end();
+      var t = g.endedAt;
+      g.lastTime = t; g.frame(t + 1500);
+      var mid = fx.blink;
+      g.lastTime = t + 1500; g.frame(t + 3200);
+      var full = fx.blink;
+      check(mid > 0.4 && mid < 0.6, 'a la mitad del fundido la pantalla estaba en ' + mid.toFixed(2));
+      check(full === 1, 'al final del fundido no quedó negro');
+      var anim = ctx.w.getComputedStyle(ctx.w.document.getElementById('final')).animationName;
+      check(anim === 'aparecer-final', 'el texto final no aparece con transición (' + anim + ')');
+      noErrors(ctx);
+      return 'fundido 0 → ' + mid.toFixed(2) + ' → 1; texto con transición';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

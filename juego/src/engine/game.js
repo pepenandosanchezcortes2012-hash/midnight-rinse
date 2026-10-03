@@ -265,7 +265,7 @@
       this.gamepad.poll(dt);
       if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); this._attract(dt); }
       this.retro.render(this.world.scene, this.player.camera, {
-        blink: this.state === 'ended' ? 1 : Math.max(this.player.blink.amount, this.bosque.fade, this.pasillo.fade),
+        blink: this.state === 'ended' ? Math.min(1, (now - (this.endedAt || 0)) / 3000) : Math.max(this.player.blink.amount, this.bosque.fade, this.pasillo.fade),
         dread: this.dread,
         time: now / 1000,
         flash: this.horror.flash,
@@ -720,7 +720,11 @@
       if (this.question) { this.question = null; this.stats.respuesta = 'sin_respuesta'; }
       this.ui.hideChoices();
       this.closeNote();
-      this.audio.stopAll();
+      // Transición: el mundo se desvanece en ~3 s (el texto final aparece después, por CSS).
+      this.endedAt = performance.now();
+      if (reason === 'bosque') { this.audio.trueno(0.6, false); this.audio.ding(); }
+      this.endSound = true;
+      this.audio.stopAll(3.2);
       this.input.unlock();
       var s = this.stats;
       var faults = s.mirada + s.pasillo + s.filtro + (s.respuesta === 'incorrecta' ? 2 : (s.respuesta === 'correcta' ? 0 : 1));
@@ -762,6 +766,9 @@
       if (this.flags.customerSeen && s.mirada === 0) { L.unlock('ojos_al_suelo'); }
       if (this.consumables.used.porros >= 3) { L.unlock('paranoia'); }
       this.ui.showGrade(grade[0], grade[1]);
+      if (reason !== 'bosque') {
+        if (good) { this.audio.ding(); this.audio.door(); } else { this.audio.thud(); this.audio.buzz(); }
+      }
       if (reason === 'bosque') {
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {
