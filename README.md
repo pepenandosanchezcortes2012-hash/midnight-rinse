@@ -6,6 +6,8 @@ Terror liminal acogedor en primera persona, con estética PS1 a 320×240. **+18:
 
 **Doble clic en `juego/index.html`.** No necesita instalación, servidor ni internet: Three.js r128 va incluido en `juego/vendor/`. Funciona en Chrome, Edge o Firefox con WebGL. Usa audífonos.
 
+**Guía de controles dentro del juego:** botón en la pantalla de título y en la pausa (**Esc** en la computadora, **tres dedos** en el celular). Tiene teclas dibujadas, un esquema de gestos y pestañas para teclado o celular.
+
 | Control | Acción |
 | :--- | :--- |
 | **WASD** / flechas | Caminar |

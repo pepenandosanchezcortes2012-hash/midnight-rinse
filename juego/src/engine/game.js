@@ -109,6 +109,7 @@
       this.lastTime = performance.now();
       this.ui.subtitle('01:10. Turno de noche en la Lavandería La Espuma.', 5);
       this.ui.subtitle('La hoja del registro está sobre el mostrador.', 5);
+      this.ui.subtitle(this.touchUI ? '(Tres dedos: pausa y guía de controles.)' : '(Esc: pausa y guía de controles.)', 6);
     }
 
     /** Móvil: pantalla completa y horizontal (si el navegador lo permite; si no, se juega igual). */

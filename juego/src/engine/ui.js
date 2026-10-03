@@ -24,6 +24,15 @@
       $('btn-abandonar').addEventListener('click', function () { window.location.reload(); });
       $('btn-volver').addEventListener('click', function () { window.location.reload(); });
       $('btn-borrar-registro').addEventListener('click', function () { game.shift.reset(); self.refreshRegistry(); });
+      // Guía de controles: desde el título y desde la pausa; Esc la cierra.
+      $('btn-guia').addEventListener('click', function () { self.showGuide(true); });
+      $('btn-guia-pausa').addEventListener('click', function () { self.showGuide(true); });
+      $('btn-guia-cerrar').addEventListener('click', function () { self.showGuide(false); });
+      $('guia-tab-escritorio').addEventListener('click', function () { self._guideTab('escritorio'); });
+      $('guia-tab-tactil').addEventListener('click', function () { self._guideTab('tactil'); });
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !$('guia').hidden) { e.preventDefault(); self.showGuide(false); }
+      });
       // Móvil: tocar la hoja la deja; tocar una respuesta la elige.
       this.el.note.addEventListener('click', function () { if (game.noteOpen) { game.closeNote(); } });
       this.el.choices.addEventListener('click', function (e) {
@@ -127,7 +136,27 @@
       var panel = $('panel-musica');
       if (panel) { panel.open = false; $('pausa-musica').appendChild(panel); }
     }
-    showPause(on) { this.el.pause.hidden = !on; }
+    showPause(on) {
+      this.el.pause.hidden = !on;
+      if (!on) { $('guia').hidden = true; }
+    }
+
+    /** Abre la guía en la pestaña del dispositivo que estás usando (se puede cambiar a la otra). */
+    showGuide(on) {
+      $('guia').hidden = !on;
+      if (on) {
+        this._guideTab(document.body.classList.contains('tactil') ? 'tactil' : 'escritorio');
+        $('guia').scrollTop = 0;
+        $('btn-guia-cerrar').focus({ preventScroll: true });
+      }
+    }
+
+    _guideTab(which) {
+      ['escritorio', 'tactil'].forEach(function (k) {
+        $('guia-' + k).hidden = k !== which;
+        $('guia-tab-' + k).setAttribute('aria-selected', String(k === which));
+      });
+    }
 
     showNote(text) {
       this.el.noteText.textContent = text || '(hoja en blanco)';

@@ -109,6 +109,18 @@ El proyecto pasó por dos etapas:
   - **Pausa y partida:** el panel queda alineado en la pausa y el turno completo termina sin errores.
   - **Sin probar:** el audio no se pudo oír (la pestaña de prueba no tiene gesto del usuario, igual que la regla del iPhone). Pruébalo en tu teléfono.
 
+## 7. Guía de controles
+- **Dónde:** pantalla propia, que se abre desde el título y desde la pausa. Abre en la pestaña de tu dispositivo, Teclado y ratón o Celular (gestos).
+- **Contenido:**
+  - **Teclado y ratón:** teclas dibujadas, agrupadas en moverte, usar, tu cuerpo, consumibles, tu música, y hablar y menú.
+  - **Celular:** un esquema de la pantalla con las zonas de caminar, mirar y la esquina de consumibles.
+- **Cierre y aviso:** se cierra con Volver o Esc, y al reanudar el turno. Al empezar un turno, un subtítulo dice cómo abrirla.
+- **Probado en Chrome:**
+  - Se abre desde el título y la pausa, y cambia de pestaña.
+  - Esc la cierra; al reanudar también se cierra.
+  - Cada pestaña tiene 15 filas.
+  - Ninguna prueba dio errores.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
