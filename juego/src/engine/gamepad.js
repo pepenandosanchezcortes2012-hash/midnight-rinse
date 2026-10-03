@@ -137,6 +137,7 @@
         if (hit(BTN.LEFT)) { input.pressed.add('Digit1'); }
         if (hit(BTN.UP)) { input.pressed.add('Digit2'); }
         if (hit(BTN.RIGHT)) { input.pressed.add('Digit3'); }
+        if (hit(BTN.DOWN)) { input.pressed.add('Digit4'); }
       } else {
         if (hit(BTN.UP)) { input.actions.add('cigarro'); }
         if (hit(BTN.LEFT)) { input.actions.add('porro'); }

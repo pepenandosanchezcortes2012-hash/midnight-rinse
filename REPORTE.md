@@ -285,6 +285,14 @@ El proyecto pasó por dos etapas:
 - **Qué hace:** botón en la pantalla final. Usa Web Share (menú del teléfono) o, si no está, copia al portapapeles. El texto lleva la nota, la dificultad, el final y las hojas encontradas, más el enlace a la carpeta del juego.
 - **Prueba nueva.** Resultado: 22/22.
 
+## 26. La respuesta secreta
+- **Cuándo aparece:** si encontraste las 6 hojas del bosque o abriste tu casillero (su etiqueta dice «05:13»), la pregunta de la hora tiene una cuarta respuesta: «Son las cinco y trece. Ya terminó.».
+- **Qué pasa:** cuenta como correcta, el pavor baja a 0 y él responde «…Entonces ya lo sabes». Se va por la puerta de vidrio y no vuelve en el turno.
+- **Final bueno:** suma una frase.
+- **Controles:** tecla 4, cruceta ▼ o tocar la opción.
+- **Logro oculto:** «La hora verdadera».
+- **Prueba nueva.** Resultado: 23/23.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

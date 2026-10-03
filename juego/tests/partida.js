@@ -548,6 +548,29 @@
       return 'compartido con nota ' + g.grade + ' y 2 de 6 hojas';
     }],
 
+    ['Respuesta secreta: con las seis hojas, él se va', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      var d = ctx.w.document;
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g._ask();
+      check(d.querySelectorAll('#dialogo-opciones li').length === 3, 'sin hojas ya había respuesta secreta');
+      g._answer(3);
+      g.bosque.found = [true, true, true, true, true, true];
+      g._ask();
+      var lis = d.querySelectorAll('#dialogo-opciones li');
+      check(lis.length === 4 && /cinco y trece/.test(lis[3].textContent), 'con las seis hojas no apareció la cuarta respuesta');
+      lis[3].click();
+      await wait(1600);
+      check(!g.horror.customer.present && !g.world.customer.group.visible, 'él no se fue');
+      check(g.stats.respuesta === 'correcta' && g.logros.has('secreto'), 'no contó como correcta o no dio el logro');
+      g.horror._apply({ type: 'cliente_aparece' }, 'banco');
+      check(!g.horror.customer.present, 'volvió a aparecer después de irse');
+      noErrors(ctx);
+      return 'cuarta respuesta → se va y no vuelve; logro «La hora verdadera»';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

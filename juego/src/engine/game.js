@@ -416,11 +416,10 @@
       var q = 'Disculpe... ¿qué hora es?';
       this.ui.subtitle('Cliente: ' + q, 5);
       this.audio.speak(q, 'cliente');
-      this.ui.showChoices('Cliente: «' + q + '»', [
-        'Son ' + real + '.',
-        'Faltan cinco minutos para las seis.',
-        '(No responder.)'
-      ]);
+      var choices = ['Son ' + real + '.', 'Faltan cinco minutos para las seis.', '(No responder.)'];
+      // Respuesta secreta: si leíste las seis hojas del bosque o abriste tu casillero, ya sabes la hora verdadera.
+      if (this.bosque.pagesFound() >= 6 || this.flags.ownLocker) { choices.push('Son las cinco y trece. Ya terminó.'); }
+      this.ui.showChoices('Cliente: «' + q + '»', choices);
     }
 
     _tickQuestion(dt) {
@@ -442,6 +441,7 @@
       if (input.hit('Digit1') || input.hit('Numpad1')) { this._answer(1); }
       else if (input.hit('Digit2') || input.hit('Numpad2')) { this._answer(2); }
       else if (input.hit('Digit3') || input.hit('Numpad3')) { this._answer(3); }
+      else if ((input.hit('Digit4') || input.hit('Numpad4')) && (this.bosque.pagesFound() >= 6 || this.flags.ownLocker)) { this._answer(4); }
     }
 
     _answer(choice) {
@@ -449,6 +449,24 @@
       this.question = null;
       this.ui.hideChoices();
       var self = this;
+      if (choice === 4) {
+        // La hora verdadera: él se levanta y se va. No vuelve en todo el turno.
+        this.stats.respuesta = 'correcta';
+        this.flags.secreto = true;
+        this.ui.subtitle('Tú: Son las cinco y trece. Ya terminó.', 3);
+        setTimeout(function () {
+          var reply = '…Entonces ya lo sabes.';
+          self.ui.subtitle('Cliente: ' + reply, 5);
+          self.audio.speak(reply, 'cliente');
+          self.ui.subtitle('(Se levanta despacio, camina hacia la puerta de vidrio y ya no está.)', 6);
+          self.horror.customer.present = false;
+          self.world.customer.group.visible = false;
+          self.audio.door();
+          if (self.logros) { self.logros.unlock('secreto'); }
+        }, 1300);
+        this.dread = 0;
+        return;
+      }
       if (choice === 2) {
         this.stats.respuesta = 'correcta';
         this.ui.subtitle('Tú: Faltan cinco minutos para las seis.', 3);
@@ -624,7 +642,8 @@
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {
         this.ui.showEnd('05:12 · Turno terminado',
-          'Las lavadoras se detienen una por una. Afuera sigue lloviendo, pero la puerta por fin abre. El banco amarillo está vacío y seco.',
+          'Las lavadoras se detienen una por una. Afuera sigue lloviendo, pero la puerta por fin abre. El banco amarillo está vacío y seco.' +
+            (this.flags.secreto ? ' Él no volvió a preguntar la hora. Nadie volverá a preguntártela.' : ''),
           summary);
       } else {
         this.ui.showEnd('01:10 · Turno de medianoche',

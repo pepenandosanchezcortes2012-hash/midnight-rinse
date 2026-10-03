@@ -17,7 +17,7 @@
     '(Casillero de D. Una linterna sin pilas y una manga de uniforme, sola.)',
     '(Casillero de T. Hojas de registro en blanco, todas con la misma hora: 05:12.)',
     '(Casillero de A. Vacío. En el fondo hay lodo seco, como de bosque.)',
-    '(El casillero tiene tu nombre. Adentro hay un gancho vacío. Todavía está tibio.)'
+    '(El casillero tiene tu nombre. Adentro hay un gancho vacío, todavía tibio, y una etiqueta: «05:13».)'
   ];
 
   class Pasillo {
@@ -150,6 +150,7 @@
       MR.Haptics.pulse(15);
       g.ui.subtitle(LOCKERS[i], 5);
       if (i === LOCKERS.length - 1) {
+        g.flags.ownLocker = true; // ahora sabes la hora verdadera
         g.dread = Math.min(1, g.dread + 0.1);
         g.audio.thud();
         if (g.logros) { g.logros.unlock('casillero'); }

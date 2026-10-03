@@ -222,7 +222,7 @@
       this.firedLog.push({ type: e.type, zone: zoneName, minute: Math.floor(g.minutes) });
       switch (e.type) {
         case 'cliente_aparece':
-          if (!this.customer.present) {
+          if (!this.customer.present && !g.flags.secreto) {
             this.placeCustomer('banco');
             this.customer.present = true;
             audio.thud();
