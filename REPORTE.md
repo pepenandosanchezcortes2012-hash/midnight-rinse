@@ -390,6 +390,10 @@ El proyecto pasó por dos etapas:
 - **Recompensas:** logro «Objetos perdidos» con 6, conteo en el resumen final y el objeto pendiente en el guardado de partida.
 - **Prueba nueva.** Resultado: 35/35.
 
+## 42. El Archivo
+- **`archivo.js`:** guarda de forma permanente las hojas encontradas y las transmisiones de radio escuchadas (`midnight-rinse/archivo`). Panel en el título agrupado por hojas y radio; las entradas encontradas se releen en la vista de la hoja.
+- **Prueba nueva.** Resultado: 36/36.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

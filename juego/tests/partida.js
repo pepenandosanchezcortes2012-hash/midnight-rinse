@@ -833,6 +833,29 @@
       return 'encontrado y guardado (1/' + g.objetos.total() + ')';
     }],
 
+    ['Archivo: lo que lees y escuchas se guarda y se puede releer', async function () {
+      localStorage.removeItem('midnight-rinse/archivo');
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      g.bosque.takePage(2); g.closeNote();
+      g.gameplay.tuneTo(94.1); step(ctx, 2);
+      g.minutes = ctx.w.MR.Config.RADIO_HOST - 0.05; step(ctx, 10);
+      check(g.archivo.count() === 2, 'el archivo no guardó la hoja y la radio (' + g.archivo.count() + ')');
+      // Otra visita: desde el título se puede releer.
+      var ctx2 = await load();
+      var d = ctx2.w.document;
+      check(/^2\//.test(d.getElementById('archivo-cuenta').textContent), 'el título no muestra 2 entradas');
+      var entry = d.querySelector('#archivo-lista li.leer');
+      check(entry, 'no hay entradas para releer');
+      entry.click();
+      check(!d.getElementById('nota').hidden && d.getElementById('nota-texto').textContent.length > 40, 'no se abrió para releer');
+      d.getElementById('nota').click();
+      check(d.getElementById('nota').hidden, 'no se cerró al tocarla');
+      localStorage.removeItem('midnight-rinse/archivo');
+      return 'hoja 3 y radio de la noche 1 guardadas y releídas desde el título';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

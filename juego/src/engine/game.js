@@ -55,8 +55,10 @@
       this.gato = new MR.Gato(this);
       this.logros = new MR.Logros(this);
       this.objetos = new MR.Objetos(this);
+      this.archivo = new MR.Archivo(this);
       this.ui.renderLogros(this.logros);
       this.ui.renderObjetos(this.objetos);
+      this.ui.renderArchivo(this.archivo);
       this.ui.applyView();
       this.ui.bindTele(this.tele);
       this.touch = new MR.TouchControls(this);
@@ -401,6 +403,7 @@
             this.ui.subtitle('[Radio: solo estática. En la 94.1 ya nadie habla.]', 6);
           } else {
             var line = scripts[n - 1];
+            this.archivo.radio(n - 1);
             this.ui.subtitle('[Radio] ' + line, 10);
             this.audio.speak(line, 'locutor');
             if (/cinco y trece/.test(line)) { this.flags.heardTrueTime = true; } // la noche 7 revela la hora verdadera

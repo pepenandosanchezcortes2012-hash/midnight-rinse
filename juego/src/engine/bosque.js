@@ -181,6 +181,7 @@
       this.found[i] = true;
       this.f.pages[i].visible = false;
       var p = MR.HISTORIA.paginas[i];
+      if (g.archivo) { g.archivo.page(i); }
       g.audio.click();
       MR.Haptics.pulse(15);
       g.noteOpen = true;

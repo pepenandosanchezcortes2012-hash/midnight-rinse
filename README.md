@@ -158,6 +158,9 @@ En **Opciones → Dificultad**:
 - **Normal:** el juego original, hasta 3 faltas.
 - **Pesadilla:** sustos casi el doble de seguidos, 2 cigarros, 2 tragos y 1 porro. Solo se perdona **una** falta para el final bueno.
 
+### Archivo
+Todo lo que lees (las hojas del bosque) y escuchas (Radio Nocturna a las 02:40) queda en el **Archivo** de la pantalla de título, para releerlo cuando quieras y armar la historia completa.
+
 ### Objetos perdidos
 Cuando una lavadora termina su ciclo, a veces queda **algo olvidado** adentro. Abre la puerta para encontrarlo. Hay **12 objetos**, algunos normales y otros no tanto, y se guardan en una colección permanente (**Objetos perdidos**, en la pantalla de título).
 

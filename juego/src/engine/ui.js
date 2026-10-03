@@ -145,6 +145,40 @@
       if (cam && o.fov) { cam.fov = o.fov; cam.updateProjectionMatrix(); }
     }
 
+    /** Archivo: hojas y transmisiones que ya encontraste; tocar una la abre para releerla. */
+    renderArchivo(archivo) {
+      $('archivo-cuenta').textContent = archivo.count() + '/' + archivo.total();
+      var list = $('archivo-lista');
+      list.textContent = '';
+      var game = this.game;
+      var self = this;
+      var group = null;
+      archivo.view().forEach(function (e) {
+        if (e.grupo !== group) {
+          group = e.grupo;
+          var h = document.createElement('li');
+          h.className = 'grupo';
+          h.textContent = group;
+          list.appendChild(h);
+        }
+        var li = document.createElement('li');
+        li.className = e.hecho ? 'hecho' : '';
+        var mark = document.createElement('span');
+        mark.className = 'marca';
+        mark.textContent = e.hecho ? '▤' : '·';
+        var body = document.createElement('span');
+        body.textContent = e.titulo;
+        li.appendChild(mark);
+        li.appendChild(body);
+        if (e.hecho) {
+          li.classList.add('leer');
+          li.tabIndex = 0;
+          li.addEventListener('click', function () { game.noteOpen = true; self.showNote(e.texto, e.encabezado); });
+        }
+        list.appendChild(li);
+      });
+    }
+
     /** Panel de objetos perdidos (misma presentación que los logros). */
     renderObjetos(objetos) {
       $('objetos-cuenta').textContent = objetos.count() + '/' + objetos.total();

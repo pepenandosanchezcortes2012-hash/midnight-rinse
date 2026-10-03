@@ -326,3 +326,8 @@ body.mando .solo-mando { display: block !important; }
   .boton { padding: 8px 18px; font-size: 16px; }
 }
 #titulo.amanecer { background: linear-gradient(rgba(40, 30, 18, 0.1), rgba(14, 10, 6, 0.55) 32%, rgba(3, 4, 6, 0.93) 58%); }
+
+/* Archivo: grupos y entradas que se pueden releer. */
+.logros li.grupo { display: block; color: var(--acento); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding-top: 10px; border-bottom: 0; }
+.logros li.leer { cursor: pointer; }
+.logros li.leer:hover span:last-child, .logros li.leer:focus span:last-child { color: var(--acento); }
