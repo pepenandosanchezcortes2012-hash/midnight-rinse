@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#050608">
+  <title>Midnight Rinse · Turno de Medianoche</title>
+  <link rel="stylesheet" href="src/estilo.css">
+</head>
+<body>
+  <div id="escenario">
+    <canvas id="lienzo"></canvas>
+    <div id="subtitulos" aria-live="polite"></div>
+    <div id="mira" hidden></div>
+    <!-- Móvil: apenas asoman la punta de un cigarro y el tapón de la petaca (deslizar desde aquí). -->
+    <div id="consumibles" aria-hidden="true">
+      <svg viewBox="0 0 32 21" width="64" height="42" shape-rendering="crispEdges">
+        <g id="consumible-porro">
+          <rect x="10" y="7" width="4" height="14" fill="#f0ecdc"/>
+          <rect x="11" y="4" width="2" height="3" fill="#e2dccb"/>
+          <rect x="11" y="3" width="1" height="1" fill="#cfc8b4"/>
+          <rect x="12" y="2" width="1" height="1" fill="#cfc8b4"/>
+          <rect x="11" y="9" width="2" height="1" fill="#8aa06a"/>
+        </g>
+        <g id="consumible-cigarro">
+          <rect x="17" y="2" width="3" height="12" fill="#e9e6dc"/>
+          <rect x="17" y="14" width="3" height="7" fill="#c8823a"/>
+          <rect x="17" y="1" width="3" height="1" fill="#6b6a66"/>
+          <rect x="18" y="0" width="1" height="1" fill="#ff7a2a"/>
+        </g>
+        <g id="consumible-petaca">
+          <rect x="23" y="9" width="8" height="4" fill="#b9bcc0"/>
+          <rect x="23" y="13" width="8" height="1" fill="#7c8086"/>
+          <rect x="22" y="14" width="10" height="7" fill="#8a8f94"/>
+          <rect x="24" y="10" width="1" height="2" fill="#e8ebee"/>
+        </g>
+      </svg>
+    </div>
+    <div id="girar">Gira el teléfono a horizontal</div>
+  </div>
+
+  <!-- Pantalla de título -->
+  <section id="titulo" class="pantalla">
+    <h1>MIDNIGHT RINSE</h1>
+    <p class="sub">Turno de Medianoche</p>
+    <p id="aviso-hora-real" class="aviso" hidden></p>
+    <button id="btn-comenzar" class="boton">Comenzar turno</button>
+    <details class="opciones" open>
+      <summary>Opciones</summary>
+      <label><input type="checkbox" id="opt-subtitulos" checked> Subtítulos</label>
+      <label><input type="checkbox" id="opt-voces" checked> Voces sintetizadas (las del navegador)</label>
+      <label><input type="checkbox" id="opt-destellos"> Reducir destellos de luz</label>
+      <label><input type="checkbox" id="opt-mira"> Mostrar punto de mira</label>
+      <label><input type="checkbox" id="opt-meta"> Capa meta: usar la hora real de tu computadora</label>
+      <label class="solo-tactil"><input type="checkbox" id="opt-vibracion" checked> Vibración (perillas, monedas, trapeador, pasos)</label>
+      <label class="solo-tactil"><input type="checkbox" id="opt-giroscopio" checked> Micro-balanceo con el giroscopio</label>
+      <label>Sensibilidad del ratón <input type="range" id="opt-sensibilidad" min="0.5" max="2.5" step="0.1" value="1.2"></label>
+      <label>Volumen <input type="range" id="opt-volumen" min="0" max="1" step="0.05" value="0.8"></label>
+      <label class="nombre">Tu nombre en los susurros (opcional)
+        <input type="text" id="opt-nombre" maxlength="24" placeholder="vacío = sin nombre">
+      </label>
+      <p class="nota">Si escribes un nombre, algunos susurros lo dirán. Es opcional y no sale de tu navegador.</p>
+      <button id="btn-borrar-registro" class="boton secundario">Borrar registro del turno</button>
+      <p id="estado-registro" class="nota"></p>
+    </details>
+    <details class="opciones" id="panel-musica">
+      <summary>Tu música dentro del juego (YouTube Music u otra)</summary>
+      <p class="nota solo-escritorio">1) Abre YouTube Music y pon lo que quieras. 2) Pulsa «Conectar pestaña», elige la pestaña de YouTube Music y marca «Compartir audio de la pestaña». Tu música sonará desde la radio del mostrador, en la 99.9 FM, en 3D: más fuerte cerca, de lado si giras la cabeza, ahogada cuando él está cerca.</p>
+      <p class="nota solo-tactil">En el celular el navegador no puede tomar el audio de otra app: elige canciones de tu teléfono y sonarán desde la radio del mostrador (99.9 FM). O deja tu música sonando en otra app y activa «Callar la radio del juego».</p>
+      <div class="fila">
+        <button id="btn-abrir-ytm" class="boton secundario" type="button">Abrir YouTube Music</button>
+        <button id="btn-conectar-pestana" class="boton secundario solo-escritorio" type="button">Conectar pestaña</button>
+      </div>
+      <label class="nombre">O elige canciones de tu dispositivo
+        <input type="file" id="musica-archivos" accept="audio/*" multiple>
+      </label>
+      <label><input type="checkbox" id="opt-lofi" checked> Sonido de radio vieja (lo-fi)</label>
+      <label title="Útil si tu música suena desde otra app"><input type="checkbox" id="opt-mezcla"> Callar la radio del juego</label>
+      <p id="musica-estado" class="nota">Sin conectar.</p>
+      <button id="btn-desconectar-musica" class="boton secundario" type="button">Desconectar</button>
+    </details>
+    <div class="controles solo-escritorio">
+      <p><b>WASD</b> caminar · <b>ratón</b> mirar · <b>clic</b> usar / mantener para fregar, limpiar o girar perillas</p>
+      <p><b>E</b> (mantener) limpiar el vaho de los lentes · <b>B</b> cerrar los ojos · <b>C</b> cigarro · <b>F</b> petaca · <b>J</b> porro · <b>1 2 3</b> responder · <b>Esc</b> pausa</p>
+    </div>
+    <div class="controles solo-tactil">
+      <p>Sin botones. <b>Pulgar izquierdo</b>: apóyalo donde quieras y arrastra para caminar. <b>Pulgar derecho</b>: arrastra para mirar.</p>
+      <p><b>Toca los objetos</b> para usarlos; mantén el dedo y arrastra para girar perillas, fregar o limpiar filtros.</p>
+      <p><b>Doble toque</b>: parpadear · <b>dos dedos hacia abajo</b>: limpiar el vaho de los lentes · <b>tres dedos</b>: pausa.</p>
+      <p>Esquina inferior derecha: <b>desliza hacia arriba</b> para el cigarro, <b>hacia la izquierda</b> para el porro, <b>en diagonal</b> para la petaca. Juega en horizontal.</p>
+    </div>
+    <p class="advertencia">+18 · Terror psicológico, luces que parpadean y sonidos graves. Contiene consumo de tabaco, alcohol y cannabis (ficción). El registro del turno persiste entre partidas.</p>
+  </section>
+
+  <!-- Pausa -->
+  <section id="pausa" class="pantalla" hidden>
+    <h2>Pausa</h2>
+    <button id="btn-continuar" class="boton">Continuar</button>
+    <div id="pausa-musica"></div>
+    <button id="btn-abandonar" class="boton secundario">Abandonar el turno</button>
+  </section>
+
+  <!-- La hoja del registro (vista de cerca) -->
+  <section id="nota" class="pantalla papel" hidden>
+    <p class="encabezado">REGISTRO DE TURNO · LAVANDERÍA LA ESPUMA</p>
+    <p id="nota-texto"></p>
+    <p class="pie">clic para dejar la hoja</p>
+  </section>
+
+  <!-- Respuesta a la pregunta del cliente -->
+  <section id="dialogo" hidden>
+    <p id="dialogo-pregunta"></p>
+    <ol id="dialogo-opciones"></ol>
+  </section>
+
+  <!-- Final -->
+  <section id="final" class="pantalla" hidden>
+    <h2 id="final-titulo"></h2>
+    <p id="final-texto"></p>
+    <ul id="final-resumen"></ul>
+    <button id="btn-volver" class="boton">Volver al inicio</button>
+  </section>
+
+  <script src="vendor/three.min.js"></script>
+  <!-- Núcleo verificado (ports exactos de core/midnight_rinse_core) -->
+  <script src="src/core/dispatcher.js"></script>
+  <script src="src/core/bayer.js"></script>
+  <script src="src/core/vertexSnap.js"></script>
+  <script src="src/core/steppedHold.js"></script>
+  <script src="src/core/detentDial.js"></script>
+  <script src="src/core/clockAnomaly.js"></script>
+  <script src="src/core/shiftLog.js"></script>
+  <!-- Motor del juego -->
+  <script src="src/engine/config.js"></script>
+  <script src="src/engine/util.js"></script>
+  <script src="src/engine/textures.js"></script>
+  <script src="src/engine/retro.js"></script>
+  <script src="src/engine/audio.js"></script>
+  <script src="src/engine/input.js"></script>
+  <script src="src/engine/world.js"></script>
+  <script src="src/engine/player.js"></script>
+  <script src="src/engine/glasses.js"></script>
+  <script src="src/engine/gameplay.js"></script>
+  <script src="src/engine/horror.js"></script>
+  <script src="src/engine/touch.js"></script>
+  <script src="src/engine/consumables.js"></script>
+  <script src="src/engine/music.js"></script>
+  <script src="src/engine/ui.js"></script>
+  <script src="src/engine/game.js"></script>
+  <script src="src/main.js"></script>
+</body>
+</html>

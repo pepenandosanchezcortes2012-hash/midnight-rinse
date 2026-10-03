@@ -1,0 +1,45 @@
+{
+  "name": "blind_spot_dispatcher",
+  "language": "python",
+  "spec_file": "spec.md",
+  "required_files": [
+    "blind_spot_dispatcher.py"
+  ],
+  "allowed_globs": [
+    "*.py"
+  ],
+  "public_tests_dir": "tests_public",
+  "hidden_tests_dir": "tests_hidden",
+  "reference_dir": "reference",
+  "tests_dest": "tests",
+  "test_command": "{python} -m unittest discover -s tests -v",
+  "bench_files": [
+    "bench.py"
+  ],
+  "bench_command": "{python} bench.py",
+  "bench_runs": 3,
+  "bench_higher_is_better": false,
+  "timeout_s": 120,
+  "bench_timeout_s": 120,
+  "backend": "cli",
+  "cli_bin": "agy",
+  "models_cli": {
+    "gladiator": "gemini-3.8-flash-high",
+    "redteam": "gemini-3.8-flash-high",
+    "adjudicator": "gemini-3.8-flash-high",
+    "judge": "gemini-3.8-flash-high",
+    "jury": "gemini-3.8-flash-high",
+    "fusion": "gemini-3.8-flash-high",
+    "sentinel": "gemini-3.8-flash-high",
+    "repair": "gemini-3.8-flash-high"
+  },
+  "request_timeout_s": 238,
+  "red_team_agents": 8,
+  "jury_size": 5,
+  "fusion": true,
+  "sentinel_review": true,
+  "max_calls": 450,
+  "forbid_patterns": [
+    "^\\s*(?:import|from)\\s+(?!(?:__future__|typing|math|os|sys|threading|tempfile|errno|datetime|time|heapq|collections|itertools|functools|enum|dataclasses|numbers|pathlib|io|contextlib|stat|copy|bisect|abc|weakref|operator|random|fcntl|msvcrt)\\b)\\w+"
+  ]
+}

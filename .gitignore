@@ -1,0 +1,6 @@
+# Registros locales de las corridas del Coliseo (contienen rutas de la máquina)
+arenas/*/runs/
+arenas/**/*.out
+.apex/
+__pycache__/
+*.pyc

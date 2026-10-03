@@ -1,0 +1,149 @@
+{
+  "batches": [
+    {
+      "k": 0,
+      "rc": 0,
+      "run_id": "20261002-164533",
+      "defensor": "ninguno todavía",
+      "verdict": "APROBADO",
+      "seconds": 195.8,
+      "calls": 26,
+      "agents": 26,
+      "challengers": [
+        "G001",
+        "G026",
+        "G051",
+        "G076"
+      ],
+      "batch_champion": "G076",
+      "title": "nuevo campeón"
+    },
+    {
+      "k": 1,
+      "rc": 0,
+      "run_id": "20261002-164848",
+      "defensor": "G076 · DELTA · Replantear el problema desde cero",
+      "verdict": "APROBADO",
+      "seconds": 238.8,
+      "calls": 38,
+      "agents": 38,
+      "challengers": [
+        "G002",
+        "G027",
+        "G052",
+        "G077"
+      ],
+      "batch_champion": "G002",
+      "title": "nuevo campeón"
+    },
+    {
+      "k": 2,
+      "rc": 0,
+      "run_id": "20261002-165247",
+      "defensor": "G002 · ALFA · Estructuras de datos O(1)",
+      "verdict": "APROBADO",
+      "seconds": 203.6,
+      "calls": 38,
+      "agents": 38,
+      "challengers": [
+        "G003",
+        "G028",
+        "G053",
+        "G078"
+      ],
+      "batch_champion": "G000",
+      "title": "defendido"
+    },
+    {
+      "k": 3,
+      "rc": 0,
+      "run_id": "20261002-165610",
+      "defensor": "G002 · ALFA · Estructuras de datos O(1)",
+      "verdict": "APROBADO",
+      "seconds": 225.8,
+      "calls": 38,
+      "agents": 38,
+      "challengers": [
+        "G004",
+        "G029",
+        "G054",
+        "G079"
+      ],
+      "batch_champion": "G000",
+      "title": "defendido"
+    },
+    {
+      "k": 4,
+      "rc": 0,
+      "run_id": "20261002-165956",
+      "defensor": "G002 · ALFA · Estructuras de datos O(1)",
+      "verdict": "APROBADO",
+      "seconds": 237.9,
+      "calls": 38,
+      "agents": 38,
+      "challengers": [
+        "G005",
+        "G030",
+        "G055",
+        "G080"
+      ],
+      "batch_champion": "G000",
+      "title": "defendido"
+    },
+    {
+      "k": 5,
+      "rc": 0,
+      "run_id": "20261002-170354",
+      "defensor": "G002 · ALFA · Estructuras de datos O(1)",
+      "verdict": "APROBADO",
+      "seconds": 219.8,
+      "calls": 38,
+      "agents": 38,
+      "challengers": [
+        "G006",
+        "G031",
+        "G056",
+        "G081"
+      ],
+      "batch_champion": "G000",
+      "title": "defendido"
+    },
+    {
+      "k": 6,
+      "rc": 0,
+      "run_id": "20261002-170734",
+      "defensor": "G002 · ALFA · Estructuras de datos O(1)",
+      "verdict": "APROBADO",
+      "seconds": 232.7,
+      "calls": 38,
+      "agents": 38,
+      "challengers": [
+        "G007",
+        "G032",
+        "G057",
+        "G082"
+      ],
+      "batch_champion": "G000",
+      "title": "defendido"
+    },
+    {
+      "k": 7,
+      "rc": 0,
+      "run_id": "20261002-171127",
+      "defensor": "G002 · ALFA · Estructuras de datos O(1)",
+      "verdict": "APROBADO",
+      "seconds": 433.1,
+      "calls": 72,
+      "agents": 72,
+      "challengers": [
+        "G008",
+        "G033",
+        "G058",
+        "G083"
+      ],
+      "batch_champion": "G000",
+      "title": "defendido (con fusión o reparación del Centinela)"
+    }
+  ],
+  "champion": "G002 · ALFA · Estructuras de datos O(1)"
+}

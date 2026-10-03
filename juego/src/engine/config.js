@@ -1,0 +1,54 @@
+/**
+ * Configuración central del juego: tiempos del turno, ritmo, distancias y diseño de la lavandería.
+ * Todas las horas están en minutos de juego desde la medianoche (70 = 01:10).
+ */
+(function (MR) {
+  'use strict';
+
+  var params = new URLSearchParams(window.location.search);
+  var speed = Math.max(0.1, Math.min(60, parseFloat(params.get('velocidad')) || 1));
+
+  MR.Config = {
+    RENDER_W: 320,
+    RENDER_H: 240,
+    // vertex_snap usa ndc * vres: con vres = 160x120 la rejilla es de 1 píxel a 320x240.
+    SNAP_RES: [160, 120],
+    FOV: 70,
+
+    // Reloj del turno: 16 segundos de juego por segundo real (~15 minutos reales en total).
+    GAME_SECONDS_PER_REAL_SECOND: 16 * speed,
+    SHIFT_START: 70,          // 01:10
+    PRINTER_START: 75,        // 01:15 la impresora térmica entrega el registro
+    CUSTOMER_APPEARS: 140,    // 02:20 el Cliente Inmóvil aparece en el banco
+    RADIO_HOST: 160,          // 02:40 el locutor nocturno
+    CUSTOMER_TALK_FALLBACK: 190, // 03:10 si el jugador nunca se acercó, el cliente habla igual
+    PHONE_RINGS: 230,         // 03:50 el teléfono público
+    TIME_QUESTION_FROM: 240,  // 04:00 el cliente pregunta la hora
+    TIME_QUESTION_FORCE: 252, // 04:12 la pregunta llega aunque estés lejos
+    PRINTER_COLLAPSE: 273,    // 04:33 la impresora entrega el colapso
+    SHIFT_END: 312,           // 05:12 el turno termina y el juego cierra limpio
+    MOP_CHECKS: [120, 165, 210, 255, 300], // revisión del pasillo cada 45 minutos
+
+    PLAYER_HEIGHT: 1.62,
+    PLAYER_RADIUS: 0.3,
+    WALK_SPEED: 2.3,
+    REACH: 2.2,
+
+    // Lentes empañados: evaporación 0.035 por segundo y borrado completo en 1.8 s de contacto.
+    FOG_EVAPORATION: 0.035,
+    FOG_WIPE_SECONDS: 1.8,
+    FOG_GRID: [40, 30],
+
+    // Mirada al rostro del cliente.
+    STARE_ANGLE_DEG: 7,
+    STARE_DISTANCE: 7,
+    STARE_SECONDS: 1.6,
+
+    RADIO_STATION: 94.1,
+    MOP_SECONDS: 2.0,
+    FILTER_CLEAN_SECONDS: 1.5,
+    WASHER_CYCLE_MIN: 30,
+    COINS_PER_PRESS: 4,
+    DEBUG_SPEED: speed
+  };
+})(window.MR = window.MR || {});
