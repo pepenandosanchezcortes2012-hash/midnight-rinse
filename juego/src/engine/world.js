@@ -55,6 +55,7 @@
       this._dryers();
       this._bench();
       this._counter();
+      this._tv();
       this._entrance();
       this._closet();
       this._puddles();
@@ -255,6 +256,48 @@
       clock.rotation.y = -Math.PI / 2;
       clock.position.set(7.97, 2.25, 1.95);
       this.add(clock);
+    }
+
+    /**
+     * Tele CRT en un soporte de pared, entre lavadoras y secadoras, inclinada hacia la sala. Su pantalla es un
+     * "hueco" en el lienzo por el que se ve tu música de YouTube (ver tele.js). Tocar la tele = reproducir/pausar;
+     * tocar la perilla = siguiente canción.
+     */
+    _tv() {
+      var m = this.mat;
+      // Soporte: placa en la pared y brazo.
+      this.box(0.3, 0.3, 0.04, m.metal, -0.1, 2.2, -4.97);
+      this.box(0.06, 0.06, 0.32, m.metal, -0.1, 2.12, -4.8);
+      var tv = new THREE.Group();
+      tv.position.set(-0.1, 2.25, -4.5);
+      tv.rotation.x = 0.17; // la pantalla mira un poco hacia abajo, a la sala
+      this.add(tv);
+      var plastic = this.retro.material({ texture: 'black', color: 0x4a4740 });
+      var body = this.box(0.66, 0.52, 0.46, plastic, 0, 0, -0.03, tv);
+      this.box(0.5, 0.38, 0.2, plastic, 0, 0, -0.32, tv);           // tubo
+      // Marco alrededor de la pantalla (4:3, 0.48 x 0.36).
+      var bezel = this.retro.material({ texture: 'black', color: 0x2c2a26 });
+      this.box(0.6, 0.04, 0.02, bezel, 0, 0.2, 0.205, tv);
+      this.box(0.6, 0.06, 0.02, bezel, 0, -0.21, 0.205, tv);
+      this.box(0.04, 0.4, 0.02, bezel, -0.28, 0, 0.205, tv);
+      this.box(0.08, 0.4, 0.02, bezel, 0.27, 0, 0.205, tv);
+      var screen = new THREE.Mesh(new THREE.PlaneGeometry(0.48, 0.36), this.retro.screenMaterial());
+      screen.position.set(-0.01, 0, 0.202);
+      tv.add(screen);
+      // Ancla del reproductor: un poco más grande que el hueco, para que los bordes siempre muestren video.
+      var anchor = new THREE.Object3D();
+      anchor.position.copy(screen.position);
+      tv.add(anchor);
+      // Perilla de canal y foco de encendido.
+      var knob = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.03, 8), m.metal);
+      knob.rotation.x = Math.PI / 2;
+      knob.position.set(0.27, 0.08, 0.22);
+      tv.add(knob);
+      var led = this.box(0.025, 0.015, 0.01, this.retro.material({ texture: 'white', color: 0xff3020, emissive: 0.2 }), 0.27, -0.12, 0.22, tv);
+      this.interactive(body, 'tele');
+      this.interactive(screen, 'tele');
+      this.interactive(knob, 'teleCanal');
+      this.tv = { group: tv, screen: screen, anchor: anchor, knob: knob, led: led, width: 0.48, height: 0.36 };
     }
 
     _entrance() {

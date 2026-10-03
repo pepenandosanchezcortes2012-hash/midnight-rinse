@@ -91,6 +91,24 @@ El proyecto pasó por dos etapas:
   - **Turno completo:** fumando los 3 porros llega al final sin errores.
   - **Sin probar automáticamente:** la captura de pestaña necesita que tú elijas la pestaña en el selector del navegador.
 
+## 6. Tu música en el celular: la tele de la lavandería
+- **Problema:** en el celular no se puede capturar audio de otras apps, y la app de YouTube Music sin Premium se pausa en segundo plano.
+- **Solución (`tele.js`):**
+  - **Fuente:** el reproductor oficial de YouTube (IFrame API) en una tele CRT del mundo. Lee enlaces de canción, álbum (`OLAK5uy_…`), playlist, mix, `youtu.be`, shorts o ID.
+  - **Render:** la pantalla de la tele escribe alfa 0 en el lienzo (`retro.screenMaterial`). El posproceso compone en alfa premultiplicado, así que el vaho, la viñeta y el parpadeo tapan el video de forma proporcional.
+  - **Proyección:** el reproductor recibe una sola `matrix3d` proyectiva (viewport × proyección × vista × modelo).
+  - **Interacción y efectos:** tocar la tele pausa o reanuda; la perilla pasa de canción. Volumen por distancia, estática por cercanía del Cliente Inmóvil y por los susurros, y apagones.
+  - **Panel:** en el título y la pausa el reproductor se muestra plano dentro del panel, para tocar ▶.
+- **Hallazgo:**
+  - **Fallo:** el método clásico de CSS3DRenderer (`perspective` + `preserve-3d`) se dibujaba desplazado en Chrome con escala de pantalla al 125 %, aunque `getBoundingClientRect` decía lo contrario. Lo confirmé con un contorno de prueba.
+  - **Arreglo:** la matriz proyectiva única queda clavada sobre el hueco, también en vista oblicua.
+- **Probado en Chrome con un video real de YouTube:**
+  - **Opacidad:** lienzo 100 % opaco sin enlace y de espaldas. Hueco de 14 372 px mirando la tele; parcial con medio parpadeo o con vaho; tapado con los ojos cerrados.
+  - **Toques:** la pantalla y la perilla se detectan como objetos y llaman al reproductor.
+  - **Sonido y efectos:** volumen 100 cerca y 27 en el mostrador; en el apagón, apagada y en silencio; con el cliente a 0.6 m, estática 0.46.
+  - **Pausa y partida:** el panel queda alineado en la pausa y el turno completo termina sin errores.
+  - **Sin probar:** el audio no se pudo oír (la pestaña de prueba no tiene gesto del usuario, igual que la regla del iPhone). Pruébalo en tu teléfono.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

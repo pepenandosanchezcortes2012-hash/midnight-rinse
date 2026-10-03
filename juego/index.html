@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="src/estilo.css">
 </head>
 <body>
+  <!-- Capa de la tele: el reproductor de YouTube vive DETRÁS del lienzo y se ve por el hueco de la pantalla. -->
+  <div id="tele"><div id="tele-camara"><div id="tele-pantalla"></div></div></div>
   <div id="escenario">
     <canvas id="lienzo"></canvas>
     <div id="subtitulos" aria-live="polite"></div>
@@ -67,8 +69,16 @@
     </details>
     <details class="opciones" id="panel-musica">
       <summary>Tu música dentro del juego (YouTube Music u otra)</summary>
+      <p class="nota"><b>En la tele de la lavandería (celular y computadora).</b> En YouTube Music toca <b>Compartir → Copiar enlace</b> en una canción, un álbum o una playlist, y pégalo aquí. Sonará en la tele colgada entre las lavadoras y las secadoras: más fuerte si te acercas. Tócala para pausar y toca su perilla para cambiar de canción.</p>
+      <div class="fila">
+        <input type="url" id="tele-enlace" placeholder="https://music.youtube.com/…" autocomplete="off" spellcheck="false">
+        <button id="btn-tele" class="boton secundario" type="button">Poner en la tele</button>
+      </div>
+      <div id="tele-hueco" hidden></div>
+      <p id="tele-estado" class="nota"></p>
+      <p class="nota"><b>O por la radio del mostrador (99.9 FM):</b></p>
       <p class="nota solo-escritorio">1) Abre YouTube Music y pon lo que quieras. 2) Pulsa «Conectar pestaña», elige la pestaña de YouTube Music y marca «Compartir audio de la pestaña». Tu música sonará desde la radio del mostrador, en la 99.9 FM, en 3D: más fuerte cerca, de lado si giras la cabeza, ahogada cuando él está cerca.</p>
-      <p class="nota solo-tactil">En el celular el navegador no puede tomar el audio de otra app: elige canciones de tu teléfono y sonarán desde la radio del mostrador (99.9 FM). O deja tu música sonando en otra app y activa «Callar la radio del juego».</p>
+      <p class="nota solo-tactil">Elige canciones guardadas en tu teléfono y sonarán desde la radio del mostrador. O, si tienes YouTube Music Premium o Spotify, deja tu música sonando en su app y activa «Callar la radio del juego».</p>
       <div class="fila">
         <button id="btn-abrir-ytm" class="boton secundario" type="button">Abrir YouTube Music</button>
         <button id="btn-conectar-pestana" class="boton secundario solo-escritorio" type="button">Conectar pestaña</button>
@@ -147,6 +157,7 @@
   <script src="src/engine/touch.js"></script>
   <script src="src/engine/consumables.js"></script>
   <script src="src/engine/music.js"></script>
+  <script src="src/engine/tele.js"></script>
   <script src="src/engine/ui.js"></script>
   <script src="src/engine/game.js"></script>
   <script src="src/main.js"></script>

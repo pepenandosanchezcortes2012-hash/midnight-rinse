@@ -47,6 +47,8 @@
       this.consumables = new MR.Consumables(this);
       this.music = new MR.MusicLink(this);
       this.ui.bindMusic(this.music);
+      this.tele = new MR.Tele(this);
+      this.ui.bindTele(this.tele);
       this.touch = new MR.TouchControls(this);
       this.tilt = new MR.Tilt();
       if (MR.isTouchDevice()) { this.onTouchActivity(); }
@@ -90,6 +92,7 @@
     start() {
       this.options = this.ui.options;
       this.ui.hideTitle();
+      MR.Game.audioSession(this.options.mixMode);
       this.audio.start(this.options.volume, this.options.voices);
       MR.Haptics.enabled = this.options.vibration;
       if (this.touchUI) {
@@ -149,6 +152,7 @@
         collapse: this.collapsed ? 1 : 0,
         high: this.consumables.high
       });
+      this.tele.frame(dt, now / 1000);
       this.input.endFrame();
       requestAnimationFrame(this.frame.bind(this));
     }
@@ -509,6 +513,14 @@
       }
     }
   }
+
+  /**
+   * iPhone (Safari 16.4+): en modo mezcla el audio del juego es "ambient" y NO corta la música que suena en otra
+   * app (YouTube Music Premium, Spotify). Sin modo mezcla, comportamiento normal.
+   */
+  Game.audioSession = function (mix) {
+    try { if (navigator.audioSession) { navigator.audioSession.type = mix ? 'ambient' : 'auto'; } } catch (e) { /* no soportado */ }
+  };
 
   MR.Game = Game;
 })(window.MR = window.MR || {});

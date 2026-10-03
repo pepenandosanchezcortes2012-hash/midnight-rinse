@@ -47,15 +47,27 @@ Se puede desactivar en las opciones.
 - **Porro (3):** colores más intensos con aberración cromática, el tiempo del turno se estira (hasta un 18 % más lento), tu música suena con reverberación y el pavor baja mucho… pero la **paranoia** acelera los eventos y trae susurros fuera de hora.
 
 ### Tu música dentro del juego (YouTube Music u otra)
-En la pantalla de título (y en la pausa) está el panel **«Tu música dentro del juego»**. Tu música no suena encima del juego: suena **desde la radio del mostrador, en la 99.9 FM**, en audio 3D.
-- **Computadora (Chrome o Edge):** abre YouTube Music en otra pestaña con tu cuenta y pon lo que quieras. Pulsa **Conectar pestaña**, elige esa pestaña y marca **«Compartir audio de la pestaña»**. La pestaña original se silencia y su audio entra al juego.
-- **Celular:** el navegador no deja tomar el audio de otra app, así que eliges canciones de tu teléfono. O deja tu música sonando en otra app y activa **«Callar la radio del juego»**.
-- **Cómo suena en el juego:**
-  - Baja si te alejas y cambia de oído según hacia dónde miras (HRTF).
-  - Si mueves la perilla fuera de la 99.9, se pierde entre la estática. En la pantalla de la radio dice **«TU»** cuando estás sintonizado.
-  - Se ahoga cuando el Cliente Inmóvil está cerca y se corta en los apagones y los susurros. En el colapso suena «bajo el agua».
-  - Opción **«Sonido de radio vieja»** (lo-fi) o fidelidad completa.
-- **Requisitos:** para YouTube Music hace falta internet y servir el juego por `http(s)`, por ejemplo GitHub Pages. La captura de pestaña no funciona abriendo el archivo con doble clic. Nada se graba ni se sube: el audio solo pasa por tu navegador.
+En la pantalla de título (y en la pausa; en el celular, con **tres dedos**) está el panel **«Tu música dentro del juego»**. Tu música suena **dentro de la lavandería**, no encima del juego.
+
+**1. En la tele de la lavandería: funciona en el celular y en la computadora, sin Premium ni archivos.**
+- En YouTube Music toca **Compartir → Copiar enlace** en una canción, un álbum o una playlist. Pégalo y pulsa **Poner en la tele**. La primera vez, toca ▶ en el reproductor; en iPhone es obligatorio.
+- Suena en la **tele CRT** colgada entre las lavadoras y las secadoras. Es el reproductor oficial de YouTube, proyectado en 3D sobre su pantalla: lo tapan las paredes, tus manos, el Cliente Inmóvil, **el vaho de tus lentes** y **tus párpados**.
+- **Tócala** para pausar o reanudar. **Toca su perilla** para pasar a la siguiente canción.
+- **Volumen:** más fuerte cuando te acercas.
+- **El horror:** el Cliente Inmóvil cerca y los susurros meten estática; **en los apagones la tele se apaga**.
+- **Limitaciones:**
+  - Algunas canciones no se dejan reproducir fuera de YouTube (lo decide la disquera). En una playlist, el juego las salta solo.
+  - Tus «Me gusta» son privados y no se pueden usar.
+  - En iPhone el volumen no cambia con la distancia: suena al volumen del teléfono.
+
+**2. Por la radio del mostrador (99.9 FM), con filtro de radio vieja y audio 3D:**
+- **Computadora (Chrome o Edge):** **Conectar pestaña** toma el audio de tu pestaña de YouTube Music. Elige la pestaña y marca «Compartir audio de la pestaña».
+- **Celular:** elige canciones guardadas en el teléfono.
+- **Cómo suena:** cambia de oído según hacia dónde miras, se pierde en la estática fuera de la 99.9 y se ahoga cuando él está cerca. Con el porro suena con eco.
+
+**3. Desde otra app:** con YouTube Music Premium o Spotify, deja tu música sonando y activa **«Callar la radio del juego»**. En iPhone, el juego entonces no corta la música de la otra app.
+
+**Requisito:** la tele y la captura de pestaña necesitan internet y el juego publicado (por ejemplo, GitHub Pages). No funcionan abriendo el archivo con doble clic. Nada se graba ni se sube.
 
 Un turno dura unos 15 minutos reales. Para probar más rápido: `index.html?velocidad=4`.
 
@@ -93,6 +105,7 @@ midnight-rinse/
 │   │   ├── touch.js               móvil Zero-HUD: gestos invisibles, vibración y giroscopio
 │   │   ├── consumables.js         cigarro, petaca y porro (calman, pero con costo)
 │   │   ├── music.js               tu música (pestaña de YouTube Music o archivos) por la radio 3D
+│   │   ├── tele.js                la tele: reproductor de YouTube proyectado en 3D por un hueco del lienzo
 │   │   ├── world.js               la lavandería: geometría, colisiones, zonas y anclas
 │   │   ├── glasses.js             vaho de lentes: mapa de humedad de dos pasadas
 │   │   ├── gameplay.js            interacción táctil y sistemas (lavadoras, secadoras, charcos…)

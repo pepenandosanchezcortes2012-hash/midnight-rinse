@@ -37,7 +37,7 @@
 
     _loadOptions() {
       var defaults = { subtitles: true, voices: true, reduceFlashes: false, crosshair: false, meta: false, sensitivity: 1.2, volume: 0.8, name: '',
-        vibration: true, gyro: true, lofi: true, mixMode: false };
+        vibration: true, gyro: true, lofi: true, mixMode: false, teleLink: '' };
       try {
         var saved = JSON.parse(window.localStorage.getItem(OPTIONS_KEY) || '{}');
         return Object.assign(defaults, saved);
@@ -67,6 +67,7 @@
           if (m[1] === 'volume') { self.game.audio.setVolume(o.volume); }
           if (m[1] === 'vibration') { MR.Haptics.enabled = o.vibration; if (o.vibration) { MR.Haptics.pulse(25); } }
           if (m[1] === 'lofi' && self.game.music) { self.game.music.setLofi(o.lofi); }
+          if (m[1] === 'mixMode') { MR.Game.audioSession(o.mixMode); }
           self._saveOptions();
         });
       });
@@ -97,6 +98,26 @@
       $('musica-archivos').addEventListener('change', function (e) { music.loadFiles(e.target.files); });
       $('btn-desconectar-musica').addEventListener('click', function () { music.disconnect(); });
       if (!MR.MusicLink.canCaptureTab()) { $('btn-conectar-pestana').disabled = true; }
+    }
+
+    /** Tele: pegar un enlace de YouTube Music / YouTube (se recuerda el último, solo en este navegador). */
+    bindTele(tele) {
+      var o = this.options;
+      var self = this;
+      var input = $('tele-enlace');
+      var slot = $('tele-hueco');
+      if (o.teleLink) { input.value = o.teleLink; }
+      tele.onStatus = function (text) { $('tele-estado').textContent = text; };
+      function go() {
+        slot.hidden = false; // el reproductor aparece aquí: en iPhone hay que tocar ▶ la primera vez
+        tele.load(input.value).then(function (ok) {
+          if (!ok) { slot.hidden = !tele.has(); return; }
+          o.teleLink = input.value.trim().slice(0, 300);
+          self._saveOptions();
+        });
+      }
+      $('btn-tele').addEventListener('click', go);
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } });
     }
 
     hideTitle() {

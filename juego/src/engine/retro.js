@@ -64,6 +64,30 @@
     '}'
   ].join('\n');
 
+  // Pantalla de la tele: "perfora" el lienzo (alfa 0) para que se vea el reproductor de YouTube que está DETRÁS
+  // del canvas. Como es geometría de la escena, las paredes, las manos y el Cliente Inmóvil la tapan de verdad.
+  // El color sale premultiplicado: apagada = vidrio oscuro opaco; estática = granos opacos; niebla de distancia.
+  var SCREEN_FRAG = [
+    'uniform float uOpen;',
+    'uniform float uStatic;',
+    'uniform float uTime;',
+    'uniform vec3 uFogColor;',
+    'varying vec3 vUvW;',
+    'varying vec3 vLight;',
+    'varying float vFog;',
+    'float rand(vec2 co) { return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453); }',
+    'void main() {',
+    '  vec2 uv = vUvW.xy / vUvW.z;',
+    '  float n = rand(floor(uv * vec2(64.0, 48.0)) + vec2(floor(uTime * 24.0), 0.0));',
+    '  float cover = 1.0 - uOpen;',
+    '  float grain = step(1.0 - uStatic, n);',
+    '  float a = max(cover, grain);',
+    '  vec3 glass = vec3(0.03, 0.04, 0.04) + vLight * 0.04;',
+    '  vec3 c = mix(glass * cover, vec3(0.75 * n), grain);',
+    '  gl_FragColor = vec4(c * (1.0 - vFog) + uFogColor * vFog, a * (1.0 - vFog) + vFog);',
+    '}'
+  ].join('\n');
+
   var POST_VERT = [
     'varying vec2 vUv;',
     'void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }'
@@ -87,7 +111,10 @@
     '  vec2 uv = (px + 0.5) / uRes;',
     '  float jitter = (rand(vec2(px.y, floor(uTime * 12.0))) - 0.5) * uDread * uDread * 3.0;',
     '  uv.x += jitter / uRes.x;',
-    '  vec3 col = texture2D(tScene, uv).rgb;',
+    '  vec4 scene = texture2D(tScene, uv);',
+    '  vec3 col = scene.rgb;',
+    // A = cuánto tapa el lienzo lo que hay detrás (la tele). Fuera de la pantalla de la tele siempre es 1.
+    '  float A = scene.a;',
     '  float m = texture2D(tFog, vUv).r;',
     '  if (m > 0.01) {',
     '    vec2 o = vec2(2.0) / uRes;',
@@ -98,6 +125,7 @@
     '    float k = smoothstep(0.03, 0.85, m);',
     '    float drop = step(0.985, rand(floor(px / 2.0))) * k;',
     '    col = mix(col, fogged, k * 0.92) + drop * 0.06;',
+    '    A = 1.0 - (1.0 - A) * (1.0 - k * 0.92);',
     '  }',
     '  if (uHigh > 0.001) {',
     '    vec2 off = vec2(uHigh * 1.3 / uRes.x, 0.0);',
@@ -110,9 +138,12 @@
     '  float gray = dot(col, vec3(0.299, 0.587, 0.114));',
     '  col = mix(col, vec3(gray), clamp(uDread * 0.5 + uCollapse * 0.3, 0.0, 1.0));',
     '  float vig = smoothstep(0.9, 0.2, length(vUv - 0.5) * 1.35);',
-    '  col *= mix(1.0, vig, 0.45 + uDread * 0.4);',
+    '  float vf = mix(1.0, vig, 0.45 + uDread * 0.4);',
+    '  col *= vf;',
+    '  A = 1.0 - (1.0 - A) * vf;',
     '  col += vec3(uFlash);',
     '  col *= 1.0 - uBlink;',
+    '  A = 1.0 - (1.0 - A) * (1.0 - uBlink);',
     '  float x = px.x;',
     '  float y = uRes.y - 1.0 - px.y;',
     '  vec2 bc = (vec2(mod(x, 8.0), mod(y, 8.0)) + 0.5) / 8.0;',
@@ -120,7 +151,7 @@
     '  float thr = (M + 0.5) / 64.0;',
     '  col = clamp(col, 0.0, 1.0);',
     '  vec3 lvl = clamp(floor(col * 31.0 + thr), 0.0, 31.0);',
-    '  gl_FragColor = vec4(lvl / 31.0, 1.0);',
+    '  gl_FragColor = vec4(lvl / 31.0, clamp(A, 0.0, 1.0));',
     '}'
   ].join('\n');
 
@@ -143,8 +174,10 @@
   class Retro {
     constructor(canvas) {
       var C = MR.Config;
-      this.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, powerPreference: 'high-performance' });
+      // alpha: el lienzo puede tener huecos (la pantalla de la tele) por los que se ve la capa de video de detrás.
+      this.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
       this.renderer.setPixelRatio(1);
+      this.renderer.setClearColor(0x000000, 1);
       this.target = new THREE.WebGLRenderTarget(C.RENDER_W, C.RENDER_H, {
         minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat
       });
@@ -213,6 +246,13 @@
         fragmentShader: WORLD_FRAG,
         side: opts.side || THREE.FrontSide
       });
+    }
+
+    /** Material de la pantalla de la tele (ver SCREEN_FRAG). uOpen 1 = se ve el video; uStatic 0..1 = estática. */
+    screenMaterial() {
+      var uniforms = { uOpen: { value: 0 }, uStatic: { value: 0 }, uTime: { value: 0 } };
+      Object.keys(this.shared).forEach(function (k) { uniforms[k] = this.shared[k]; }, this);
+      return new THREE.ShaderMaterial({ uniforms: uniforms, vertexShader: WORLD_VERT, fragmentShader: SCREEN_FRAG });
     }
 
     setLight(i, position, color, intensity, range) {

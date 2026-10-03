@@ -145,6 +145,8 @@
       if (kind === 'mopStand') { this._toggleMop(); return; }
       if (kind === 'phone') { this._phone(); return; }
       if (kind === 'note') { this.game.openNote(); return; }
+      if (kind === 'tele') { this.game.tele.togglePlay(); return; }
+      if (kind === 'teleCanal') { this.game.tele.next(); return; }
       if (kind === 'puddle' && !this.mopHeld) {
         this.say('nomop', '(Necesitas el trapeador. Está en el almacén, al fondo a la izquierda.)');
         return;

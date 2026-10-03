@@ -19,8 +19,28 @@ html, body {
   overflow: hidden;
 }
 
+/* Capa de la tele (debajo del lienzo; el lienzo la deja ver solo por el hueco de la pantalla). */
+#tele { position: fixed; left: 0; top: 0; width: 0; height: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+#tele.panel { overflow: visible; z-index: 11; }
+#tele-camara { position: absolute; left: 0; top: 0; pointer-events: none; }
+#tele-pantalla { position: absolute; left: 0; top: 0; background: #000; pointer-events: none; transform-origin: 0 0; }
+#tele.panel #tele-pantalla { pointer-events: auto; }
+#tele-pantalla iframe { display: block; width: 100%; height: 100%; border: 0; }
+#tele-hueco { width: 100%; aspect-ratio: 16 / 9; min-height: 200px; background: #000; margin: 6px 0; }
+#tele-hueco[hidden] { display: none; }
+.opciones input[type="url"] {
+  flex: 1 1 220px;
+  min-width: 0;
+  font-family: var(--fuente);
+  background: #111317;
+  color: var(--tinta);
+  border: 1px solid #3a3c42;
+  padding: 8px;
+}
+
 #escenario {
   position: fixed;
+  z-index: 1;
   inset: 0;
   display: flex;
   align-items: center;
@@ -69,7 +89,7 @@ body.tactil .solo-escritorio { display: none !important; }
 #lienzo {
   display: block;
   image-rendering: pixelated;
-  background: #000;
+  background: transparent; /* el hueco de la tele deja ver la capa de video de detrás */
 }
 
 #subtitulos {
