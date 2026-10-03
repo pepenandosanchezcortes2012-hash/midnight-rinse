@@ -491,6 +491,13 @@
         var h = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.27, 0.23), [m.hair, m.hair, m.hair, m.hair, m.hair, m.face]);
         h.position.set(0, y, 0);
         parent.add(h);
+        // Sombrero de ala ancha (gira con la cabeza): le ensombrece la cara.
+        var brim = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.02, 10), m.dark);
+        brim.position.set(0, 0.15, 0);
+        h.add(brim);
+        var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.15, 10), m.dark);
+        crown.position.set(0, 0.23, 0);
+        h.add(crown);
         return h;
       }
       // Sentado (mirando hacia -z, hacia las lavadoras).
@@ -501,13 +508,16 @@
       this.box(0.1, 0.5, 0.12, m.coat, -0.29, 0.78, -0.06, seated);
       this.box(0.1, 0.5, 0.12, m.coat, 0.29, 0.78, -0.06, seated);
       this.seatedHead = head(seated, 1.34);
-      // De pie.
-      this.box(0.17, 0.9, 0.19, m.coat, -0.11, 0.45, 0, standing);
-      this.box(0.17, 0.9, 0.19, m.coat, 0.11, 0.45, 0, standing);
-      this.box(0.48, 1.0, 0.3, m.coat, 0, 1.08, 0, standing);
-      this.box(0.1, 0.66, 0.12, m.coat, -0.3, 1.15, 0, standing);
-      this.box(0.1, 0.66, 0.12, m.coat, 0.3, 1.15, 0, standing);
-      this.standingHead = head(standing, 1.72);
+      // De pie: más alto que una persona (~2 m), abrigo hasta las rodillas, brazos que cuelgan de más.
+      this.box(0.15, 1.0, 0.17, m.dark, -0.1, 0.5, 0, standing);
+      this.box(0.15, 1.0, 0.17, m.dark, 0.1, 0.5, 0, standing);
+      this.box(0.54, 0.8, 0.34, m.coat, 0, 0.82, 0, standing);  // falda del abrigo
+      this.box(0.5, 0.82, 0.31, m.coat, 0, 1.52, 0, standing);  // torso
+      this.box(0.1, 0.92, 0.12, m.coat, -0.31, 1.24, 0, standing);
+      this.box(0.1, 0.92, 0.12, m.coat, 0.31, 1.24, 0, standing);
+      this.box(0.08, 0.1, 0.08, m.face, -0.31, 0.74, 0, standing); // manos pálidas
+      this.box(0.08, 0.1, 0.08, m.face, 0.31, 0.74, 0, standing);
+      this.standingHead = head(standing, 2.06);
       group.visible = false;
       this.add(group);
       this.customer = { group: group, seated: seated, standing: standing };
