@@ -28,6 +28,16 @@ Terror liminal acogedor en primera persona, con estética PS1 a 320×240. **+18:
 - **iPhone:** toca **Compartir → Agregar a pantalla de inicio**.
 - **Cómo queda:** con su icono, en pantalla completa y en horizontal. **Funciona sin internet** desde la primera visita, excepto la tele de YouTube, que sí necesita conexión.
 
+### Con control de consola
+Conecta un control de Xbox, PlayStation, Switch Pro o uno genérico, y presiona cualquier botón:
+- **Stick izquierdo:** caminar. **Stick derecho:** mirar.
+- **A:** usar; mantenlo con el stick derecho para girar perillas.
+- **B:** parpadear. **X** (mantener): limpiar los lentes.
+- **Cruceta ↑ ◀ ▶:** cigarro, porro y petaca. Si alguien te habla, responden 1, 2 y 3.
+- **Start:** pausa. **View/Select:** guía.
+- **Menús:** se recorren con la cruceta; **A** elige y **B** vuelve.
+- **Vibración:** el control vibra con los mismos golpes que el celular.
+
 ### En el celular (Zero-HUD: pantalla 100 % limpia)
 Abre `juego/index.html` en el navegador del teléfono (o publícalo en cualquier hosting estático) y juega en horizontal. No hay joysticks dibujados ni botones:
 

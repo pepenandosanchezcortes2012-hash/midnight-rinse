@@ -224,6 +224,56 @@
       return 'luz ambiente ' + amb0.toFixed(2) + ' → ' + peak.toFixed(2) + '; 1 trueno; modo suave OK';
     }],
 
+    ['Control de consola (simulado): menús, sticks, botones y vibración', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var pad = { id: 'Control de prueba (STANDARD GAMEPAD)', index: 0, axes: [0, 0, 0, 0], buttons: [], rumbles: 0 };
+      for (var b = 0; b < 17; b += 1) { pad.buttons.push({ pressed: false, value: 0 }); }
+      pad.vibrationActuator = { playEffect: function () { pad.rumbles += 1; return Promise.resolve('complete'); } };
+      Object.defineProperty(ctx.w.navigator, 'getGamepads', { configurable: true, value: function () { return [pad]; } });
+      g.gamepad._connect(pad);
+      check(ctx.w.document.body.classList.contains('mando'), 'no se marcó el control como conectado');
+      function frame(n) { for (var i = 0; i < (n || 1); i += 1) { g.gamepad.poll(1 / 30); if (g.state === 'playing') { g.update(1 / 30); } g.input.endFrame(); } }
+      function press(i) { pad.buttons[i].pressed = true; frame(1); pad.buttons[i].pressed = false; frame(1); }
+      // Título: abajo mueve el foco; Start empieza el turno.
+      press(13);
+      check(ctx.w.document.querySelector('.foco-mando'), 'la cruceta no movió el foco en el menú');
+      press(9);
+      check(g.state === 'playing', 'Start no empezó el turno');
+      // Caminar y mirar.
+      g.player.pos.set(-0.5, 0, 1.5); // en medio de la sala, sin nada enfrente
+      var x0 = g.player.pos.x;
+      var z0 = g.player.pos.z;
+      var yaw0 = g.player.yaw;
+      pad.axes = [0, -1, 0.8, 0]; frame(45); pad.axes = [0, 0, 0, 0]; frame(1);
+      var moved = Math.hypot(g.player.pos.x - x0, g.player.pos.z - z0);
+      check(moved > 0.5, 'el stick izquierdo no movió al jugador (' + moved.toFixed(2) + ' m)');
+      check(Math.abs(g.player.yaw - yaw0) > 0.3, 'el stick derecho no giró la cabeza');
+      // Cruceta ↑: cigarro. B: parpadeo.
+      press(12);
+      check(g.consumables.smoke > 0, 'la cruceta ↑ no encendió el cigarro');
+      var blinks = g.stats.parpadeos;
+      press(1); frame(10);
+      check(g.stats.parpadeos > blinks || g.player.blink.amount > 0, 'B no hizo parpadear');
+      // Start: pausa; B: vuelve. View: guía.
+      press(9);
+      check(g.state === 'paused', 'Start no pausó');
+      press(1);
+      check(g.state === 'playing', 'B no reanudó desde la pausa');
+      press(8);
+      check(!ctx.w.document.getElementById('guia').hidden, 'View no abrió la guía');
+      check(!ctx.w.document.getElementById('guia-mando').hidden, 'la guía no abrió en la pestaña del control');
+      press(1);
+      check(ctx.w.document.getElementById('guia').hidden, 'B no cerró la guía');
+      // Vibración: el mismo golpe que el celular.
+      g.ctx = null;
+      ctx.w.MR.Haptics.enabled = true;
+      ctx.w.MR.Haptics.pulse([20, 40, 20]);
+      check(pad.rumbles > 0, 'el control no vibró');
+      noErrors(ctx);
+      return 'menú, Start, sticks, cruceta, B, pausa, guía y ' + pad.rumbles + ' vibraciones';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

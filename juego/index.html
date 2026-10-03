@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" href="iconos/favicon-32.png">
   <link rel="apple-touch-icon" href="iconos/apple-touch-icon.png">
   <title>Midnight Rinse · Turno de Medianoche</title>
-  <link rel="stylesheet" href="src/estilo.css?v=20261003010701">
+  <link rel="stylesheet" href="src/estilo.css?v=20261003011022">
 </head>
 <body>
   <!-- Capa de la tele: el reproductor de YouTube vive DETRÁS del lienzo y se ve por el hueco de la pantalla. -->
@@ -140,6 +140,7 @@
     <div class="guia-pestanas" role="tablist">
       <button id="guia-tab-escritorio" class="guia-tab" role="tab" type="button">Teclado y ratón</button>
       <button id="guia-tab-tactil" class="guia-tab" role="tab" type="button">Celular (gestos)</button>
+      <button id="guia-tab-mando" class="guia-tab" role="tab" type="button">Control (mando)</button>
     </div>
 
     <div id="guia-escritorio" class="guia-cuerpo" role="tabpanel">
@@ -218,6 +219,26 @@
       <div class="g-fila"><div class="g-ctl"><span class="gesto">🖐 tres dedos</span></div><div class="g-acc">Pausa: cambiar la música y abrir esta guía</div></div>
     </div>
 
+    <div id="guia-mando" class="guia-cuerpo" role="tabpanel" hidden>
+      <p class="g-nota">Funciona con controles de Xbox, PlayStation, Switch Pro y genéricos. Conéctalo y presiona cualquier botón. Vibra con los mismos golpes que el celular.</p>
+      <h3>Moverte</h3>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">stick izquierdo</span></div><div class="g-acc">Caminar</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">stick derecho</span></div><div class="g-acc">Mirar</div></div>
+      <h3>Usar las cosas</h3>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla">A</span> <span class="g-o">o</span> <span class="tecla">✕</span></div><div class="g-acc">Usar lo que miras</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla">A</span> <span class="g-o">mantener</span> + <span class="tecla ancha">stick der. ↔</span></div><div class="g-acc">Girar perillas; fregar; limpiar filtros</div></div>
+      <h3>Tu cuerpo</h3>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla">B</span> <span class="g-o">o</span> <span class="tecla">○</span></div><div class="g-acc">Parpadear</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla">X</span> <span class="g-o">o</span> <span class="tecla">□</span> <span class="g-o">mantener</span> + <span class="tecla ancha">stick der.</span></div><div class="g-acc">Limpiar los lentes</div></div>
+      <h3>Consumibles</h3>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla">▲</span> <span class="tecla">◀</span> <span class="tecla">▶</span> <span class="g-o">cruceta</span></div><div class="g-acc">Cigarro · porro · petaca</div></div>
+      <h3>Hablar y menú</h3>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla">◀</span> <span class="tecla">▲</span> <span class="tecla">▶</span></div><div class="g-acc">Responder 1 · 2 · 3 cuando alguien te habla</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">Start</span></div><div class="g-acc">Pausa</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">View / Select</span></div><div class="g-acc">Esta guía</div></div>
+      <div class="g-fila"><div class="g-ctl">En los menús</div><div class="g-acc">Cruceta o stick para moverte · <b>A</b> elegir · <b>B</b> volver · ◀ ▶ en los deslizadores</div></div>
+    </div>
+
     <button id="btn-guia-cerrar" class="boton" type="button">Volver</button>
   </section>
 
@@ -232,6 +253,7 @@
   <section id="dialogo" hidden>
     <p id="dialogo-pregunta"></p>
     <ol id="dialogo-opciones"></ol>
+    <p class="nota solo-mando">Control: ◀ 1 · ▲ 2 · ▶ 3</p>
   </section>
 
   <!-- Final -->
@@ -242,35 +264,36 @@
     <button id="btn-volver" class="boton">Volver al inicio</button>
   </section>
 
-  <script src="vendor/three.min.js?v=20261003010701"></script>
+  <script src="vendor/three.min.js?v=20261003011022"></script>
   <!-- Núcleo verificado (ports exactos de core/midnight_rinse_core) -->
-  <script src="src/core/dispatcher.js?v=20261003010701"></script>
-  <script src="src/core/bayer.js?v=20261003010701"></script>
-  <script src="src/core/vertexSnap.js?v=20261003010701"></script>
-  <script src="src/core/steppedHold.js?v=20261003010701"></script>
-  <script src="src/core/detentDial.js?v=20261003010701"></script>
-  <script src="src/core/clockAnomaly.js?v=20261003010701"></script>
-  <script src="src/core/shiftLog.js?v=20261003010701"></script>
+  <script src="src/core/dispatcher.js?v=20261003011022"></script>
+  <script src="src/core/bayer.js?v=20261003011022"></script>
+  <script src="src/core/vertexSnap.js?v=20261003011022"></script>
+  <script src="src/core/steppedHold.js?v=20261003011022"></script>
+  <script src="src/core/detentDial.js?v=20261003011022"></script>
+  <script src="src/core/clockAnomaly.js?v=20261003011022"></script>
+  <script src="src/core/shiftLog.js?v=20261003011022"></script>
   <!-- Motor del juego -->
-  <script src="src/engine/config.js?v=20261003010701"></script>
-  <script src="src/engine/util.js?v=20261003010701"></script>
-  <script src="src/engine/textures.js?v=20261003010701"></script>
-  <script src="src/engine/retro.js?v=20261003010701"></script>
-  <script src="src/engine/audio.js?v=20261003010701"></script>
-  <script src="src/engine/input.js?v=20261003010701"></script>
-  <script src="src/engine/world.js?v=20261003010701"></script>
-  <script src="src/engine/player.js?v=20261003010701"></script>
-  <script src="src/engine/glasses.js?v=20261003010701"></script>
-  <script src="src/engine/gameplay.js?v=20261003010701"></script>
-  <script src="src/engine/horror.js?v=20261003010701"></script>
-  <script src="src/engine/touch.js?v=20261003010701"></script>
-  <script src="src/engine/consumables.js?v=20261003010701"></script>
-  <script src="src/engine/music.js?v=20261003010701"></script>
-  <script src="src/engine/tele.js?v=20261003010701"></script>
-  <script src="src/engine/bosque.js?v=20261003010701"></script>
-  <script src="src/engine/clima.js?v=20261003010701"></script>
-  <script src="src/engine/ui.js?v=20261003010701"></script>
-  <script src="src/engine/game.js?v=20261003010701"></script>
-  <script src="src/main.js?v=20261003010701"></script>
+  <script src="src/engine/config.js?v=20261003011022"></script>
+  <script src="src/engine/util.js?v=20261003011022"></script>
+  <script src="src/engine/textures.js?v=20261003011022"></script>
+  <script src="src/engine/retro.js?v=20261003011022"></script>
+  <script src="src/engine/audio.js?v=20261003011022"></script>
+  <script src="src/engine/input.js?v=20261003011022"></script>
+  <script src="src/engine/world.js?v=20261003011022"></script>
+  <script src="src/engine/player.js?v=20261003011022"></script>
+  <script src="src/engine/glasses.js?v=20261003011022"></script>
+  <script src="src/engine/gameplay.js?v=20261003011022"></script>
+  <script src="src/engine/horror.js?v=20261003011022"></script>
+  <script src="src/engine/touch.js?v=20261003011022"></script>
+  <script src="src/engine/consumables.js?v=20261003011022"></script>
+  <script src="src/engine/music.js?v=20261003011022"></script>
+  <script src="src/engine/tele.js?v=20261003011022"></script>
+  <script src="src/engine/bosque.js?v=20261003011022"></script>
+  <script src="src/engine/clima.js?v=20261003011022"></script>
+  <script src="src/engine/gamepad.js?v=20261003011022"></script>
+  <script src="src/engine/ui.js?v=20261003011022"></script>
+  <script src="src/engine/game.js?v=20261003011022"></script>
+  <script src="src/main.js?v=20261003011022"></script>
 </body>
 </html>

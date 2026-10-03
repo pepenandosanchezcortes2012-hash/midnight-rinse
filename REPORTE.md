@@ -190,6 +190,18 @@ El proyecto pasó por dos etapas:
 - **Pasos:** sobre tierra mojada suenan distinto.
 - **Prueba nueva:** lluvia solo afuera, el relámpago ilumina (0.04 → 0.31), un trueno, vuelta a la normalidad y modo suave. Resultado: 11/11 pruebas en verde.
 
+## 14. Control de consola
+- **`gamepad.js`:** usa la Gamepad API con mapeo estándar y escribe en los mismos canales de `MR.Input` que el teclado, el ratón y los gestos.
+- **Controles:**
+  - Sticks con zona muerta; la mirada tiene curva cuadrática.
+  - A con mantener: el stick derecho gira las perillas y cepilla los lentes.
+  - La cruceta maneja los consumibles, o las respuestas si alguien te habla.
+  - Start pausa y View abre la guía.
+- **Menús:** foco visible, A, B y ◀ ▶ en los deslizadores.
+- **Vibración:** `MR.Haptics.pulse` también hace vibrar el control (`dual-rumble`).
+- **Guía:** pestaña «Control (mando)», que se abre sola si hay un control conectado.
+- **Prueba nueva con un control simulado.** Resultado: 12/12 pruebas en verde.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

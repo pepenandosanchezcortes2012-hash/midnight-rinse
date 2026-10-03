@@ -31,6 +31,7 @@
       $('btn-guia-cerrar').addEventListener('click', function () { self.showGuide(false); });
       $('guia-tab-escritorio').addEventListener('click', function () { self._guideTab('escritorio'); });
       $('guia-tab-tactil').addEventListener('click', function () { self._guideTab('tactil'); });
+      $('guia-tab-mando').addEventListener('click', function () { self._guideTab('mando'); });
       // Reiniciar todo: primero una pantalla de confirmación (no una ventana del navegador).
       $('btn-reiniciar').addEventListener('click', function () { self.showReset(true); });
       $('btn-reiniciar-pausa').addEventListener('click', function () { self.showReset(true); });
@@ -158,7 +159,8 @@
     showGuide(on) {
       $('guia').hidden = !on;
       if (on) {
-        this._guideTab(document.body.classList.contains('tactil') ? 'tactil' : 'escritorio');
+        var b = document.body.classList;
+        this._guideTab(b.contains('mando') ? 'mando' : (b.contains('tactil') ? 'tactil' : 'escritorio'));
         $('guia').scrollTop = 0;
         $('btn-guia-cerrar').focus({ preventScroll: true });
       }
@@ -196,7 +198,7 @@
     }
 
     _guideTab(which) {
-      ['escritorio', 'tactil'].forEach(function (k) {
+      ['escritorio', 'tactil', 'mando'].forEach(function (k) {
         $('guia-' + k).hidden = k !== which;
         $('guia-tab-' + k).setAttribute('aria-selected', String(k === which));
       });

@@ -50,6 +50,7 @@
       this.tele = new MR.Tele(this);
       this.bosque = new MR.Bosque(this);
       this.clima = new MR.Clima(this);
+      this.gamepad = new MR.GamepadControls(this);
       this.ui.bindTele(this.tele);
       this.touch = new MR.TouchControls(this);
       this.tilt = new MR.Tilt();
@@ -159,6 +160,7 @@
     frame(now) {
       var dt = Math.min(0.05, Math.max(0, (now - this.lastTime) / 1000));
       this.lastTime = now;
+      this.gamepad.poll(dt);
       if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); }
       this.retro.render(this.world.scene, this.player.camera, {
         blink: this.state === 'ended' ? 1 : Math.max(this.player.blink.amount, this.bosque.fade),
