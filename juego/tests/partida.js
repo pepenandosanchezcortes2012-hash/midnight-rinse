@@ -406,6 +406,44 @@
       return 'consumibles 8/6/4 vs 2/2/1; eventos cada ' + calm.interval.toFixed(0) + ' s vs ' + hell.interval.toFixed(0) + ' s';
     }],
 
+    ['Continuar turno: se guarda solo y vuelve igual', async function () {
+      localStorage.removeItem('midnight-rinse/partida');
+      var ctx = await load();
+      check(ctx.w.document.getElementById('btn-continuar-turno').hidden, 'apareció «Continuar» sin turno guardado');
+      start(ctx);
+      var g = ctx.g;
+      // Un turno a media noche con muchas cosas en juego.
+      g.minutes = 200; g.dread = 0.42;
+      g.gameplay.coins = 3; g.gameplay.washers[5].running = true; g.gameplay.washers[5].remaining = 17;
+      g.gameplay.puddleActive = [true, false, true, false, false, true, false, false].slice(0, g.gameplay.puddleActive.length);
+      g.gameplay._applyPuddles();
+      g.horror.placeCustomer('mostrador'); g.horror.customer.present = true;
+      g.consumables.used.cigarros = 2; g.consumables.cigarettes = 3;
+      g.bosque.go(); step(ctx, 40);
+      g.bosque.takePage(0); g.closeNote(); g.bosque.takePage(3); g.closeNote();
+      g.player.pos.set(-2.1, 0, 118.4); g.player.yaw = 1.1;
+      g.pause();
+      check(localStorage.getItem('midnight-rinse/partida'), 'no se guardó al pausar');
+      // Como si la app se hubiera cerrado: cargar de nuevo y continuar.
+      var ctx2 = await load();
+      var b = ctx2.w.document.getElementById('btn-continuar-turno');
+      check(!b.hidden && /03:20/.test(b.textContent), 'el botón no ofrece continuar a las 03:20 («' + b.textContent + '»)');
+      b.click();
+      var g2 = ctx2.g;
+      step(ctx2, 1);
+      check(g2.state === 'playing' && Math.abs(g2.minutes - 200) < 1, 'no continuó a la misma hora');
+      check(g2.bosque.outside && Math.hypot(g2.player.pos.x + 2.1, g2.player.pos.z - 118.4) < 0.5, 'no volvió al mismo lugar del bosque');
+      check(g2.bosque.pagesFound() === 2 && !g2.world.forest.pages[0].visible, 'no recordó las hojas');
+      check(g2.gameplay.coins === 3 && g2.gameplay.washers[5].running, 'no recordó monedas y lavadoras');
+      check(g2.horror.customer.present && g2.horror.customer.anchor === 'mostrador', 'él no volvió a su lugar');
+      check(g2.consumables.used.cigarros === 2 && g2.consumables.cigarettes === 3, 'no recordó los consumibles');
+      // Al terminar, el guardado se borra.
+      g2.end();
+      check(!localStorage.getItem('midnight-rinse/partida'), 'el guardado siguió después del final');
+      noErrors(ctx2);
+      return 'continuó a las 03:20 en el bosque con 2 hojas, monedas, lavadoras, él y consumibles';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

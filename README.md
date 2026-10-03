@@ -117,6 +117,11 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Sintoniza la radio** del mostrador en la 94.1. A las 02:40 habla el locutor.
 - **Las reglas del registro importan.** Hay dos finales.
 
+### Continuar turno
+El turno se guarda solo cada 10 segundos y al pausar o salir de la app; sirve si te llaman o el teléfono cierra el juego. En la pantalla de título aparece **«Continuar turno (02:47 · Normal)»**.
+- **Qué se guarda:** la hora, dónde estabas (también en el bosque), las lavadoras, los charcos, tus monedas, el trapeador, la radio, los consumibles, las hojas y dónde estaba *él*.
+- **Cuándo se borra:** al terminar el turno, al empezar uno nuevo o al **abandonarlo**.
+
 ### Dificultad
 En **Opciones → Dificultad**:
 - **Tranquilo:** sustos espaciados, 8 cigarros, 6 tragos y 4 porros. Los lentes se empañan más lento y se perdonan hasta 6 faltas.

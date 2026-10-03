@@ -96,7 +96,16 @@
       document.body.classList.add('tactil');
     }
 
-    start() {
+    /** Continuar el turno guardado (botón de la pantalla de título). */
+    continueShift() {
+      var saved = MR.Partida.load();
+      if (!saved) { return; }
+      this.ui.options.difficulty = saved.difficulty;
+      this.start(saved);
+    }
+
+    /** Empieza el turno; con saved, lo continúa desde el guardado. */
+    start(saved) {
       this.options = this.ui.options;
       this.diff = MR.DIFICULTAD[this.options.difficulty] || MR.DIFICULTAD.normal;
       this.consumables.cigarettes = this.diff.cigarros;
@@ -118,6 +127,12 @@
       if (this.music.connected()) { this.gameplay.tuneTo(MR.MusicLink.STATION); }
       this.state = 'playing';
       this.lastTime = performance.now();
+      this.saveTimer = 10;
+      if (saved) {
+        MR.Partida.restore(this, saved);
+        return;
+      }
+      MR.Partida.clear(); // turno nuevo: el guardado anterior ya no vale
       this.ui.subtitle('01:10. Turno de noche en la Lavandería La Espuma.', 5);
       this.ui.subtitle('La hoja del registro está sobre el mostrador.', 5);
       this.ui.subtitle(this.touchUI ? '(Tres dedos: pausa y guía de controles.)' : '(H: guía de controles · Esc: pausa.)', 6);
@@ -136,6 +151,7 @@
     pause() {
       if (this.state !== 'playing') { return; }
       this.state = 'paused';
+      MR.Partida.save(this);
       this.music.pause();
       this.audio.pause();
       this.touch.reset();
@@ -278,6 +294,9 @@
       this.gameplay.update(dt, dMin, this.minutes);
       this.horror.update(dt, this.player);
       this.gato.update(dt);
+      // Guardado automático (Continuar turno).
+      this.saveTimer -= dt;
+      if (this.saveTimer <= 0) { this.saveTimer = 10; MR.Partida.save(this); }
       this._beats(prevMinutes);
       this._question(dt);
       this._dread(dt);
@@ -544,6 +563,7 @@
     end(reason) {
       if (this.state === 'ended') { return; }
       this.state = 'ended';
+      MR.Partida.clear();
       if (this.question) { this.question = null; this.stats.respuesta = 'sin_respuesta'; }
       this.ui.hideChoices();
       this.closeNote();

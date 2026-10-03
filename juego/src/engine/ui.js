@@ -20,8 +20,10 @@
       this._bindOptions();
       var self = this;
       $('btn-comenzar').addEventListener('click', function () { self._saveOptions(); game.start(); });
+      $('btn-continuar-turno').addEventListener('click', function () { self._saveOptions(); game.continueShift(); });
+      this.refreshContinue();
       $('btn-continuar').addEventListener('click', function () { game.resume(); });
-      $('btn-abandonar').addEventListener('click', function () { window.location.reload(); });
+      $('btn-abandonar').addEventListener('click', function () { MR.Partida.clear(); window.location.reload(); });
       $('btn-volver').addEventListener('click', function () { window.location.reload(); });
       $('btn-borrar-registro').addEventListener('click', function () { game.shift.reset(); self.refreshRegistry(); });
       // Guía de controles: desde el título y desde la pausa; Esc la cierra.
@@ -110,6 +112,17 @@
       this.el.realTime.hidden = !show;
       if (show) {
         this.el.realTime.textContent = 'Son las ' + MR.Util.clockText(h * 60 + now.getMinutes()) + '. Deberías estar durmiendo.';
+      }
+    }
+
+    /** Botón «Continuar turno (02:47 · Normal)» si hay un turno guardado. */
+    refreshContinue() {
+      var b = $('btn-continuar-turno');
+      var d = MR.Partida && MR.Partida.load();
+      b.hidden = !d;
+      if (d) {
+        var diff = MR.DIFICULTAD[d.difficulty] || MR.DIFICULTAD.normal;
+        b.textContent = 'Continuar turno (' + MR.Util.clockText(Math.floor(d.minutes)) + ' · ' + diff.nombre + ')';
       }
     }
 

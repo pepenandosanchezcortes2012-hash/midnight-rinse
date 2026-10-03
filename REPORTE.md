@@ -241,6 +241,14 @@ El proyecto pasó por dos etapas:
 - **Fondo degradado:** se ve la escena arriba y el texto queda legible abajo.
 - **Al empezar el turno:** `player.update` vuelve a tomar la cámara.
 
+## 20. Continuar turno
+- **`partida.js`:** guarda solo datos, sin objetos de three.js, en `midnight-rinse/partida`, cada 10 s y al pausar (incluye salir de la app).
+- **Cuándo no guarda:** con una pregunta abierta o a mitad de un cruce de puerta.
+- **Qué restaura:** hora, pavor, faltas, banderas del guion, consumibles, monedas, bandeja, charcos, lavadoras y secadoras, radio, trapeador, el cliente en su ancla, el bosque (afuera y hojas) y la posición.
+- **Botón en el título:** «Continuar turno (hora · dificultad)».
+- **Cuándo se borra:** al terminar, al empezar un turno nuevo o al abandonar.
+- **Prueba nueva:** se guarda a las 03:20 en el bosque, se recarga y todo vuelve igual. Resultado: 17/17.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
