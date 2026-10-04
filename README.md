@@ -2,6 +2,8 @@
 
 Terror liminal acogedor en primera persona, con estética PS1 a 320×240. **+18:** contiene consumo de tabaco, alcohol y cannabis (ficción). Es tu turno de noche en la Lavandería La Espuma, de 01:10 a 05:12. No hay HUD: todo se hace con las manos (monedas, perillas, filtros de pelusa, el trapeador y el vaho de tus lentes). El horror nunca ataca de frente: solo ocurre fuera de tu campo de visión o mientras parpadeas.
 
+**English version:** the game is also in English. It picks your browser language, or change it in *Options → Idioma · Language* (or open it with `?lang=en`).
+
 ## Cómo jugar
 
 **Doble clic en `juego/index.html`.** No necesita instalación, servidor ni internet: Three.js r128 va incluido en `juego/vendor/`. Funciona en Chrome, Edge o Firefox con WebGL. Usa audífonos.
@@ -238,6 +240,18 @@ Antes de subir cambios, sella `index.html` para que los navegadores no mezclen s
 ```bash
 py juego/herramientas/sellar_version.py   # añade ?v=<fecha-hora> a todos los scripts y estilos
 ```
+
+### Textos en inglés
+
+El texto en español es la clave: `MR.t('texto')` lo traduce en las salidas (subtítulos, hojas, menús, voces) y `MR.tf('Noche {n}', { n: 3 })` maneja los textos con datos. El diccionario vive en `juego/src/engine/textos_en.js`:
+
+```bash
+py juego/herramientas/textos.py                    # cuántos textos hay y cuántos faltan por traducir
+py juego/herramientas/textos.py --faltan f.json    # lista de los que faltan
+py juego/herramientas/textos.py --agregar t.json   # valida (etiquetas, {marcadores}, enlaces) y agrega traducciones
+```
+
+Si agregas un texto nuevo, que sea un literal (o una plantilla de `MR.tf`), no una suma de pedazos; la prueba «Versión en inglés» avisa si algo llega sin traducir.
 
 ## Verificación
 

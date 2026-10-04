@@ -185,10 +185,10 @@
       g.audio.click();
       MR.Haptics.pulse(15);
       g.noteOpen = true;
-      g.ui.showNote(p.texto, 'HOJA MOJADA DEL REGISTRO · ' + p.firma.toUpperCase());
+      g.ui.showNote(p.texto, MR.tf('HOJA MOJADA DEL REGISTRO · {f}', { f: MR.t(p.firma).toUpperCase() }));
       var n = this.pagesFound();
       g.logros.unlock('hoja');
-      g.ui.subtitle(n < 6 ? '(Hojas del registro: ' + n + ' de 6.)' : '(Tienes las seis hojas. La lavadora del claro te espera.)', 4);
+      g.ui.subtitle(n < 6 ? MR.tf('(Hojas del registro: {n} de 6.)', { n: n }) : '(Tienes las seis hojas. La lavadora del claro te espera.)', 4);
     }
 
     /** Tocar la lavadora del claro (con las seis hojas: el tercer final). */
@@ -207,7 +207,7 @@
         return;
       }
       if (n > 0) {
-        g.ui.subtitle('(La tapa no abre. Llevas ' + n + ' de 6 hojas del registro.)', 4);
+        g.ui.subtitle(MR.tf('(La tapa no abre. Llevas {n} de 6 hojas del registro.)', { n: n }), 4);
         g.audio.click();
         return;
       }

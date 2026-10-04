@@ -4,10 +4,11 @@
 
   function boot() {
     try {
+      MR.I18N.translateDom(); // inglés: el HTML se traduce antes de que el juego lo use
       window.midnightRinse = new MR.Game();
     } catch (error) {
       var box = document.getElementById('subtitulos');
-      box.textContent = 'No se pudo iniciar el juego: ' + error.message + '\n¿Tu navegador tiene WebGL activado?';
+      box.textContent = MR.tf('No se pudo iniciar el juego: {e}', { e: error.message }) + '\n' + MR.t('¿Tu navegador tiene WebGL activado?');
       throw error;
     }
   }

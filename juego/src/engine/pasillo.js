@@ -51,7 +51,7 @@
     /** Escribe tu nombre (el de las opciones) en el último casillero. */
     nameLocker(name) {
       var l = this.p.lastLabel;
-      var txt = (name || '').trim().toUpperCase().slice(0, 8) || 'TÚ';
+      var txt = (name || '').trim().toUpperCase().slice(0, 8) || MR.t('TÚ');
       l.ctx.fillStyle = '#e8e1cc';
       l.ctx.fillRect(0, 0, 32, 12);
       l.ctx.fillStyle = '#2b2a26';

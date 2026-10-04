@@ -357,7 +357,7 @@
       var x = panel.ctx;
       x.fillStyle = '#1a0d0a'; x.fillRect(0, 0, 32, 48);
       x.fillStyle = '#ffd27a'; x.font = 'bold 9px monospace'; x.textAlign = 'center';
-      x.fillText('CAFÉ', 16, 12);
+      x.fillText(MR.t('CAFÉ'), 16, 12);
       x.fillStyle = '#c8a070'; x.fillRect(9, 18, 14, 14);
       x.fillStyle = '#5a3a20'; x.fillRect(11, 20, 10, 10);
       x.fillStyle = '#ffd27a'; x.font = '7px monospace'; x.fillText('$1', 16, 42);
@@ -612,7 +612,7 @@
 
       // Siete casilleros: R., E., S., D., T., A. (las hojas del bosque)… y el tuyo.
       var lockerMat = R.material({ texture: 'casillero' });
-      var initials = ['R.', 'E.', 'S.', 'D.', 'T.', 'A.', 'TÚ'];
+      var initials = ['R.', 'E.', 'S.', 'D.', 'T.', 'A.', MR.t('TÚ')];
       var lockers = [];
       var lastLabel = null;
       initials.forEach(function (txt, i) {

@@ -151,7 +151,7 @@
       this.ui.subtitle('01:10. Turno de noche en la Lavandería La Espuma.', 5);
       this.ui.subtitle('La hoja del registro está sobre el mostrador.', 5);
       this.ui.subtitle(this.touchUI ? '(Tres dedos: pausa y guía de controles.)' : '(H: guía de controles · Esc: pausa.)', 6);
-      if (this.mod) { this.ui.subtitle('(Nota del gerente en la tablilla: «' + MR.NOCHES_ESPECIALES[this.mod].nota + '»)', 8); }
+      if (this.mod) { this.ui.subtitle(MR.tf('(Nota del gerente en la tablilla: «{nota}»)', { nota: MR.t(MR.NOCHES_ESPECIALES[this.mod].nota) }), 8); }
     }
 
     /** Móvil: pantalla completa y horizontal (si el navegador lo permite; si no, se juega igual). */
@@ -222,7 +222,7 @@
         for (var i = 0; i < 6; i += 1) { this.retro.setLightFactor(i, 0.12); this.world.panels[i].material.uniforms.uEmissive.value = 0.15; }
         var n = document.getElementById('noche');
         n.hidden = false;
-        n.textContent = this.logros.has('verdadero') ? 'Amaneció. Ya no vuelves… a menos que quieras.' : 'Amaneció. Pero esta noche vuelves.';
+        n.textContent = MR.t(this.logros.has('verdadero') ? 'Amaneció. Ya no vuelves… a menos que quieras.' : 'Amaneció. Pero esta noche vuelves.');
         n.classList.add('amanecer');
         document.getElementById('titulo').classList.add('amanecer');
       } else {
@@ -405,7 +405,7 @@
           } else {
             var line = scripts[n - 1];
             this.archivo.radio(n - 1);
-            this.ui.subtitle('[Radio] ' + line, 10);
+            this.ui.subtitle(MR.tf('[Radio] {l}', { l: MR.t(line) }), 10);
             this.audio.speak(line, 'locutor');
             if (/cinco y trece/.test(line)) { this.flags.heardTrueTime = true; } // la noche 7 revela la hora verdadera
           }
@@ -436,7 +436,7 @@
         this.gameplay.printReceipt();
         this.collapsed = true;
         this.gameplay.setCollapsed();
-        this.ui.subtitle('[La impresora vuelve a imprimir.] «' + collapseText + '»', 8);
+        this.ui.subtitle(MR.tf('[La impresora vuelve a imprimir.] «{t}»', { t: MR.t(collapseText) }), 8);
         this.ui.refreshRegistry();
         if (this.horror.customer.present) { this.horror.schedule('cliente_se_va', this.horror.customer.zone || 'banco', 4); }
       }
@@ -445,7 +445,7 @@
     _customerTalks() {
       this.talked = true;
       var line = 'Hace frío aquí dentro, ¿verdad? El agua de esas máquinas ya no se calienta.';
-      this.ui.subtitle('Cliente: ' + line, 6);
+      this.ui.subtitle(MR.tf('Cliente: {l}', { l: MR.t(line) }), 6);
       this.audio.speak(line, 'cliente');
       this.shift.update('customer_talked');
       this.ui.refreshRegistry();
@@ -475,15 +475,15 @@
     }
 
     _ask() {
-      var real = U.spokenTime(this.minutes);
+      var real = MR.I18N.spokenTime(this.minutes);
       this.question = { timer: 20, repeated: false, real: real };
       var q = 'Disculpe... ¿qué hora es?';
-      this.ui.subtitle('Cliente: ' + q, 5);
+      this.ui.subtitle(MR.tf('Cliente: {l}', { l: MR.t(q) }), 5);
       this.audio.speak(q, 'cliente');
-      var choices = ['Son ' + real + '.', 'Faltan cinco minutos para las seis.', '(No responder.)'];
+      var choices = [MR.tf('Son {hora}.', { hora: real }), 'Faltan cinco minutos para las seis.', '(No responder.)'];
       // Respuesta secreta: si leíste las seis hojas del bosque o abriste tu casillero, ya sabes la hora verdadera.
       if (this._knowsTrueTime()) { choices.push('Son las cinco y trece. Ya terminó.'); }
-      this.ui.showChoices('Cliente: «' + q + '»', choices);
+      this.ui.showChoices(MR.tf('Cliente: «{l}»', { l: MR.t(q) }), choices);
     }
 
     /** ¿Sabes la hora verdadera? (las seis hojas, tu casillero o la radio de la noche 7). */
@@ -523,7 +523,7 @@
         this.ui.subtitle('Tú: Son las cinco y trece. Ya terminó.', 3);
         setTimeout(function () {
           var reply = '…Entonces ya lo sabes.';
-          self.ui.subtitle('Cliente: ' + reply, 5);
+          self.ui.subtitle(MR.tf('Cliente: {l}', { l: MR.t(reply) }), 5);
           self.audio.speak(reply, 'cliente');
           self.ui.subtitle('(Se levanta despacio, camina hacia la puerta de vidrio y ya no está.)', 6);
           self.horror.customer.present = false;
@@ -539,17 +539,17 @@
         this.ui.subtitle('Tú: Faltan cinco minutos para las seis.', 3);
         setTimeout(function () {
           var reply = 'Gracias. Entonces todavía hay tiempo.';
-          self.ui.subtitle('Cliente: ' + reply, 5);
+          self.ui.subtitle(MR.tf('Cliente: {l}', { l: MR.t(reply) }), 5);
           self.audio.speak(reply, 'cliente');
         }, 1200);
         this.dread = Math.max(0, this.dread - 0.3);
         if (this.horror.customer.anchor !== 'banco') { this.horror.schedule('cliente_mueve', 'banco', 3, { to: 'banco' }); }
       } else if (choice === 1) {
         this.stats.respuesta = 'incorrecta';
-        this.ui.subtitle('Tú: Son ' + q.real + '.', 3);
+        this.ui.subtitle(MR.tf('Tú: Son {hora}.', { hora: q.real }), 3);
         setTimeout(function () {
           var reply = 'No. No es esa hora.';
-          self.ui.subtitle('Cliente: ' + reply, 4);
+          self.ui.subtitle(MR.tf('Cliente: {l}', { l: MR.t(reply) }), 4);
           self.audio.speak(reply, 'cliente');
           self.horror.schedule('apagon_total', 'jugador', 8, { seconds: 2.5 });
           self.horror.schedule('cliente_detras', 'jugador', 7);
@@ -595,13 +595,13 @@
     onWhisper() {
       var name = this.options.name;
       if (name && Math.random() < 0.5) {
-        this.ui.subtitle('(susurros: «…' + name + '…»)', 3);
-        this.audio.speak(name, 'susurro');
+        this.ui.subtitle(MR.tf('(susurros: «…{n}…»)', { n: name }), 3);
+        this.audio.speak(name, 'susurro', true);
         return;
       }
       var w = U.pick(MR.HISTORIA.susurros);
-      this.ui.subtitle('(susurros: «' + w + '»)', 3);
-      this.audio.speak(w.replace(/…/g, ''), 'susurro');
+      this.ui.subtitle(MR.tf('(susurros: «{w}»)', { w: MR.t(w) }), 3);
+      this.audio.speak(MR.t(w).replace(/…/g, ''), 'susurro', true);
     }
 
     onPhoneAnswered() {
@@ -613,7 +613,7 @@
         return;
       }
       var line ='No lo mires a la cara. Si te pregunta la hora... faltan cinco minutos para las seis. Faltan cinco minutos para las seis.';
-      this.ui.subtitle('[Teléfono] ' + line, 9);
+      this.ui.subtitle(MR.tf('[Teléfono] {l}', { l: MR.t(line) }), 9);
       this.audio.speak(line, 'telefono');
       this.flags.phone = true;
     }
@@ -645,7 +645,7 @@
       function hint(id, when, text) {
         if (said[id] || !when) { return; }
         said[id] = true;
-        self.ui.subtitle('(Pista: ' + text + ')', 6);
+        self.ui.subtitle(MR.tf('(Pista: {t})', { t: MR.t(text) }), 6);
       }
       hint('registro', this.minutes > C.SHIFT_START + 12 && !f.readNote, 'la hoja del registro está sobre el mostrador. Tócala para leer las reglas.');
       hint('lavadoras', this.minutes > C.SHIFT_START + 25 && gp.washers.filter(function (w) { return w.running; }).length < 3,
@@ -668,20 +668,21 @@
       var running = gp.washers.filter(function (w) { return w.running; }).length;
       var worst = gp.dryers.reduce(function (best, d, i) { return d.lint > best.lint ? { lint: d.lint, i: i } : best; }, { lint: -1, i: 0 });
       var ok = function (b) { return b ? '✔ ' : '☐ '; };
+      var cat = MR.I18N.cat;
       var lines = [
-        'Son las ' + U.clockText(Math.floor(mins)) + '.',
-        this.mod ? 'Nota del gerente: ' + MR.NOCHES_ESPECIALES[this.mod].nota : 'Noche normal. Que siga así.',
+        MR.tf('Son las {h}.', { h: U.clockText(Math.floor(mins)) }),
+        this.mod ? MR.tf('Nota del gerente: {nota}', { nota: MR.t(MR.NOCHES_ESPECIALES[this.mod].nota) }) : 'Noche normal. Que siga así.',
         '',
-        ok(puddles < 3) + 'Pasillo central: ' + puddles + (puddles === 1 ? ' charco' : ' charcos') +
-          (next ? ' (revisión a las ' + U.clockText(next) + '; con 3 o más es falta).' : ' (ya no hay más revisiones).'),
-        ok(running >= 3) + 'Lavadoras funcionando: ' + running + ' de 6 (con 3 o más, su ruido tapa el zumbido).',
-        ok(worst.lint < 0.7) + 'Filtros de pelusa: el más lleno, secadora ' + (worst.i + 1) + ' al ' + Math.round(Math.min(1, worst.lint) * 100) + ' %.'
+        cat(ok(puddles < 3), MR.tf(puddles === 1 ? 'Pasillo central: {n} charco' : 'Pasillo central: {n} charcos', { n: puddles }), ' ',
+          next ? MR.tf('(revisión a las {h}; con 3 o más es falta).', { h: U.clockText(next) }) : MR.t('(ya no hay más revisiones).')),
+        cat(ok(running >= 3), MR.tf('Lavadoras funcionando: {n} de 6 (con 3 o más, su ruido tapa el zumbido).', { n: running })),
+        cat(ok(worst.lint < 0.7), MR.tf('Filtros de pelusa: el más lleno, secadora {n} al {p} %.', { n: worst.i + 1, p: Math.round(Math.min(1, worst.lint) * 100) }))
       ];
       if (this.flags.customerSeen) { lines.push('• No le mires la cara al cliente del banco.'); }
       lines.push(this.flags.phone ? '• Si te pregunta la hora: «Faltan cinco minutos para las seis».' : '• Si alguien te pregunta la hora, responde con cuidado.');
-      if (this.pasillo.unlocked) { lines.push('• La puerta trasera quedó entreabierta.' + (this.pasillo.fuses ? '' : ' Los fusibles están allá.')); }
+      if (this.pasillo.unlocked) { lines.push(cat(MR.t('• La puerta trasera quedó entreabierta.'), this.pasillo.fuses ? '' : ' ' + MR.t('Los fusibles están allá.'))); }
       var pages = this.bosque.pagesFound();
-      if (pages > 0 || this.bosque.visits > 0) { lines.push('• Hojas del registro en el bosque: ' + pages + ' de 6.'); }
+      if (pages > 0 || this.bosque.visits > 0) { lines.push(MR.tf('• Hojas del registro en el bosque: {n} de 6.', { n: pages })); }
       this.noteOpen = true;
       this.ui.showNote(lines.join('\n'), 'TAREAS DEL TURNO · TABLILLA DEL MOSTRADOR', 'tareas');
       this.audio.click();
@@ -736,23 +737,24 @@
       var faults = s.mirada + s.pasillo + s.filtro + (s.respuesta === 'incorrecta' ? 2 : (s.respuesta === 'correcta' ? 0 : 1));
       var diff = this.diff || MR.DIFICULTAD.normal;
       var good = s.respuesta === 'correcta' && faults <= diff.faltas;
-      var answer = { correcta: 'correcta', incorrecta: 'incorrecta', sin_respuesta: 'sin respuesta', no_pregunto: 'nunca te la preguntó' }[s.respuesta];
+      var answer = { correcta: 'Respuesta a la hora: correcta', incorrecta: 'Respuesta a la hora: incorrecta',
+        sin_respuesta: 'Respuesta a la hora: sin respuesta', no_pregunto: 'Respuesta a la hora: nunca te la preguntó' }[s.respuesta];
+      var used = this.consumables.used;
       var summary = [
-        'Dificultad: ' + diff.nombre + ' (faltas permitidas para el final bueno: ' + diff.faltas + ')' +
-          (this.mod ? ' · Noche especial: ' + MR.NOCHES_ESPECIALES[this.mod].nombre : ''),
-        'Respuesta a la hora: ' + answer,
-        'Miradas a su cara después de la advertencia: ' + s.mirada,
-        'Revisiones del pasillo con charcos: ' + s.pasillo + ' de ' + MR.Config.MOP_CHECKS.length,
-        'Filtros de pelusa saturados: ' + s.filtro,
-        'Charcos fregados: ' + s.charcos,
-        'Parpadeos: ' + s.parpadeos,
-        'Cigarros: ' + this.consumables.used.cigarros + ' · Tragos de la petaca: ' + this.consumables.used.tragos +
-          ' · Porros: ' + this.consumables.used.porros + ' · Cafés: ' + this.consumables.used.cafes,
-        'Salidas al bosque: ' + this.bosque.visits + ' · Hojas del registro: ' + this.bosque.pagesFound() + ' de 6',
-        'Caricias a Pelusa: ' + this.gato.pets + ' · Bufidos de alarma: ' + this.gato.hisses +
-          ' · Objetos perdidos encontrados: ' + this.objetos.foundTonight,
-        'Pasillo de servicio: ' + this.pasillo.visits + (this.pasillo.visits === 1 ? ' visita' : ' visitas') +
-          ' · Fusibles: ' + (this.pasillo.fuses ? 'restablecidos' : 'sin tocar')
+        MR.I18N.cat(MR.tf('Dificultad: {d} (faltas permitidas para el final bueno: {f})', { d: MR.t(diff.nombre), f: diff.faltas }),
+          this.mod ? ' · ' + MR.tf('Noche especial: {n}', { n: MR.t(MR.NOCHES_ESPECIALES[this.mod].nombre) }) : ''),
+        answer,
+        MR.tf('Miradas a su cara después de la advertencia: {n}', { n: s.mirada }),
+        MR.tf('Revisiones del pasillo con charcos: {n} de {de}', { n: s.pasillo, de: MR.Config.MOP_CHECKS.length }),
+        MR.tf('Filtros de pelusa saturados: {n}', { n: s.filtro }),
+        MR.tf('Charcos fregados: {n}', { n: s.charcos }),
+        MR.tf('Parpadeos: {n}', { n: s.parpadeos }),
+        MR.tf('Cigarros: {c} · Tragos de la petaca: {t} · Porros: {p} · Cafés: {k}', { c: used.cigarros, t: used.tragos, p: used.porros, k: used.cafes }),
+        MR.tf('Salidas al bosque: {n} · Hojas del registro: {h} de 6', { n: this.bosque.visits, h: this.bosque.pagesFound() }),
+        MR.tf('Caricias a Pelusa: {c} · Bufidos de alarma: {b} · Objetos perdidos encontrados: {o}',
+          { c: this.gato.pets, b: this.gato.hisses, o: this.objetos.foundTonight }),
+        MR.I18N.cat(MR.tf(this.pasillo.visits === 1 ? 'Pasillo de servicio: {n} visita' : 'Pasillo de servicio: {n} visitas', { n: this.pasillo.visits }),
+          ' · ', MR.t(this.pasillo.fuses ? 'Fusibles: restablecidos' : 'Fusibles: sin tocar'))
       ];
       document.body.classList.remove('jugando');
       this.tilt.stop();
@@ -763,7 +765,7 @@
         5 * this.bosque.pagesFound() + (reason === 'bosque' ? 15 : 0) + (good ? 10 : 0) + Math.min(10, s.charcos * 2) +
         (reason === 'bosque' && this.flags.secreto ? 25 : 0);
       var grade = MR.Game.grade(score);
-      summary.unshift('Evaluación del turno: ' + grade[0] + ' (' + Math.max(0, Math.round(score)) + ' puntos)');
+      summary.unshift(MR.tf('Evaluación del turno: {nota} ({p} puntos)', { nota: grade[0], p: Math.max(0, Math.round(score)) }));
       this.grade = grade[0];
       // Logros del final del turno.
       var L = this.logros;
@@ -788,12 +790,12 @@
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {
         this.ui.showEnd('05:12 · Turno terminado',
-          'Las lavadoras se detienen una por una. Afuera sigue lloviendo, pero la puerta por fin abre. El banco amarillo está vacío y seco.' +
-            (this.flags.secreto ? ' Él no volvió a preguntar la hora. Nadie volverá a preguntártela.' : ''),
+          MR.I18N.cat(MR.t('Las lavadoras se detienen una por una. Afuera sigue lloviendo, pero la puerta por fin abre. El banco amarillo está vacío y seco.'),
+            this.flags.secreto ? ' ' + MR.t('Él no volvió a preguntar la hora. Nadie volverá a preguntártela.') : ''),
           summary);
       } else {
         this.ui.showEnd('01:10 · Turno de medianoche',
-          'Parpadeas. El reloj marca la una y diez. Sobre el mostrador, el registro dice: «' + MR.TEXTS.collapse + '» El turno no terminó.',
+          MR.tf('Parpadeas. El reloj marca la una y diez. Sobre el mostrador, el registro dice: «{t}» El turno no terminó.', { t: MR.t(MR.TEXTS.collapse) }),
           summary);
       }
     }

@@ -58,7 +58,7 @@
       this.got[id] = Date.now();
       this._save();
       var g = this.game;
-      if (g.state !== 'ended') { g.ui.subtitle('★ Logro: ' + def.titulo, 4); }
+      if (g.state !== 'ended') { g.ui.subtitle(MR.tf('★ Logro: {t}', { t: MR.t(def.titulo) }), 4); }
       if (g.audio.ctx) { g.audio.ding(); }
       MR.Haptics.pulse([15, 40, 15]);
       g.ui.renderLogros(this);

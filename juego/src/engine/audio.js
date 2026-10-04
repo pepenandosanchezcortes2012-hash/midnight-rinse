@@ -495,11 +495,14 @@
     }
 
     /** Voz sintetizada opcional. role: 'cliente' | 'locutor' | 'telefono' | 'susurro'. */
-    speak(text, role) {
+    /** Voz sintetizada en el idioma del juego (`raw`: el texto ya viene listo, p. ej. tu nombre). */
+    speak(text, role, raw) {
       if (!this.voices || !window.speechSynthesis) { return; }
-      var u = new SpeechSynthesisUtterance(text);
-      var voices = window.speechSynthesis.getVoices().filter(function (v) { return /^es/i.test(v.lang); });
-      if (voices.length) { u.voice = voices[0]; u.lang = voices[0].lang; } else { u.lang = 'es-MX'; }
+      var en = MR.I18N && MR.I18N.lang === 'en';
+      var u = new SpeechSynthesisUtterance(raw ? text : MR.t(text));
+      var re = en ? /^en/i : /^es/i;
+      var voices = window.speechSynthesis.getVoices().filter(function (v) { return re.test(v.lang); });
+      if (voices.length) { u.voice = voices[0]; u.lang = voices[0].lang; } else { u.lang = en ? 'en-US' : 'es-MX'; }
       var conf = { cliente: [0.55, 0.78, 0.9], locutor: [0.9, 0.92, 0.55], telefono: [0.4, 0.8, 0.45], susurro: [0.2, 0.7, 0.25] }[role] ||
         [1, 1, 0.8];
       u.pitch = conf[0];

@@ -181,9 +181,9 @@
         this.title = d && d.title ? d.title : '';
         this.errors = 0;
         if (this.game.logros) { this.game.logros.unlock('tele'); }
-        this._setStatus('Sonando en la tele' + (this.title ? ': «' + this.title + '»' : '') + '.');
+        this._setStatus(this.title ? MR.tf('Sonando en la tele: «{t}».', { t: this.title }) : 'Sonando en la tele.');
       } else if (s === S.PAUSED) {
-        this._setStatus('En pausa' + (this.title ? ': «' + this.title + '»' : '') + '.');
+        this._setStatus(this.title ? MR.tf('En pausa: «{t}».', { t: this.title }) : 'En pausa.');
       } else if (s === S.ENDED && this.link && !this.link.list) {
         this.player.seekTo(0, true); // una sola canción: se repite toda la noche
         this._play();
@@ -193,14 +193,14 @@
     _onError(code) {
       var blocked = 'Esa canción no se deja reproducir fuera de YouTube (lo decide la disquera).';
       var msg = { 2: 'El enlace no es válido.', 5: 'Tu navegador no pudo reproducir ese video.', 100: 'Ese video no existe o es privado.',
-        101: blocked, 150: blocked, 153: 'YouTube rechazó la conexión desde esta página.' }[code] || 'YouTube dio un error (' + code + ').';
+        101: blocked, 150: blocked, 153: 'YouTube rechazó la conexión desde esta página.' }[code] || MR.tf('YouTube dio un error ({c}).', { c: code });
       if (this.link && this.link.list && this.errors < 6) {
         this.errors += 1;
-        this._setStatus(msg + ' Paso a la siguiente…');
+        this._setStatus(MR.tf('{m} Paso a la siguiente…', { m: MR.t(msg) }));
         var p = this.player;
         setTimeout(function () { try { p.nextVideo(); } catch (e) { /* reproductor reemplazado */ } }, 900);
       } else {
-        this._setStatus(msg + ' Prueba otra versión de la canción (por ejemplo, la de «Audio» o «Letra»).');
+        this._setStatus(MR.tf('{m} Prueba otra versión de la canción (por ejemplo, la de «Audio» o «Letra»).', { m: MR.t(msg) }));
       }
     }
 

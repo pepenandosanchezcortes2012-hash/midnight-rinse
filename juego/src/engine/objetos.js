@@ -58,7 +58,8 @@
       var isNew = !this.got[def.id];
       if (isNew) { this.got[def.id] = g.night || 1; this._save(); }
       this.foundTonight += 1;
-      g.ui.subtitle('(Entre la ropa húmeda: ' + def.nombre.toLowerCase() + '. ' + def.desc + ')' + (isNew ? '' : ' (Ya tenías uno igual.)'), 7);
+      g.ui.subtitle(MR.I18N.cat(MR.tf('(Entre la ropa húmeda: {n}. {d})', { n: MR.t(def.nombre).toLowerCase(), d: MR.t(def.desc) }),
+        isNew ? '' : ' ' + MR.t('(Ya tenías uno igual.)')), 7);
       g.audio.ding();
       MR.Haptics.pulse([15, 30, 15]);
       g.ui.renderObjetos(this);
@@ -71,7 +72,7 @@
       var got = this.got;
       return LIST.map(function (o) {
         var have = !!got[o.id];
-        return { titulo: have ? o.nombre : '???', desc: have ? o.desc + ' (noche ' + got[o.id] + ')' : 'Algún ciclo lo dejará.', hecho: have };
+        return { titulo: have ? o.nombre : '???', desc: have ? MR.I18N.cat(MR.t(o.desc), ' ', MR.tf('(noche {n})', { n: got[o.id] })) : 'Algún ciclo lo dejará.', hecho: have };
       });
     }
   }

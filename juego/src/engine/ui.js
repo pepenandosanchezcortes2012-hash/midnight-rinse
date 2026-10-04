@@ -54,6 +54,10 @@
         var li = e.target.closest('li');
         if (li && li.dataset.n) { game.answerChoice(parseInt(li.dataset.n, 10)); }
       });
+      // Idioma: cambiarlo guarda la opción y recarga la página.
+      var lang = $('opt-idioma');
+      lang.value = MR.I18N.lang;
+      lang.addEventListener('change', function () { MR.I18N.set(lang.value); });
       this.refreshRegistry();
       this.refreshRealTime();
       setInterval(function () { self._renderSubtitles(); }, 200);
@@ -104,7 +108,7 @@
 
     refreshRegistry() {
       var text = this.game.shift.currentText();
-      this.el.registry.textContent = text ? 'El registro guardado dice: «' + text + '»' : 'El registro del turno está vacío.';
+      this.el.registry.textContent = text ? MR.tf('El registro guardado dice: «{t}»', { t: MR.t(text) }) : MR.t('El registro del turno está vacío.');
     }
 
     refreshRealTime() {
@@ -113,7 +117,7 @@
       var show = this.options.meta && h >= 2 && h < 5;
       this.el.realTime.hidden = !show;
       if (show) {
-        this.el.realTime.textContent = 'Son las ' + MR.Util.clockText(h * 60 + now.getMinutes()) + '. Deberías estar durmiendo.';
+        this.el.realTime.textContent = MR.tf('Son las {h}. Deberías estar durmiendo.', { h: MR.Util.clockText(h * 60 + now.getMinutes()) });
       }
     }
 
@@ -123,7 +127,7 @@
       try { n = parseInt(window.localStorage.getItem('midnight-rinse/noches') || '0', 10) || 0; } catch (e) { n = 0; }
       var el = $('noche');
       el.hidden = n < 1;
-      el.textContent = 'Noche ' + (n + 1);
+      el.textContent = MR.tf('Noche {n}', { n: n + 1 });
     }
 
     /** Botón «Continuar turno (02:47 · Normal)» si hay un turno guardado. */
@@ -133,7 +137,7 @@
       b.hidden = !d;
       if (d) {
         var diff = MR.DIFICULTAD[d.difficulty] || MR.DIFICULTAD.normal;
-        b.textContent = 'Continuar turno (' + MR.Util.clockText(Math.floor(d.minutes)) + ' · ' + diff.nombre + ')';
+        b.textContent = MR.tf('Continuar turno ({h} · {d})', { h: MR.Util.clockText(Math.floor(d.minutes)), d: MR.t(diff.nombre) });
       }
     }
 
@@ -158,7 +162,7 @@
           group = e.grupo;
           var h = document.createElement('li');
           h.className = 'grupo';
-          h.textContent = group;
+          h.textContent = MR.t(group);
           list.appendChild(h);
         }
         var li = document.createElement('li');
@@ -167,7 +171,7 @@
         mark.className = 'marca';
         mark.textContent = e.hecho ? '▤' : '·';
         var body = document.createElement('span');
-        body.textContent = e.titulo;
+        body.textContent = MR.t(e.titulo);
         li.appendChild(mark);
         li.appendChild(body);
         if (e.hecho) {
@@ -195,10 +199,10 @@
         mark.textContent = l.hecho ? on : off;
         var body = document.createElement('span');
         var b = document.createElement('b');
-        b.textContent = l.titulo;
+        b.textContent = MR.t(l.titulo);
         body.appendChild(b);
         body.appendChild(document.createElement('br'));
-        body.appendChild(document.createTextNode(l.desc));
+        body.appendChild(document.createTextNode(MR.t(l.desc)));
         li.appendChild(mark);
         li.appendChild(body);
         list.appendChild(li);
@@ -218,10 +222,10 @@
         mark.textContent = l.hecho ? '★' : '☆';
         var body = document.createElement('span');
         var b = document.createElement('b');
-        b.textContent = l.titulo;
+        b.textContent = MR.t(l.titulo);
         body.appendChild(b);
         body.appendChild(document.createElement('br'));
-        body.appendChild(document.createTextNode(l.desc));
+        body.appendChild(document.createTextNode(MR.t(l.desc)));
         li.appendChild(mark);
         li.appendChild(body);
         list.appendChild(li);
@@ -232,7 +236,7 @@
     bindMusic(music) {
       var o = this.options;
       music.lofi = o.lofi;
-      music.onStatus = function (text) { $('musica-estado').textContent = text; };
+      music.onStatus = function (text) { $('musica-estado').textContent = MR.t(text); };
       $('btn-abrir-ytm').addEventListener('click', function () { window.open('https://music.youtube.com/', '_blank', 'noopener'); });
       $('btn-conectar-pestana').addEventListener('click', function () { music.connectTab(); });
       $('musica-archivos').addEventListener('change', function (e) { music.loadFiles(e.target.files); });
@@ -247,7 +251,7 @@
       var input = $('tele-enlace');
       var slot = $('tele-hueco');
       if (o.teleLink) { input.value = o.teleLink; }
-      tele.onStatus = function (text) { $('tele-estado').textContent = text; };
+      tele.onStatus = function (text) { $('tele-estado').textContent = MR.t(text); };
       function go() {
         slot.hidden = false; // el reproductor aparece aquí: en iPhone hay que tocar ▶ la primera vez
         tele.load(input.value).then(function (ok) {
@@ -272,7 +276,7 @@
       if (!on) { $('guia').hidden = true; }
       if (on && this.game.bosque) {
         var away = this.game.bosque.outside || (this.game.pasillo && this.game.pasillo.inside);
-        $('btn-bosque').textContent = away ? 'Volver a la lavandería' : 'Salir al bosque';
+        $('btn-bosque').textContent = MR.t(away ? 'Volver a la lavandería' : 'Salir al bosque');
       }
     }
 
@@ -328,8 +332,9 @@
     /** La hoja vista de cerca: el registro del mostrador o una hoja mojada del bosque (con su firma). */
     showNote(text, header, cls) {
       this.el.note.classList.toggle('tareas', cls === 'tareas');
-      this.el.noteText.textContent = text || '(hoja en blanco)';
-      this.el.note.querySelector('.encabezado').textContent = header || 'REGISTRO DE TURNO · LAVANDERÍA LA ESPUMA';
+      // Línea por línea: la tablilla de tareas llega como varias líneas ya armadas.
+      this.el.noteText.textContent = String(text || '(hoja en blanco)').split('\n').map(MR.t).join('\n');
+      this.el.note.querySelector('.encabezado').textContent = MR.t(header || 'REGISTRO DE TURNO · LAVANDERÍA LA ESPUMA');
       this.el.note.hidden = false;
     }
 
@@ -337,7 +342,7 @@
 
     subtitle(text, seconds) {
       if (!this.options.subtitles) { return; }
-      this.lines.push({ text: text, until: performance.now() + (seconds || 4) * 1000 });
+      this.lines.push({ text: MR.t(text), until: performance.now() + (seconds || 4) * 1000 });
       if (this.lines.length > 3) { this.lines.shift(); }
       this._renderSubtitles();
     }
@@ -349,12 +354,12 @@
     }
 
     showChoices(question, options) {
-      this.el.question.textContent = question;
+      this.el.question.textContent = MR.t(question);
       this.el.choices.textContent = '';
       var list = this.el.choices;
       options.forEach(function (o, i) {
         var li = document.createElement('li');
-        li.textContent = o;
+        li.textContent = MR.t(o);
         li.dataset.n = String(i + 1);
         list.appendChild(li);
       });
@@ -377,11 +382,11 @@
     shareText() {
       var g = this.game;
       var title = this.el.endTitle.textContent;
-      var diff = g.diff ? g.diff.nombre : 'Normal';
+      var diff = MR.t(g.diff ? g.diff.nombre : 'Normal');
       var pages = g.bosque.pagesFound();
-      return 'Saqué ' + (g.grade || '?') + ' en Midnight Rinse (' + diff + '): «' + title + '».' +
-        (pages ? ' Encontré ' + pages + ' de 6 hojas en el bosque.' : '') +
-        ' ¿Aguantas el turno de medianoche?';
+      return MR.tf('Saqué {nota} en Midnight Rinse ({dif}): «{titulo}».', { nota: g.grade || '?', dif: diff, titulo: title }) +
+        (pages ? ' ' + MR.tf('Encontré {n} de 6 hojas en el bosque.', { n: pages }) : '') +
+        ' ' + MR.t('¿Aguantas el turno de medianoche?');
     }
 
     /** Compartir: menú del teléfono (Web Share) o, si no hay, copiar al portapapeles. */
@@ -395,7 +400,7 @@
       }
       var full = text + ' ' + url;
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(full).then(function () { status.textContent = 'Copiado. Pégalo donde quieras.'; },
+        navigator.clipboard.writeText(full).then(function () { status.textContent = MR.t('Copiado. Pégalo donde quieras.'); },
           function () { status.textContent = full; });
       } else {
         status.textContent = full;
@@ -405,17 +410,17 @@
     /** La nota del gerente (A–F) en la pantalla final. */
     showGrade(letter, comment) {
       $('final-letra').textContent = letter;
-      $('final-gerente').textContent = comment;
+      $('final-gerente').textContent = MR.t(comment);
     }
 
     showEnd(title, text, summary) {
-      this.el.endTitle.textContent = title;
-      this.el.endText.textContent = text;
+      this.el.endTitle.textContent = MR.t(title);
+      this.el.endText.textContent = MR.t(text);
       this.el.endList.textContent = '';
       var list = this.el.endList;
       summary.forEach(function (s) {
         var li = document.createElement('li');
-        li.textContent = s;
+        li.textContent = MR.t(s);
         list.appendChild(li);
       });
       this.el.end.hidden = false;

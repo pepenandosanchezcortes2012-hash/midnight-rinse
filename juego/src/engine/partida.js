@@ -120,7 +120,7 @@
       g.player.yaw = d.player.yaw;
       g.player.pitch = d.player.pitch;
       g.ui.lines = [];
-      g.ui.subtitle('(Continúas el turno. Son las ' + MR.Util.clockText(Math.floor(d.minutes)) + '.)', 4);
+      g.ui.subtitle(MR.tf('(Continúas el turno. Son las {h}.)', { h: MR.Util.clockText(Math.floor(d.minutes)) }), 4);
     }
   };
 })(window.MR = window.MR || {});

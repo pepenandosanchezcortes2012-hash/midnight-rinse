@@ -50,7 +50,7 @@
       this.index = gp.index;
       document.body.classList.add('mando');
       var name = String(gp.id || 'control').replace(/\s*\(.*$/, '').slice(0, 40);
-      this.game.ui.subtitle('(Control conectado: ' + name + '.)', 3);
+      this.game.ui.subtitle(MR.tf('(Control conectado: {n}.)', { n: name }), 3);
     }
 
     pad() {

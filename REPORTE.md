@@ -409,6 +409,13 @@ El proyecto pasó por dos etapas:
 - **Qué da:** el final «05:13 · Fin del turno», 25 puntos extra en la evaluación y el logro oculto «Fin del turno». A partir de ahí, el título amanece con «Ya no vuelves… a menos que quieras».
 - **Prueba nueva.** Resultado: 38/38.
 
+## 46. Versión en inglés
+- **Cómo funciona:** se traduce a la salida. `MR.t` busca el texto en español en el diccionario (`textos_en.js`, 541 textos); `MR.tf` traduce plantillas con datos (horas, conteos, nombres). El HTML se traduce al arrancar, y los párrafos con formato (`<b>`, teclas) se traducen enteros con sus etiquetas. Las voces sintetizadas usan una voz en inglés y la hora se dice en inglés («four oh seven»).
+- **Idioma:** el del navegador, la opción *Idioma · Language* (recarga la página) o `?lang=en`.
+- **Traducción:** borrador de Gemini 3.8 Flash (agy) en 7 lotes, con contexto del juego y un glosario fijo para que las mecánicas se digan igual (la hora, el teléfono, las faltas → *strikes*). Revisé las 541 entradas a mano y corregí algunas. `herramientas/textos.py` extrae los textos (HTML y literales de JS) y valida cada traducción (mismas etiquetas, mismos `{marcadores}`, sin enlaces ni código nuevos).
+- **Cambios para que todo se pueda traducir:** unas 45 concatenaciones pasaron a ser plantillas. Las pruebas se cargan con `lang=es`.
+- **Prueba nueva:** juega en inglés (menús, tablilla, susurros, teléfono, diálogo, logro, bosque, final y compartir) y falla si algún texto llega sin traducir. Resultado: 39/39.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -130,7 +130,7 @@
         self._tuneIfPlaying();
         return true;
       }).catch(function (err) {
-        self._setStatus(err && err.name === 'NotAllowedError' ? 'Captura cancelada.' : 'No se pudo capturar la pestaña: ' + (err && err.message));
+        self._setStatus(err && err.name === 'NotAllowedError' ? 'Captura cancelada.' : MR.tf('No se pudo capturar la pestaña: {e}', { e: err && err.message }));
         return false;
       });
     }
@@ -156,7 +156,8 @@
       this.kind = 'archivos';
       this.element.loop = files.length === 1;
       this._playIndex();
-      this._setStatus('Conectado: ' + files.length + (files.length === 1 ? ' canción' : ' canciones') + ' en la radio del mostrador (99.9 FM).');
+      this._setStatus(MR.tf(files.length === 1 ? 'Conectado: {n} canción en la radio del mostrador (99.9 FM).' :
+        'Conectado: {n} canciones en la radio del mostrador (99.9 FM).', { n: files.length }));
       this._tuneIfPlaying();
       return true;
     }

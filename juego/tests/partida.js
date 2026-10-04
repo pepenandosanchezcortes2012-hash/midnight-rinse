@@ -53,6 +53,7 @@
       };
       var q = query || '';
       if (q.indexOf('noche=') < 0) { q += (q.indexOf('?') >= 0 ? '&' : '?') + 'noche=ninguna'; } // pruebas deterministas
+      if (q.indexOf('lang=') < 0) { q += '&lang=es'; } // en español salvo la prueba de idioma
       marco.src = 'index.html' + q + '&prueba=' + Date.now();
     });
   }
@@ -895,6 +896,47 @@
       check(g.logros.has('verdadero') && g.logros.has('final_bosque'), 'no dio los logros del final');
       noErrors(ctx);
       return '«' + title + '»';
+    }],
+
+    ['Versión en inglés: menús, diálogo, tablilla, bosque y final sin textos sin traducir', async function () {
+      var ctx = await load('?lang=en');
+      var w = ctx.w;
+      var g = ctx.g;
+      var d = w.document;
+      var I = w.MR.I18N;
+      function sinTraducir() {
+        return Object.keys(I.missing).slice(0, 4).map(function (k) { return k.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ0-9 ,.:]/g, ' ').slice(0, 70); }).join(' / ');
+      }
+      check(I.lang === 'en' && d.documentElement.lang === 'en', 'no está en inglés');
+      check(d.getElementById('btn-comenzar').textContent === 'Start shift', 'el botón dice ' + d.getElementById('btn-comenzar').textContent);
+      check(d.getElementById('opt-idioma').value === 'en', 'el selector de idioma no marca English');
+      check(!Object.keys(I.missing).length, 'HTML sin traducir: ' + sinTraducir());
+      start(ctx);
+      step(ctx, 60);
+      g.openTasks(); g.closeNote();
+      g.openNote(); g.closeNote();
+      g.options.name = 'Pepe';
+      for (var i = 0; i < 6; i += 1) { g.onWhisper(); }
+      g.onPhoneAnswered();
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g._customerTalks();
+      g._ask();
+      var q = d.getElementById('dialogo-pregunta').textContent;
+      var first = d.querySelector('#dialogo-opciones li').textContent;
+      check(q.indexOf('Customer:') === 0 && /^It's /.test(first), 'diálogo: ' + q + ' | ' + first);
+      g._answer(1);
+      await wait(1300);
+      g.logros.unlock('gato');
+      g.bosque.go(); step(ctx, 40);
+      g.bosque.takePage(0); g.closeNote();
+      g.bosque.touchWasher(); step(ctx, 10);
+      g.end('fin'); step(ctx, 10);
+      var title = d.getElementById('final-titulo').textContent;
+      check(title === '01:10 · Midnight shift', 'final: ' + title);
+      check(/^I got /.test(g.ui.shareText()), 'compartir: ' + g.ui.shareText().slice(0, 40));
+      check(!Object.keys(I.missing).length, 'sin traducir: ' + sinTraducir());
+      noErrors(ctx);
+      return '«' + title + '» · ' + Object.keys(w.MR.TEXTOS_EN).length + ' textos';
     }],
 
     ['Turno completo con salidas al bosque', async function () {
