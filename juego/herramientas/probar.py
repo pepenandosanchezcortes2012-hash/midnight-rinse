@@ -29,7 +29,8 @@ def main():
     with tempfile.TemporaryDirectory() as perfil:
         p = subprocess.run([str(chrome), '--headless=new', '--no-first-run', '--no-default-browser-check', '--mute-audio',
                             '--user-data-dir=' + perfil, '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
-                            '--window-size=1036,647', '--virtual-time-budget=240000', '--dump-dom', url],
+                            '--window-size=1036,647', '--autoplay-policy=no-user-gesture-required',
+                            '--virtual-time-budget=240000', '--dump-dom', url],
                            capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=600)
     dom = p.stdout
     filas = re.findall(r'<li class="(ok|mal)"[^>]*>(.*?)</li>', dom, re.S)

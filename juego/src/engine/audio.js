@@ -102,6 +102,12 @@
       this.rain = this._loop(this.white, [['bandpass', 1500, 0.6], ['lowpass', 3800, 0.7]], 0.05);
       this.wind = this._loop(this.brown, [['lowpass', 260, 0.7]], 0.05); // retumbo; afuera, viento
       this.cityLoop = this._loop(this.brown, [['bandpass', 140, 0.6], ['lowpass', 500, 0.7]], 0); // la avenida (ciudad.js)
+      // La pista zen del bosque: un bus con su filtro (setForest la sube y la baja).
+      this.forestBus = ctx.createGain();
+      this.forestBus.gain.value = 0;
+      this.forestLp = ctx.createBiquadFilter();
+      this.forestLp.type = 'lowpass'; this.forestLp.frequency.value = 1500;
+      this.forestLp.connect(this.forestBus); this.forestBus.connect(this.master);
       this.hum = ctx.createGain();
       this.hum.gain.value = 0.012;
       this.hum.connect(this.master);
@@ -305,6 +311,74 @@
     obturador() { this._tone(2600, 0.02, 0.12, 'square'); this._burst(this.white, 'bandpass', 2400, 1.1, 0.07, 0.14); }
 
     click() { this._tone(1900, 0.018, 0.09, 'square'); this._burst(this.white, 'highpass', 3000, 0.7, 0.02, 0.05); }
+    /**
+     * Pista zen / lo-fi del bosque (procedural): acordes suaves (Rem9 · Sol9 · Do maj9 · Lam9, un compás de 2,7 s),
+     * campanitas pentatónicas y crepitar de vinilo. level 0..1 (baja con el miedo; 0 al volver a la lavandería).
+     */
+    setForest(level) {
+      if (!this.forestBus || !this.ctx) { return; }
+      var t = this.ctx.currentTime;
+      this.forestBus.gain.setTargetAtTime(Math.max(0, level) * 0.9, t, 1.2);
+      var self = this;
+      if (level > 0 && !this.forestTimer) {
+        this.forestBar = this.forestBar || 0;
+        this._forestBar();
+        this.forestTimer = setInterval(function () { self._forestBar(); }, 2700);
+      } else if (level <= 0 && this.forestTimer) {
+        clearInterval(this.forestTimer);
+        this.forestTimer = null;
+      }
+    }
+
+    _forestBar() {
+      var ctx = this.ctx;
+      if (!ctx || ctx.state !== 'running') { return; } // en pausa no se acumulan compases
+      var chords = [[146.83, 174.61, 220.0, 261.63, 329.63], [98.0, 196.0, 246.94, 293.66, 349.23],
+        [130.81, 164.81, 196.0, 246.94, 293.66], [110.0, 130.81, 164.81, 196.0, 246.94]];
+      var notes = chords[this.forestBar % chords.length];
+      this.forestBar += 1;
+      var t = ctx.currentTime + 0.05;
+      var out = this.forestLp;
+      notes.forEach(function (f, i) {
+        var g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.016, t + 0.7 + i * 0.05);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 3.4);
+        g.connect(out);
+        ['sine', 'triangle'].forEach(function (type, k) {
+          var o = ctx.createOscillator();
+          o.type = type;
+          o.frequency.value = f * (k ? 1.003 : 1); // un poco desafinado, como cinta
+          o.connect(g); o.start(t); o.stop(t + 3.5);
+        });
+      });
+      // Campanita (pentatónica de Re menor), no en todos los compases.
+      if (Math.random() < 0.65) {
+        var bell = [587.33, 698.46, 783.99, 880.0, 1046.5][Math.floor(Math.random() * 5)];
+        var bt = t + 0.4 + Math.random() * 1.6;
+        var bg = ctx.createGain();
+        bg.gain.setValueAtTime(0.022, bt);
+        bg.gain.exponentialRampToValueAtTime(0.0001, bt + 1.5);
+        bg.connect(out);
+        var bo = ctx.createOscillator();
+        bo.type = 'triangle'; bo.frequency.value = bell;
+        bo.connect(bg); bo.start(bt); bo.stop(bt + 1.6);
+      }
+      // Crepitar de vinilo: chasquidos chiquitos.
+      for (var c = 0; c < 6; c += 1) {
+        var ct = t + Math.random() * 2.6;
+        var src = ctx.createBufferSource();
+        src.buffer = this.white;
+        var hp = ctx.createBiquadFilter();
+        hp.type = 'highpass'; hp.frequency.value = 3000;
+        var cg = ctx.createGain();
+        cg.gain.setValueAtTime(0.012, ct);
+        cg.gain.exponentialRampToValueAtTime(0.0001, ct + 0.012);
+        src.connect(hp); hp.connect(cg); cg.connect(this.forestBus);
+        src.start(ct, Math.random() * 2); src.stop(ct + 0.02);
+      }
+    }
+
     /** El murmullo de la avenida por la vidriera (0 = nada, 1 = tráfico de la una de la mañana). */
     setCity(level) {
       if (!this.cityLoop || !this.ctx) { return; }

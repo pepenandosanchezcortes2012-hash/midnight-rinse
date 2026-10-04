@@ -589,6 +589,12 @@ El proyecto pasó por dos etapas:
 - **Rendimiento:** sala de 142 a 151 llamadas de dibujo (umbral 220). Revisado con capturas a la 01:20 y a las 04:50.
 - Prueba nueva. Resultado: 66/66.
 
+## 77. Sprint 3: el bosque infinito, la secadora solitaria y la pista zen
+- **Bosque infinito y no euclidiano** (`bosque._infinite`): al pasar el borde lejano (z > 148,4) o los costados (|x| > 20,6), te hace parpadear, y en el parpadeo te devuelve al otro lado (z − 41 o x ∓ 40,4), mirando hacia el mismo lado. La primera vez: «(Parpadeas. El sendero sigue igual que hace un momento. Demasiado igual.)». Las cosas cambian cuando cierras los ojos (regla del juego), así que el salto no se ve. Los bordes sólidos quedan de respaldo.
+- **La secadora solitaria:** después de la segunda vuelta aparece en un claro propio (sin pinos encima), con la puerta ámbar que palpita y el cuerpo que tiembla al centrifugar. Al acercarte la notas; al tocarla: «(Está tibia. En la puerta tiene una etiqueta descolorida: «La Espuma · 1987».)». Logro oculto «La secadora solitaria».
+- **Pista zen / lo-fi procedural** (`audio.setForest`): acordes de Rem9, Sol9, Do maj9 y Lam9 (2,7 s por compás) con seno y triángulo un poco desafinados, como cinta, campanitas pentatónicas, crepitar de vinilo y un filtro pasa bajos. Sube al salir, baja con el miedo y se corta al volver. En pausa no acumula compases.
+- **Pruebas:** `probar.py` ahora corre Chrome con `--autoplay-policy=no-user-gesture-required`, así que las pruebas usan el audio de verdad (contexto `running`). Prueba nueva: dos vueltas, la secadora, el logro y la pista (que suena afuera y se corta adentro). El primer intento falló porque el parpadeo forzado se perdía si caía con los ojos todavía abriéndose; corregido. Resultado: 67/67.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

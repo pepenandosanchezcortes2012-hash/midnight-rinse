@@ -43,3 +43,12 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** vidrieras sin vidrio dibujado. Un vidrio semitransparente agujerearía el lienzo (el canal alfa se usa para la tele), así que se ven abiertas, con lluvia afuera.
 - **Decisión:** solo el letrero de la farmacia se traduce en la versión en inglés. La tortillería y el hotel son nombres del lugar.
 - Rendimiento: 151 llamadas de dibujo en la sala (umbral 220).
+
+## Sprint 3 — El bosque infinito
+
+- **Bosque infinito y no euclidiano:** en el borde, un parpadeo te devuelve al otro lado. A la segunda vuelta aparece **la secadora solitaria** («La Espuma · 1987»), con un logro oculto.
+- **Pista zen / lo-fi** procedural solo en el bosque: acordes suaves, campanitas y crepitar de vinilo. Baja con el miedo.
+- **Decisión:** el salto ocurre en un parpadeo, no con un fundido ni a la vista. Así respeta la regla del juego (lo que no ves puede cambiar) y no rompe la inmersión.
+- **Decisión:** la pista es procedural (Web Audio) en vez de un archivo de música. No pesa nada, no necesita derechos y se puede bajar con el miedo en tiempo real.
+- **Decisión:** las farolas anómalas y el tendedero ya existían (niebla y luna llena), así que este sprint no las duplica.
+- **Calidad:** las pruebas en Chrome sin ventana ahora permiten audio sin gesto, para probar el sonido de verdad. 67/67.

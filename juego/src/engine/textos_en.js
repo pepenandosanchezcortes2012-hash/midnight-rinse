@@ -717,5 +717,11 @@ MR.TEXTOS_EN = {
  "(La avenida se va quedando sola. Las ventanas de enfrente se apagan una por una.)": "(The avenue is emptying out. The windows across the street go dark one by one.)",
  "(Ya no pasa nadie. Solo la farmacia sigue encendida, como si esperara a alguien.)": "(No one passes anymore. Only the pharmacy is still lit, as if waiting for someone.)",
  "+ FARMACIA": "+ PHARMACY",
- "Dos vidrieras a la avenida: Blackwood está viva a la una de la mañana. Mira cómo cambia.": "Two windows onto the avenue: Blackwood is alive at one in the morning. Watch how it changes."
+ "Dos vidrieras a la avenida: Blackwood está viva a la una de la mañana. Mira cómo cambia.": "Two windows onto the avenue: Blackwood is alive at one in the morning. Watch how it changes.",
+ "(Parpadeas. El sendero sigue igual que hace un momento. Demasiado igual.)": "(You blink. The path looks the same as a moment ago. Too much the same.)",
+ "(Entre los pinos hay una secadora sola, encendida. El tambor gira. No tiene cable.)": "(Among the pines there's a lone dryer, running. The drum is turning. It has no cord.)",
+ "(Está tibia. En la puerta tiene una etiqueta descolorida: «La Espuma · 1987».)": "(It's warm. On the door there's a faded label: “La Espuma · 1987”.)",
+ "La secadora solitaria": "The lone dryer",
+ "Encuéntrala en el bosque que no termina.": "Find it in the forest that never ends.",
+ "El bosque no termina. Y ahora tiene música.": "The forest never ends. And now it has music."
 };

@@ -131,6 +131,8 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **El turno no se detiene:** mientras estás afuera nadie friega los charcos ni vigila las lavadoras.
 - **Seis hojas mojadas del registro** están tiradas cerca del sendero: son de quienes hicieron este turno antes que tú y cuentan qué pasa aquí. Si las juntas todas, la lavadora del claro abre un **tercer final**.
 - **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
+- **El bosque no termina:** si llegas al fondo o a los costados, parpadeas y el bosque te devuelve al otro lado. Si das dos vueltas, aparece algo entre los pinos.
+- **Música:** afuera suena una pista zen lo-fi, suave, que baja cuando sube el miedo.
 
 ### Noches especiales
 Más o menos la mitad de las noches traen algo distinto, con una **nota del gerente** al empezar y en la tablilla:

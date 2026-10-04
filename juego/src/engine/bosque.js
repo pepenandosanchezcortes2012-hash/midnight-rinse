@@ -96,6 +96,9 @@
         g.glasses.drop();
       }
       this._lamp2(dt);
+      this._infinite();
+      this._loneDryer(dt);
+      g.audio.setForest(1 - g.dread * 0.6);
       this._clothesline(dt);
       // Ambiente: un búho de vez en cuando (las ramas que crujen las programa el director del horror).
       this.ambientTimer -= dt;
@@ -122,6 +125,53 @@
         g.ui.subtitle('(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)', 5);
         g.dread = Math.min(1, g.dread + 0.04);
       }
+    }
+
+    /**
+     * El bosque infinito (canon §7): al llegar al borde lejano o a los costados, parpadeas y el bosque te devuelve al
+     * otro lado. El sendero sigue igual. Demasiado igual. Los bordes sólidos de world.js quedan de respaldo.
+     */
+    _infinite() {
+      var g = this.game;
+      var pl = g.player;
+      var p = pl.pos;
+      var over = p.z > 148.4 || Math.abs(p.x) > 20.6;
+      if (!over) { this.wrapPending = false; return; }
+      if (!pl.eyesClosed) {
+        // Un parpadeo sin querer (si iba uno a medias, se fuerza en cuanto los ojos terminan de abrirse).
+        this.wrapPending = true;
+        if (pl.blink.phase === 'open') { pl.blink.timer = 0; }
+        return;
+      }
+      if (p.z > 148.4) { p.z -= 41; }
+      if (p.x > 20.6) { p.x -= 40.4; } else if (p.x < -20.6) { p.x += 40.4; }
+      this.wrapPending = false;
+      this.wraps = (this.wraps || 0) + 1;
+      if (this.wraps === 1) { g.ui.subtitle('(Parpadeas. El sendero sigue igual que hace un momento. Demasiado igual.)', 5); }
+      if (this.wraps === 2) { this.f.loneDryer.visible = true; }
+      g.dread = Math.min(1, g.dread + 0.03);
+    }
+
+    /** La secadora solitaria: el tambor brilla y vibra; la primera vez que estás cerca, la notas. */
+    _loneDryer(dt) {
+      var d = this.f.loneDryer;
+      if (!d.visible) { return; }
+      this.loneT = (this.loneT || 0) + dt;
+      this.f.lonePort.material.uniforms.uEmissive.value = 1.0 + Math.sin(this.loneT * 5) * 0.15;
+      d.children[0].position.x = Math.sin(this.loneT * 40) * 0.004; // tiembla al centrifugar
+      var g = this.game;
+      if (!this.loneNoticed && U.distXZ(g.player.pos, d.position) < 9) {
+        this.loneNoticed = true;
+        g.audio.buzz();
+        g.ui.subtitle('(Entre los pinos hay una secadora sola, encendida. El tambor gira. No tiene cable.)', 5);
+      }
+    }
+
+    /** Tocar la secadora solitaria. */
+    touchLoneDryer() {
+      var g = this.game;
+      g.gameplay.say('solitaria', '(Está tibia. En la puerta tiene una etiqueta descolorida: «La Espuma · 1987».)', 5);
+      if (g.logros) { g.logros.unlock('solitaria'); }
     }
 
     /** Luz de la segunda farola (ranura 5): encendida o, si ya se apagó, nada. */
@@ -201,6 +251,7 @@
       spots.forEach(function (s, i) { R.setLight(i, new THREE.Vector3(s[0], s[1], s[2]), s[3], s[4], s[5]); });
       // Noche de niebla: la segunda farola (ranura de luz 5, libre afuera).
       this.f.lamp2.visible = toOutside && g.mod === 'niebla';
+      g.audio.setForest(toOutside ? 1 : 0); // la pista zen del bosque
       this.f.clothesline.visible = toOutside && g.mod === 'luna';
       if (this.f.lamp2.visible) { this._lamp2Light(); }
       if (toOutside) {

@@ -1041,6 +1041,45 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Bosque infinito: al fondo o al costado, un parpadeo te devuelve; a la segunda vuelta, la secadora solitaria', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var b = g.bosque;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      ctx.w.dispatchEvent(new ctx.w.PointerEvent('pointerdown')); // despierta el audio (para la pista zen)
+      start(ctx);
+      b.go(); step(ctx, 40);
+      check(b.outside, 'no salió al bosque');
+      // Al fondo: camina hacia +z hasta pasar el borde.
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(2, 0, 147.9); g.player.yaw = Math.PI; g.player.pitch = 0;
+      var maxZ = 0;
+      for (var i = 0; i < 90 && !b.wraps; i += 1) {
+        g.input.keys.add('KeyW'); step(ctx, 1); maxZ = Math.max(maxZ, g.player.pos.z);
+      }
+      g.input.keys.delete('KeyW');
+      check(b.wraps === 1 && g.player.pos.z < 112, 'no dio la vuelta por el fondo (z ' + g.player.pos.z.toFixed(1) + ', vueltas ' + b.wraps + ')');
+      check(sub().indexOf('Demasiado igual') >= 0, 'faltó el aviso de la primera vuelta');
+      check(!g.world.forest.loneDryer.visible, 'la secadora apareció antes de tiempo');
+      // Al costado.
+      g.player.pos.set(20.5, 0, 125); g.player.yaw = -Math.PI / 2;
+      for (var k = 0; k < 90 && b.wraps < 2; k += 1) { g.input.keys.add('KeyW'); step(ctx, 1); }
+      g.input.keys.delete('KeyW');
+      check(b.wraps === 2 && g.player.pos.x < -18, 'no dio la vuelta por el costado (x ' + g.player.pos.x.toFixed(1) + ')');
+      check(g.world.forest.loneDryer.visible, 'no apareció la secadora solitaria');
+      g.player.pos.set(-12, 0, 127); step(ctx, 2);
+      check(sub().indexOf('secadora sola') >= 0, 'no notó la secadora');
+      b.touchLoneDryer();
+      check(g.logros.has('solitaria') && sub().indexOf('1987') >= 0, 'tocarla no hizo nada');
+      // La pista zen: suena afuera y se va al volver.
+      await wait(3000);
+      check(g.audio.forestBar >= 1 && g.audio.forestTimer, 'no sonó la pista del bosque (' + g.audio.forestBar + ')');
+      b.go(); step(ctx, 40);
+      check(!g.audio.forestTimer, 'la pista siguió en la lavandería');
+      noErrors(ctx);
+      return '2 vueltas · secadora · ' + g.audio.forestBar + ' compases zen';
+    }],
+
     ['La avenida por la vidriera: autos y gente a la 01:20; vacía y bajo el agua a las 04:50', async function () {
       var ctx = await load();
       var g = ctx.g;

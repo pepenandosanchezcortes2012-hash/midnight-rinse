@@ -1140,6 +1140,7 @@
         if (distToRoute(x, z) < 1.8) { continue; }
         if (Math.hypot(x - 6, z - 140.5) < 5.2) { continue; }
         if (Math.hypot(x + 4.5, z - 103.2) < 1.5) { continue; }
+        if (Math.hypot(x + 14.5, z - 129) < 2.6) { continue; }      // el claro de la secadora solitaria
         var blocked = false;
         for (var n = 0; n < forestAnchors.length && !blocked; n += 1) {
           var an = this.anchors[forestAnchors[n]];
@@ -1175,7 +1176,20 @@
       this.add(inert(new THREE.Mesh(mergeParts(crowns), mt.pine)));
       if (rocks.length) { this.add(inert(new THREE.Mesh(mergeParts(rocks), mt.rock))); }
 
-      // Bordes: no se puede salir del bosque (ni rodear la fachada).
+      // La secadora solitaria (bosque infinito): aparece después de dar dos vueltas (bosque.js). Encendida, sin cable.
+      var lone = new THREE.Group();
+      lone.position.set(-14.5, 0, 129);
+      lone.rotation.y = 0.6;
+      var loneBody = this.box(0.86, 1.0, 0.8, R.material({ texture: 'white', color: 0xd9d6cc }), 0, 0.5, 0, lone);
+      var lonePort = new THREE.Mesh(new THREE.CircleGeometry(0.26, 12), R.material({ texture: 'white', color: 0xffb35a, emissive: 1.1 }));
+      lonePort.position.set(0, 0.55, 0.41);
+      lone.add(lonePort);
+      this.box(0.6, 0.06, 0.04, R.material({ texture: 'white', color: 0x9a988f }), 0, 0.92, 0.41, lone);
+      [loneBody, lonePort].forEach(function (o) { this.interactive(o, 'secadoraSola'); }, this);
+      lone.visible = false;
+      this.add(lone);
+
+      // Bordes: no se puede salir del bosque (ni rodear la fachada). El bosque infinito (bosque.js) te devuelve antes.
       this.collider(-23.5, -22.2, 98, 152);
       this.collider(22.2, 23.5, 98, 152);
       this.collider(-23.5, 23.5, 150.2, 152);
@@ -1190,6 +1204,8 @@
         washerLamp: wmLamp,
         lampHead: lampHead,
         lamp2: lamp2,
+        loneDryer: lone,
+        lonePort: lonePort,
         clothesline: line,
         shirts: shirts,
         lamp2Mat: lamp2Mat,
