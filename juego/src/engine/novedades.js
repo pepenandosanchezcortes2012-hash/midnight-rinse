@@ -8,6 +8,8 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 16, texto: 'Noche especial «Tormenta eléctrica»: relámpagos seguidos y la luz parpadea con los truenos.' },
+    { id: 15, texto: 'Logro «Álbum de la noche»: fotos en los tres lugares en un mismo turno.' },
     { id: 14, texto: 'Opción de fondo oscuro detrás de los subtítulos.' },
     { id: 13, texto: 'El teléfono dice algo distinto cada noche. Desde la sexta, contesta tu propia voz.' },
     { id: 12, texto: 'Opción «Brillo», para jugar en el celular con mucha luz.' },

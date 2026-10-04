@@ -484,6 +484,11 @@ El proyecto pasó por dos etapas:
 - **Pelusa en la foto:** si el gato sale en cuadro (a menos de 4,5 m), al revisar la foto: «Pelusa sale movida, como en todas las fotos». Una vez por turno, y nunca en la foto en que sale él.
 - Prueba nueva. Resultado: 50/50.
 
+## 60. Noche especial «Tormenta eléctrica»
+- **Qué cambia:** relámpagos cada 7–16 s (en vez de 24–55; el primero llega a los 4–9 s) y truenos cercanos más seguidos (60 % en vez de 35 %). Un trueno cercano, estando adentro, hace parpadear algunas luces, y los apagones del director salen 1,8 veces más. En el bosque, cada relámpago es otra oportunidad de verlo entre los árboles. Es la séptima noche especial.
+- **Novedades:** se agregaron esta noche y el «Álbum de la noche».
+- Prueba nueva: 4 relámpagos en un minuto de juego y luces que parpadean con el trueno. Resultado: 51/51.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

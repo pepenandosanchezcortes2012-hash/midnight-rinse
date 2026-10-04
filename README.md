@@ -129,6 +129,7 @@ Más o menos la mitad de las noches traen algo distinto, con una **nota del gere
 - **Luna llena:** no llueve; el bosque está despejado, con cielo azul oscuro.
 - **¿Y el gato?:** Pelusa no aparece hasta las 03:00.
 - **Corte de agua:** las lavadoras no arrancan. Para tapar el zumbido, mete monedas en las secadoras (clic en la secadora) o pon tu música.
+- **Tormenta eléctrica:** relámpagos mucho más seguidos, truenos cerca (adentro, la luz parpadea) y más apagones.
 
 ### Noche tras noche
 El juego cuenta tus noches («Noche 3» en el título).

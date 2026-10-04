@@ -155,6 +155,7 @@
       if (g.whispers) { table.push(['susurro', 4]); }
       else if (g.consumables.high > 0.5) { table.push(['susurro', 1.5]); } // paranoia: susurros fuera de hora
       if (g.mod === 'apagones') { table = table.map(function (e) { return e[0] === 'apagon' ? [e[0], e[1] * 3] : e; }); }
+      if (g.mod === 'tormenta') { table = table.map(function (e) { return e[0] === 'apagon' ? [e[0], e[1] * 1.8] : e; }); }
       var total = table.reduce(function (s, e) { return s + e[1]; }, 0);
       var r = Math.random() * total;
       var pick = table[0][0];

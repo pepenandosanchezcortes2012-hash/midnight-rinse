@@ -63,6 +63,7 @@
     niebla: { nombre: 'Niebla', nota: 'Hay niebla. Los lentes se te van a empañar más; lleva un trapo.' },
     luna: { nombre: 'Luna llena', nota: 'Por fin dejó de llover. Luna llena. Dicen que así se ve todo… también lo que no quieres ver.' },
     sin_gato: { nombre: '¿Y el gato?', nota: '¿Has visto a Pelusa? No vino a comer.' },
+    tormenta: { nombre: 'Tormenta eléctrica', nota: 'Anuncian tormenta eléctrica toda la noche. Si truena cerca, la luz va a parpadear: no te asustes.' },
     sin_agua: { nombre: 'Corte de agua', nota: 'Cortaron el agua hasta las seis. Las lavadoras no van a arrancar: pon las secadoras o algo de música para tapar el zumbido.' }
   };
 

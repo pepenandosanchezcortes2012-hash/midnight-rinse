@@ -109,7 +109,9 @@
         u.uRight.value.set(1, 0, 0).applyQuaternion(cam.quaternion);
       }
 
-      // Tormenta.
+      // Tormenta (en la noche de tormenta eléctrica, relámpagos mucho más seguidos).
+      var storm = g.mod === 'tormenta';
+      if (storm && this.nextBolt > 16) { this.nextBolt = U.rand(4, 9); }
       if (!clear) { this.nextBolt -= dt; }
       if (!clear && !this.bolt && this.nextBolt <= 0) { this._startBolt(); }
       var f = 0;
@@ -123,11 +125,15 @@
         if (!b.thundered && b.t >= b.thunderAt) {
           b.thundered = true;
           g.audio.trueno(b.thunderVol * (out ? 1 : 0.55), !out);
+          // Trueno cercano en noche de tormenta: adentro, las luces parpadean.
+          if (storm && b.thunderVol > 0.9 && !out) {
+            for (var li = 0; li < 6; li += 1) { if (Math.random() < 0.5) { g.horror.flickers[li] = Math.max(g.horror.flickers[li], U.rand(0.25, 0.6)); } }
+          }
           MR.Haptics.pulse(b.thunderVol > 0.7 ? [90, 60, 140] : [60, 80, 60]);
         }
         if (b.thundered && b.t > b.thunderAt + 4) {
           this.bolt = null;
-          this.nextBolt = U.rand(24, 55);
+          this.nextBolt = storm ? U.rand(7, 16) : U.rand(24, 55);
         }
       }
       this.flash = f;
@@ -141,7 +147,7 @@
     _startBolt() {
       var g = this.game;
       var gentle = g.options.reduceFlashes;
-      var near = Math.random() < 0.35;
+      var near = Math.random() < (g.mod === 'tormenta' ? 0.6 : 0.35);
       var flashes = gentle ? [[0, 0.6, 0.45]] : [[0, 0.09, 1], [0.16, 0.07, 0.6]];
       if (!gentle && Math.random() < 0.5) { flashes.push([0.34, 0.12, 0.85]); }
       this.bolt = {

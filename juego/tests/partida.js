@@ -1155,6 +1155,27 @@
       return 'brillo medio ' + base.toFixed(1) + ' → ' + bright.toFixed(1);
     }],
 
+    ['Noche de tormenta eléctrica: relámpagos seguidos y la luz parpadea con los truenos', async function () {
+      var ctx = await load('?noche=tormenta');
+      var g = ctx.g;
+      start(ctx);
+      check(g.mod === 'tormenta' && /tormenta/.test(ctx.w.document.getElementById('subtitulos').textContent), 'no avisó de la tormenta');
+      step(ctx, 30 * 60);
+      check(g.clima.bolts >= 3, 'pocos relámpagos en un minuto (' + g.clima.bolts + ')');
+      // Un trueno cercano, adentro: alguna luz parpadea.
+      g.horror.flickers = g.horror.flickers.map(function () { return 0; });
+      g.clima.bolt = { t: 0, flashes: [[0, 0.09, 1]], thunderAt: 0.1, thunderVol: 1, thundered: false };
+      var flick = 0;
+      for (var i = 0; i < 6 && !flick; i += 1) {
+        step(ctx, 8);
+        flick = g.horror.flickers.filter(function (f) { return f > 0; }).length;
+        if (!flick && g.clima.bolt && g.clima.bolt.thundered) { g.clima.bolt = { t: 0, flashes: [[0, 0.09, 1]], thunderAt: 0.1, thunderVol: 1, thundered: false }; }
+      }
+      check(flick > 0, 'las luces no parpadearon con el trueno');
+      noErrors(ctx);
+      return g.clima.bolts + ' relámpagos en un minuto';
+    }],
+
     ['Noche sin agua: las lavadoras no arrancan; las secadoras y la música tapan el zumbido', async function () {
       var ctx = await load('?noche=sin_agua');
       var g = ctx.g;

@@ -629,5 +629,9 @@ MR.TEXTOS_EN = {
  "Opción de fondo oscuro detrás de los subtítulos.": "Option for a dark background behind subtitles.",
  "(Revisas la foto: Pelusa sale movida, como en todas las fotos.)": "(You check the photo: Pelusa came out blurry, like in every photo.)",
  "Álbum de la noche": "Night album",
- "Saca fotos en la lavandería, el bosque y el pasillo en un mismo turno.": "Take photos in the laundromat, the forest, and the corridor in a single shift."
+ "Saca fotos en la lavandería, el bosque y el pasillo en un mismo turno.": "Take photos in the laundromat, the forest, and the corridor in a single shift.",
+ "Tormenta eléctrica": "Thunderstorm",
+ "Anuncian tormenta eléctrica toda la noche. Si truena cerca, la luz va a parpadear: no te asustes.": "A thunderstorm is forecast all night. If it thunders nearby, the lights will flicker: don't be scared.",
+ "Noche especial «Tormenta eléctrica»: relámpagos seguidos y la luz parpadea con los truenos.": "Special night “Thunderstorm”: frequent lightning, and the lights flicker with the thunder.",
+ "Logro «Álbum de la noche»: fotos en los tres lugares en un mismo turno.": "“Night album” achievement: photos in all three places in a single shift."
 };
