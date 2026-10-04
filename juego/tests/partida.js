@@ -689,7 +689,8 @@
       // Al mirarlo, la cabeza se queda donde quedó.
       var y0 = h.headYaw;
       g.player.yaw = Math.atan2(-(-3.5 - 2), -(0.62 - 3));
-      g.player.blink.timer = 99; // sin parpadear (si parpadeas, también gira: es a propósito)
+      // Sin parpadear (si parpadeas, también gira: es a propósito). Si iba un parpadeo a medias, se termina aquí.
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 99;
       step(ctx, 30);
       check(h.zoneVisible('banco') > 0 && Math.abs(h.headYaw - y0) < 1e-6, 'la cabeza se movió mientras lo mirabas');
       // Al cambiar de lugar, vuelve al frente.
