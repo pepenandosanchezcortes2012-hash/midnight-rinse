@@ -755,5 +755,8 @@ MR.TEXTOS_EN = {
  "(Alguien escribió en el vaho del vidrio: «1986». Está al revés. Lo escribieron desde afuera.)": "(Someone wrote in the fog on the glass: “1986”. It's backwards. It was written from outside.)",
  "La campana de la escuela": "The school bell",
  "Hazla sonar en el bosque que no termina.": "Ring it in the forest that never ends.",
- "Si el bosque te devuelve tres veces, escucharás una campana. Y alguien escribe en el vaho de la vidriera.": "If the forest sends you back three times, you will hear a bell. And someone writes in the fog on the window."
+ "Si el bosque te devuelve tres veces, escucharás una campana. Y alguien escribe en el vaho de la vidriera.": "If the forest sends you back three times, you will hear a bell. And someone writes in the fog on the window.",
+ "(Pelusa se sienta junto a la cara blanca. Ella no la mira, pero le acerca la mano.)": "(Pelusa sits beside the white face. It doesn't look at the cat, but it moves its hand closer.)",
+ "(Del otro lado de la avenida, alguien de cara blanca mira hacia la lavandería. No trae paraguas.)": "(Across the avenue, someone with a white face is looking at the laundromat. No umbrella.)",
+ "Mira la avenida: las caras blancas cruzan antes de entrar. Y Pelusa ya eligió de quién desconfiar.": "Watch the avenue: the white faces cross it before coming in. And Pelusa has already chosen whom to distrust."
 };

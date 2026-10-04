@@ -607,6 +607,12 @@ El proyecto pasó por dos etapas:
 - **Anomalía: «1986» en el vaho.** Desde las 02:30, una vez por noche, con la vidriera fuera de vista (zona de oclusión nueva), aparece un parche de vaho con «1986» escrito con el dedo, **en espejo**, porque lo escribieron desde la calle. Al verlo: «(Alguien escribió en el vaho del vidrio: «1986». Está al revés. Lo escribieron desde afuera.)». La lluvia lo borra cuando dejas de mirar, 40 s después.
 - Revisado con capturas (la campana entre los pinos; el «1986» invertido sobre la avenida encendida). Pruebas nuevas. Resultado: 70/70.
 
+## 80. Sprint 5: la vida conectada
+- **Pelusa y la clientela:** su alarma ahora reconoce dos amenazas (él de pie a menos de 3,5 m, o una máscara negra a menos de 3 m): bufa y huye al punto más lejano de lo que la asustó. Cuando está despierta, a veces deja su rutina para sentarse junto a una cara blanca que lava su ropa: «(Pelusa se sienta junto a la cara blanca. Ella no la mira, pero le acerca la mano.)».
+- **Las caras blancas cruzan la avenida:** antes de entrar, se las ve por la vidriera cruzando desde la vereda de enfrente hacia la puerta, sin paraguas. Al llegar, suena la puerta y entran. Ahora se quedan 22 s junto a su lavadora, «esperando el centrifugado».
+- **La vigía:** desde las 03:00, una vez por noche y solo con la vidriera fuera de vista, una cara blanca aparece parada en la vereda de enfrente, mirando la lavandería. Al verla: «(Del otro lado de la avenida, alguien de cara blanca mira hacia la lavandería. No trae paraguas.)». Si apartas la vista o parpadeas, ya no está.
+- **Pruebas:** la de la rutina de Pelusa ahora se aísla de las visitas (con visitas, a veces se va a acompañarlas). Prueba nueva con las cuatro cosas. Revisado con captura (la cara blanca cruzando la avenida encendida). Resultado: 71/71.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

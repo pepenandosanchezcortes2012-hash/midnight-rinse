@@ -29,6 +29,7 @@
       for (var i = 0; i < n; i += 1) { plan.push({ at: U.rand(76, 135), kind: 'cara' }); }
       if (Math.random() < 0.5) { plan.push({ at: U.rand(282, 300), kind: 'cara' }); }
       plan.push({ at: 170, kind: 'mascara' });
+      this.approach = null;
       if (Math.random() < 0.6) { plan.push({ at: 245, kind: 'mascara' }); }
       this.plan = plan.sort(function (a, b) { return a.at - b.at; });
       this.tmp = new THREE.Vector3();
@@ -72,6 +73,67 @@
       }
       g.visible = true;
       return { group: g, head: head };
+    }
+
+    // -------------------------------------------------------------------------------------------- afuera
+    /** Una cara blanca cruza la avenida hacia la puerta, sin paraguas (la ves por la vidriera). */
+    _startApproach() {
+      var m = this._model('cara');
+      var from = [U.rand(3.8, 7.2), 11.9];
+      m.group.position.set(from[0], 0.12, from[1]);
+      this.world.add(m.group);
+      this.approach = { model: m, to: [0.4, 5.5] };
+    }
+
+    _stepApproach(dt, inSala) {
+      var a = this.approach;
+      var pos = a.model.group.position;
+      var dx = a.to[0] - pos.x;
+      var dz = a.to[1] - pos.z;
+      var d = Math.hypot(dx, dz);
+      var step = 1.1 * dt;
+      if (d <= step || !inSala) {
+        this.world.scene.remove(a.model.group);
+        this.approach = null;
+        this.spawn('cara'); // entra (si no hay lavadora libre, hoy no vino)
+        return;
+      }
+      pos.x += dx / d * step;
+      pos.z += dz / d * step;
+      a.model.group.rotation.y = Math.atan2(-dx, -dz);
+      a.bob = (a.bob || 0) + dt * 7;
+      pos.y = 0.12 + Math.abs(Math.sin(a.bob)) * 0.03;
+    }
+
+    /** La vigía: una cara blanca parada en la vereda de enfrente, mirando la lavandería (horror.js la hace aparecer). */
+    showWatcher() {
+      if (!this.watcher) {
+        this.watcher = this._model('cara');
+        this.watcher.group.position.set(5.2, 0.12, 12.0);
+        this.watcher.group.rotation.y = 0;
+        this.world.add(this.watcher.group);
+      }
+      this.watcher.group.visible = true;
+      this.watcherSeen = null;
+    }
+
+    _stepWatcher(inSala) {
+      var w = this.watcher;
+      if (!w || !w.group.visible) { return; }
+      var g = this.game;
+      var h = g.horror;
+      var seen = inSala && h.zoneVisible('vidriera') > 0.3 && !g.player.eyesClosed;
+      if (seen && this.watcherSeen === null) {
+        this.watcherSeen = h.clock;
+        g.ui.subtitle('(Del otro lado de la avenida, alguien de cara blanca mira hacia la lavandería. No trae paraguas.)', 6);
+        g.dread = Math.min(1, g.dread + 0.04);
+      }
+      if (this.watcherSeen !== null && !seen) {
+        this.watcherAway = (this.watcherAway || 0) + 1;
+        if (this.watcherAway > 75 || g.player.eyesClosed) { w.group.visible = false; } // ya no está
+      } else {
+        this.watcherAway = 0;
+      }
     }
 
     // -------------------------------------------------------------------------------------------- llegada
@@ -186,10 +248,13 @@
         var forced = this.spawn('mascara');
         if (forced) { forced.forcedOrder = this.pendingOrder; this.pendingOrder = null; }
       }
-      while (this.plan.length && g.minutes >= this.plan[0].at && inSala && this.visitors.length < 2) {
+      while (this.plan.length && g.minutes >= this.plan[0].at && inSala && this.visitors.length < 2 && !this.approach) {
         var p = this.plan.shift();
-        if (!this.spawn(p.kind) && p.kind === 'cara') { /* todas las lavadoras ocupadas: hoy no vino */ }
+        // Las caras blancas primero cruzan la avenida (se ven por la vidriera) y después entran.
+        if (p.kind === 'cara') { this._startApproach(); } else { this.spawn(p.kind); }
       }
+      if (this.approach) { this._stepApproach(dt, inSala); }
+      this._stepWatcher(inSala);
       var self = this;
       this.visitors.slice().forEach(function (v) { self._step(v, dt); });
     }
@@ -236,7 +301,7 @@
           // Mientras conversa contigo no se va; si te alejas, la conversación termina.
           if (v.talking) {
             if (U.distXZ(g.player.pos, v.model.group.position) > 4) { this._endTalk(v); }
-          } else if (v.timer > 9) { this._leave(v); }
+          } else if (v.timer > 22) { this._leave(v); } // espera el centrifugado (como dicen ellas)
         } else if (v.timer > 6) {
           this._leave(v);
         }

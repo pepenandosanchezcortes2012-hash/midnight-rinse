@@ -87,6 +87,7 @@
       this.hisses = 0;
       this.waitingDoor = false;
       this.tmp = new V3();
+      this.company = {}; // caras blancas a las que ya acompañó
       this._placeAtPerch('secadora');
     }
 
@@ -228,6 +229,7 @@
         case 'ventana':
           this.timer -= dt;
           this._activity(dt);
+          this._keepCompany();
           if (this.timer <= 0) { this._decide(); }
           break;
         case 'eriza':
@@ -253,6 +255,17 @@
       if (this.node === PERCHES[target].from) { this._jump(target, false); return; }
       this.pendingPerch = target;
       this._goTo(PERCHES[target].from);
+    }
+
+    /** El punto de la red más cercano a una posición. */
+    _nearNode(p) {
+      var best = this.node;
+      var bd = 1e9;
+      Object.keys(NODES).forEach(function (k) {
+        var d = Math.hypot(NODES[k][0] - p.x, NODES[k][1] - p.z);
+        if (d < bd) { bd = d; best = k; }
+      });
+      return best;
     }
 
     /** El punto de la red más cercano a ti. */
@@ -286,6 +299,22 @@
       }
     }
 
+    /** Llegó junto a la cara blanca: se sienta a su lado (y la primera vez, un subtítulo). */
+    _keepCompany() {
+      var v = this.companyWith;
+      if (!v || this.state !== 'sentado') { return; }
+      var gp = v.model.group.position;
+      var me = this.mesh.root.position;
+      if (Math.hypot(gp.x - me.x, gp.z - me.z) > 2.6) { return; }
+      this.companyWith = null;
+      this.mesh.root.rotation.y = Math.atan2(gp.x - me.x, gp.z - me.z);
+      this.timer = Math.max(this.timer, 8);
+      if (!this.companySaid) {
+        this.companySaid = true;
+        this.game.ui.subtitle('(Pelusa se sienta junto a la cara blanca. Ella no la mira, pero le acerca la mano.)', 5);
+      }
+    }
+
     /** Qué hacer ahora: lo decide la rutina de la hora (antes era al azar). */
     _decide() {
       var act = this.activity = routine(this.game.minutes);
@@ -293,6 +322,15 @@
       if (this.perch && !sleeps) { this._jump(null, true); return; }   // bajar de donde esté
       var h = this.game.horror;
       var root = this.mesh.root;
+      // A veces, en vez de su rutina, va a sentarse junto a una cara blanca que lava su ropa.
+      var cl = this.game.clientela;
+      var face = !sleeps && cl ? cl.visitors.filter(function (v) { return v.kind === 'cara' && v.state === 'llego'; })[0] : null;
+      if (face && !this.company[face.id] && Math.random() < 0.35) {
+        this.company[face.id] = true;
+        this.companyWith = face;
+        this._goTo(this._nearNode(face.model.group.position));
+        return;
+      }
       switch (act) {
         case 'dormir': this._toPerch('secadora'); return;
         case 'siesta': {
@@ -382,12 +420,29 @@
       }
     }
 
-    _alarm() {
+    /** Lo que la asusta: él de pie a menos de 3.5 m, o una máscara negra a menos de 3 m. */
+    _threat() {
       var h = this.game.horror;
-      if (!h.customer.present || h.customer.seated || this.state === 'eriza' || this.state === 'huye' || this.state === 'salta') { return; }
-      var c = this.world.customer.group.position;
       var me = this.mesh.root.position;
-      if (Math.hypot(c.x - me.x, c.z - me.z) > 3.5) { return; }
+      if (h.customer.present && !h.customer.seated) {
+        var c = this.world.customer.group.position;
+        if (Math.hypot(c.x - me.x, c.z - me.z) <= 3.5) { return c; }
+      }
+      var cl = this.game.clientela;
+      var masks = cl ? cl.visitors.filter(function (v) { return v.kind === 'mascara'; }) : [];
+      for (var i = 0; i < masks.length; i += 1) {
+        var p = masks[i].model.group.position;
+        if (Math.hypot(p.x - me.x, p.z - me.z) <= 3) { return p; }
+      }
+      return null;
+    }
+
+    _alarm() {
+      if (this.state === 'eriza' || this.state === 'huye' || this.state === 'salta') { return; }
+      var c = this._threat();
+      if (!c) { return; }
+      var me = this.mesh.root.position;
+      this.fleeFrom = c.clone();
       this.state = 'eriza';
       this.timer = 1.1;
       this.hisses += 1;
@@ -397,8 +452,8 @@
     }
 
     _flee() {
-      // Al punto más lejano de él.
-      var c = this.world.customer.group.position;
+      // Al punto más lejano de lo que la asustó (él o una máscara).
+      var c = this.fleeFrom || this.world.customer.group.position;
       var best = this.node;
       var bd = -1;
       Object.keys(NODES).forEach(function (k) {

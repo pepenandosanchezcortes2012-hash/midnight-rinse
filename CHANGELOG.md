@@ -65,3 +65,10 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **«1986» en el vaho**, escrito al revés desde afuera, sin que lo veas escribirse.
 - **Decisión:** la campana y la orden 22 se conectan por causa y efecto, y nunca se explica. Es la regla del canon: cada cosa agrega una pista, nunca la respuesta.
 - **Decisión:** el «1986» va en espejo. Es un detalle que se entiende solo («desde afuera»), sin texto de más.
+
+## Sprint 5 — La vida conectada
+
+- Pelusa le bufa a las máscaras negras y acompaña a las caras blancas. Las caras cruzan la avenida (por la vidriera) antes de entrar. La vigía mira la lavandería desde la vereda de enfrente.
+- **Decisión:** las máscaras asustan a Pelusa igual que él; las caras blancas no. El gato es el mejor detector de qué es peligroso, así que el jugador aprende sin que nadie se lo diga.
+- **Decisión:** las caras blancas se quedan 22 s (antes 9). Es coherente con sus propias líneas («esperamos a que termine el centrifugado»), da tiempo a conversar y a que Pelusa llegue.
+- **Decisión:** si el gato acompaña a alguien, no lo hace mientras duerme. La rutina manda.

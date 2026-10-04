@@ -1041,6 +1041,58 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Vida conectada: Pelusa bufa a las máscaras y acompaña a las caras; la cara cruza la avenida; la vigía', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var cat = g.gato;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.plan = [];
+      g.horror.customer.present = false;
+      g.player.pos.set(-6, 0, 2.5);
+      // Pelusa y la máscara: ponla en el camino al mostrador.
+      cat._placeAtPerch('mostrador'); cat._jump(null, true); step(ctx, 30);
+      cat.mesh.root.position.set(3.0, 0, 3.0); cat.node = 'F4'; cat.state = 'sentado'; cat.timer = 99;
+      var m = c.spawn('mascara');
+      var hissed = false;
+      for (var i = 0; i < 30 * 12 && !hissed; i += 1) { step(ctx, 1); hissed = cat.hisses > 0; }
+      check(hissed, 'Pelusa no le bufó a la máscara');
+      for (var j = 0; j < 30 * 30 && c.visitors.length; j += 1) { step(ctx, 1); }
+      // La cara blanca cruza la avenida antes de entrar.
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      c.plan = [{ at: 0, kind: 'cara' }];
+      step(ctx, 1);
+      check(c.approach && c.approach.model.group.position.z > 9, 'no empezó a cruzar la avenida');
+      for (var k = 0; k < 30 * 12 && c.approach; k += 1) { step(ctx, 1); }
+      check(!c.approach && c.visitors.length === 1, 'no entró después de cruzar');
+      var face = c.visitors[0];
+      for (var q = 0; q < 30 * 30 && face.state !== 'llego'; q += 1) { step(ctx, 1); }
+      // Pelusa la acompaña (forzando su decisión, a una hora en que está despierta: 02:10, acicalarse).
+      g.minutes = 130;
+      var rnd = ctx.w.Math.random;
+      ctx.w.Math.random = function () { return 0.01; };
+      cat.state = 'sentado'; cat.timer = 0; cat.perch = null; step(ctx, 1);
+      ctx.w.Math.random = rnd;
+      for (var r = 0; r < 30 * 25 && sub().indexOf('Pelusa se sienta junto') < 0; r += 1) { step(ctx, 1); }
+      check(sub().indexOf('Pelusa se sienta junto') >= 0, 'Pelusa no acompañó a la cara blanca');
+      // La vigía: aparece sin mirar la vidriera, se nota al mirar y se va al apartar la vista.
+      g.minutes = 200;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(4.6, 0, 1.2);
+      var toward = Math.atan2(-(4.7 - 4.6), -(5.0 - 1.2));
+      g.player.yaw = toward + Math.PI; g.player.pitch = 0;
+      g.horror.schedule('vigia', 'vidriera', 1);
+      step(ctx, 10);
+      check(c.watcher && c.watcher.group.visible, 'no apareció la vigía');
+      g.player.yaw = toward; step(ctx, 3);
+      check(sub().indexOf('mira hacia la lavandería') >= 0, 'no notó a la vigía');
+      g.player.yaw = toward + Math.PI; step(ctx, 90);
+      check(!c.watcher.group.visible, 'la vigía no se fue');
+      noErrors(ctx);
+      return 'bufido · cruce · compañía · vigía';
+    }],
+
     ['Secreto: la campana de la escuela (tercera vuelta) trae a una máscara con la ORDEN N.º 22', async function () {
       var ctx = await load();
       var g = ctx.g;
@@ -1221,6 +1273,7 @@
       var cat = g.gato;
       start(ctx);
       g.horror.customer.present = false;
+      g.clientela.plan = []; // sin visitas: Pelusa a veces las acompaña (eso tiene su propia prueba)
       function at(min, frames) {
         g.minutes = min;
         cat.timer = 0;
