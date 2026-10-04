@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 33, texto: 'El final verdadero ahora tiene amanecer. Ojalá lo veas.' },
     { id: 32, texto: 'Mira la avenida: las caras blancas cruzan antes de entrar. Y Pelusa ya eligió de quién desconfiar.' },
     { id: 31, texto: 'Si el bosque te devuelve tres veces, escucharás una campana. Y alguien escribe en el vaho de la vidriera.' },
     { id: 30, texto: 'Puedes conversar con las caras blancas. Pregúntales por 1986.' },

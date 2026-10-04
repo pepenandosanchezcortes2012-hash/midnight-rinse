@@ -41,6 +41,8 @@
 
     /** Luz ambiente de base donde estés (el clima le suma los relámpagos). */
     baseAmbient() {
+      // Al amanecer (final verdadero): la luz gris de la mañana entra por la vidriera.
+      if (this.game.epilogue) { return this.dawnAmbient || (this.dawnAmbient = new THREE.Vector3(0.58, 0.53, 0.5)); }
       var p = this.game.pasillo;
       if (p && p.inside) { return p.p.ambient; }
       return this.outside ? this.outAmbient : this.inside.ambient;

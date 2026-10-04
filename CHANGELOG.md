@@ -72,3 +72,10 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** las máscaras asustan a Pelusa igual que él; las caras blancas no. El gato es el mejor detector de qué es peligroso, así que el jugador aprende sin que nadie se lo diga.
 - **Decisión:** las caras blancas se quedan 22 s (antes 9). Es coherente con sus propias líneas («esperamos a que termine el centrifugado»), da tiempo a conversar y a que Pelusa llegue.
 - **Decisión:** si el gato acompaña a alguien, no lo hace mientras duerme. La rutina manda.
+
+## Sprint 6 — El amanecer en Blackwood
+
+- El final verdadero se juega: la lavandería a oscuras a las 05:13, la avenida de día, pájaros, la farmacia por fin apagada y la puerta de vidrio que da a la calle.
+- **Decisión:** es la única vez que la puerta no lleva al bosque. Es la recompensa del final y cierra el contraste entre la vidriera y la puerta que se abrió en el Sprint 2.
+- **Decisión:** el reloj se queda en 05:13 y no hay sustos. Es un momento de calma; el jugador decide cuándo irse.
+- **Decisión:** la luz es gris de mañana, no un sol brillante. Mantiene la paleta PS1 apagada y el tono melancólico de Blackwood.

@@ -893,6 +893,8 @@
       check(g.flags.secreto, 'la respuesta secreta no quedó registrada');
       g.bosque.go(); step(ctx, 40);
       g.bosque.touchWasher(); step(ctx, 30 * 4);
+      check(g.epilogue && g.state === 'playing', 'no empezó el amanecer');
+      g.gameplay._begin({ kind: 'salirBosque', index: 0 }, g.input); step(ctx, 5); // la puerta da a la calle
       var title = ctx.w.document.getElementById('final-titulo').textContent;
       check(g.state === 'ended' && title === ctx.w.MR.HISTORIA.verdadero.titulo, 'no fue el final verdadero (' + title + ')');
       check(g.logros.has('verdadero') && g.logros.has('final_bosque'), 'no dio los logros del final');
@@ -1039,6 +1041,35 @@
       check(g.dread < 0.5 && d.getElementById('subtitulos').textContent.indexOf('agua en la cara') >= 0, 'el lavabo no hizo nada');
       noErrors(ctx);
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
+    }],
+
+    ['El amanecer en Blackwood: tras el final verdadero, la lavandería a oscuras, la avenida de día y la puerta a la calle', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var city = g.world.city;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      ctx.w.dispatchEvent(new ctx.w.PointerEvent('pointerdown'));
+      start(ctx);
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g.bosque.found = [true, true, true, true, true, true];
+      g._ask(); g._answer(4);
+      await wait(1500);
+      g.bosque.go(); step(ctx, 40);
+      g.bosque.touchWasher(); step(ctx, 30 * 4);
+      check(g.epilogue && g.state === 'playing' && !g.bosque.outside, 'no volvió a la lavandería al amanecer');
+      check(sub().indexOf('luz de la mañana') >= 0, 'faltó el aviso del amanecer');
+      step(ctx, 30 * 10);
+      check(g.minutes === 313 && g.state === 'playing', 'el reloj siguió o el turno terminó solo (' + g.minutes + ')');
+      check(g.retro.lightFactor.every(function (f) { return f === 0; }), 'las luces siguen prendidas');
+      check(g.ciudad.dawn && city.signs.farmacia.uniforms.uEmissive.value === 0 && !city.rain.visible, 'la avenida no amaneció');
+      check(city.water.position.y < -0.5, 'el agua no bajó');
+      check(!g.horror.customer.present && !g.clientela.visitors.length, 'hay alguien en la lavandería');
+      g.gameplay._begin({ kind: 'salirBosque', index: 0 }, g.input);
+      step(ctx, 5);
+      var title = ctx.w.document.getElementById('final-titulo').textContent;
+      check(g.state === 'ended' && g.ending === 'verdadero' && title === ctx.w.MR.HISTORIA.verdadero.titulo, 'la puerta no llevó al final verdadero (' + title + ')');
+      noErrors(ctx);
+      return '05:13 · luces apagadas · farmacia apagada · la calle';
     }],
 
     ['Vida conectada: Pelusa bufa a las máscaras y acompaña a las caras; la cara cruza la avenida; la vigía', async function () {
@@ -1950,6 +1981,7 @@
       g._ask(); g._answer(4);
       g.bosque.go(); step(ctx, 40);
       g.bosque.touchWasher(); step(ctx, 30 * 4);
+      g.finishEpilogue(); step(ctx, 5);
       check(g.ending === 'verdadero', 'final ' + g.ending);
       check(d.getElementById('final-resumen').textContent.indexOf('¡Nuevo récord en Normal!') >= 0, 'no avisó del récord');
       var h = g.historial.d;

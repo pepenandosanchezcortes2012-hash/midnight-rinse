@@ -284,7 +284,8 @@
       if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); this._attract(dt); }
       this.espejo.render(); // el reflejo del espejo del pasillo, antes del cuadro
       this.retro.render(this.world.scene, this.player.camera, {
-        blink: this.state === 'ended' ? Math.min(1, (now - (this.endedAt || 0)) / 3000) : Math.max(this.player.blink.amount, this.bosque.fade, this.pasillo.fade),
+        blink: this.state === 'ended' ? Math.min(1, (now - (this.endedAt || 0)) / 3000) :
+          Math.max(this.player.blink.amount, this.bosque.fade, this.pasillo.fade, this.epiFade || 0),
         dread: this.dread,
         time: now / 1000,
         flash: this.horror.flash,
@@ -315,6 +316,7 @@
       var input = this.input;
       var prevMinutes = this.minutes;
       this.minutes = Math.min(C.SHIFT_END, this.minutes + dt * C.GAME_SECONDS_PER_REAL_SECOND / 60 * this.consumables.timeScale());
+      if (this.epilogue) { this.minutes = 313; prevMinutes = 313; } // el amanecer: el reloj se queda en 05:13
       var dMin = this.minutes - prevMinutes;
       this.whispers = MR.whispersActive(this.clock()) || (this.options.meta && MR.whispersActive(new Date()));
 
@@ -349,7 +351,7 @@
       if (cc) { extra.push(cc); }
       this.bosque.update(dt);
       this.espejo.update(dt);
-      this.clientela.update(dt);
+      if (!this.epilogue) { this.clientela.update(dt); }
       this.ciudad.update(dt);
       this.pasillo.update(dt);
       this.player.update(dt, input, {
@@ -370,23 +372,29 @@
 
       this.consumables.update(dt);
       this.gameplay.update(dt, dMin, this.minutes);
-      this.horror.update(dt, this.player);
+      if (this.epilogue) {
+        this._epilogueUpdate(dt);
+      } else {
+        this.horror.update(dt, this.player);
+      }
       this.gato.update(dt);
-      this.hintTimer = (this.hintTimer || 0) - dt;
-      if (this.hintTimer <= 0) { this.hintTimer = 1; this._hints(); }
-      // Guardado automático (Continuar turno).
-      this.saveTimer -= dt;
-      if (this.saveTimer <= 0) { this.saveTimer = 10; MR.Partida.save(this); }
-      this._beats(prevMinutes);
-      this._question(dt);
-      this._dread(dt);
+      if (!this.epilogue) {
+        this.hintTimer = (this.hintTimer || 0) - dt;
+        if (this.hintTimer <= 0) { this.hintTimer = 1; this._hints(); }
+        // Guardado automático (Continuar turno).
+        this.saveTimer -= dt;
+        if (this.saveTimer <= 0) { this.saveTimer = 10; MR.Partida.save(this); }
+        this._beats(prevMinutes);
+        this._question(dt);
+        this._dread(dt);
+      }
       this.glasses.update(dt, this._humidity(), this.wipe);
       this.horror.flash = Math.max(0, this.horror.flash - dt * 2);
       this.music.update(dt);
       this.audio.update({
         outdoor: this.bosque.outdoor,
         muffled: this.pasillo.muffle,
-        clearSky: this.mod === 'luna',
+        clearSky: this.mod === 'luna' || !!this.epilogue,
         high: this.consumables.high,
         mixMode: this.options.mixMode,
         musicProximity: this.music.proximity,
@@ -396,9 +404,9 @@
         dread: this.dread,
         collapse: this.collapsed,
         eyesClosed: this.player.eyesClosed,
-        lightLevel: this.horror.lightLevel()
+        lightLevel: this.epilogue ? 0 : this.horror.lightLevel()
       });
-      if (this.minutes >= C.SHIFT_END) { this.end(); }
+      if (this.minutes >= C.SHIFT_END && !this.epilogue) { this.end(); } // al amanecer, el turno termina al cruzar la puerta
     }
 
     _crossed(prev, at) { return prev < at && this.minutes >= at; }
@@ -636,6 +644,67 @@
       }
     }
 
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * El amanecer en Blackwood (final verdadero): vuelves a la lavandería a oscuras a las 05:13. Por la vidriera entra
+     * la luz de la mañana, la avenida está seca y despierta, la cruz de la farmacia por fin se apagó. La puerta de
+     * vidrio, por primera vez, da a la calle: al cruzarla termina el turno.
+     */
+    _startEpilogue() {
+      this.epilogue = true;
+      this.epiFade = 1;
+      this.epiTime = 0;
+      this.closeDialog();
+      this.closeNote();
+      if (this.bosque.outside) { this.bosque._swap(false); }
+      if (this.pasillo.inside) { this.pasillo._swap(false); }
+      this.bosque.ending = false;
+      var p = this.player;
+      p.pos.set(4.6, 0, 0.6);
+      p.yaw = Math.PI; // mirando la vidriera grande
+      p.pitch = 0.05;
+      this.minutes = 313;
+      this.dread = 0;
+      this.horror.customer.present = false;
+      this.world.customer.group.visible = false;
+      this.world.loneHat.visible = false;
+      var cl = this.clientela;
+      cl.plan = [];
+      cl.visitors.slice().forEach(function (v) { cl._remove(v); });
+      if (cl.watcher) { cl.watcher.group.visible = false; }
+      if (cl.approach) { this.world.scene.remove(cl.approach.model.group); cl.approach = null; }
+      for (var i = 0; i < 6; i += 1) { this.retro.setLightFactor(i, 0); } // las luces de la lavandería, apagadas
+      this.retro.shared.uAmbient.value.copy(this.bosque.baseAmbient()); // la luz gris de la mañana (clima.js la mantiene)
+      this.retro.shared.uFogColor.value.set(0.56, 0.62, 0.68);   // lo lejano se aclara (de noche se oscurecía)
+      this.retro.renderer.setClearColor(0x9fb3c4, 1);                 // el cielo, arriba de los edificios
+      this.ciudad.dawn = true;
+      this.ui.subtitle('(05:13. Las luces de la lavandería están apagadas. Por la vidriera entra la luz de la mañana.)', 7);
+      var self = this;
+      setTimeout(function () {
+        if (self.epilogue && self.state === 'playing') {
+          self.ui.subtitle('(El letrero de la puerta dice CERRADO. Por primera vez, la puerta de vidrio da a la calle.)', 7);
+        }
+      }, 6500);
+    }
+
+    _epilogueUpdate(dt) {
+      this.epiTime += dt;
+      this.epiFade = Math.max(0, this.epiFade - dt / 2.5);
+      this.dread = 0;
+      for (var i = 0; i < 6; i += 1) { this.retro.setLightFactor(i, 0); }
+      // Pájaros: trinos sueltos, de un lado y del otro.
+      this.birdTimer = (this.birdTimer || 0) - dt;
+      if (this.birdTimer <= 0) { this.birdTimer = U.rand(0.8, 2.6); this.audio.pajaro(U.rand(-0.8, 0.8)); }
+    }
+
+    /** Cruzar la puerta de vidrio al amanecer: la calle, y el final. */
+    finishEpilogue() {
+      if (!this.epilogue || this.epilogueDone) { return; }
+      this.epilogueDone = true;
+      this.audio.door();
+      this.end('bosque');
+    }
+
     /** Tocar el banco amarillo: frío antes de que él llegue; si está sentado, no te atreves; si se fue, tibio. */
     touchBench() {
       var h = this.horror;
@@ -823,6 +892,8 @@
     /** Fin del turno. reason = 'bosque' para el tercer final (las seis hojas en la lavadora del claro). */
     end(reason) {
       if (this.state === 'ended') { return; }
+      // Final verdadero: antes de la pantalla final, el amanecer en Blackwood (se juega hasta cruzar la puerta).
+      if (reason === 'bosque' && this.flags.secreto && !this.epilogue) { this._startEpilogue(); return; }
       this.state = 'ended';
       MR.Partida.clear();
       try {

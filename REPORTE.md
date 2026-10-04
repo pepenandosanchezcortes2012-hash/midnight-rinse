@@ -613,6 +613,18 @@ El proyecto pasó por dos etapas:
 - **La vigía:** desde las 03:00, una vez por noche y solo con la vidriera fuera de vista, una cara blanca aparece parada en la vereda de enfrente, mirando la lavandería. Al verla: «(Del otro lado de la avenida, alguien de cara blanca mira hacia la lavandería. No trae paraguas.)». Si apartas la vista o parpadeas, ya no está.
 - **Pruebas:** la de la rutina de Pelusa ahora se aísla de las visitas (con visitas, a veces se va a acompañarlas). Prueba nueva con las cuatro cosas. Revisado con captura (la cara blanca cruzando la avenida encendida). Resultado: 71/71.
 
+## 81. Sprint 6: el amanecer en Blackwood (epílogo del final verdadero)
+- **Qué pasa:** al cerrar el ciclo en el claro la misma noche en que le dijiste la hora verdadera, ya no aparece de inmediato la pantalla final. Vuelves a la lavandería a las **05:13**:
+  - las luces apagadas, y una luz gris de mañana que entra por la vidriera;
+  - la avenida de día: seca, con tráfico, gente sin paraguas, ventanas que reflejan el cielo y sin lluvia;
+  - la cruz de la farmacia de don Pedro **por fin apagada**;
+  - pájaros en vez de zumbido.
+
+  Nadie más en la lavandería. «(El letrero de la puerta dice CERRADO. Por primera vez, la puerta de vidrio da a la calle.)» Al cruzarla termina el turno con el final verdadero. Puedes quedarte el tiempo que quieras: el reloj no avanza.
+- **Cómo:** `game._startEpilogue()`, `_epilogueUpdate()` y `finishEpilogue()`. Durante el amanecer no corren el director de sustos, las visitas, el guardado ni las horas. Las luces quedan en 0 y la luz ambiente de mañana la mantiene `bosque.baseAmbient()` (antes, `clima.js` la pisaba cada cuadro). La niebla toma color de cielo para que lo lejano se aclare, `ciudad.dawn` pinta las fachadas de día, y `audio.pajaro()` canta.
+- **Errores encontrados por las pruebas y corregidos:** un `end()` por la hora (el reloj fijo en 05:13 pasaba de 05:12) y `setRGB` sobre un `Vector3`. Las pruebas del final verdadero y de récords ahora cruzan la puerta.
+- Revisado con capturas: la primera versión se veía de noche; se ajustó hasta que se viera de mañana. Prueba nueva. Resultado: 72/72.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -758,5 +758,8 @@ MR.TEXTOS_EN = {
  "Si el bosque te devuelve tres veces, escucharás una campana. Y alguien escribe en el vaho de la vidriera.": "If the forest sends you back three times, you will hear a bell. And someone writes in the fog on the window.",
  "(Pelusa se sienta junto a la cara blanca. Ella no la mira, pero le acerca la mano.)": "(Pelusa sits beside the white face. It doesn't look at the cat, but it moves its hand closer.)",
  "(Del otro lado de la avenida, alguien de cara blanca mira hacia la lavandería. No trae paraguas.)": "(Across the avenue, someone with a white face is looking at the laundromat. No umbrella.)",
- "Mira la avenida: las caras blancas cruzan antes de entrar. Y Pelusa ya eligió de quién desconfiar.": "Watch the avenue: the white faces cross it before coming in. And Pelusa has already chosen whom to distrust."
+ "Mira la avenida: las caras blancas cruzan antes de entrar. Y Pelusa ya eligió de quién desconfiar.": "Watch the avenue: the white faces cross it before coming in. And Pelusa has already chosen whom to distrust.",
+ "(05:13. Las luces de la lavandería están apagadas. Por la vidriera entra la luz de la mañana.)": "(05:13. The laundromat lights are off. Morning light is coming in through the window.)",
+ "(El letrero de la puerta dice CERRADO. Por primera vez, la puerta de vidrio da a la calle.)": "(The sign on the door says CLOSED. For the first time, the glass door opens onto the street.)",
+ "El final verdadero ahora tiene amanecer. Ojalá lo veas.": "The true ending now has a dawn. I hope you get to see it."
 };

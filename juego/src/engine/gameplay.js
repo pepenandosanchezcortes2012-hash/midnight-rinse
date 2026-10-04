@@ -161,6 +161,7 @@
       if (kind === 'note') { this.game.openNote(); return; }
       if (kind === 'tareas') { this.game.openTasks(); return; }
       if (kind === 'tele') { this.game.tele.togglePlay(); return; }
+      if (kind === 'salirBosque' && this.game.epilogue) { this.game.finishEpilogue(); return; } // al amanecer: la calle
       if (kind === 'salirBosque' || kind === 'entrarLavanderia') { this.game.bosque.go(); return; }
       if (kind === 'lavadoraBosque') { this.game.bosque.touchWasher(); return; }
       if (kind === 'paginaBosque') { this.game.bosque.takePage(target.index); return; }

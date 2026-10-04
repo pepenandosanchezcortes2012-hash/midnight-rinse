@@ -405,6 +405,31 @@
       ring(2.2, 0.035, 0.8); // la que contesta, lejos
     }
 
+    /** Un pájaro al amanecer: dos o tres notas agudas que suben y bajan. */
+    pajaro(pan) {
+      var ctx = this.ctx;
+      if (!ctx) { return; }
+      var t = ctx.currentTime;
+      var p = ctx.createStereoPanner();
+      p.pan.value = pan || 0;
+      p.connect(this.master);
+      var n = 2 + Math.floor(Math.random() * 2);
+      for (var i = 0; i < n; i += 1) {
+        var at = t + i * 0.13;
+        var f = 2600 + Math.random() * 1400;
+        var o = ctx.createOscillator();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f, at);
+        o.frequency.exponentialRampToValueAtTime(f * (i % 2 ? 0.8 : 1.25), at + 0.09);
+        var g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, at);
+        g.gain.exponentialRampToValueAtTime(0.025, at + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, at + 0.11);
+        o.connect(g); g.connect(p);
+        o.start(at); o.stop(at + 0.12);
+      }
+    }
+
     /** El murmullo de la avenida por la vidriera (0 = nada, 1 = tráfico de la una de la mañana). */
     setCity(level) {
       if (!this.cityLoop || !this.ctx) { return; }

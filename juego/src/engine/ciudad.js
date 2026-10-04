@@ -33,17 +33,20 @@
 
     /** Fachadas: ventanas encendidas según la vida (se redibuja solo si cambia cuántas hay). */
     drawFacades() {
-      var lit = 0.12 + 0.75 * this.vida;
+      var lit = this.dawn ? 0.05 : 0.12 + 0.75 * this.vida; // de día casi no hay ventanas encendidas
+      var dawn = !!this.dawn;
       this.c.facades.forEach(function (f) {
         var on = f.windows.filter(function (w) { return w.at < lit; }).length;
-        if (on === f.lit) { return; }
+        if (on === f.lit && f.dawn === dawn) { return; }
+        f.dawn = dawn;
         f.lit = on;
         var x = f.tex.ctx;
-        x.fillStyle = '#2a1f1c';
+        x.fillStyle = dawn ? '#6e544a' : '#2a1f1c'; // de día, el ladrillo se ve
         x.fillRect(0, 0, 32, 40);
         f.windows.forEach(function (w, i) {
           var glow = w.at < lit;
-          x.fillStyle = glow ? ((i + f.seed) % 7 === 0 ? '#8fb4ff' : '#ffd27a') : '#121314'; // alguna tele azul
+          // De noche: luz amarilla (o la tele azul). De día: los vidrios reflejan el cielo gris.
+          x.fillStyle = glow ? ((i + f.seed) % 7 === 0 ? '#8fb4ff' : '#ffd27a') : (dawn ? '#8fa2b3' : '#121314');
           x.fillRect(3 + w.c * 7, 3 + w.r * 7.4, 5, 5);
         });
         f.tex.texture.needsUpdate = true;
@@ -56,11 +59,13 @@
       var inSala = !g.bosque.outside && !g.pasillo.inside;
       c.group.visible = inSala;
       if (!inSala) { g.audio.setCity(0); return; }
-      this.vida = this.vidaAt(g.minutes);
-      this.agua = this.aguaAt(g.minutes);
+      this.vida = this.dawn ? 1 : this.vidaAt(g.minutes);
+      this.agua = this.dawn ? 0 : this.aguaAt(g.minutes);
       c.water.position.y = -0.6 + this.agua * 1.45;
       // Letreros: la farmacia parpadea pero no se apaga; los demás se apagan con la vida.
-      c.signs.farmacia.uniforms.uEmissive.value = Math.random() < 0.04 ? 0.25 : 1.3;
+      // Al amanecer (final verdadero), la cruz de la farmacia por fin se apaga; no hay lluvia ni paraguas.
+      c.signs.farmacia.uniforms.uEmissive.value = this.dawn ? 0 : (Math.random() < 0.04 ? 0.25 : 1.3);
+      c.rain.visible = !this.dawn;
       c.signs.tortilleria.uniforms.uEmissive.value = this.vida > 0.4 ? 1.3 : (this.vida > 0.25 && Math.random() < 0.5 ? 0.35 : 0);
       c.signs.hotel.uniforms.uEmissive.value = this.vida > 0.15 ? 1.2 : 0;
       this.drawFacades();
@@ -108,6 +113,7 @@
           p.group.position.set(-21 * p.dir, 0.12, U.pick(WALKS));
           p.group.rotation.y = p.dir > 0 ? Math.PI / 2 : -Math.PI / 2;
           p.group.visible = true;
+          p.group.children[1].visible = !this.dawn; // el paraguas, solo si llueve
         }
       }
       this.c.people.forEach(function (k) {
