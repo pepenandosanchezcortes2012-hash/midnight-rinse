@@ -114,6 +114,7 @@
       this._clothes(player);
       this._prints(player);
       this._stepsAbove(dt, player);
+      this._basket(player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -152,6 +153,7 @@
         if (!g.gameplay.phoneRinging && g.minutes > MR.Config.PHONE_RINGS + 10) { table.push(['telefono_breve', 0.8]); }
         if (!this.coinDone && g.gameplay.coins > 0 && g.gameplay.trayCoins === 0) { table.push(['moneda_canto', 0.8]); }
         if (!this.clothesDone) { table.push(['ropa_doblada', 0.8]); }
+        if ((this.basketLevel || 0) < 3 && g.flags.customerSeen) { table.push(['cesto', 1]); }
         if (g.flags.customerSeen && !g.tele.faceArmed && (g.tele.faceSeen || 0) < 2) { table.push(['tele_rostro', 1.2]); }
         if (this.customer.present) {
           table.push(['huellas', 1], ['mano_vidrio', 1]);
@@ -202,6 +204,7 @@
         case 'radio_sola': this.schedule('radio_sola', 'mostrador', 1); break;
         case 'moneda_canto': this.schedule('moneda_canto', 'cambiador', 1); break;
         case 'ropa_doblada': this.schedule('ropa_doblada', 'mostrador', 1); break;
+        case 'cesto': this.schedule('cesto', 'cesto', 1); break;
         case 'tele_rostro': this.game.tele.faceArmed = true; break; // sale cuando mires la tele (tele.js)
         case 'espejo': this.game.espejo.armed = true; break; // sale cuando te mires en el espejo (espejo.js)
         case 'golpe_secadora': this.schedule('golpe_secadora', 'secadoras', 1, { index: Math.floor(Math.random() * 4) }); break;
@@ -324,6 +327,16 @@
           this.flickers[0] = Math.max(this.flickers[0], U.rand(0.5, 1.6));
           audio.buzz();
           break;
+        case 'cesto': {
+          // Mientras no lo mirabas, el cesto tiene un uniforme más (tres en total). Roce de tela.
+          var lvl = this.basketLevel || 0;
+          if (lvl >= 3) { break; }
+          w.basketPiles[lvl].visible = true;
+          this.basketLevel = lvl + 1;
+          audio.lint();
+          g.dread = Math.min(1, g.dread + 0.02);
+          break;
+        }
         case 'ropa_doblada': {
           // Mientras no mirabas el mostrador: una pila de ropa doblada que nadie trajo; roce de tela a tus espaldas.
           if (this.clothesDone) { break; }
@@ -516,6 +529,16 @@
       if (!force && Math.random() < 0.5) { return; }
       this.printsFromForest = true;
       this.schedule('huellas', 'banco', 1);
+    }
+
+    /** El cesto lleno: al verlo de cerca con sus tres uniformes, el subtítulo (una vez). */
+    _basket(player) {
+      if ((this.basketLevel || 0) < 3 || this.basketNoticed) { return; }
+      if (this.zoneVisible('cesto') > 0.4 && U.distXZ(player.pos, this.world.basket.position) < 3) {
+        this.basketNoticed = true;
+        this.game.ui.subtitle('(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)', 5);
+        this.game.dread = Math.min(1, this.game.dread + 0.05);
+      }
     }
 
     /**

@@ -544,6 +544,11 @@ El proyecto pasó por dos etapas:
 - **Qué pasa:** desde que él apareció, si te quedas quieto 6 s en la sala con menos de 3 máquinas tapando el zumbido (`calmSources() < 3`), se oyen seis pasos graves y amortiguados en el techo, cruzando de izquierda a derecha. Después: «(Arriba se oyen pasos. La lavandería no tiene segundo piso.)». Una vez por noche, nunca en Paseo. No hay nada que ver: es pura paranoia de sonido, y premia mantener las máquinas andando.
 - Prueba nueva (con 3 lavadoras no; caminando no; quieto y en silencio sí, con subtítulo). Resultado: 60/60.
 
+## 70. El cesto que se llena
+- **Qué pasa:** entre lavadoras y secadoras hay un cesto de plástico vacío, con su propia zona de oclusión. Desde que él apareció, el director puede programar «cesto» hasta tres veces por noche: solo cuando no lo miras (o parpadeas), aparece un uniforme más, con un roce de tela. Lleno y visto de cerca: «(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)». Al tocarlo: vacío, «(Un cesto de plástico vacío.)»; con uniformes, «(Están tibios. Ninguno tiene nombre todavía.)», una pista de que el ciclo espera a otros. Revisado con captura: la última capa asoma sobre el borde.
+- **Rendimiento:** en la sala, de 138 a 142 llamadas de dibujo.
+- Prueba nueva. Resultado: 61/61.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

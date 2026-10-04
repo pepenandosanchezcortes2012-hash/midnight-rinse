@@ -233,6 +233,27 @@
       }
       this.collider(0.95, 5.05, -5, -4.15);
 
+      // El cesto de ropa entre lavadoras y secadoras: se llena de uniformes cuando no lo miras (horror.js, «cesto»).
+      var basket = new THREE.Group();
+      basket.position.set(0.45, 0, -3.75);
+      var plastic = this.retro.material({ texture: 'white', color: 0x4d5a66 });
+      this.box(0.56, 0.03, 0.4, plastic, 0, 0.015, 0, basket);
+      [[0, 0.2, 0.19, 0.56, 0.03], [0, 0.2, -0.19, 0.56, 0.03], [0.27, 0.2, 0, 0.03, 0.4], [-0.27, 0.2, 0, 0.03, 0.4]].forEach(function (s) {
+        this.box(s[3], 0.38, s[4], plastic, s[0], s[1], s[2], basket);
+      }, this);
+      var uniform = this.retro.material({ texture: 'white', color: 0x6f7f8f });
+      this.basketPiles = [];
+      for (var bp = 0; bp < 3; bp += 1) {
+        var pile = this.box(0.48 - bp * 0.03, 0.12, 0.32 - bp * 0.02, uniform, (bp - 1) * 0.02, 0.08 + bp * 0.14, (1 - bp) * 0.015, basket);
+        pile.rotation.y = (bp - 1) * 0.12;
+        pile.visible = false;
+        this.basketPiles.push(pile);
+      }
+      basket.children.forEach(function (c) { this.interactive(c, 'cesto'); }, this);
+      this.add(basket);
+      this.basket = basket;
+      this.collider(0.15, 0.75, -4.0, -3.5);
+
       // Puerta trasera (pasillo de servicio).
       var pivot = new THREE.Group();
       pivot.position.set(6.35, 0, -4.97);
@@ -588,6 +609,7 @@
         entrada: { center: new V3(0.0, 1.2, 4.5), radius: 1.8 },
         almacen: { center: new V3(-7.3, 1.2, 3.5), radius: 1.2 },
         cambiador: { center: new V3(-4.5, 0.8, 4.6), radius: 0.8 },
+        cesto: { center: new V3(0.45, 0.4, -3.75), radius: 0.6 },
         puerta_trasera: { center: new V3(6.8, 1.1, -4.7), radius: 0.9 }
       };
     }

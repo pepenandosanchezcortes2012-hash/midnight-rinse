@@ -1041,6 +1041,31 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['El cesto: se llena de uniformes solo cuando no lo miras; lleno, el subtítulo', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var b = g.world.basket.position;
+      start(ctx);
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(b.x + 0.4, 0, b.z + 2.2);
+      var toward = Math.atan2(-(b.x - g.player.pos.x), -(b.z - g.player.pos.z));
+      g.player.yaw = toward; g.player.pitch = -0.45;
+      step(ctx, 2);
+      check(h.zoneVisible('cesto') > 0.4, 'el cesto no estaba a la vista');
+      h.schedule('cesto', 'cesto', 1);
+      step(ctx, 20);
+      check(!h.basketLevel, 'creció mientras lo mirabas');
+      g.player.yaw = toward + Math.PI;
+      for (var k = 0; k < 3; k += 1) { h.schedule('cesto', 'cesto', 1); step(ctx, 20); }
+      check(h.basketLevel === 3 && g.world.basketPiles.every(function (p) { return p.visible; }), 'no se llenó (' + h.basketLevel + ')');
+      g.player.yaw = toward;
+      step(ctx, 3);
+      check(ctx.w.document.getElementById('subtitulos').textContent.indexOf('uniformes como el tuyo') >= 0, 'no lo notó lleno');
+      noErrors(ctx);
+      return 'tres uniformes, solo a espaldas';
+    }],
+
     ['Pasos arriba: quieto y en silencio, sí; caminando o con tres lavadoras, no', async function () {
       var ctx = await load();
       var g = ctx.g;

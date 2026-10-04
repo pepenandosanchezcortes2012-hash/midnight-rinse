@@ -652,5 +652,9 @@ MR.TEXTOS_EN = {
  "(El banco está tibio, como si alguien acabara de levantarse.)": "(The bench is warm, as if someone just got up.)",
  "Puedes tocar el banco amarillo. Fíjate si está frío.": "You can touch the yellow bench. Notice whether it's cold.",
  "(Arriba se oyen pasos. La lavandería no tiene segundo piso.)": "(Footsteps upstairs. The laundromat doesn't have a second floor.)",
- "No te quedes quieto mucho rato en silencio.": "Don't stay still in silence for too long."
+ "No te quedes quieto mucho rato en silencio.": "Don't stay still in silence for too long.",
+ "(Están tibios. Ninguno tiene nombre todavía.)": "(They're warm. None of them has a name yet.)",
+ "(Un cesto de plástico vacío.)": "(An empty plastic basket.)",
+ "(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)": "(The basket is full of uniforms like yours. All dry. All warm.)",
+ "Hay un cesto entre las lavadoras y las secadoras. Estaba vacío.": "There's a basket between the washers and the dryers. It was empty."
 };

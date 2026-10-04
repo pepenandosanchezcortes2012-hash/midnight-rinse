@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 23, texto: 'Hay un cesto entre las lavadoras y las secadoras. Estaba vacío.' },
     { id: 22, texto: 'No te quedes quieto mucho rato en silencio.' },
     { id: 21, texto: 'Puedes tocar el banco amarillo. Fíjate si está frío.' },
     { id: 20, texto: 'En las noches de niebla, el bosque tiene otra farola. No intentes alcanzarla.' },
