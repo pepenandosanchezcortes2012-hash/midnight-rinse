@@ -6,6 +6,7 @@
  *   Un párrafo con etiquetas de formato (<b>, <span class="tecla">…) se traduce entero, con sus etiquetas.
  * - Idioma: ?lang=es|en, la opción guardada o, si no hay, el del navegador (español si empieza con «es»).
  * - En inglés, lo que no tiene traducción queda en MR.I18N.missing (la prueba de idioma lo revisa).
+ * - textos_en.js solo se descarga en inglés (ver el final de este archivo).
  */
 (function (MR) {
   'use strict';
@@ -130,4 +131,11 @@
   MR.I18N = I;
   MR.t = I.t;
   MR.tf = I.tf;
+
+  // En inglés, las traducciones se cargan aquí mismo (la etiqueta de index.html es inerte para no descargarlas en
+  // español). document.write durante la carga: el script nuevo corre antes que los que siguen en la página.
+  if (I.lang === 'en' && !MR.TEXTOS_EN && document.readyState === 'loading') {
+    var tag = document.querySelector('script[data-idioma="en"]');
+    if (tag) { document.write('<script src="' + tag.getAttribute('src') + '"><\/script>'); }
+  }
 })(window.MR = window.MR || {});

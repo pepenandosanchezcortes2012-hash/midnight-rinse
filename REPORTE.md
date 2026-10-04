@@ -493,6 +493,23 @@ El proyecto pasó por dos etapas:
 - **El autoguardado** ahora incluye los sustos ya vistos esa noche (la cara en la tele, él en el espejo, si ya notaste que no te reflejas) y las fotos del turno (lugares del «Álbum», cuántas, si ya salió él o Pelusa). Al recargar, los sustos no pasan de su límite por noche y no se pierde el progreso del álbum. Los guardados viejos siguen sirviendo: los campos nuevos son opcionales.
 - Prueba nueva. Resultado: 52/52.
 
+## 62. Cinco skills del proyecto y el pipeline completo
+- **Skills en `.claude/skills/`**, pedidas por Yesda: `midnight-creative-engine`, `retro-psx-optimizer`, `perpetual-task-runner`, `qa-sentinel-audio` y `lorekeeper-blackwood`. Cada una tiene su `SKILL.md`, con cuándo usarla, los pasos y las reglas, y una herramienta que funciona. Son instrucciones y scripts que se cargan al trabajar en el proyecto, no procesos que corran solos: el «automático» es el ciclo del `perpetual-task-runner`, que llama a las otras en cada vuelta.
+- **`TASK_BACKLOG.md`:** pendientes, 5 ideas del motor creativo (3 microanomalías y 2 variaciones, revisadas contra el canon), bloqueadas y hechas.
+- **`CANON.md`:** el canon real del juego (lugar, horarios, él, los seis de antes, reglas del misterio, inventario de textos). Las propuestas de Yesda (el embalse de 1986, las caras blancas, las máscaras negras, el bosque infinito, «Blackwood») quedan en la §7 como pendientes de decisión: hoy no están en el juego y `lore_check.py` las rechaza en textos nuevos hasta que se aprueben.
+- **Primera tarea del ciclo:** `textos_en.js` (~80 KB) solo se descarga en inglés. La etiqueta en `index.html` es inerte (`type="text/plain"`), así que el sellado de versión y el service worker la siguen viendo y el modo sin conexión en inglés sigue funcionando. `idioma.js` la carga con `document.write` antes que los demás scripts. Prueba: en español `MR.TEXTOS_EN` no existe, y la prueba en inglés sigue pasando.
+- **Prueba nueva del audio:** el primer toque despierta el ambiente, y un `AudioContext` suspendido (llamada, otra app) se reanuda con el siguiente toque.
+- **Resultados del pipeline:**
+  - Centinela: estático, núcleo JS, 53/53 partidas y, en el modo completo, las 203 pruebas de Python y la versión en vivo.
+  - Auditoría PS1: todos los invariantes en orden.
+  - Canon: sin contradicciones.
+
+| Área | Llamadas de dibujo | Triángulos | ms update+render (CPU, SwiftShader) |
+|---|---|---|---|
+| Sala | 138 | 2 264 | 3,2 |
+| Bosque | 27 | 19 437 | 0,4 |
+| Pasillo (con espejo) | 50 | 1 006 | 1,5 |
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

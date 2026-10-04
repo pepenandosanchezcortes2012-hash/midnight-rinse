@@ -192,6 +192,17 @@ Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y 
 - El registro del turno **persiste entre partidas** y nunca retrocede. Se puede borrar desde la pantalla de título.
 - **Reiniciar todo** (botón rojo en el título y en la pausa): pide confirmación y deja el juego como la primera vez. Borra el registro del turno, las opciones y el enlace de tu música, y solo toca lo que guarda este juego en tu navegador.
 
+## Skills del proyecto (Claude Code)
+
+En `.claude/skills/` hay cinco skills que se cargan al trabajar en esta carpeta. Cada una tiene su `SKILL.md` y sus herramientas:
+| Skill | Para qué | Herramienta |
+|---|---|---|
+| `midnight-creative-engine` | Propone 3 microanomalías y 2 variaciones (cliente, bosque o radio) al cerrar cada tarea, en clave de terror sutil | `estado.py` (inventario del contenido, para no repetir) |
+| `retro-psx-optimizer` | Que siga viéndose PS1 y corra en el celular | `auditar_psx.py [medir]` (invariantes del render; llamadas, triángulos y ms por área) |
+| `perpetual-task-runner` | El ciclo autónomo sobre `TASK_BACKLOG.md`: tomar, hacer, probar, publicar, marcar | `backlog.py` |
+| `qa-sentinel-audio` | Pruebas (Python, JS, partidas), rutas relativas sin 404, audio y despachador de oclusión | `centinela.py [completo]` |
+| `lorekeeper-blackwood` | El canon (`CANON.md`) y la revisión de todo texto nuevo | `lore_check.py ["texto"]` |
+
 ## Estructura
 
 ```

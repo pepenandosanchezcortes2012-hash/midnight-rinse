@@ -89,6 +89,7 @@
     ['El juego arranca sin errores', async function () {
       var ctx = await load();
       check(ctx.g.state === 'title', 'estado inicial ' + ctx.g.state);
+      check(!ctx.w.MR.TEXTOS_EN, 'en español no debería descargar los textos en inglés');
       ['Tele', 'Bosque', 'MusicLink', 'Consumables', 'TouchControls'].forEach(function (k) { check(ctx.w.MR[k], 'falta MR.' + k); });
       noErrors(ctx);
       return 'título listo; ' + ctx.g.world.forest.trees + ' pinos en el bosque';
@@ -1038,6 +1039,27 @@
       check(g.dread < 0.5 && d.getElementById('subtitulos').textContent.indexOf('agua en la cara') >= 0, 'el lavabo no hizo nada');
       noErrors(ctx);
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
+    }],
+
+    ['Audio: el primer toque despierta el ambiente y un audio suspendido se reanuda', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      check(!g.audio.ambience, 'el ambiente sonó antes de cualquier gesto');
+      ctx.w.dispatchEvent(new ctx.w.PointerEvent('pointerdown'));
+      check(g.audio.ctx && g.audio.ambience, 'el primer toque no despertó el audio');
+      start(ctx);
+      // El navegador lo suspende (llamada, otra app): el siguiente toque lo reanuda.
+      var ac = g.audio.ctx;
+      var resumed = 0;
+      var realResume = ac.resume;
+      Object.defineProperty(ac, 'state', { configurable: true, get: function () { return 'suspended'; } });
+      ac.resume = function () { resumed += 1; return Promise.resolve(); };
+      ctx.w.dispatchEvent(new ctx.w.Event('touchstart'));
+      delete ac.state;
+      ac.resume = realResume;
+      check(resumed === 1, 'el toque no reanudó el audio suspendido (' + resumed + ')');
+      noErrors(ctx);
+      return 'contexto ' + ac.state + ' · ' + ac.sampleRate + ' Hz';
     }],
 
     ['Continuar turno: recuerda las fotos del álbum y los sustos ya vistos', async function () {

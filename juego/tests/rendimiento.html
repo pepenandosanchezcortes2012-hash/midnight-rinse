@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Midnight Rinse · Rendimiento</title>
+  <style>body{margin:0;background:#050608;color:#e8e1cc;font:14px "Courier New",monospace}iframe{border:0;width:640px;height:400px;display:block}pre{padding:12px}</style>
+</head>
+<body>
+<!--
+  Mide cada área (sala, bosque, pasillo con espejo): llamadas de dibujo, triángulos y milisegundos de update+render
+  por cuadro. La usa .claude/skills/retro-psx-optimizer/auditar_psx.py (Chrome sin ventana) y deja el resultado
+  en el bloque «resultado», como JSON. Con SwiftShader los milisegundos son de CPU: sirven para comparar, no como FPS reales.
+-->
+<iframe id="m" src="../index.html?noche=ninguna&lang=es"></iframe>
+<pre id="resultado">midiendo…</pre>
+<script>
+  var m = document.getElementById('m');
+  m.onload = function () {
+    var w = m.contentWindow;
+    (function poll() {
+      var g = w.midnightRinse;
+      if (!g) { setTimeout(poll, 50); return; }
+      w.document.getElementById('btn-comenzar').click();
+      function frames(n) { for (var i = 0; i < n; i += 1) { g.update(1 / 30); g.input.endFrame(); } }
+      function medir(nombre) {
+        var r = g.retro.renderer;
+        var fx = { blink: 0, dread: 0.2, time: 1, flash: 0, collapse: 0, high: 0 };
+        // Calentar (compilación de shaders) y luego medir 90 cuadros.
+        for (var k = 0; k < 10; k += 1) { g.update(1 / 30); g.input.endFrame(); g.espejo.render(); g.retro.render(g.world.scene, g.player.camera, fx); }
+        r.info.autoReset = false;
+        r.info.reset();
+        g.espejo.render();
+        g.retro.render(g.world.scene, g.player.camera, fx);
+        var calls = r.info.render.calls;
+        var tris = r.info.render.triangles;
+        r.info.autoReset = true;
+        var t0 = performance.now();
+        for (var j = 0; j < 90; j += 1) {
+          g.update(1 / 30); g.input.endFrame();
+          g.espejo.render();
+          g.retro.render(g.world.scene, g.player.camera, fx);
+        }
+        r.getContext().finish();
+        var ms = (performance.now() - t0) / 90;
+        return { area: nombre, llamadas: calls, triangulos: tris, ms: Math.round(ms * 100) / 100 };
+      }
+      var out = [];
+      frames(5);
+      g.player.pos.set(-2, 0, 1); g.player.yaw = 0.3;
+      out.push(medir('sala'));
+      g.bosque.go(); frames(40);
+      g.player.yaw = Math.PI;
+      out.push(medir('bosque'));
+      g.bosque.go(); frames(40);
+      g.pasillo.unlock(true); g.pasillo.go(); frames(40);
+      var X = g.espejo.planeX - 1.465;
+      g.player.pos.set(X + 0.3, 0, 2.2); g.player.yaw = -Math.PI / 2; g.player.pitch = 0;
+      out.push(medir('pasillo (espejo)'));
+      var info = g.retro.renderer.info;
+      document.getElementById('resultado').textContent = JSON.stringify({
+        areas: out,
+        texturas: info.memory.textures,
+        geometrias: info.memory.geometries,
+        programas: info.programs ? info.programs.length : null,
+        resolucion: [w.MR.Config.RENDER_W, w.MR.Config.RENDER_H]
+      });
+    })();
+  };
+</script>
+</body>
+</html>
