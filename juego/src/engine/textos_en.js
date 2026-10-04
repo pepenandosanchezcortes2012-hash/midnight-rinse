@@ -643,5 +643,8 @@ MR.TEXTOS_EN = {
  "(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)": "(There are wet footprints on the floor leading from the glass door to the yellow bench. They're your size.)",
  "Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.": "Before we go: this one's for someone who's still folding other people's laundry at this hour. They know who they are.",
  "(Entre la estática, alguien dice tu nombre: «…{n}…».)": "(Through the static, someone says your name: “…{n}…”.)",
- "Radio Nocturna tiene una dedicatoria para ti (noches 3 a 6).": "Night Radio has a dedication for you (nights 3 to 6)."
+ "Radio Nocturna tiene una dedicatoria para ti (noches 3 a 6).": "Night Radio has a dedication for you (nights 3 to 6).",
+ "(Entre la niebla hay otra farola, más adentro. No la habías visto.)": "(Through the fog there's another streetlight, deeper in. You hadn't seen it before.)",
+ "(La farola de adentro está apagada. Como si nunca hubiera estado encendida.)": "(The streetlight deeper in is off. As if it had never been on.)",
+ "En las noches de niebla, el bosque tiene otra farola. No intentes alcanzarla.": "On foggy nights, the forest has another streetlight. Don't try to reach it."
 };

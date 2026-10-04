@@ -531,6 +531,11 @@ El proyecto pasó por dos etapas:
 - Prueba nueva (noches 2, 3 con y sin nombre, y 8). Resultado: 57/57.
 - **Arreglo de la prueba:** en vivo falló porque 3 cuadros no alcanzaban a cruzar las 02:40 desde 3 s antes; en local pasaba solo porque el bucle real del juego seguía corriendo durante la espera. Ahora arranca a 0,6 s de juego de las 02:40 y comprueba que la radio habló.
 
+## 67. Noche de niebla: la segunda farola
+- **Qué pasa:** solo en las noches de niebla, más adentro del bosque hay otra farola encendida (ranura de luz 5). Si caminas hacia ella, retrocede: siempre está a ~7,5 m, un resplandor entre la niebla (que corta a los 9 m). La primera vez que la ves: «(Entre la niebla hay otra farola, más adentro. No la habías visto.)». Si la pierdes de vista 2 s, se apaga con un chasquido eléctrico; al volver a mirar: «(La farola de adentro está apagada. Como si nunca hubiera estado encendida.)». Si llega al borde del bosque, también se apaga.
+- **Sin colisión:** nunca llegas a ella. Las noches normales no cambian.
+- Prueba nueva (no aparece en noche normal; retrocede; aviso; se apaga a espaldas; segundo aviso). Resultado: 58/58.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

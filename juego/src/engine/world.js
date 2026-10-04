@@ -824,6 +824,16 @@
       this.box(0.5, 0.06, 0.06, m.metal, -4.27, 3.98, 103.2);
       var lampHead = this.box(0.38, 0.12, 0.24, mt.lamp, -4.05, 3.92, 103.2);
       this.collider(-4.65, -4.35, 103.05, 103.35);
+      // La segunda farola: solo en noches de niebla, más adentro; nunca te acercas y, si la pierdes de vista, se apaga
+      // (bosque.js). Sin colisión: nunca llegas a ella.
+      var lamp2 = new THREE.Group();
+      lamp2.position.set(-7, 0, 126);
+      this.box(0.12, 4.0, 0.12, m.metal, 0, 2.0, 0, lamp2);
+      this.box(0.5, 0.06, 0.06, m.metal, 0.23, 3.98, 0, lamp2);
+      var lamp2Mat = R.material({ texture: 'white', color: 0xffb060, emissive: 1.2 });
+      this.box(0.38, 0.12, 0.24, lamp2Mat, 0.45, 3.92, 0, lamp2);
+      lamp2.visible = false;
+      this.add(lamp2);
 
       // La lavadora del claro: encendida, sin cable, con su foco verde.
       var wm = new THREE.Group();
@@ -961,6 +971,8 @@
         lampMaterial: mt.lamp,
         washerLamp: wmLamp,
         lampHead: lampHead,
+        lamp2: lamp2,
+        lamp2Mat: lamp2Mat,
         anchors: forestAnchors,
         zones: Object.keys(zoneDefs),
         trees: trees.length,

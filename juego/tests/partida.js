@@ -1041,6 +1041,42 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Noche de niebla: la segunda farola retrocede y, si la pierdes de vista, se apaga', async function () {
+      var ctx = await load();
+      start(ctx);
+      ctx.g.bosque.go(); step(ctx, 40);
+      check(!ctx.g.world.forest.lamp2.visible, 'en una noche normal no hay segunda farola');
+      ctx = await load('?noche=niebla');
+      var g = ctx.g;
+      var b = g.bosque;
+      var L = g.world.forest.lamp2;
+      var d = ctx.w.document;
+      start(ctx);
+      b.go(); step(ctx, 40);
+      check(b.outside && L.visible && g.world.forest.lamp2Mat.uniforms.uEmissive.value > 1, 'no apareció encendida');
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      // Caminar hacia ella: siempre a ~7,5 m.
+      g.player.pos.set(L.position.x + 2, 0, L.position.z - 3);
+      step(ctx, 2);
+      var dist = Math.hypot(L.position.x - g.player.pos.x, L.position.z - g.player.pos.z);
+      check(dist > 7.3, 'te dejó acercarte (' + dist.toFixed(1) + ' m)');
+      // Mirarla: el primer aviso.
+      g.player.yaw = Math.atan2(-(L.position.x + 0.45 - g.player.pos.x), -(L.position.z - g.player.pos.z));
+      g.player.pitch = 0.2;
+      step(ctx, 30);
+      check(d.getElementById('subtitulos').textContent.indexOf('otra farola') >= 0, 'no la notó');
+      // Darse vuelta: se apaga. Volver a mirar: el segundo aviso.
+      var yaw = g.player.yaw;
+      g.player.yaw = yaw + Math.PI;
+      step(ctx, 75);
+      check(b.lamp2Off && g.world.forest.lamp2Mat.uniforms.uEmissive.value === 0, 'no se apagó al perderla de vista');
+      g.player.yaw = yaw;
+      step(ctx, 3);
+      check(d.getElementById('subtitulos').textContent.indexOf('está apagada') >= 0, 'no notó que se apagó');
+      noErrors(ctx);
+      return 'a ' + dist.toFixed(1) + ' m; se apaga a espaldas';
+    }],
+
     ['Radio: la dedicatoria de las noches 3 a 6 (y tu nombre entre la estática)', async function () {
       var casos = [[1, 'Pepe', false, false], [2, 'Pepe', true, true], [2, '', true, false], [7, 'Pepe', false, false]];
       for (var i = 0; i < casos.length; i += 1) {

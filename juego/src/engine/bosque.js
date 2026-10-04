@@ -95,12 +95,74 @@
         this.dropTimer = U.rand(0.12, 0.4);
         g.glasses.drop();
       }
+      this._lamp2(dt);
       // Ambiente: un búho de vez en cuando (las ramas que crujen las programa el director del horror).
       this.ambientTimer -= dt;
       if (this.ambientTimer <= 0) {
         this.ambientTimer = U.rand(18, 40);
         g.audio.buho();
       }
+    }
+
+    /** Luz de la segunda farola (ranura 5): encendida o, si ya se apagó, nada. */
+    _lamp2Light() {
+      var L = this.f.lamp2;
+      var on = !this.lamp2Off;
+      this.f.lamp2Mat.uniforms.uEmissive.value = on ? 1.2 : 0;
+      this.retro.setLight(5, new THREE.Vector3(L.position.x + 0.45, 3.8, L.position.z), new THREE.Color(1.0, 0.62, 0.3), on ? 1.0 : 0, 9.0);
+    }
+
+    /**
+     * La segunda farola: si caminas hacia ella, retrocede (siempre a ~7,5 m, entre la niebla). La primera vez que la ves,
+     * un subtítulo; si la pierdes de vista 2 s, se apaga con un chasquido; al volver a mirarla, otro subtítulo.
+     */
+    _lamp2(dt) {
+      var L = this.f.lamp2;
+      if (!L.visible) { return; }
+      var g = this.game;
+      var p = g.player.pos;
+      if (!this.lamp2Off) {
+        var dx = L.position.x - p.x;
+        var dz = L.position.z - p.z;
+        var d = Math.hypot(dx, dz) || 0.001;
+        if (d < 7.5) {
+          var a = this.f.area;
+          var nx = p.x + dx / d * 7.5;
+          var nz = p.z + dz / d * 7.5;
+          if (nx > a.minX + 1 && nx < a.maxX - 1 && nz > a.minZ + 4 && nz < a.maxZ - 1) {
+            L.position.set(nx, 0, nz);
+            this._lamp2Light();
+          } else {
+            this._lamp2OffNow(); // ya no tiene a dónde irse
+          }
+        }
+      }
+      var head = this.tmp2 || (this.tmp2 = new THREE.Vector3());
+      head.set(L.position.x + 0.45, 3.9, L.position.z).project(g.player.camera);
+      var onScreen = Math.abs(head.x) < 0.95 && Math.abs(head.y) < 0.95 && head.z < 1 && !g.player.eyesClosed;
+      if (onScreen) {
+        this.lamp2Away = 0;
+        this.lamp2Seen = (this.lamp2Seen || 0) + dt;
+        if (!this.lamp2Noticed && this.lamp2Seen > 0.8 && !this.lamp2Off) {
+          this.lamp2Noticed = true;
+          g.ui.subtitle('(Entre la niebla hay otra farola, más adentro. No la habías visto.)', 5);
+        }
+        if (this.lamp2Off && this.lamp2Noticed && !this.lamp2OffSeen) {
+          this.lamp2OffSeen = true;
+          g.ui.subtitle('(La farola de adentro está apagada. Como si nunca hubiera estado encendida.)', 5);
+          g.dread = Math.min(1, g.dread + 0.05);
+        }
+      } else if (this.lamp2Noticed && !this.lamp2Off) {
+        this.lamp2Away = (this.lamp2Away || 0) + dt;
+        if (this.lamp2Away > 2) { this._lamp2OffNow(); }
+      }
+    }
+
+    _lamp2OffNow() {
+      if (this.lamp2Off) { return; }
+      this.lamp2Off = true;
+      this._lamp2Light();
+      this.game.audio.buzz(); // el zumbido eléctrico se corta
     }
 
     /** Linterna del celular: un poco delante de la cara. Se llama DESPUÉS de mover al jugador (sin retraso). */
@@ -117,6 +179,9 @@
       var sh = R.shared;
       var spots = toOutside ? this.f.lights : this.world.lightSpots;
       spots.forEach(function (s, i) { R.setLight(i, new THREE.Vector3(s[0], s[1], s[2]), s[3], s[4], s[5]); });
+      // Noche de niebla: la segunda farola (ranura de luz 5, libre afuera).
+      this.f.lamp2.visible = toOutside && g.mod === 'niebla';
+      if (this.f.lamp2.visible) { this._lamp2Light(); }
       if (toOutside) {
         sh.uAmbient.value.copy(this.outAmbient);
         var mod = g.mod;
