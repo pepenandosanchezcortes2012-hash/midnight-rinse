@@ -51,6 +51,7 @@
       this.bosque = new MR.Bosque(this);
       this.pasillo = new MR.Pasillo(this);
       this.espejo = new MR.Espejo(this);
+      this.clientela = new MR.Clientela(this);
       this.clima = new MR.Clima(this);
       this.gamepad = new MR.GamepadControls(this);
       this.gato = new MR.Gato(this);
@@ -347,6 +348,7 @@
       if (cc) { extra.push(cc); }
       this.bosque.update(dt);
       this.espejo.update(dt);
+      this.clientela.update(dt);
       this.pasillo.update(dt);
       this.player.update(dt, input, {
         look: !this.noteOpen && !dialing && !this.wipe.active,

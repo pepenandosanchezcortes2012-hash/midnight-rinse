@@ -3,6 +3,7 @@
  * - Hojas del registro encontradas en el bosque (6).
  * - Transmisiones de Radio Nocturna que escuchaste a las 02:40 (8).
  * - Llamadas del teléfono público que contestaste a las 03:50 (6).
+ * - Órdenes de la Administración del Embalse que imprimió la impresora (12).
  * Se guarda en midnight-rinse/archivo; «Reiniciar todo» lo borra.
  */
 (function (MR) {
@@ -22,6 +23,7 @@
       d.paginas = d.paginas || {};
       d.radio = d.radio || {};
       d.telefono = d.telefono || {};
+      d.ordenes = d.ordenes || {};
       return d;
     }
 
@@ -33,9 +35,12 @@
     page(i) { if (!this.data.paginas[i]) { this.data.paginas[i] = this.game.night || 1; this._save(); } }
     radio(i) { if (!this.data.radio[i]) { this.data.radio[i] = this.game.night || 1; this._save(); } }
     phone(i) { if (!this.data.telefono[i]) { this.data.telefono[i] = this.game.night || 1; this._save(); } }
+    order(i) { if (!this.data.ordenes[i]) { this.data.ordenes[i] = this.game.night || 1; this._save(); } }
 
-    count() { return Object.keys(this.data.paginas).length + Object.keys(this.data.radio).length + Object.keys(this.data.telefono).length; }
-    total() { return MR.HISTORIA.paginas.length + MR.HISTORIA.radio.length + MR.HISTORIA.telefono.length; }
+    count() { return Object.keys(this.data.paginas).length + Object.keys(this.data.radio).length + Object.keys(this.data.telefono).length +
+      Object.keys(this.data.ordenes).length; }
+    total() { return MR.HISTORIA.paginas.length + MR.HISTORIA.radio.length + MR.HISTORIA.telefono.length +
+      MR.HISTORIA.blackwood.ordenes.length; }
 
     /** Entradas para el panel: [{grupo, titulo, texto, encabezado, hecho}]. */
     view() {
@@ -57,6 +62,11 @@
         var mine = i === calls.length - 1; // la última llamada: tu propia voz (y desde ahí, todas las noches)
         out.push({ grupo: 'Teléfono público', titulo: MR.tf(have ? (mine ? 'Noche {n} en adelante' : 'Noche {n}') : 'Noche {n} · ???', { n: i + 1 }),
           texto: line, encabezado: MR.tf(mine ? 'TELÉFONO PÚBLICO · TU PROPIA VOZ · 03:50' : 'TELÉFONO PÚBLICO · NOCHE {n} · 03:50', { n: i + 1 }), hecho: have });
+      });
+      MR.HISTORIA.blackwood.ordenes.forEach(function (line, i) {
+        var have = !!d.ordenes[i];
+        out.push({ grupo: 'Órdenes de la Administración del Embalse', titulo: MR.tf(have ? 'ORDEN N.º {n}' : 'Orden {n} · ???', { n: have ? (line.match(/N\.º (\d+)/) || [0, i + 1])[1] : i + 1 }),
+          texto: line, encabezado: 'ADMINISTRACIÓN DEL EMBALSE · ORDEN IMPRESA', hecho: have });
       });
       return out;
     }

@@ -102,6 +102,13 @@ A las **03:00** se oye un clic: la **puerta trasera**, junto a las secadoras, qu
 Si restableces la **caja de fusibles**, los apagones del resto del turno duran la mitad. Él también puede esperarte al fondo, junto a la caldera.
 - **El lavabo y su espejo:** echarte agua en la cara baja el miedo. El espejo refleja el pasillo de verdad… pero a ti no. Y a veces, detrás de ti, hay alguien.
 
+### Blackwood: la clientela de la noche
+La Espuma está en la orilla del embalse que cubrió **Blackwood** en 1986. De noche vienen sus vecinos:
+- **Las caras blancas** entran por la puerta de vidrio, ponen a lavar su ropa empapada (la lavadora arranca de verdad), murmuran algo y se van. Puedes hablarles. Nunca te miran a los ojos.
+- **Las máscaras negras**, de la Administración del Embalse, se paran frente al mostrador sin decir nada, y la impresora entrega una **orden**. Las órdenes quedan en el Archivo.
+
+Los diálogos los escribió Gemini y se revisaron contra el canon. Detalles en `CHANGELOG.md`.
+
 ### Pelusa, el gato
 Un gato negro vive en la lavandería.
 - **Su vida:** duerme sobre una secadora, el banco o el mostrador, baja de un salto, camina por la sala y se sienta a mirarte.

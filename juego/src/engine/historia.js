@@ -65,6 +65,58 @@
       '…siete ya se quedaron…',
       '…nadie vendrá a relevarte…'
     ],
+    // Blackwood (aprobado por Yesda): las caras blancas y las órdenes de las máscaras negras. Borrador de Gemini
+    // (agy), revisado contra CANON.md y lore_check.py.
+    blackwood: {
+      llegada: [
+        'Las mangas pesan mucho cuando el agua no termina de salir.',
+        'Traigo barro de la farmacia vieja en el dobladillo del pantalón.',
+        'El agua del río nunca termina de soltar los abrigos.',
+        'Buenas noches. Estas sábanas se quedaron frías desde el otoño de 1986.',
+        'Las monedas están heladas, pero todavía sirven para la máquina tres.',
+        'Huele a jabón dulce aquí adentro; afuera solo huele a represa.',
+        'Caminé despacio por los pinos para no gotear en la entrada.',
+        'La campana de la escuela sonó justo antes de que se llenara el valle.',
+        'El uniforme de los domingos todavía conserva un poco de arena limpia.',
+        'Solo vengo a escurrir el vestido antes de que aclare.',
+        'Disculpe el charco en la entrada; las botas venían muy llenas.',
+        'La radio de la noche siempre acompaña bien este ciclo de lavado.'
+      ],
+      tocar: [
+        'No te preocupes por nosotros; solo esperamos a que termine el centrifugado.',
+        'El agua del fondo está muy quieta; aquí hace más tibio.',
+        'Aquel año guardamos la ropa limpia arriba, pero el lago subió igual.',
+        'El gato Pelusa siempre huele la hierba empapada que traemos en los zapatos.',
+        'No busques mi mirada; es mejor mirar el reflejo del tambor girando.',
+        'La farmacia de don Pedro tenía este mismo aroma a detergente en polvo.',
+        'Si escuchas un rumor hondo, no es la tubería; es el embalse respirando.',
+        'Nos sentamos en el banco amarillo porque ahí no importa mojar.',
+        'Déjalo girar despacio; ya no tenemos prisa por regresar a casa.',
+        'El agua nunca volverá a estar clara, pero la ropa queda suave.'
+      ],
+      despedida: [
+        'Gracias por el calor. El camino entre los pinos ya se cerró.',
+        'Nos llevamos la ropa húmeda; abajo se seca a su propio tiempo.',
+        'Que tengas un buen turno hasta que den las 05:12.',
+        'La puerta de vidrio siempre abre fácil hacia el bosque.',
+        'Ya está. Nos vemos cuando vuelva a llover.',
+        'Cuida al gato Pelusa del viento que baja del lago.'
+      ],
+      ordenes: [
+        'ORDEN N.º 01: A las 02:40, la radio del mostrador debe estar en la 94.1.',
+        'ORDEN N.º 04: No abra los casilleros del uno al siete bajo ninguna circunstancia.',
+        'ORDEN N.º 09: Si él pregunta la hora, responda únicamente que faltan cinco minutos para las seis.',
+        'ORDEN N.º 12: Jamás mire el rostro del hombre de abrigo largo y sombrero.',
+        'ORDEN N.º 15: Limpie el lodo del piso antes de que marquen las 03:00.',
+        'ORDEN N.º 18: No intente seguir a ningún cliente más allá de la puerta de vidrio.',
+        'ORDEN N.º 22: Mantenga las cuatro secadoras apagadas si escucha sonar la campana sumergida.',
+        'ORDEN N.º 27: Ignore cualquier documento municipal que conserve sellos oficiales fechados en 1986.',
+        'ORDEN N.º 31: Deje salir al gato Pelusa si rasca la puerta de vidrio.',
+        'ORDEN N.º 36: No altere el nivel de agua en ninguna de las seis lavadoras.',
+        'ORDEN N.º 40: Entregue las llaves y abandone el mostrador exactamente a las 05:12.',
+        'ORDEN N.º 44: Recuerde que la verdadera hora de relevo no ocurre hasta las 05:13.'
+      ]
+    },
     // Final verdadero: la hora verdadera y las seis hojas, en la misma noche.
     verdadero: {
       titulo: '05:13 · Fin del turno',

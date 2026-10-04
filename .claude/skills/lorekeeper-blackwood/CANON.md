@@ -2,7 +2,7 @@
 
 Archivo maestro de la historia. Todo texto nuevo del juego (tickets de la impresora, radio, teléfono, hojas, susurros, objetos, notas del gerente, subtítulos) se revisa contra esto antes de entrar. `lore_check.py` verifica automáticamente lo que se puede verificar.
 
-Estado: **canon vigente** = lo que ya está en el juego (octubre de 2026). Lo que no está aquí no es canon.
+Estado: **canon vigente** = lo que ya está en el juego más lo aprobado por Yesda en la §7 (octubre de 2026). Lo que no está aquí no es canon.
 
 ## 1. El lugar
 - **Lavandería La Espuma**, abierta 24 h. Sala con 6 lavadoras y 4 secadoras, banco amarillo, mostrador con la impresora térmica, la radio, la tablilla de tareas y el teléfono público junto a la entrada; tele colgada entre lavadoras y secadoras; cambiador de monedas; almacén con el trapeador (al fondo a la izquierda); máquina de café.
@@ -43,10 +43,10 @@ Estado: **canon vigente** = lo que ya está en el juego (octubre de 2026). Lo qu
 - Casilleros: `pasillo.js`. Notas del gerente (noches especiales): `config.js`. Pistas, diálogo y finales: `game.js`.
 - Todo texto visible tiene traducción en `textos_en.js` (glosario fijo: shift log, log page, strike, clipboard, yellow bench, the clearing, Night Radio…).
 
-## 7. Propuestas pendientes de decisión (NO son canon)
-Propuestas de Yesda (octubre de 2026). No aparecen en el juego y **no se usan en textos nuevos hasta que se aprueben**:
-- **El embalse de 1986.** Encajaría con el agua turbia y el ticket de 1987: «el local está donde estaba el pueblo antes del embalse». Habría que decidir si el bosque es el fondo del embalse.
-- **El misterio de las caras blancas.** Se parece a la cara pálida de él. ¿Son varios? ¿Son los seis de antes?
-- **Las órdenes de las máscaras negras.** Es una facción nueva; hoy no hay nada parecido. Habría que decidir quién da órdenes: ¿el gerente que nunca se ve?
-- **El bosque infinito.** El bosque ya «no termina» (la niebla se alimenta de los turnos fallidos), pero hoy tiene borde y un claro.
-- **«Blackwood»:** el nombre no aparece en el juego. Hay que decidir si es el bosque, el pueblo o la empresa dueña de La Espuma.
+## 7. Blackwood y el embalse (aprobado por Yesda, octubre de 2026)
+- **Blackwood** era el pueblo del valle. En **1986** el **embalse** lo cubrió: casas, calles, la farmacia, la escuela. Nadie dice en voz alta qué pasó con los que no se fueron. **La Espuma** abrió en **1987** en la orilla nueva (de ahí el ticket de 1987). El agua «nunca va a volver a ser clara» porque debajo sigue el pueblo.
+- **El bosque de Blackwood es infinito y no euclidiano**: el sendero da la vuelta sobre sí mismo, y lo que dejaste atrás vuelve a estar delante. Lo que hay más adentro (la secadora solitaria, las farolas que no estaban) son restos del pueblo que el bosque guarda.
+- **Las caras blancas** son vecinos de Blackwood. Vienen de noche a lavar su ropa, que siempre está empapada. Tienen la cara lisa y blanca, sin rasgos. Son amables a su modo, hablan poco y bajito, nunca te miran a los ojos y se van por la puerta de vidrio. No hacen daño. **Él no es uno de ellos** (él tiene sombrero y pregunta la hora; ellos no preguntan nada).
+- **Las máscaras negras** son la **Administración del Embalse**: altos, de traje oscuro, con una máscara negra de caras planas, geométrica. **Nunca hablan.** Se paran frente al mostrador y la impresora térmica entrega una **ORDEN** numerada. Las órdenes son de oficina, frías, y nunca contradicen las reglas del turno: la instrucción del teléfono y la hora verdadera siguen valiendo.
+- **Reglas del pueblo:** nadie de Blackwood dice qué pasó exactamente en 1986, el año del embalse es siempre 1986, las caras blancas no tienen nombre propio y las máscaras negras no hablan.
+- **Por la vidriera** (sprint 2): la avenida con vida, como era Blackwood antes del agua, que se va apagando y llenando de agua a medida que avanza el turno.

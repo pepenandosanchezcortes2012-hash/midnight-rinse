@@ -529,7 +529,7 @@
       var re = en ? /^en/i : /^es/i;
       var voices = window.speechSynthesis.getVoices().filter(function (v) { return re.test(v.lang); });
       if (voices.length) { u.voice = voices[0]; u.lang = voices[0].lang; } else { u.lang = en ? 'en-US' : 'es-MX'; }
-      var conf = { cliente: [0.55, 0.78, 0.9], locutor: [0.9, 0.92, 0.55], telefono: [0.4, 0.8, 0.45], susurro: [0.2, 0.7, 0.25] }[role] ||
+      var conf = { cliente: [0.55, 0.78, 0.9], locutor: [0.9, 0.92, 0.55], telefono: [0.4, 0.8, 0.45], susurro: [0.2, 0.7, 0.25], cara: [0.75, 0.8, 0.45] }[role] ||
         [1, 1, 0.8];
       u.pitch = conf[0];
       u.rate = conf[1];

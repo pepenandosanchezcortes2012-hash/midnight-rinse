@@ -13,8 +13,7 @@ Reglas automáticas (las demás se revisan leyendo CANON.md):
   - Firmas de las hojas entre el 14 de octubre y el 19 de noviembre.
   - Toda llamada del teléfono dice «faltan cinco minutos para las seis».
   - Él no tiene nombre (no se le llama por un nombre propio) y nunca ataca de frente (sin «te ataca», «te agarra», «te muerde»).
-  - Elementos propuestos y no aprobados (embalse, máscaras negras, caras blancas, Blackwood, bosque infinito)
-    no aparecen en textos del juego mientras sigan en la sección 7 de CANON.md.
+  - Blackwood: el embalse lo cubrió en 1986 (no otro año); las máscaras negras no hablan.
 """
 import re
 import sys
@@ -25,7 +24,7 @@ ENGINE = RAIZ / 'juego' / 'src' / 'engine'
 FUENTES = [ENGINE / f for f in ('historia.js', 'objetos.js', 'pasillo.js', 'config.js', 'game.js', 'gameplay.js', 'horror.js',
                                 'bosque.js', 'espejo.js', 'fotos.js', 'tele.js', 'logros.js', 'archivo.js', 'novedades.js')] + \
           [RAIZ / 'juego' / 'src' / 'core' / 'shiftLog.js']
-NO_APROBADOS = [r'\bembalse', r'm[áa]scaras? negras?', r'caras? blancas?', r'blackwood', r'bosque infinito']
+NO_APROBADOS = []  # todo lo de la §7 de CANON.md quedó aprobado (octubre de 2026)
 NUMEROS = {'casilleros': ('siete', '7'), 'hojas': ('seis', '6')}
 problemas = []
 
@@ -64,6 +63,11 @@ def revisar(origen, linea, t):
     for pat in NO_APROBADOS:
         if re.search(pat, low):
             mal('«%s» está en propuestas sin aprobar (CANON.md §7)' % re.search(pat, low).group(0))
+    if ('embalse' in low or 'blackwood' in low or 'inund' in low) and re.search(r'\b19[5-9]\d\b', t):
+        if any(y != '1986' for y in re.findall(r'\b(19[5-9]\d)\b', t)) and not re.search(r'1987', t):
+            mal('el embalse cubrió Blackwood en 1986')
+    if re.search(r'm[áa]scaras? negras?', low) and re.search(r'\b(dijo|dice|habla|hablan|susurra|pregunta)\b', low):
+        mal('las máscaras negras nunca hablan (solo imprimen órdenes)')
     if re.search(r'\bte (ataca|agarra|muerde|apuñala|persigue corriendo)\b', low):
         mal('él nunca ataca de frente')
 

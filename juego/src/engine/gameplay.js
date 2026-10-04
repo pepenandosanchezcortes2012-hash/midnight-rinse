@@ -136,6 +136,7 @@
       if (kind === 'dryerStart') { this._dryerCoin(target.index); return; }
       if (kind === 'lavabo') { this.game.espejo.sink(); return; }
       if (kind === 'banco') { this.game.touchBench(); return; }
+      if (kind === 'visitante') { this.game.clientela.talk(target.index); return; }
       if (kind === 'cesto') {
         var full = this.game.horror.basketLevel || 0;
         this.say('cesto', full ? '(Están tibios. Ninguno tiene nombre todavía.)' : '(Un cesto de plástico vacío.)', 3.5);

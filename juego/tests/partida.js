@@ -1041,6 +1041,41 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Blackwood: una cara blanca pone a lavar y se va; una máscara negra deja una orden impresa', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.plan = [];
+      g.player.pos.set(-6, 0, 2.5); // lejos de su camino
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      g.gameplay.washers[2].credit = true; // la que tú preparaste no se la quita
+      var v = c.spawn('cara');
+      check(v && v.washer !== 2, 'eligió la lavadora con tu moneda');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      check(v.state === 'llego', 'la cara blanca no llegó a la lavadora');
+      check(sub().indexOf('Una cara blanca') >= 0, 'no murmuró al llegar');
+      step(ctx, 30 * 3);
+      check(g.gameplay.washers[v.washer].running, 'no puso a lavar');
+      c.talk(v.id);
+      check(sub().indexOf('Una cara blanca') >= 0, 'no respondió al hablarle');
+      for (var j = 0; j < 30 * 40 && c.visitors.length; j += 1) { step(ctx, 1); }
+      check(!c.visitors.length, 'no se fue');
+      var m = c.spawn('mascara');
+      for (var k = 0; k < 30 * 30 && m.state !== 'llego'; k += 1) { step(ctx, 1); }
+      check(m.state === 'llego', 'la máscara no llegó al mostrador');
+      await wait(1100);
+      check(/ORDEN N\.º \d\d/.test(sub()), 'no salió la orden impresa');
+      var orders = Object.keys(g.archivo.data.ordenes).length;
+      check(orders >= 1, 'la orden no quedó en el Archivo');
+      g.gameplay.messageCooldown = {};
+      c.talk(m.id);
+      check(sub().indexOf('No dice nada') >= 0, 'la máscara habló');
+      noErrors(ctx);
+      return 'lavadora ' + (v.washer + 1) + ' · ' + orders + ' orden en el Archivo';
+    }],
+
     ['Luna llena: el tendedero con uniformes que se mecen sin viento', async function () {
       var ctx = await load();
       start(ctx);

@@ -570,6 +570,13 @@ El proyecto pasó por dos etapas:
 - **Lectura:** el ritmo lo fija el diseño del núcleo. Entre las 02:00 y las 05:00 de juego, `anomalyMultiplier` vale 3× (`clockAnomaly`, port exacto del Python), y el miedo suma hasta 1,8×. Así, los 34 s base bajan a ~6 s en la hora fuerte. La mayoría son anomalías chicas (un charco, una puerta, una luz que falla) y todas ocurren fuera de tu vista. Los sustos de esta sesión tienen tope por noche y no dominan. Las «huellas» se repiten porque el susto original vuelve cada vez que se secan.
 - **Sin cambios de pesos.** Si a Yesda le parece mucho para Normal, la palanca es el multiplicador 3× de la hora fuerte o el factor del miedo. Es una decisión de diseño, así que queda anotada.
 
+## 74. Sprint 1 del modo autónomo: Blackwood llega al mostrador
+- **Canon:** CANON.md §7 aprobado e integrado (Blackwood bajo el embalse en 1986, caras blancas, máscaras negras de la Administración del Embalse, bosque infinito). `lore_check.py` con reglas nuevas.
+- **`clientela.js`:** visitantes que caminan por la sala con una ruta de puntos (entrada → pasillo central → destino), esperan si estás en su camino y se balancean al caminar. Las caras blancas ponen a lavar en una lavadora libre (que arranca de verdad), murmuran y se van; si las miras de cerca, giran la cara. Las máscaras negras se paran frente al mostrador y la impresora entrega una ORDEN, que queda en el Archivo (nuevo grupo, 12 órdenes).
+- **Diálogos:** 40 líneas generadas con Gemini (agy) en la computadora de Yesda, revisadas (6 corregidas) y traducidas. Voz «cara» suave en la síntesis.
+- **Decisiones y lo verificado:** en `CHANGELOG.md`. Revisado con capturas: la máscara facetada junto al mostrador y la cara lisa frente a las lavadoras.
+- Prueba nueva. Resultado: 64/64.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
