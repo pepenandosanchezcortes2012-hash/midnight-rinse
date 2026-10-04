@@ -298,10 +298,15 @@
       this.renderer.setSize(w, h);
     }
 
-    render(scene, camera, fx) {
+    /** Colores de las luces del área (base × parpadeo/apagón). Lo usan el cuadro y la pasada del espejo. */
+    applyLights() {
       for (var i = 0; i < MAX_LIGHTS; i += 1) {
         this.shared.uLightColor.value[i].copy(this.lightBase[i]).multiplyScalar(this.lightFactor[i]);
       }
+    }
+
+    render(scene, camera, fx) {
+      this.applyLights();
       var u = this.post.uniforms;
       u.uBlink.value = fx.blink;
       u.uDread.value = fx.dread;

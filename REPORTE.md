@@ -442,6 +442,13 @@ El proyecto pasó por dos etapas:
 - **Corte de agua:** sexta noche especial. Las lavadoras empiezan paradas y no arrancan («no entra agua»; la moneda no se pierde). Solo esa noche, cada secadora cuenta como una lavadora para tapar el zumbido, y tu música (tele o radio 99.9) cuenta como una y media. `game.calmSources()` junta todo eso. La tablilla y las pistas lo explican. Las noches normales no cambian.
 - **También en inglés:** 10 textos nuevos, 585 en total. Prueba nueva. Resultado: 43/43.
 
+## 52. El espejo del pasillo (reflejo de verdad)
+- **El lavabo:** en la pared derecha del pasillo de servicio, frente a los casilleros. Echarte agua en la cara baja el miedo (0,15; una vez cada 40 s). En la noche sin agua, el grifo solo tose aire.
+- **El espejo:** una cámara virtual, reflejada sobre el plano del espejo, dibuja la escena en una textura de 192×144 (sin suavizado, como el resto). El espejo la lee con proyección (`texture2DProj`). Solo se dibuja si estás en el pasillo, a menos de 7 m y con el espejo en pantalla. En esa pasada se esconden el propio espejo, su marco y tus manos: **no te reflejas**, y la primera vez un subtítulo lo nota. La pared queda detrás del plano y no tapa el reflejo, porque su cara trasera no se dibuja.
+- **El susto «espejo»:** desde que lo viste, el director lo deja listo (hasta dos por noche, nunca en Paseo). Si te miras en el espejo de frente, cerca y con los ojos abiertos durante más de 0,6 s, él aparece de pie detrás de ti, solo en el reflejo, durante 1,8 s. Si dejas de mirar o parpadeas, ya no está. Da un susurro, sube el miedo y desbloquea el logro oculto «Dos en el espejo».
+- **Arreglo:** los colores de las luces se calculaban solo dentro de `retro.render()`; ahora `retro.applyLights()` también lo usa la pasada del espejo.
+- **Prueba nueva:** el reflejo tiene luz, él ocupa más de 300 píxeles distintos y vuelve a su lugar, sin errores de WebGL, y el lavabo funciona. Lo revisé con capturas de Chrome sin ventana. Resultado: 44/44.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

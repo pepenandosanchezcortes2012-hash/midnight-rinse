@@ -899,6 +899,54 @@
       return '«' + title + '»';
     }],
 
+    ['El espejo del pasillo: refleja, tú no sales y a veces él está detrás', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var e = g.espejo;
+      var d = ctx.w.document;
+      start(ctx);
+      g.flags.customerSeen = true;
+      g.pasillo.unlock(true); g.pasillo.go(); step(ctx, 40);
+      check(g.pasillo.inside, 'no entró al pasillo');
+      var X = e.planeX - 1.465;
+      g.player.pos.set(X + 0.3, 0, 2.2); g.player.yaw = -Math.PI / 2; g.player.pitch = 0;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 99;
+      step(ctx, 30);
+      check(e.on && e.looking > 0.6, 'el espejo no está a la vista (on ' + e.on + ', mirando ' + e.looking.toFixed(2) + ')');
+      check(d.getElementById('subtitulos').textContent.indexOf('A ti no') >= 0, 'no notó que no te reflejas');
+      function snap() {
+        e.render();
+        var px = new Uint8Array(192 * 144 * 4);
+        g.retro.renderer.readRenderTargetPixels(e.rt, 0, 0, 192, 144, px);
+        return px;
+      }
+      var a = snap();
+      var lit = 0;
+      for (var i = 0; i < a.length; i += 4) { if (a[i] + a[i + 1] + a[i + 2] > 30) { lit += 1; } }
+      check(lit > 192 * 144 * 0.2, 'el reflejo está vacío (' + lit + ' píxeles con luz)');
+      var vis = g.world.customer.group.visible;
+      e.armed = true;
+      step(ctx, 1);
+      check(e.ghost > 0 && g.logros.has('espejo'), 'no salió en el espejo');
+      var b = snap();
+      check(g.world.customer.group.visible === vis, 'él quedó visible fuera del reflejo');
+      var diff = 0;
+      for (var j = 0; j < a.length; j += 4) { if (Math.abs(a[j] - b[j]) + Math.abs(a[j + 1] - b[j + 1]) + Math.abs(a[j + 2] - b[j + 2]) > 40) { diff += 1; } }
+      check(diff > 300, 'él no se ve en el reflejo (' + diff + ' píxeles distintos)');
+      var gl = g.retro.renderer.getContext();
+      check(gl.getError() === 0, 'error de WebGL en la pasada del espejo');
+      // Al dejar de mirar, ya no está.
+      g.player.yaw = Math.PI / 2;
+      step(ctx, 2);
+      check(e.ghost === 0, 'siguió en el espejo sin mirarlo');
+      // El lavabo.
+      g.dread = 0.6;
+      e.sink();
+      check(g.dread < 0.5 && d.getElementById('subtitulos').textContent.indexOf('agua en la cara') >= 0, 'el lavabo no hizo nada');
+      noErrors(ctx);
+      return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
+    }],
+
     ['Noche sin agua: las lavadoras no arrancan; las secadoras y la música tapan el zumbido', async function () {
       var ctx = await load('?noche=sin_agua');
       var g = ctx.g;

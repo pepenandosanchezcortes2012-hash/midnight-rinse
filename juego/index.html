@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" href="iconos/favicon-32.png">
   <link rel="apple-touch-icon" href="iconos/apple-touch-icon.png">
   <title>Midnight Rinse · Turno de Medianoche</title>
-  <link rel="stylesheet" href="src/estilo.css?v=20261004123400">
+  <link rel="stylesheet" href="src/estilo.css?v=20261004124145">
 </head>
 <body>
   <!-- Capa de la tele: el reproductor de YouTube vive DETRÁS del lienzo y se ve por el hueco de la pantalla. -->
@@ -207,6 +207,7 @@
       <h3>El pasillo de servicio</h3>
       <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en la puerta trasera</div><div class="g-acc">Entrar al pasillo <span class="g-nota">(se abre a las 03:00)</span></div></div>
       <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en un casillero o en los fusibles</div><div class="g-acc">Abrirlo · restablecerlos (los apagones duran la mitad)</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en el lavabo</div><div class="g-acc">Echarte agua en la cara <span class="g-nota">(baja el miedo; el espejo de arriba… míralo si te atreves)</span></div></div>
       <h3>El bosque</h3>
       <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en la puerta de vidrio</div><div class="g-acc">Salir al bosque <span class="g-nota">(o en la pausa: «Salir al bosque»)</span></div></div>
       <div class="g-fila"><div class="g-ctl"><span class="tecla ancha">clic</span> en la puerta de la fachada</div><div class="g-acc">Volver a la lavandería</div></div>
@@ -262,6 +263,7 @@
       <h3>El pasillo de servicio</h3>
       <div class="g-fila"><div class="g-ctl"><span class="gesto">☝ tocar</span> la puerta trasera</div><div class="g-acc">Entrar al pasillo <span class="g-nota">(se abre a las 03:00)</span></div></div>
       <div class="g-fila"><div class="g-ctl"><span class="gesto">☝ tocar</span> un casillero o los fusibles</div><div class="g-acc">Abrirlo · restablecerlos</div></div>
+      <div class="g-fila"><div class="g-ctl"><span class="gesto">☝ tocar</span> el lavabo</div><div class="g-acc">Echarte agua en la cara <span class="g-nota">(baja el miedo)</span></div></div>
       <h3>El bosque</h3>
       <div class="g-fila"><div class="g-ctl"><span class="gesto">☝ tocar</span> la puerta de vidrio</div><div class="g-acc">Salir al bosque <span class="g-nota">(o en la pausa: «Salir al bosque»)</span></div></div>
       <div class="g-fila"><div class="g-ctl"><span class="gesto">☝ tocar</span> la puerta de la fachada</div><div class="g-acc">Volver a la lavandería</div></div>
@@ -334,47 +336,48 @@
     <p id="compartir-estado" class="nota"></p>
   </section>
 
-  <script src="vendor/three.min.js?v=20261004123400"></script>
+  <script src="vendor/three.min.js?v=20261004124145"></script>
   <!-- Núcleo verificado (ports exactos de core/midnight_rinse_core) -->
-  <script src="src/core/dispatcher.js?v=20261004123400"></script>
-  <script src="src/core/bayer.js?v=20261004123400"></script>
-  <script src="src/core/vertexSnap.js?v=20261004123400"></script>
-  <script src="src/core/steppedHold.js?v=20261004123400"></script>
-  <script src="src/core/detentDial.js?v=20261004123400"></script>
-  <script src="src/core/clockAnomaly.js?v=20261004123400"></script>
-  <script src="src/core/shiftLog.js?v=20261004123400"></script>
+  <script src="src/core/dispatcher.js?v=20261004124145"></script>
+  <script src="src/core/bayer.js?v=20261004124145"></script>
+  <script src="src/core/vertexSnap.js?v=20261004124145"></script>
+  <script src="src/core/steppedHold.js?v=20261004124145"></script>
+  <script src="src/core/detentDial.js?v=20261004124145"></script>
+  <script src="src/core/clockAnomaly.js?v=20261004124145"></script>
+  <script src="src/core/shiftLog.js?v=20261004124145"></script>
   <!-- Motor del juego -->
-  <script src="src/engine/config.js?v=20261004123400"></script>
-  <script src="src/engine/util.js?v=20261004123400"></script>
-  <script src="src/engine/idioma.js?v=20261004123400"></script>
-  <script src="src/engine/textos_en.js?v=20261004123400"></script>
-  <script src="src/engine/textures.js?v=20261004123400"></script>
-  <script src="src/engine/retro.js?v=20261004123400"></script>
-  <script src="src/engine/audio.js?v=20261004123400"></script>
-  <script src="src/engine/input.js?v=20261004123400"></script>
-  <script src="src/engine/world.js?v=20261004123400"></script>
-  <script src="src/engine/player.js?v=20261004123400"></script>
-  <script src="src/engine/glasses.js?v=20261004123400"></script>
-  <script src="src/engine/gameplay.js?v=20261004123400"></script>
-  <script src="src/engine/horror.js?v=20261004123400"></script>
-  <script src="src/engine/touch.js?v=20261004123400"></script>
-  <script src="src/engine/consumables.js?v=20261004123400"></script>
-  <script src="src/engine/music.js?v=20261004123400"></script>
-  <script src="src/engine/tele.js?v=20261004123400"></script>
-  <script src="src/engine/historia.js?v=20261004123400"></script>
-  <script src="src/engine/bosque.js?v=20261004123400"></script>
-  <script src="src/engine/pasillo.js?v=20261004123400"></script>
-  <script src="src/engine/clima.js?v=20261004123400"></script>
-  <script src="src/engine/gamepad.js?v=20261004123400"></script>
-  <script src="src/engine/logros.js?v=20261004123400"></script>
-  <script src="src/engine/objetos.js?v=20261004123400"></script>
-  <script src="src/engine/archivo.js?v=20261004123400"></script>
-  <script src="src/engine/historial.js?v=20261004123400"></script>
-  <script src="src/engine/fotos.js?v=20261004123400"></script>
-  <script src="src/engine/gato.js?v=20261004123400"></script>
-  <script src="src/engine/partida.js?v=20261004123400"></script>
-  <script src="src/engine/ui.js?v=20261004123400"></script>
-  <script src="src/engine/game.js?v=20261004123400"></script>
-  <script src="src/main.js?v=20261004123400"></script>
+  <script src="src/engine/config.js?v=20261004124145"></script>
+  <script src="src/engine/util.js?v=20261004124145"></script>
+  <script src="src/engine/idioma.js?v=20261004124145"></script>
+  <script src="src/engine/textos_en.js?v=20261004124145"></script>
+  <script src="src/engine/textures.js?v=20261004124145"></script>
+  <script src="src/engine/retro.js?v=20261004124145"></script>
+  <script src="src/engine/audio.js?v=20261004124145"></script>
+  <script src="src/engine/input.js?v=20261004124145"></script>
+  <script src="src/engine/world.js?v=20261004124145"></script>
+  <script src="src/engine/player.js?v=20261004124145"></script>
+  <script src="src/engine/glasses.js?v=20261004124145"></script>
+  <script src="src/engine/gameplay.js?v=20261004124145"></script>
+  <script src="src/engine/horror.js?v=20261004124145"></script>
+  <script src="src/engine/touch.js?v=20261004124145"></script>
+  <script src="src/engine/consumables.js?v=20261004124145"></script>
+  <script src="src/engine/music.js?v=20261004124145"></script>
+  <script src="src/engine/tele.js?v=20261004124145"></script>
+  <script src="src/engine/historia.js?v=20261004124145"></script>
+  <script src="src/engine/bosque.js?v=20261004124145"></script>
+  <script src="src/engine/pasillo.js?v=20261004124145"></script>
+  <script src="src/engine/espejo.js?v=20261004124145"></script>
+  <script src="src/engine/clima.js?v=20261004124145"></script>
+  <script src="src/engine/gamepad.js?v=20261004124145"></script>
+  <script src="src/engine/logros.js?v=20261004124145"></script>
+  <script src="src/engine/objetos.js?v=20261004124145"></script>
+  <script src="src/engine/archivo.js?v=20261004124145"></script>
+  <script src="src/engine/historial.js?v=20261004124145"></script>
+  <script src="src/engine/fotos.js?v=20261004124145"></script>
+  <script src="src/engine/gato.js?v=20261004124145"></script>
+  <script src="src/engine/partida.js?v=20261004124145"></script>
+  <script src="src/engine/ui.js?v=20261004124145"></script>
+  <script src="src/engine/game.js?v=20261004124145"></script>
+  <script src="src/main.js?v=20261004124145"></script>
 </body>
 </html>

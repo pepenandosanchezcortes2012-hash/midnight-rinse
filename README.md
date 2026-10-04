@@ -100,6 +100,7 @@ A las **03:00** se oye un clic: la **puerta trasera**, junto a las secadoras, qu
 - **siete casilleros**: R., E., S., D., T., A. (las mismas iniciales de las hojas del bosque)… y el último tiene **tu nombre**.
 
 Si restableces la **caja de fusibles**, los apagones del resto del turno duran la mitad. Él también puede esperarte al fondo, junto a la caldera.
+- **El lavabo y su espejo:** echarte agua en la cara baja el miedo. El espejo refleja el pasillo de verdad… pero a ti no. Y a veces, detrás de ti, hay alguien.
 
 ### Pelusa, el gato
 Un gato negro vive en la lavandería.

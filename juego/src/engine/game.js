@@ -50,6 +50,7 @@
       this.tele = new MR.Tele(this);
       this.bosque = new MR.Bosque(this);
       this.pasillo = new MR.Pasillo(this);
+      this.espejo = new MR.Espejo(this);
       this.clima = new MR.Clima(this);
       this.gamepad = new MR.GamepadControls(this);
       this.gato = new MR.Gato(this);
@@ -279,6 +280,7 @@
       this.lastTime = now;
       this.gamepad.poll(dt);
       if (this.state === 'playing') { this.update(dt); } else if (this.state === 'title') { this.music.update(dt); this._attract(dt); }
+      this.espejo.render(); // el reflejo del espejo del pasillo, antes del cuadro
       this.retro.render(this.world.scene, this.player.camera, {
         blink: this.state === 'ended' ? Math.min(1, (now - (this.endedAt || 0)) / 3000) : Math.max(this.player.blink.amount, this.bosque.fade, this.pasillo.fade),
         dread: this.dread,
@@ -343,6 +345,7 @@
       var cc = this.horror.customerCollider();
       if (cc) { extra.push(cc); }
       this.bosque.update(dt);
+      this.espejo.update(dt);
       this.pasillo.update(dt);
       this.player.update(dt, input, {
         look: !this.noteOpen && !dialing && !this.wipe.active,

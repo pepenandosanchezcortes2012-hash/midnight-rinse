@@ -667,6 +667,24 @@
       this.box(0.01, 0.25, 0.01, m.dark, X, 2.48, 0.8);
       var bulb = this.box(0.08, 0.1, 0.08, R.material({ texture: 'white', color: 0xffe2a8, emissive: 1.3 }), X, 2.3, 0.8);
 
+      // Lavabo con espejo, en la pared derecha frente a los casilleros (el reflejo lo dibuja espejo.js).
+      var porcelain = R.material({ texture: 'white', color: 0xd8d6cc });
+      var sink = this.box(0.42, 0.14, 0.5, porcelain, X + 1.27, 0.86, 2.2);
+      this.box(0.14, 0.78, 0.14, porcelain, X + 1.35, 0.4, 2.2);
+      var tap = this.box(0.14, 0.05, 0.04, m.metal, X + 1.4, 1.02, 2.2);
+      this.interactive(sink, 'lavabo');
+      this.interactive(tap, 'lavabo');
+      this.collider(X + 1.0, X + 1.5, 1.9, 2.5);
+      var frame = new THREE.Mesh(new THREE.PlaneGeometry(0.64, 0.8), m.dark);
+      frame.rotation.y = -Math.PI / 2;
+      frame.position.set(X + 1.475, 1.58, 2.2);
+      this.add(inert(frame));
+      var mirror = new THREE.Mesh(new THREE.PlaneGeometry(0.56, 0.72), m.dark);
+      mirror.rotation.y = -Math.PI / 2;
+      mirror.position.set(X + 1.465, 1.58, 2.2);
+      this.add(inert(mirror));
+      this.mirror = { mesh: mirror, hide: [mirror, frame], planeX: X + 1.465, center: new V3(X + 1.465, 1.58, 2.2) };
+
       // Anclas y zonas del Cliente Inmóvil.
       this.anchors.pasillo_fondo = { x: X, z: -4.4, rot: Math.PI, seated: false, zone: 'pasillo_fondo' };
       this.anchors.pasillo_puerta = { x: X + 0.9, z: 5.3, rot: Math.atan2(0.9, 9.3), seated: false, zone: 'pasillo_puerta' };

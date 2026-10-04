@@ -585,5 +585,16 @@ MR.TEXTOS_EN = {
  "Secadoras funcionando: {n} de 4 (hoy no hay agua: con 3 o más, o con tu música, se tapa el zumbido).": "Dryers running: {n} of 4 (no water tonight: with 3 or more, or with your music, the hum is drowned out).",
  "(La perilla gira, pero no entra agua. La lavadora solo zumba.)": "(The knob turns, but no water comes in. The washer just hums.)",
  "(Esta secadora ya está girando.)": "(This dryer is already spinning.)",
- "(Metes una moneda. La secadora arranca con un golpe sordo.)": "(You put in a coin. The dryer starts with a dull thud.)"
+ "(Metes una moneda. La secadora arranca con un golpe sordo.)": "(You put in a coin. The dryer starts with a dull thud.)",
+ "<span class=\"tecla ancha\">clic</span> en el lavabo": "<span class=\"tecla ancha\">click</span> on the sink",
+ "Echarte agua en la cara <span class=\"g-nota\">(baja el miedo; el espejo de arriba… míralo si te atreves)</span>": "Splash water on your face <span class=\"g-nota\">(lowers your fear; the mirror above it… look if you dare)</span>",
+ "<span class=\"gesto\">☝ tocar</span> el lavabo": "<span class=\"gesto\">☝ tap</span> the sink",
+ "Echarte agua en la cara <span class=\"g-nota\">(baja el miedo)</span>": "Splash water on your face <span class=\"g-nota\">(lowers your fear)</span>",
+ "(En el espejo, alguien está de pie detrás de ti. Te das vuelta: no hay nadie.)": "(In the mirror, someone is standing behind you. You turn around: no one is there.)",
+ "(En el espejo se ve el pasillo detrás de ti. A ti no.)": "(The mirror shows the corridor behind you. It doesn't show you.)",
+ "(El grifo tose aire. Hoy no hay agua.)": "(The tap coughs air. There's no water tonight.)",
+ "(Ya tienes la cara empapada.)": "(Your face is already soaked.)",
+ "(Te echas agua en la cara. Está helada. Por un momento te sientes despierto.)": "(You splash water on your face. It's ice cold. For a moment you feel awake.)",
+ "Dos en el espejo": "Two in the mirror",
+ "Míralo detrás de ti en el espejo del pasillo.": "See him behind you in the corridor mirror."
 };

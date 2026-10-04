@@ -137,6 +137,7 @@
         // En el pasillo de servicio: la bombilla… y la lavandería sigue cambiando sola.
         table = [['bombilla', 2.5], ['apagon', 0.8], ['charco', 0.6], ['puerta_lavadora', 0.6], ['golpe_secadora', 1]];
         if (this.customer.present) { table.push(['cliente_pasillo', 2.5 + g.stats.mirada * 0.5]); }
+        if (g.flags.customerSeen && !g.espejo.armed && g.espejo.ghosts < 2) { table.push(['espejo', 1.5]); }
       } else if (outside) {
         // En el bosque: ramas, la linterna, el búho… y la lavandería sigue cambiando sola a tus espaldas.
         table = [['rama', 3], ['linterna', 1.5], ['buho', 1], ['apagon', 1], ['charco', 0.8], ['puerta_lavadora', 0.6], ['secadora_sola', 0.6]];
@@ -193,6 +194,7 @@
         }
         case 'radio_sola': this.schedule('radio_sola', 'mostrador', 1); break;
         case 'tele_rostro': this.game.tele.faceArmed = true; break; // sale cuando mires la tele (tele.js)
+        case 'espejo': this.game.espejo.armed = true; break; // sale cuando te mires en el espejo (espejo.js)
         case 'golpe_secadora': this.schedule('golpe_secadora', 'secadoras', 1, { index: Math.floor(Math.random() * 4) }); break;
         case 'telefono_breve': this.schedule('telefono_breve', 'mostrador', 1); break;
         case 'mano_lavadora': this.schedule('mano_lavadora', 'lavadoras', 2, { index: Math.floor(Math.random() * 6) }); break;

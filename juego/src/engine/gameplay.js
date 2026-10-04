@@ -7,7 +7,7 @@
   'use strict';
 
   var U = MR.Util;
-  var BUSY = { washerCoin: 1, washerDial: 1, radioDial: 1, dryerFilter: 1, dryerStart: 1, changer: 1, changerTray: 1, phone: 1, washerDoor: 1 };
+  var BUSY = { washerCoin: 1, washerDial: 1, radioDial: 1, dryerFilter: 1, dryerStart: 1, lavabo: 1, changer: 1, changerTray: 1, phone: 1, washerDoor: 1 };
   var HAPTIC = { dialClick: 10, coin: 25, changer: [12, 40, 12], tray: [10, 30, 15], door: 20, mopPulse: 18, filterPulse: 7 };
 
   class Gameplay {
@@ -134,6 +134,7 @@
       }
       if (kind === 'washerCoin') { this._insertCoin(target.index); return; }
       if (kind === 'dryerStart') { this._dryerCoin(target.index); return; }
+      if (kind === 'lavabo') { this.game.espejo.sink(); return; }
       if (kind === 'changer') { this._changer(); return; }
       if (kind === 'changerTray') { this._pickTray(); return; }
       if (kind === 'washerDoor') { this._toggleDoor(target.index); return; }
