@@ -4,7 +4,6 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P2) Microanomalía «El cesto» (sala) — un cesto de ropa junto a las secadoras que se va llenando en 3 pasos, cada vez que no lo miras; al tercero: «(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)». Archivos: world.js (cesto y 3 montones), horror.js (zona secadoras, oclusión); prueba: no crece mientras lo miras.
 
 ## Ideas (motor creativo, sin aprobar)
 - [ ] (P3) Variación de cliente «El sombrero» — cuando se va con la hora verdadera, su sombrero queda en el banco amarillo; al verlo: «(En el banco amarillo quedó su sombrero. Está seco.)»; al siguiente parpadeo ya no está. Archivos: world.js (sombrero suelto), game.js (respuesta 4), horror.js; prueba: con la respuesta secreta.
@@ -14,6 +13,7 @@ Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas de
 - [ ] (P1) Lore: decidir las propuestas de Yesda — el embalse de 1986, las caras blancas, las órdenes de las máscaras negras, el bosque infinito y el nombre «Blackwood» (CANON.md §7). Hasta decidir, lore_check.py los rechaza en textos del juego. — BLOQUEADA: decisión de diseño de Yesda
 
 ## Hechas
+- [x] (P2) Microanomalía «El cesto» (sala) — un cesto de ropa junto a las secadoras que se va llenando en 3 pasos, cada vez que no lo miras; al tercero: «(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)». Archivos: world.js (cesto y 3 montones), horror.js (zona secadoras, oclusión); prueba: no crece mientras lo miras. — commit e1f8459 (2026-10-04)
 - [x] (P2) Microanomalía «Pasos arriba» (sala, solo sonido) — si te quedas quieto con menos de 3 máquinas sonando, se oyen pasos amortiguados en el techo, de un lado al otro (paneo); «(Arriba se oyen pasos. La lavandería no tiene segundo piso.)». Una vez por noche, nunca en Paseo. Archivos: audio.js (pasos con filtro grave), horror.js; prueba: quieto y en silencio sí, caminando o con 3 lavadoras no. — commit 6c8397b (2026-10-04)
 - [x] (P2) Microanomalía «El banco tibio» (sala) — tocar el banco amarillo cuando él no está: «(El banco está tibio, como si alguien acabara de levantarse.)»; antes de que aparezca la primera vez: «(El banco está frío.)». Archivos: world.js (banco interactivo), gameplay.js; prueba: antes y después de que se vaya. — commit 8e883c3 (2026-10-04)
 - [x] (P3) Variación de bosque «La segunda farola» (noches de niebla) — más adentro del sendero aparece otra farola encendida; si caminas hacia ella siempre está a la misma distancia; al darte vuelta y volver a mirar, está apagada. Sin sonido salvo el zumbido eléctrico, que se corta. Archivos: world.js (_forest), bosque.js; respeta «el bosque tiene borde» (CANON §1 y §7). — commit 19f2ae0 (2026-10-04)
