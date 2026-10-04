@@ -297,6 +297,7 @@
         this.faceSeen = (this.faceSeen || 0) + 1;
         g.audio.buzz();
         g.dread = Math.min(1, g.dread + 0.08);
+        MR.Haptics.pulse([40, 50, 90]);
       }
       var faceAmt = 0;
       if (this.face > 0) {

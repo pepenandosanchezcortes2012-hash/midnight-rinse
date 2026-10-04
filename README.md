@@ -174,7 +174,7 @@ En la pantalla de título: turnos terminados, tu mejor evaluación en cada dific
 Todo lo que lees (las hojas del bosque) y escuchas (Radio Nocturna a las 02:40) queda en el **Archivo** de la pantalla de título, para releerlo cuando quieras y armar la historia completa.
 
 ### Objetos perdidos
-Cuando una lavadora termina su ciclo, a veces queda **algo olvidado** adentro. Abre la puerta para encontrarlo. Hay **12 objetos**, algunos normales y otros no tanto, y se guardan en una colección permanente (**Objetos perdidos**, en la pantalla de título).
+Cuando una lavadora termina su ciclo, a veces queda **algo olvidado** adentro. Abre la puerta para encontrarlo. Hay **15 objetos**, algunos normales y otros no tanto, y se guardan en una colección permanente (**Objetos perdidos**, en la pantalla de título).
 
 ### Logros
 Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y se guardan en tu navegador. Ejemplos: terminar el turno, sintonizar la radio cuando habla el locutor, tener las seis lavadoras en marcha a la vez, que un relámpago lo revele, el tercer final…

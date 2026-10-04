@@ -20,7 +20,10 @@
     { id: 'llave', nombre: 'Una llave pequeña', desc: 'Con una etiqueta: «casillero 7».' },
     { id: 'diente', nombre: 'Un diente de leche', desc: 'En una bolsita de plástico con tu nombre de niño.' },
     { id: 'polaroid', nombre: 'Una foto instantánea', desc: 'Tú, dormido en el banco amarillo. Tomada desde muy cerca.' },
-    { id: 'nota', nombre: 'Una nota doblada', desc: 'Con letra apretada: «No te voy a dejar salir. Me gusta tu compañía».' }
+    { id: 'nota', nombre: 'Una nota doblada', desc: 'Con letra apretada: «No te voy a dejar salir. Me gusta tu compañía».' },
+    { id: 'espejito', nombre: 'Un espejo de bolsillo', desc: 'Empañado por dentro, como si alguien hubiera respirado del otro lado.' },
+    { id: 'rollo', nombre: 'Un rollo de fotos sin revelar', desc: 'Doce exposiciones. En la etiqueta, con tu letra: «no las revelen».' },
+    { id: 'llave_paso', nombre: 'Una llave de paso', desc: 'Fría y mojada. Alguien cerró el agua a propósito.' }
   ];
 
   class Objetos {

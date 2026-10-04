@@ -101,6 +101,7 @@
         this.ghosts += 1;
         g.audio.whisper(0);
         g.dread = Math.min(1, g.dread + 0.12);
+        MR.Haptics.pulse([60, 40, 120]);
         if (g.logros) { g.logros.unlock('espejo'); }
         setTimeout(function () {
           if (g.state === 'playing') { g.ui.subtitle('(En el espejo, alguien está de pie detrás de ti. Te das vuelta: no hay nadie.)', 6); }

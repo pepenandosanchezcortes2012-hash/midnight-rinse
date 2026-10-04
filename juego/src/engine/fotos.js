@@ -134,6 +134,7 @@
           if (g.state !== 'playing') { return; }
           g.ui.subtitle('(Revisas la foto. Hay alguien de pie frente a ti. Levantas la vista: no hay nadie.)', 6);
           g.audio.thud();
+          MR.Haptics.pulse(140);
           g.dread = Math.min(1, g.dread + 0.15);
           if (g.logros) { g.logros.unlock('foto'); }
         }, 900);

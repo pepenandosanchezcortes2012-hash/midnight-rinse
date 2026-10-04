@@ -455,6 +455,12 @@ El proyecto pasó por dos etapas:
 - **En el celular:** capturas a 844×390 del título (se desplaza, con todos los paneles) y de la pausa (cinco botones en tres filas). No hubo que cambiar nada.
 - Resultado: 45/45.
 
+## 54. Búsqueda de fallos con 24 turnos al azar, vibración en los sustos nuevos y tres objetos
+- **Búsqueda de fallos (no se sube):** 24 turnos completos con semilla, todas las noches especiales y las cuatro dificultades (un tercio en inglés), dibujando también el espejo y la tele. Los 24 terminaron sin excepciones ni errores, con finales paseo, bueno y la una y diez.
+- **Vibración** (celular y control) al ver su cara en la tele, al verlo en el espejo y al revisar la foto donde sale él.
+- **Tres objetos perdidos nuevos**, ligados a lo que se agregó: un espejo de bolsillo, un rollo de fotos sin revelar y una llave de paso. Ahora son 15 en total. También en inglés: 602 textos.
+- Resultado: 45/45.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

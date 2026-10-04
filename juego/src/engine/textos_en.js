@@ -596,5 +596,11 @@ MR.TEXTOS_EN = {
  "(Ya tienes la cara empapada.)": "(Your face is already soaked.)",
  "(Te echas agua en la cara. Está helada. Por un momento te sientes despierto.)": "(You splash water on your face. It's ice cold. For a moment you feel awake.)",
  "Dos en el espejo": "Two in the mirror",
- "Míralo detrás de ti en el espejo del pasillo.": "See him behind you in the corridor mirror."
+ "Míralo detrás de ti en el espejo del pasillo.": "See him behind you in the corridor mirror.",
+ "Un espejo de bolsillo": "A pocket mirror",
+ "Empañado por dentro, como si alguien hubiera respirado del otro lado.": "Fogged up on the inside, as if someone had breathed on the other side.",
+ "Un rollo de fotos sin revelar": "An undeveloped roll of film",
+ "Doce exposiciones. En la etiqueta, con tu letra: «no las revelen».": "Twelve exposures. On the label, in your handwriting: “don't develop them”.",
+ "Una llave de paso": "A water shutoff key",
+ "Fría y mojada. Alguien cerró el agua a propósito.": "Cold and wet. Someone shut off the water on purpose."
 };
