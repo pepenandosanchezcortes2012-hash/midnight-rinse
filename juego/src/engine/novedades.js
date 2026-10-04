@@ -1,0 +1,33 @@
+/**
+ * Novedades: lo último que cambió en el juego, en un panel del título. Si hay algo que no has visto, el panel
+ * lleva un «● nuevo» hasta que lo abres (se recuerda en midnight-rinse/novedades). La más nueva va primero.
+ */
+(function (MR) {
+  'use strict';
+
+  var KEY = 'midnight-rinse/novedades';
+
+  MR.NOVEDADES = [
+    { id: 13, texto: 'El teléfono dice algo distinto cada noche. Desde la sexta, contesta tu propia voz.' },
+    { id: 12, texto: 'Opción «Brillo», para jugar en el celular con mucha luz.' },
+    { id: 11, texto: 'El pasillo de servicio tiene un lavabo con espejo. Tú no te reflejas.' },
+    { id: 10, texto: 'Noche especial «Corte de agua»: las secadoras ahora funcionan con moneda.' },
+    { id: 9, texto: 'Fotos con la cámara del celular (P, Y o la pausa). Revísalas bien.' },
+    { id: 8, texto: 'A veces la tele muestra algo entre la nieve.' },
+    { id: 7, texto: 'Récords: tu mejor nota por dificultad y los cinco finales.' },
+    { id: 6, texto: 'English version: Options → Idioma · Language.' },
+    { id: 5, texto: 'Un final más, para quien hace todo en la misma noche.' },
+    { id: 4, texto: 'Filtro de televisor viejo (CRT) en las opciones.' }
+  ];
+
+  MR.Novedades = {
+    latest: function () { return MR.NOVEDADES[0].id; },
+    seen: function () {
+      try { return parseInt(window.localStorage.getItem(KEY) || '0', 10) || 0; } catch (e) { return 0; }
+    },
+    unseen: function () { return MR.Novedades.seen() < MR.Novedades.latest(); },
+    markSeen: function () {
+      try { window.localStorage.setItem(KEY, String(MR.Novedades.latest())); } catch (e) { /* sin almacenamiento */ }
+    }
+  };
+})(window.MR = window.MR || {});

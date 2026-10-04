@@ -1040,6 +1040,21 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Novedades: «● nuevo» hasta que abres el panel', async function () {
+      localStorage.removeItem('midnight-rinse/novedades');
+      var ctx = await load();
+      var d = ctx.w.document;
+      check(!d.getElementById('novedades-punto').hidden, 'no marcó las novedades como nuevas');
+      check(d.querySelectorAll('#novedades-lista li').length === ctx.w.MR.NOVEDADES.length, 'faltan novedades en la lista');
+      d.getElementById('panel-novedades').open = true;
+      await wait(50); // el evento «toggle» llega después
+      check(d.getElementById('novedades-punto').hidden, 'el punto no se fue al abrir');
+      ctx = await load();
+      check(ctx.w.document.getElementById('novedades-punto').hidden, 'volvió a marcarse como nuevo');
+      noErrors(ctx);
+      return ctx.w.MR.NOVEDADES.length + ' novedades';
+    }],
+
     ['El teléfono: una llamada por noche; desde la sexta, con tu propia voz', async function () {
       var lines = [];
       var nights = [0, 3, 5, 9];

@@ -252,6 +252,8 @@ Antes de subir cambios, sella `index.html` para que los navegadores no mezclen s
 py juego/herramientas/sellar_version.py   # añade ?v=<fecha-hora> a todos los scripts y estilos
 ```
 
+Si el cambio se nota al jugar, agrega una línea arriba de todo en `MR.NOVEDADES` (`juego/src/engine/novedades.js`) con un `id` mayor, y su traducción con `herramientas/textos.py`: quien vuelva verá «● nuevo» en el panel «Novedades».
+
 ### Textos en inglés
 
 El texto en español es la clave: `MR.t('texto')` lo traduce en las salidas (subtítulos, hojas, menús, voces) y `MR.tf('Noche {n}', { n: 3 })` maneja los textos con datos. El diccionario vive en `juego/src/engine/textos_en.js`:

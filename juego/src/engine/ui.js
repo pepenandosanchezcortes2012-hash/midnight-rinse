@@ -64,6 +64,7 @@
       var lang = $('opt-idioma');
       lang.value = MR.I18N.lang;
       lang.addEventListener('change', function () { MR.I18N.set(lang.value); });
+      this.renderNovedades();
       this.refreshRegistry();
       this.refreshRealTime();
       setInterval(function () { self._renderSubtitles(); }, 200);
@@ -186,6 +187,23 @@
           li.addEventListener('click', function () { game.noteOpen = true; self.showNote(e.texto, e.encabezado); });
         }
         list.appendChild(li);
+      });
+    }
+
+    /** Panel «Novedades»: lo último del juego; «● nuevo» hasta que lo abres. */
+    renderNovedades() {
+      var list = $('novedades-lista');
+      list.textContent = '';
+      MR.NOVEDADES.forEach(function (n) {
+        var li = document.createElement('li');
+        li.textContent = MR.t(n.texto);
+        list.appendChild(li);
+      });
+      var dot = $('novedades-punto');
+      dot.hidden = !MR.Novedades.unseen();
+      var panel = $('panel-novedades');
+      panel.addEventListener('toggle', function () {
+        if (panel.open) { MR.Novedades.markSeen(); dot.hidden = true; }
       });
     }
 

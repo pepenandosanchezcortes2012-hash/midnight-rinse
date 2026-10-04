@@ -470,6 +470,11 @@ El proyecto pasó por dos etapas:
 - **Archivo:** nuevo grupo «Teléfono público», con las llamadas que contestaste. Ahora son 20 entradas en total.
 - **También en inglés:** 613 textos. Prueba nueva (noches 1, 4, 6 y 10, más el archivo). Resultado: 47/47.
 
+## 57. Panel «Novedades»
+- **En el título:** las últimas 10 novedades del juego, la más nueva primero. Si hay alguna que no viste, el panel lleva «● nuevo» (parpadea suave) hasta que lo abres. Lo visto se guarda en `midnight-rinse/novedades`.
+- **Para publicar algo nuevo:** se agrega una línea con un `id` mayor en `MR.NOVEDADES`, más su traducción. Está anotado en el README.
+- Prueba nueva. Resultado: 48/48.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

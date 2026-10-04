@@ -613,5 +613,16 @@ MR.TEXTOS_EN = {
  "Teléfono público": "Payphone",
  "Noche {n} en adelante": "Night {n} onward",
  "TELÉFONO PÚBLICO · TU PROPIA VOZ · 03:50": "PAYPHONE · YOUR OWN VOICE · 03:50",
- "TELÉFONO PÚBLICO · NOCHE {n} · 03:50": "PAYPHONE · NIGHT {n} · 03:50"
+ "TELÉFONO PÚBLICO · NOCHE {n} · 03:50": "PAYPHONE · NIGHT {n} · 03:50",
+ "Novedades <span id=\"novedades-punto\" class=\"punto-nuevo\" hidden=\"\">● nuevo</span>": "What's new <span id=\"novedades-punto\" class=\"punto-nuevo\" hidden=\"\">● new</span>",
+ "El teléfono dice algo distinto cada noche. Desde la sexta, contesta tu propia voz.": "The phone says something different every night. From the sixth on, your own voice answers.",
+ "Opción «Brillo», para jugar en el celular con mucha luz.": "“Brightness” option, for playing on your phone in bright light.",
+ "El pasillo de servicio tiene un lavabo con espejo. Tú no te reflejas.": "The service corridor has a sink with a mirror. You have no reflection.",
+ "Noche especial «Corte de agua»: las secadoras ahora funcionan con moneda.": "Special night “Water shutoff”: the dryers now take coins.",
+ "Fotos con la cámara del celular (P, Y o la pausa). Revísalas bien.": "Photos with your phone camera (P, Y or the pause menu). Look at them closely.",
+ "A veces la tele muestra algo entre la nieve.": "Sometimes the TV shows something in the static.",
+ "Récords: tu mejor nota por dificultad y los cinco finales.": "Records: your best grade per difficulty and the five endings.",
+ "English version: Options → Idioma · Language.": "English version: Options → Idioma · Language.",
+ "Un final más, para quien hace todo en la misma noche.": "One more ending, for those who do everything in the same night.",
+ "Filtro de televisor viejo (CRT) en las opciones.": "Old TV filter (CRT) in the options."
 };
