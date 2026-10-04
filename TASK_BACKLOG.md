@@ -4,7 +4,6 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P1) Sprint 3: bosque infinito no euclidiano, secadora solitaria y pista zen lo-fi
 
 ## Ideas (motor creativo, sin aprobar)
 
@@ -12,6 +11,7 @@ Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas de
 - [ ] (P1) Lore: decidir las propuestas de Yesda — el embalse de 1986, las caras blancas, las órdenes de las máscaras negras, el bosque infinito y el nombre «Blackwood» (CANON.md §7). Hasta decidir, lore_check.py los rechaza en textos del juego. — BLOQUEADA: decisión de diseño de Yesda
 
 ## Hechas
+- [x] (P1) Sprint 3: bosque infinito no euclidiano, secadora solitaria y pista zen lo-fi — commit 17742e6 (2026-10-04)
 - [x] (P1) Sprint 2: Pelusa con rutinas y la avenida con vida por la vidriera — commit 1007d96 (2026-10-04)
 - [x] (P1) Sprint 1: clientes de cara blanca y de máscara negra al mostrador, con diálogos de Gemini — commit 71eaf67 (2026-10-04)
 - [x] (P2) Medir el ritmo de sustos por turno — turnos con semilla en las 4 dificultades contando cada evento del director; que ninguno domine y que el promedio entre sustos siga cerca de lo diseñado (~34 s reales en Normal); ajustar pesos si hace falta. — commit medición en REPORTE §73; sin cambios de pesos (2026-10-04)
