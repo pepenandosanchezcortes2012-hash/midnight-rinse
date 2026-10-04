@@ -62,7 +62,7 @@
     _loadOptions() {
       var defaults = { subtitles: true, voices: true, reduceFlashes: false, crosshair: false, meta: false, sensitivity: 1.2, volume: 0.8, name: '',
         vibration: true, gyro: true, lofi: true, mixMode: false, teleLink: '', fov: 70, invertY: false, subsScale: 1,
-        difficulty: 'normal', batterySaver: MR.isTouchDevice ? MR.isTouchDevice() : false };
+        difficulty: 'normal', crt: false, batterySaver: MR.isTouchDevice ? MR.isTouchDevice() : false };
       try {
         var saved = JSON.parse(window.localStorage.getItem(OPTIONS_KEY) || '{}');
         return Object.assign(defaults, saved);
@@ -83,7 +83,7 @@
         ['opt-volumen', 'volume', 'value'], ['opt-nombre', 'name', 'value'], ['opt-vibracion', 'vibration', 'checked'],
         ['opt-giroscopio', 'gyro', 'checked'], ['opt-lofi', 'lofi', 'checked'], ['opt-mezcla', 'mixMode', 'checked'],
         ['opt-fov', 'fov', 'value'], ['opt-invertir', 'invertY', 'checked'], ['opt-subs-tam', 'subsScale', 'value'],
-        ['opt-dificultad', 'difficulty', 'value'], ['opt-bateria', 'batterySaver', 'checked']];
+        ['opt-dificultad', 'difficulty', 'value'], ['opt-bateria', 'batterySaver', 'checked'], ['opt-crt', 'crt', 'checked']];
       map.forEach(function (m) {
         var input = $(m[0]);
         input[m[2]] = o[m[1]];

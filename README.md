@@ -169,6 +169,7 @@ Cuando una lavadora termina su ciclo, a veces queda **algo olvidado** adentro. A
 Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y se guardan en tu navegador. Ejemplos: terminar el turno, sintonizar la radio cuando habla el locutor, tener las seis lavadoras en marcha a la vez, que un relámpago lo revele, el tercer final…
 
 ### Accesibilidad y privacidad (pantalla de título)
+- **Filtro de televisor viejo (CRT)**, opcional: líneas de barrido y rejilla de fósforo.
 - **Ahorro de batería (30 FPS)**, activado por defecto en celulares: el teléfono se calienta menos durante el turno.
 - Subtítulos (activados) con **tres tamaños**, voces sintetizadas del navegador (opcionales), **reducir destellos de luz**, punto de mira opcional, sensibilidad, **campo de visión**, **invertir el eje vertical** y volumen.
 - **Capa meta-diegética (opcional y avisada):** puede usar la hora real de tu computadora. Si juegas entre las 02:00 y las 05:00, las anomalías se triplican.

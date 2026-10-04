@@ -104,6 +104,7 @@
     'uniform float uFlash;',
     'uniform float uCollapse;',
     'uniform float uHigh;',
+    'uniform float uCrt;',
     'varying vec2 vUv;',
     'float rand(vec2 co) { return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453); }',
     'void main() {',
@@ -151,7 +152,16 @@
     '  float thr = (M + 0.5) / 64.0;',
     '  col = clamp(col, 0.0, 1.0);',
     '  vec3 lvl = clamp(floor(col * 31.0 + thr), 0.0, 31.0);',
-    '  gl_FragColor = vec4(lvl / 31.0, clamp(A, 0.0, 1.0));',
+    '  vec3 outc = lvl / 31.0;',
+    // Filtro CRT opcional: línea oscura entre filas del objetivo 320x240 y rejilla de fósforo RGB.
+    '  if (uCrt > 0.5) {',
+    '    float row = fract(vUv.y * uRes.y);',
+    '    outc *= 0.7 + 0.3 * smoothstep(0.0, 0.3, row) * smoothstep(1.0, 0.7, row);',
+    '    float cm = mod(floor(gl_FragCoord.x), 3.0);',
+    '    vec3 mask = cm < 1.0 ? vec3(1.0, 0.84, 0.84) : (cm < 2.0 ? vec3(0.84, 1.0, 0.84) : vec3(0.84, 0.84, 1.0));',
+    '    outc = min(outc * mask * 1.14, vec3(1.0));',
+    '  }',
+    '  gl_FragColor = vec4(outc, clamp(A, 0.0, 1.0));',
     '}'
   ].join('\n');
 
@@ -216,7 +226,8 @@
           uTime: { value: 0 },
           uFlash: { value: 0 },
           uCollapse: { value: 0 },
-          uHigh: { value: 0 }
+          uHigh: { value: 0 },
+          uCrt: { value: 0 }
         },
         vertexShader: POST_VERT,
         fragmentShader: POST_FRAG,
@@ -284,6 +295,7 @@
       u.uFlash.value = fx.flash;
       u.uCollapse.value = fx.collapse;
       u.uHigh.value = fx.high || 0;
+      u.uCrt.value = fx.crt ? 1 : 0;
       this.renderer.setRenderTarget(this.target);
       this.renderer.render(scene, camera);
       this.renderer.setRenderTarget(null);

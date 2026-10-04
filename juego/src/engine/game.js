@@ -274,7 +274,8 @@
         time: now / 1000,
         flash: this.horror.flash,
         collapse: this.collapsed ? 1 : 0,
-        high: this.consumables.high
+        high: this.consumables.high,
+        crt: this.ui.options.crt
       });
       this.tele.frame(dt, now / 1000);
       this.input.endFrame();
