@@ -558,6 +558,18 @@ El proyecto pasó por dos etapas:
 - **Prueba:** la primera versión medía el vaivén en solo medio segundo y fallaba si justo estaba en el punto más alto del seno. Ahora mide el rango durante 1,5 s. Resultado: 63/63.
 - Con esto se terminaron las cinco ideas de la segunda tanda del motor creativo.
 
+## 73. Ritmo de sustos por turno (medición)
+- **Cómo:** 6 turnos completos con semilla (Tranquilo, Normal y Pesadilla, dos de cada uno), con un jugador que pasea al azar, contando cada evento que aplica el director (sin contar los susurros).
+
+| Dificultad | Eventos por turno | Cierres automáticos | Uno cada (sin cierres) | Sustos de esta sesión |
+|---|---|---|---|---|
+| Tranquilo | 75–76 | 9–12 | ~14 s | cesto 1–3, ropa doblada 0–1, huellas 1–2 |
+| Normal | 139–143 | 13–20 | ~7–8 s | cesto 3, ropa doblada 1, huellas 5–7 |
+| Pesadilla | 246–248 | 35–42 | ~4 s | cesto 3, ropa doblada 1, huellas 4–10 |
+
+- **Lectura:** el ritmo lo fija el diseño del núcleo. Entre las 02:00 y las 05:00 de juego, `anomalyMultiplier` vale 3× (`clockAnomaly`, port exacto del Python), y el miedo suma hasta 1,8×. Así, los 34 s base bajan a ~6 s en la hora fuerte. La mayoría son anomalías chicas (un charco, una puerta, una luz que falla) y todas ocurren fuera de tu vista. Los sustos de esta sesión tienen tope por noche y no dominan. Las «huellas» se repiten porque el susto original vuelve cada vez que se secan.
+- **Sin cambios de pesos.** Si a Yesda le parece mucho para Normal, la palanca es el multiplicador 3× de la hora fuerte o el factor del miedo. Es una decisión de diseño, así que queda anotada.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
