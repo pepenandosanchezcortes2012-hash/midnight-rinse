@@ -4,7 +4,6 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P2) Microanomalía «El banco tibio» (sala) — tocar el banco amarillo cuando él no está: «(El banco está tibio, como si alguien acabara de levantarse.)»; antes de que aparezca la primera vez: «(El banco está frío.)». Archivos: world.js (banco interactivo), gameplay.js; prueba: antes y después de que se vaya.
 
 ## Ideas (motor creativo, sin aprobar)
 - [ ] (P2) Microanomalía «Pasos arriba» (sala, solo sonido) — si te quedas quieto con menos de 3 máquinas sonando, se oyen pasos amortiguados en el techo, de un lado al otro (paneo); «(Arriba se oyen pasos. La lavandería no tiene segundo piso.)». Una vez por noche, nunca en Paseo. Archivos: audio.js (pasos con filtro grave), horror.js; prueba: quieto y en silencio sí, caminando o con 3 lavadoras no.
@@ -16,6 +15,7 @@ Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas de
 - [ ] (P1) Lore: decidir las propuestas de Yesda — el embalse de 1986, las caras blancas, las órdenes de las máscaras negras, el bosque infinito y el nombre «Blackwood» (CANON.md §7). Hasta decidir, lore_check.py los rechaza en textos del juego. — BLOQUEADA: decisión de diseño de Yesda
 
 ## Hechas
+- [x] (P2) Microanomalía «El banco tibio» (sala) — tocar el banco amarillo cuando él no está: «(El banco está tibio, como si alguien acabara de levantarse.)»; antes de que aparezca la primera vez: «(El banco está frío.)». Archivos: world.js (banco interactivo), gameplay.js; prueba: antes y después de que se vaya. — commit 8e883c3 (2026-10-04)
 - [x] (P3) Variación de bosque «La segunda farola» (noches de niebla) — más adentro del sendero aparece otra farola encendida; si caminas hacia ella siempre está a la misma distancia; al darte vuelta y volver a mirar, está apagada. Sin sonido salvo el zumbido eléctrico, que se corta. Archivos: world.js (_forest), bosque.js; respeta «el bosque tiene borde» (CANON §1 y §7). — commit 19f2ae0 (2026-10-04)
 - [x] (P3) Variación de radio «Dedicatoria» (noche 3 en adelante, solo si escribiste tu nombre) — al final de la transmisión de las 02:40: «Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.» y, si diste nombre, un susurro con él entre la estática. Archivos: game.js (radio), historia.js; prueba: noche 3 con y sin nombre. — commit 55547c5 (2026-10-04)
 - [x] (P2) Microanomalía «Huellas mojadas» (sala) — al volver del bosque, huellas mojadas van del vidrio de la entrada al banco amarillo, solo si nadie entró; se secan en 60 s. Gotas (ASMR) cerca de las huellas. «(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)». Archivos: world.js (calcomanías), bosque.js (al volver), horror.js. — commit a92f225 (ampliación del susto «huellas», que ya existía) (2026-10-04)
