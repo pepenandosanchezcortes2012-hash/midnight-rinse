@@ -566,6 +566,7 @@
           self.ui.subtitle('(Se levanta despacio, camina hacia la puerta de vidrio y ya no está.)', 6);
           self.horror.customer.present = false;
           self.world.customer.group.visible = false;
+          self.world.loneHat.visible = true; // su sombrero se queda en el banco
           self.audio.door();
           if (self.logros) { self.logros.unlock('secreto'); }
         }, 1300);

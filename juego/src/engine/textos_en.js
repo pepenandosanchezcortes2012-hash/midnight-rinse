@@ -656,5 +656,7 @@ MR.TEXTOS_EN = {
  "(Están tibios. Ninguno tiene nombre todavía.)": "(They're warm. None of them has a name yet.)",
  "(Un cesto de plástico vacío.)": "(An empty plastic basket.)",
  "(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)": "(The basket is full of uniforms like yours. All dry. All warm.)",
- "Hay un cesto entre las lavadoras y las secadoras. Estaba vacío.": "There's a basket between the washers and the dryers. It was empty."
+ "Hay un cesto entre las lavadoras y las secadoras. Estaba vacío.": "There's a basket between the washers and the dryers. It was empty.",
+ "(En el banco amarillo quedó su sombrero. Está seco.)": "(His hat was left on the yellow bench. It's dry.)",
+ "Cuando se va con la hora verdadera, algo suyo se queda un momento.": "When he leaves at the true time, something of his stays behind for a moment."
 };

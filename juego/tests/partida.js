@@ -1041,6 +1041,32 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['El sombrero: se queda en el banco cuando se va; al verlo, el subtítulo; al parpadear, ya no está', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var hat = g.world.loneHat;
+      start(ctx);
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g.bosque.found = [true, true, true, true, true, true];
+      g.player.pos.set(-1.5, 0, 3); g.player.yaw = Math.PI; // de espaldas al banco
+      step(ctx, 2);
+      g._ask(); g._answer(4);
+      await wait(1500);
+      check(!g.horror.customer.present && hat.visible, 'el sombrero no quedó en el banco');
+      step(ctx, 5);
+      check(ctx.w.document.getElementById('subtitulos').textContent.indexOf('su sombrero') < 0, 'el aviso salió sin verlo');
+      g.player.yaw = Math.atan2(-(hat.position.x - g.player.pos.x), -(hat.position.z - g.player.pos.z));
+      g.player.pitch = -0.35;
+      step(ctx, 3);
+      check(ctx.w.document.getElementById('subtitulos').textContent.indexOf('su sombrero') >= 0, 'no lo notó');
+      g.player.blink.timer = 0;
+      step(ctx, 6);
+      check(!hat.visible, 'siguió ahí después de parpadear');
+      noErrors(ctx);
+      return 'queda, se nota y se va al parpadear';
+    }],
+
     ['El cesto: se llena de uniformes solo cuando no lo miras; lleno, el subtítulo', async function () {
       var ctx = await load();
       var g = ctx.g;

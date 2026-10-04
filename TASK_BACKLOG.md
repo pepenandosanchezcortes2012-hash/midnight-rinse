@@ -4,9 +4,9 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
+- [ ] (P3) Variación de cliente «El sombrero» — cuando se va con la hora verdadera, su sombrero queda en el banco amarillo; al verlo: «(En el banco amarillo quedó su sombrero. Está seco.)»; al siguiente parpadeo ya no está. Archivos: world.js (sombrero suelto), game.js (respuesta 4), horror.js; prueba: con la respuesta secreta.
 
 ## Ideas (motor creativo, sin aprobar)
-- [ ] (P3) Variación de cliente «El sombrero» — cuando se va con la hora verdadera, su sombrero queda en el banco amarillo; al verlo: «(En el banco amarillo quedó su sombrero. Está seco.)»; al siguiente parpadeo ya no está. Archivos: world.js (sombrero suelto), game.js (respuesta 4), horror.js; prueba: con la respuesta secreta.
 - [ ] (P3) Variación de bosque «El tendedero» (noches de luna llena) — entre dos pinos junto al sendero, un tendedero con uniformes que se mecen sin viento; al verlo: «(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)». Archivos: world.js (_forest), bosque.js; prueba: solo en luna llena.
 
 ## Bloqueadas (necesitan decisión)

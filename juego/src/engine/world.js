@@ -273,6 +273,19 @@
         this.box(0.06, 0.45, 0.4, m.metal, x, 0.22, 0.62);
       }, this);
       this.collider(-5.05, -1.95, 0.35, 0.92);
+      // Su sombrero, solo, sobre el asiento: queda ahí cuando se va con la hora verdadera (game.js, horror.js).
+      var hat = new THREE.Group();
+      hat.position.set(-3.25, 0.51, 0.6);
+      hat.rotation.y = 0.4;
+      var brim = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.02, 10), m.dark);
+      brim.position.y = 0.01;
+      hat.add(brim);
+      var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.15, 10), m.dark);
+      crown.position.y = 0.095;
+      hat.add(crown);
+      hat.visible = false;
+      this.add(hat);
+      this.loneHat = hat;
     }
 
     _counter() {

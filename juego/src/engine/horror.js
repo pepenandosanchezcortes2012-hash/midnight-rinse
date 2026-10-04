@@ -115,6 +115,7 @@
       this._prints(player);
       this._stepsAbove(dt, player);
       this._basket(player);
+      this._hat(player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -529,6 +530,20 @@
       if (!force && Math.random() < 0.5) { return; }
       this.printsFromForest = true;
       this.schedule('huellas', 'banco', 1);
+    }
+
+    /** Su sombrero en el banco: al verlo, el subtítulo; en el siguiente parpadeo ya no está. */
+    _hat(player) {
+      var hat = this.world.loneHat;
+      if (!hat.visible) { return; }
+      if (!this.hatNoticed) {
+        if (!player.eyesClosed && this.zoneVisible('banco') > 0.4 && U.distXZ(player.pos, hat.position) < 4) {
+          this.hatNoticed = true;
+          this.game.ui.subtitle('(En el banco amarillo quedó su sombrero. Está seco.)', 5);
+        }
+      } else if (player.eyesClosed) {
+        hat.visible = false;
+      }
     }
 
     /** El cesto lleno: al verlo de cerca con sus tres uniformes, el subtítulo (una vez). */
