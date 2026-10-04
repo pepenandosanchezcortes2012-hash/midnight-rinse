@@ -880,6 +880,23 @@
       return 'turno completo sin él, sin sustos ni faltas';
     }],
 
+    ['Final verdadero: la hora verdadera y las seis hojas en la misma noche', async function () {
+      var ctx = await load();
+      start(ctx);
+      var g = ctx.g;
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g.bosque.found = [true, true, true, true, true, true];
+      g._ask(); g._answer(4);
+      check(g.flags.secreto, 'la respuesta secreta no quedó registrada');
+      g.bosque.go(); step(ctx, 40);
+      g.bosque.touchWasher(); step(ctx, 30 * 4);
+      var title = ctx.w.document.getElementById('final-titulo').textContent;
+      check(g.state === 'ended' && title === ctx.w.MR.HISTORIA.verdadero.titulo, 'no fue el final verdadero (' + title + ')');
+      check(g.logros.has('verdadero') && g.logros.has('final_bosque'), 'no dio los logros del final');
+      noErrors(ctx);
+      return '«' + title + '»';
+    }],
+
     ['Turno completo con salidas al bosque', async function () {
       var ctx = await load('?velocidad=8');
       start(ctx);

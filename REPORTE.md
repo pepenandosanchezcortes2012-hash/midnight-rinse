@@ -404,6 +404,11 @@ El proyecto pasó por dos etapas:
 - **Opción:** desactivada por defecto.
 - **Resultado:** 37/37.
 
+## 45. El final verdadero
+- **Cómo se consigue:** en la misma noche, dar la respuesta secreta (él se va) y meter las seis hojas en la lavadora del claro.
+- **Qué da:** el final «05:13 · Fin del turno», 25 puntos extra en la evaluación y el logro oculto «Fin del turno». A partir de ahí, el título amanece con «Ya no vuelves… a menos que quieras».
+- **Prueba nueva.** Resultado: 38/38.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

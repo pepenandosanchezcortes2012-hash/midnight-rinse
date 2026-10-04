@@ -12,6 +12,7 @@
     { id: 'final_bueno', titulo: '05:12', desc: 'Consigue que la puerta por fin abra.' },
     { id: 'bucle', titulo: 'La una y diez otra vez', desc: 'Que el turno no termine.' },
     { id: 'final_bosque', titulo: 'Último ciclo', desc: 'Mete las seis hojas en la lavadora del claro.', oculto: true },
+    { id: 'verdadero', titulo: 'Fin del turno', desc: 'Dile la hora verdadera y cierra el ciclo en la misma noche.', oculto: true },
     { id: 'bosque', titulo: 'Aire fresco', desc: 'Sal al bosque.' },
     { id: 'hoja', titulo: 'Archivista', desc: 'Encuentra una hoja mojada del registro.', oculto: true },
     { id: 'relampago', titulo: 'Lo viste', desc: 'Un relámpago lo reveló entre los árboles.', oculto: true },

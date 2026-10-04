@@ -52,6 +52,11 @@
       '…siete ya se quedaron…',
       '…nadie vendrá a relevarte…'
     ],
+    // Final verdadero: la hora verdadera y las seis hojas, en la misma noche.
+    verdadero: {
+      titulo: '05:13 · Fin del turno',
+      texto: 'Él ya no estaba para verlo. Metes las seis hojas en el tambor y la lavadora se detiene por primera vez. Cuando vuelves, la lavandería está a oscuras y el letrero dice CERRADO. Sobre el mostrador, el registro está en blanco. Afuera ya es de día. Por fin sales a la calle.'
+    },
     final: {
       titulo: 'Último ciclo de lavado',
       texto: 'Metes las seis páginas empapadas en el tambor y la máquina traga la tinta disuelta con un crujido metálico. El zumbido grave se apaga de golpe junto con los pinos, devolviéndote al pavimento frío de la avenida. Tu reloj de pulsera por fin marca las 05:13.'

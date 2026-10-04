@@ -186,7 +186,7 @@
       cam.position.set(-5.2 + k * 8.6, 1.55 + Math.sin(t * 0.21) * 0.04, 2.7 - Math.sin(t * 0.03) * 0.6);
       cam.lookAt(cam.position.x * 0.55 - 0.6, 1.0, -4.4);
       // Si ya cerraste el ciclo (tercer final), en el título amanece.
-      if (this.logros && this.logros.has('final_bosque')) { this._dawn(true); return; }
+      if (this.logros && (this.logros.has('final_bosque') || this.logros.has('verdadero'))) { this._dawn(true); return; }
       // Fluorescente que titila (sin depender de opciones: en el título aún no hay turno).
       this.attractFlicker = (this.attractFlicker || 0) - dt;
       if (this.attractFlicker <= 0) {
@@ -222,7 +222,7 @@
         for (var i = 0; i < 6; i += 1) { this.retro.setLightFactor(i, 0.12); this.world.panels[i].material.uniforms.uEmissive.value = 0.15; }
         var n = document.getElementById('noche');
         n.hidden = false;
-        n.textContent = 'Amaneció. Pero esta noche vuelves.';
+        n.textContent = this.logros.has('verdadero') ? 'Amaneció. Ya no vuelves… a menos que quieras.' : 'Amaneció. Pero esta noche vuelves.';
         n.classList.add('amanecer');
         document.getElementById('titulo').classList.add('amanecer');
       } else {
@@ -760,7 +760,8 @@
       // Evaluación del gerente: 100 puntos menos las faltas, más lo que encontraste.
       var score = 100 - 15 * (s.mirada + s.pasillo + s.filtro) -
         (s.respuesta === 'incorrecta' ? 25 : (s.respuesta === 'correcta' ? 0 : 12)) +
-        5 * this.bosque.pagesFound() + (reason === 'bosque' ? 15 : 0) + (good ? 10 : 0) + Math.min(10, s.charcos * 2);
+        5 * this.bosque.pagesFound() + (reason === 'bosque' ? 15 : 0) + (good ? 10 : 0) + Math.min(10, s.charcos * 2) +
+        (reason === 'bosque' && this.flags.secreto ? 25 : 0);
       var grade = MR.Game.grade(score);
       summary.unshift('Evaluación del turno: ' + grade[0] + ' (' + Math.max(0, Math.round(score)) + ' puntos)');
       this.grade = grade[0];
@@ -776,8 +777,13 @@
       if (reason !== 'bosque') {
         if (good) { this.audio.ding(); this.audio.door(); } else { this.audio.thud(); this.audio.buzz(); }
       }
+      // Final verdadero: en la misma noche le dijiste la hora verdadera (se fue) y cerraste el ciclo en el claro.
+      var truth = reason === 'bosque' && this.flags.secreto;
+      if (truth) { L.unlock('verdadero'); }
       if (diff.sinSustos && reason !== 'bosque') {
         this.ui.showEnd('05:12 · Paseo nocturno', 'Recorriste la lavandería, el bosque y el pasillo sin que nadie te mirara. Afuera sigue lloviendo. Esta vez fue solo un paseo.', summary);
+      } else if (truth) {
+        this.ui.showEnd(MR.HISTORIA.verdadero.titulo, MR.HISTORIA.verdadero.texto, summary);
       } else if (reason === 'bosque') {
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {

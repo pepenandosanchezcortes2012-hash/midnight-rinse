@@ -131,6 +131,7 @@ El juego cuenta tus noches («Noche 3» en el título).
 - **La radio:** a las 02:40, en la **94.1**, el locutor de Radio Nocturna dice algo distinto cada noche y la historia avanza. Escúchalo hasta la noche 7. Después de la 8 solo queda estática.
 - **Los susurros** también cambian.
 - **La respuesta secreta:** con las seis hojas, tu casillero o lo que dice la radio, aparece una cuarta respuesta cuando él te pregunta la hora…
+- **¿Y si haces todo en la misma noche?** Hay un final más, el verdadero, para quien le dice la hora verdadera y cierra el ciclo en el claro.
 
 ### Qué hacer durante el turno
 - **Primeras noches:** si te atoras, el juego te da una **pista** suave (una sola vez cada una), en las noches 1 y 2 o siempre en Tranquilo.
