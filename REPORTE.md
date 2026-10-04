@@ -510,6 +510,11 @@ El proyecto pasó por dos etapas:
 | Bosque | 27 | 19 437 | 0,4 |
 | Pasillo (con espejo) | 50 | 1 006 | 1,5 |
 
+## 63. Microanomalía «La moneda de canto» (la primera del motor creativo)
+- **Qué pasa:** una vez por noche, si llevas monedas y la bandeja está vacía, el director puede programar «moneda_canto» en la zona nueva del **cambiador**. Solo ocurre con esa zona fuera de vista o con los ojos cerrados (despachador de oclusión): te falta una moneda y en la bandeja aparece otra **parada de canto**, girando despacio, con unos tintineos muy bajitos cada vez más juntos. Al verla de cerca: «(En la bandeja del cambiador hay una moneda parada de canto. En tu bolsillo falta una.)». Al recogerla vuelve tu moneda: «(La moneda está tibia, como si alguien la hubiera tenido en la mano.)». No hay jumpscare; es paranoia de cuentas que no cuadran. Nunca en Paseo.
+- **Proceso:** salió del backlog (idea del motor creativo, aprobada por el ciclo autónomo por ser chica y no tocar el canon). Pasó por el verificador del canon y por la auditoría PS1, y tiene su traducción y su línea en «Novedades».
+- **Prueba nueva:** no ocurre mientras miras el cambiador, sí de espaldas; el subtítulo solo sale al verla; recogerla devuelve la moneda; no se repite la misma noche. Resultado: 54/54.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

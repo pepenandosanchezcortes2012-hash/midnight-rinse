@@ -633,5 +633,8 @@ MR.TEXTOS_EN = {
  "Tormenta eléctrica": "Thunderstorm",
  "Anuncian tormenta eléctrica toda la noche. Si truena cerca, la luz va a parpadear: no te asustes.": "A thunderstorm is forecast all night. If it thunders nearby, the lights will flicker: don't be scared.",
  "Noche especial «Tormenta eléctrica»: relámpagos seguidos y la luz parpadea con los truenos.": "Special night “Thunderstorm”: frequent lightning, and the lights flicker with the thunder.",
- "Logro «Álbum de la noche»: fotos en los tres lugares en un mismo turno.": "“Night album” achievement: photos in all three places in a single shift."
+ "Logro «Álbum de la noche»: fotos en los tres lugares en un mismo turno.": "“Night album” achievement: photos in all three places in a single shift.",
+ "(La moneda está tibia, como si alguien la hubiera tenido en la mano.)": "(The coin is warm, as if someone had been holding it.)",
+ "(En la bandeja del cambiador hay una moneda parada de canto. En tu bolsillo falta una.)": "(There's a coin standing on its edge in the change machine tray. One is missing from your pocket.)",
+ "Revisa tus monedas. Y la bandeja del cambiador.": "Check your coins. And the change machine tray."
 };

@@ -433,6 +433,14 @@
         this.interactive(coin, 'changerTray');
         this.trayCoins.push(coin);
       }
+      // «La moneda de canto»: una moneda parada de canto en la bandeja, girando apenas (horror.js).
+      var edge = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.008, 8), this.retro.material({ texture: 'yellow', color: 0xd8cfa8, emissive: 0.45 }));
+      edge.rotation.x = Math.PI / 2;
+      edge.position.set(-4.48, 0.63, 4.47);
+      edge.visible = false;
+      this.add(edge);
+      this.interactive(edge, 'changerTray');
+      this.edgeCoin = edge;
 
       // Teléfono público.
       this.box(0.24, 0.34, 0.1, m.dark, 2.7, 1.4, 4.94);
@@ -567,6 +575,7 @@
         mostrador: { center: new V3(6.0, 1.0, 2.6), radius: 1.6 },
         entrada: { center: new V3(0.0, 1.2, 4.5), radius: 1.8 },
         almacen: { center: new V3(-7.3, 1.2, 3.5), radius: 1.2 },
+        cambiador: { center: new V3(-4.5, 0.8, 4.6), radius: 0.8 },
         puerta_trasera: { center: new V3(6.8, 1.1, -4.7), radius: 0.9 }
       };
     }

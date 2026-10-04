@@ -304,6 +304,16 @@
     obturador() { this._tone(2600, 0.02, 0.12, 'square'); this._burst(this.white, 'bandpass', 2400, 1.1, 0.07, 0.14); }
 
     click() { this._tone(1900, 0.018, 0.09, 'square'); this._burst(this.white, 'highpass', 3000, 0.7, 0.02, 0.05); }
+    /** Una moneda que gira sola, muy bajito: tintineos cada vez más juntos hasta caer. */
+    monedaGira() {
+      var self = this;
+      var t = 0;
+      for (var i = 0; i < 9; i += 1) {
+        t += 260 - i * 24;
+        (function (k, at) { setTimeout(function () { self._tone(3300 - k * 60, 0.05, 0.018 + k * 0.002); }, at); })(i, t);
+      }
+    }
+
     coin() { this._tone(2400, 0.25, 0.08); var self = this; setTimeout(function () { self._tone(3150, 0.3, 0.06); }, 70); }
     /** Paso: baldosa (adentro) o tierra mojada (bosque: más grave y con un chapoteo). */
     step(pan, surface) {

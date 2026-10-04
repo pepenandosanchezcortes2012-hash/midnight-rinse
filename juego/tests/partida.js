@@ -1041,6 +1041,46 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['La moneda de canto: solo mientras no miras el cambiador; al verla, el subtítulo; recogerla la devuelve', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var gp = g.gameplay;
+      var h = g.horror;
+      var d = ctx.w.document;
+      start(ctx);
+      gp.coins = 3; gp.trayCoins = 0;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      // Mirando el cambiador de cerca: el susto espera.
+      var c = g.world.edgeCoin.position;
+      g.player.pos.set(c.x + 1.6, 0, c.z - 1.2);
+      g.player.yaw = Math.atan2(-(c.x - g.player.pos.x), -(c.z - g.player.pos.z));
+      g.player.pitch = -0.4;
+      step(ctx, 2);
+      check(h.zoneVisible('cambiador') > 0, 'el cambiador no estaba a la vista');
+      h.schedule('moneda_canto', 'cambiador', 1);
+      step(ctx, 30);
+      check(gp.coins === 3 && !gp.edgeCoin, 'pasó mientras lo mirabas');
+      // De espaldas: ahora sí.
+      g.player.yaw += Math.PI;
+      step(ctx, 30);
+      check(gp.coins === 2 && gp.trayCoins === 1 && gp.edgeCoin && g.world.edgeCoin.visible, 'no apareció la moneda de canto');
+      check(d.getElementById('subtitulos').textContent.indexOf('parada de canto') < 0, 'el subtítulo salió sin verla');
+      // Al voltear y verla.
+      g.player.yaw -= Math.PI;
+      step(ctx, 5);
+      check(d.getElementById('subtitulos').textContent.indexOf('parada de canto') >= 0, 'no notó la moneda al verla');
+      gp._pickTray();
+      check(gp.coins === 3 && !gp.edgeCoin && !g.world.edgeCoin.visible, 'recogerla no devolvió la moneda');
+      check(d.getElementById('subtitulos').textContent.indexOf('tibia') >= 0, 'no dijo que estaba tibia');
+      // Una vez por noche.
+      h.schedule('moneda_canto', 'cambiador', 1);
+      g.player.yaw += Math.PI;
+      step(ctx, 30);
+      check(gp.coins === 3, 'se repitió la misma noche');
+      noErrors(ctx);
+      return 'oclusión, aviso y recogida';
+    }],
+
     ['Audio: el primer toque despierta el ambiente y un audio suspendido se reanuda', async function () {
       var ctx = await load();
       var g = ctx.g;

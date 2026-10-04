@@ -296,14 +296,19 @@
       if (this.trayCoins <= 0) { this.say('emptytray', '(La bandeja está vacía. Presiona el botón amarillo.)', 3); return; }
       this.coins = Math.min(12, this.coins + this.trayCoins);
       this.trayCoins = 0;
+      var warm = this.edgeCoin;
+      this.edgeCoin = false;
       this._showTray();
       this.audio.coin();
       MR.Haptics.pulse(HAPTIC.tray);
+      if (warm) { this.say('tibia', '(La moneda está tibia, como si alguien la hubiera tenido en la mano.)', 4); }
     }
 
     _showTray() {
       var n = this.trayCoins;
-      this.world.trayCoins.forEach(function (c, i) { c.visible = i < n; });
+      var edge = !!this.edgeCoin;
+      this.world.trayCoins.forEach(function (c, i) { c.visible = !edge && i < n; });
+      this.world.edgeCoin.visible = edge;
     }
 
     _toggleDoor(i) {
