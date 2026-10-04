@@ -421,6 +421,12 @@ El proyecto pasó por dos etapas:
 - **Al terminar:** si superas tu mejor nota en esa dificultad, el resumen dice «¡Nuevo récord en …!». El primer turno no cuenta como récord.
 - **También en inglés:** 18 textos nuevos, 559 en total. Prueba nueva. Resultado: 40/40.
 
+## 48. Fotos con la cámara del celular
+- **Cómo:** P, Y/△ en el control o «Sacar una foto» en la pausa (en el celular no hay tecla libre). Se renderiza un cuadro con flash y se copia al instante a un lienzo de 320×240 (JPEG de unos 12 KB). La polaroid asoma 3,6 s en la esquina y el flash es suave si está activado «Reducir destellos». El flash tarda 1,6 s en recargarse.
+- **Galería:** las últimas 12, en `midnight-rinse/fotos`; si no caben, se borran las más viejas. Panel «Fotos» en el título, con visor y «Descargar». Se navega con el control (B cierra).
+- **El susto:** desde que lo viste (o desde la segunda noche), con 35 % de probabilidad él sale en la foto, de pie frente a ti, aunque en el cuarto no haya nadie. Un rayo busca espacio libre para que no atraviese paredes, y su posición real se restaura después de la foto. Da un subtítulo, sube el miedo y desbloquea el logro oculto «En la foto». Nunca pasa en Paseo.
+- **También en inglés:** 15 textos nuevos, 574 en total. Prueba nueva. Resultado: 41/41.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

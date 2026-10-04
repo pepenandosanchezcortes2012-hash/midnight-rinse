@@ -57,6 +57,8 @@
       this.objetos = new MR.Objetos(this);
       this.archivo = new MR.Archivo(this);
       this.historial = new MR.Historial();
+      this.fotos = new MR.Fotos(this);
+      this.ui.renderFotos(this.fotos);
       this.ui.renderHistorial(this.historial);
       this.ui.renderLogros(this.logros);
       this.ui.renderObjetos(this.objetos);
@@ -243,6 +245,12 @@
       return this.bosque.go();
     }
 
+    /** Botón de la pausa «Sacar una foto» (en el celular no hay tecla): reanuda y la saca en el siguiente cuadro. */
+    photoFromPause() {
+      if (this.state === 'paused') { this.resume(); }
+      this.pendingPhoto = true;
+    }
+
     /** H en plena partida: pausa, suelta el ratón y abre la guía de controles. */
     openGuide() {
       this.pause();
@@ -309,6 +317,8 @@
       if (this.noteOpen && input.buttonPressed) { this.closeNote(); input.buttonPressed = false; }
       this._answerKeys(input);
       if (input.action('blink')) { this.player.forceBlink(); }
+      this.fotos.update(dt);
+      if (input.hit('KeyP') || input.action('foto') || this.pendingPhoto) { this.pendingPhoto = false; this.fotos.take(); }
       if (input.hit('KeyC') || input.action('cigarro')) { this.consumables.tryCigarette(); }
       if (input.hit('KeyF') || input.action('petaca')) { this.consumables.tryFlask(); }
       if (input.hit('KeyJ') || input.action('porro')) { this.consumables.tryJoint(); }

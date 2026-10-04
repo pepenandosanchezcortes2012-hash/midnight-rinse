@@ -32,6 +32,8 @@
       $('btn-guia').addEventListener('click', function () { self.showGuide(true); });
       $('btn-guia-pausa').addEventListener('click', function () { self.showGuide(true); });
       $('btn-bosque').addEventListener('click', function () { game.travelFromPause(); });
+      $('btn-foto').addEventListener('click', function () { game.photoFromPause(); });
+      $('btn-visor-cerrar').addEventListener('click', function () { self.showVisor(null); });
       $('btn-guia-cerrar').addEventListener('click', function () { self.showGuide(false); });
       $('guia-tab-escritorio').addEventListener('click', function () { self._guideTab('escritorio'); });
       $('guia-tab-tactil').addEventListener('click', function () { self._guideTab('tactil'); });
@@ -42,6 +44,7 @@
       $('btn-reiniciar-no').addEventListener('click', function () { self.showReset(false); });
       $('btn-reiniciar-si').addEventListener('click', function () { self.resetAll(); });
       window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !$('visor').hidden) { e.preventDefault(); self.showVisor(null); return; }
         if (e.key === 'Escape' && !$('reiniciar').hidden) { e.preventDefault(); self.showReset(false); return; }
         if (e.key === 'Escape' && !$('guia').hidden) { e.preventDefault(); self.showGuide(false); return; }
         // H en la pantalla de título o en la pausa (en plena partida la maneja game.js). No al escribir en un campo.
@@ -187,6 +190,52 @@
     renderHistorial(historial) {
       $('historial-cuenta').textContent = historial.count() + '/' + historial.total();
       this._renderList($('historial-lista'), historial.view(), '▣', '□');
+    }
+
+    /** Panel «Fotos»: miniaturas (la más nueva primero); tocar una la abre en grande. */
+    renderFotos(fotos) {
+      $('fotos-cuenta').textContent = String(fotos.count());
+      var list = $('fotos-lista');
+      list.textContent = '';
+      var self = this;
+      fotos.list.slice().reverse().forEach(function (f) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'foto-mini';
+        b.title = MR.tf('Noche {n} · {h}', { n: f.noche, h: f.hora });
+        var img = document.createElement('img');
+        img.src = f.src;
+        img.alt = b.title;
+        b.appendChild(img);
+        b.addEventListener('click', function () { self.showVisor(f); });
+        list.appendChild(b);
+      });
+      $('fotos-vacio').hidden = fotos.count() > 0;
+    }
+
+    /** Una foto en grande, con «Descargar». showVisor(null) la cierra. */
+    showVisor(f) {
+      $('visor').hidden = !f;
+      if (!f) { return; }
+      $('visor-img').src = f.src;
+      $('visor-pie').textContent = MR.tf('Noche {n} · {h}', { n: f.noche, h: f.hora });
+      var a = $('visor-descargar');
+      a.href = f.src;
+      a.download = 'midnight-rinse-noche' + f.noche + '-' + f.hora.replace(':', '') + '.jpg';
+      $('btn-visor-cerrar').focus({ preventScroll: true });
+    }
+
+    /** La foto recién sacada asoma un momento como polaroid en la esquina. */
+    showPolaroid(f) {
+      var el = $('polaroid');
+      el.querySelector('img').src = f.src;
+      el.querySelector('span').textContent = f.hora;
+      el.hidden = false;
+      el.classList.remove('sale');
+      void el.offsetWidth; // reinicia la animación
+      el.classList.add('sale');
+      clearTimeout(this._polaroidTimer);
+      this._polaroidTimer = setTimeout(function () { el.hidden = true; }, 3600);
     }
 
     /** Panel de objetos perdidos (misma presentación que los logros). */

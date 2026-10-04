@@ -898,6 +898,56 @@
       return '«' + title + '»';
     }],
 
+    ['Fotos: P, el botón de la pausa, la galería y él en la foto', async function () {
+      localStorage.removeItem('midnight-rinse/fotos');
+      var ctx = await load();
+      var g = ctx.g;
+      var d = ctx.w.document;
+      var THREE = ctx.w.THREE;
+      start(ctx);
+      step(ctx, 30);
+      g.input.pressed.add('KeyP');
+      step(ctx, 1);
+      check(g.fotos.count() === 1 && /^data:image\/jpeg/.test(g.fotos.list[0].src), 'P no sacó la foto');
+      check(!d.getElementById('polaroid').hidden && d.getElementById('fotos-cuenta').textContent === '1', 'no asomó la polaroid o no se contó');
+      g.input.pressed.add('KeyP');
+      step(ctx, 1);
+      check(g.fotos.count() === 1, 'el flash debería tardar en cargar');
+      // Él en la foto: busca hacia dónde hay espacio y fuerza que salga.
+      g.player.pos.set(0, 0, 0.5);
+      var dist = 0;
+      for (var k = 0; k < 8 && !dist; k += 1) {
+        g.player.yaw = k * Math.PI / 4;
+        step(ctx, 1);
+        g.player.camera.updateMatrixWorld();
+        var dir = new THREE.Vector3();
+        g.player.camera.getWorldDirection(dir); dir.y = 0; dir.normalize();
+        dist = g.fotos._ghostDistance(g.player.camera, dir);
+      }
+      check(dist > 0, 'no hubo espacio para él en ninguna dirección');
+      var visible = g.world.customer.group.visible;
+      step(ctx, 60);
+      var f = g.fotos.take({ ghost: true });
+      check(f && f.el, 'no salió él en la foto');
+      check(g.world.customer.group.visible === visible, 'él quedó visible fuera de la foto');
+      await wait(1100);
+      check(g.logros.has('foto') && d.getElementById('subtitulos').textContent.indexOf('Revisas la foto') >= 0, 'no reaccionó a la foto');
+      // Pausa → «Sacar una foto».
+      step(ctx, 60);
+      g.pause();
+      d.getElementById('btn-foto').click();
+      step(ctx, 1);
+      check(g.state === 'playing' && g.fotos.count() === 3, 'el botón de la pausa no sacó la foto (' + g.fotos.count() + ')');
+      // Galería: la más nueva primero; el visor abre y Esc lo cierra.
+      check(d.querySelectorAll('#fotos-lista .foto-mini').length === 3, 'miniaturas');
+      d.querySelector('#fotos-lista .foto-mini').click();
+      check(!d.getElementById('visor').hidden && /^data:image/.test(d.getElementById('visor-descargar').href), 'no abrió el visor');
+      ctx.w.dispatchEvent(new ctx.w.KeyboardEvent('keydown', { key: 'Escape', code: 'Escape' }));
+      check(d.getElementById('visor').hidden, 'Esc no cerró el visor');
+      noErrors(ctx);
+      return '3 fotos · él a ' + dist.toFixed(1) + ' m · ' + Math.round(g.fotos.list[0].src.length / 1024) + ' KB';
+    }],
+
     ['Récords: turnos, mejor nota por dificultad, finales vistos y «nuevo récord»', async function () {
       localStorage.removeItem('midnight-rinse/historial');
       var ctx = await load();

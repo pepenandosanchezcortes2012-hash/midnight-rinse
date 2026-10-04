@@ -130,7 +130,37 @@ body.tactil .solo-escritorio { display: none !important; }
   text-align: center;
   z-index: 10;
 }
-.pantalla[hidden], #dialogo[hidden], #mira[hidden] { display: none; }
+.pantalla[hidden], #dialogo[hidden], #mira[hidden], #polaroid[hidden] { display: none; }
+
+/* Fotos: la polaroid que asoma, las miniaturas del panel y el visor. */
+#polaroid {
+  position: absolute;
+  left: max(14px, env(safe-area-inset-left));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  width: clamp(110px, 18vw, 170px);
+  padding: 6px 6px 20px;
+  background: #efeadb;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  transform: rotate(-5deg);
+  pointer-events: none;
+  z-index: 5;
+}
+#polaroid img { display: block; width: 100%; image-rendering: pixelated; filter: sepia(0.15) contrast(1.05); }
+#polaroid span { position: absolute; left: 0; right: 0; bottom: 3px; text-align: center; font-size: 11px; color: #3b3a35; }
+#polaroid.sale { animation: polaroid 3.6s ease forwards; }
+@keyframes polaroid {
+  0% { opacity: 0; transform: translateY(30px) rotate(-12deg); }
+  12% { opacity: 1; transform: translateY(0) rotate(-5deg); }
+  80% { opacity: 1; transform: translateY(0) rotate(-5deg); }
+  100% { opacity: 0; transform: translateY(16px) rotate(-3deg); }
+}
+.fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 8px; }
+.foto-mini { padding: 4px 4px 10px; background: #efeadb; border: 0; cursor: pointer; }
+.foto-mini img { display: block; width: 100%; image-rendering: pixelated; }
+.foto-mini:focus-visible, .foto-mini.foco-mando { outline: 2px solid #e2c84b; outline-offset: 2px; }
+#visor { z-index: 12; justify-content: center; }
+#visor-img { width: min(92vw, 640px); image-rendering: pixelated; border: 8px solid #efeadb; border-bottom-width: 28px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.7); }
+a.boton { text-decoration: none; display: inline-block; }
 
 h1 {
   margin: 0;

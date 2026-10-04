@@ -559,5 +559,20 @@ MR.TEXTOS_EN = {
  "Todavía sin turnos en esta dificultad.": "No shifts on this difficulty yet.",
  "(visto una vez)": "(seen once)",
  "(visto {n} veces)": "(seen {n} times)",
- "Un final oculto.": "A hidden ending."
+ "Un final oculto.": "A hidden ending.",
+ "Fotos (<span id=\"fotos-cuenta\">0</span>)": "Photos (<span id=\"fotos-cuenta\">0</span>)",
+ "Saca fotos con <b>P</b>, con <b>Y</b> en el control o desde la pausa. Revísalas bien.": "Take photos with <b>P</b>, with <b>Y</b> on a controller, or from the pause menu. Look at them closely.",
+ "Sacar una foto": "Take a photo",
+ "P": "P",
+ "Sacar una foto con el celular <span class=\"g-nota\">(con flash; revisa bien cada foto)</span>": "Take a photo with your phone <span class=\"g-nota\">(with flash; look closely at every photo)</span>",
+ "<span class=\"gesto\">🖐 tres dedos</span> → «Sacar una foto»": "<span class=\"gesto\">🖐 three fingers</span> → “Take a photo”",
+ "Sacar una foto con el celular <span class=\"g-nota\">(revisa bien cada foto)</span>": "Take a photo with your phone <span class=\"g-nota\">(look closely at every photo)</span>",
+ "Y": "Y",
+ "Sacar una foto con el celular": "Take a photo with your phone",
+ "Descargar": "Download",
+ "Cerrar": "Close",
+ "(Revisas la foto. Hay alguien de pie frente a ti. Levantas la vista: no hay nadie.)": "(You check the photo. Someone is standing right in front of you. You look up: no one is there.)",
+ "En la foto": "In the picture",
+ "Sácale una foto cuando no está.": "Take his picture when he isn't there.",
+ "Noche {n} · {h}": "Night {n} · {h}"
 };

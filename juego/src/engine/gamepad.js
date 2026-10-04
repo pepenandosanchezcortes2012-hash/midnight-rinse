@@ -15,7 +15,7 @@
   var DEAD = 0.18;
   var LOOK_SPEED = 2.6; // rad/s con el stick a fondo
   var BTN = { A: 0, B: 1, X: 2, Y: 3, LB: 4, RB: 5, LT: 6, RT: 7, BACK: 8, START: 9, UP: 12, DOWN: 13, LEFT: 14, RIGHT: 15 };
-  var SCREENS = ['reiniciar', 'guia', 'final', 'pausa', 'titulo']; // de arriba hacia abajo
+  var SCREENS = ['visor', 'reiniciar', 'guia', 'final', 'pausa', 'titulo']; // de arriba hacia abajo
 
   function $(id) { return document.getElementById(id); }
 
@@ -143,6 +143,7 @@
         if (hit(BTN.LEFT)) { input.actions.add('porro'); }
         if (hit(BTN.RIGHT)) { input.actions.add('petaca'); }
       }
+      if (hit(BTN.Y)) { input.actions.add('foto'); }
       if (hit(BTN.START)) { input.actions.add('pausa'); }
       if (hit(BTN.BACK)) { input.pressed.add('KeyH'); }
     }
@@ -175,7 +176,8 @@
       }
       if (hit(BTN.A) && el) { el.click(); }
       if (hit(BTN.B)) {
-        if (screen.id === 'guia') { g.ui.showGuide(false); }
+        if (screen.id === 'visor') { g.ui.showVisor(null); }
+        else if (screen.id === 'guia') { g.ui.showGuide(false); }
         else if (screen.id === 'reiniciar') { g.ui.showReset(false); }
         else if (screen.id === 'pausa') { g.resume(); }
       }

@@ -162,6 +162,9 @@ En **Opciones → Dificultad**:
 - **Normal:** el juego original, hasta 3 faltas.
 - **Pesadilla:** sustos casi el doble de seguidos, 2 cigarros, 2 tragos y 1 porro. Solo se perdona **una** falta para el final bueno.
 
+### Fotos
+Saca fotos con la cámara del celular: **P** en el teclado, **Y/△** en el control o «Sacar una foto» en la pausa (en el celular). Tienen flash, asoman un momento como polaroid y se guardan las últimas 12 en el panel «Fotos» del título, desde donde puedes descargarlas. Revísalas bien: a veces sale alguien que no estaba ahí.
+
 ### Récords
 En la pantalla de título: turnos terminados, tu mejor evaluación en cada dificultad y los cinco finales (dos están ocultos hasta que los ves). Si superas tu mejor nota, el resumen del final dice «¡Nuevo récord!».
 
