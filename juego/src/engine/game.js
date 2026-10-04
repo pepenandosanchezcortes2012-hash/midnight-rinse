@@ -152,6 +152,7 @@
         return;
       }
       MR.Partida.clear(); // turno nuevo: el guardado anterior ya no vale
+      if (this.mod === 'sin_agua') { this.gameplay.washers.forEach(function (w) { w.running = false; w.remaining = 0; }); }
       this.ui.subtitle('01:10. Turno de noche en la Lavandería La Espuma.', 5);
       this.ui.subtitle('La hoja del registro está sobre el mostrador.', 5);
       this.ui.subtitle(this.touchUI ? '(Tres dedos: pausa y guía de controles.)' : '(H: guía de controles · Esc: pausa.)', 6);
@@ -660,7 +661,11 @@
         self.ui.subtitle(MR.tf('(Pista: {t})', { t: MR.t(text) }), 6);
       }
       hint('registro', this.minutes > C.SHIFT_START + 12 && !f.readNote, 'la hoja del registro está sobre el mostrador. Tócala para leer las reglas.');
-      hint('lavadoras', this.minutes > C.SHIFT_START + 25 && gp.washers.filter(function (w) { return w.running; }).length < 3,
+      if (this.mod === 'sin_agua') {
+        hint('secadoras', this.minutes > C.SHIFT_START + 25 && this.calmSources() < 3,
+          'hoy no hay agua. Mete monedas en las secadoras para que giren, o pon tu música: el ruido tapa el zumbido.');
+      }
+      hint('lavadoras', this.mod !== 'sin_agua' && this.minutes > C.SHIFT_START + 25 && gp.washers.filter(function (w) { return w.running; }).length < 3,
         'pon a lavar. Saca monedas del cambiador junto a la entrada, mételas en la ranura y gira la perilla. Su ruido tapa el zumbido.');
       var next = C.MOP_CHECKS.filter(function (m) { return m > self.minutes; })[0];
       hint('charcos', next && next - this.minutes < 15 && gp.activePuddles() >= 2 && !gp.mopHeld,
@@ -687,7 +692,9 @@
         '',
         cat(ok(puddles < 3), MR.tf(puddles === 1 ? 'Pasillo central: {n} charco' : 'Pasillo central: {n} charcos', { n: puddles }), ' ',
           next ? MR.tf('(revisión a las {h}; con 3 o más es falta).', { h: U.clockText(next) }) : MR.t('(ya no hay más revisiones).')),
-        cat(ok(running >= 3), MR.tf('Lavadoras funcionando: {n} de 6 (con 3 o más, su ruido tapa el zumbido).', { n: running })),
+        this.mod === 'sin_agua' ?
+          cat(ok(this.calmSources() >= 3), MR.tf('Secadoras funcionando: {n} de 4 (hoy no hay agua: con 3 o más, o con tu música, se tapa el zumbido).', { n: gp.runningDryers() })) :
+          cat(ok(running >= 3), MR.tf('Lavadoras funcionando: {n} de 6 (con 3 o más, su ruido tapa el zumbido).', { n: running })),
         cat(ok(worst.lint < 0.7), MR.tf('Filtros de pelusa: el más lleno, secadora {n} al {p} %.', { n: worst.i + 1, p: Math.round(Math.min(1, worst.lint) * 100) }))
       ];
       if (this.flags.customerSeen) { lines.push('• No le mires la cara al cliente del banco.'); }
@@ -717,8 +724,20 @@
       return h * (this.diff ? this.diff.vaho : 1) * (this.mod === 'niebla' ? 1.5 : 1);
     }
 
+    /**
+     * Cuánto ruido tapa el zumbido, en «lavadoras»: con 3 ya no se oye. En la noche sin agua cuentan las secadoras
+     * y tu música (tele o radio 99.9).
+     */
+    calmSources() {
+      var n = this.gameplay.runningWashers();
+      if (this.mod === 'sin_agua') {
+        n += this.gameplay.runningDryers() + ((this.tele && this.tele.playing) || (this.music && this.music.connected()) ? 1.5 : 0);
+      }
+      return n;
+    }
+
     _dread(dt) {
-      var washerCalm = Math.min(1, this.gameplay.runningWashers() / 3);
+      var washerCalm = Math.min(1, this.calmSources() / 3);
       var prox = this.collapsed ? 0 : this.gameplay.radioProximity;
       var target = 0.08 + (1 - washerCalm) * 0.28 + (1 - prox) * 0.08 + this.gameplay.activePuddles() * 0.02 +
         (this.whispers ? 0.12 : 0) + (this.collapsed ? 0.25 : 0) + this.stats.mirada * 0.05 +

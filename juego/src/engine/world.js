@@ -227,6 +227,8 @@
           puff.visible = false;
           steam.push(puff);
         }
+        this.interactive(body, 'dryerStart', i); // una moneda y gira (el filtro, delante, tiene prioridad)
+        this.interactive(drum, 'dryerStart', i);
         this.dryers.push({ x: x, body: body, drum: drum, filter: filter, lint: lint, steam: steam });
       }
       this.collider(0.95, 5.05, -5, -4.15);

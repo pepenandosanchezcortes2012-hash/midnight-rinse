@@ -437,6 +437,11 @@ El proyecto pasó por dos etapas:
 - **`herramientas/probar.py`:** corre `pruebas.html?auto` en un Chrome sin ventana (perfil temporal, SwiftShader, tiempo virtual) y lee el resultado del DOM final. Tarda unos 30 s y no depende de la extensión del navegador.
 - **Prueba:** la de fotos ahora también comparte, con un `navigator.share` de mentira. Resultado: 42/42.
 
+## 51. Noche especial «Corte de agua» y secadoras con moneda
+- **Secadoras:** ahora se ponen a girar con una moneda (clic en el frente; el filtro, delante, tiene prioridad), cualquier noche. Giran de 40 a 60 minutos y juntan pelusa en el filtro, así que dejarlas sin cuidar trae vaho y faltas.
+- **Corte de agua:** sexta noche especial. Las lavadoras empiezan paradas y no arrancan («no entra agua»; la moneda no se pierde). Solo esa noche, cada secadora cuenta como una lavadora para tapar el zumbido, y tu música (tele o radio 99.9) cuenta como una y media. `game.calmSources()` junta todo eso. La tablilla y las pistas lo explican. Las noches normales no cambian.
+- **También en inglés:** 10 textos nuevos, 585 en total. Prueba nueva. Resultado: 43/43.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

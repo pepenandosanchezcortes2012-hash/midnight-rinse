@@ -7,7 +7,7 @@
   'use strict';
 
   var U = MR.Util;
-  var BUSY = { washerCoin: 1, washerDial: 1, radioDial: 1, dryerFilter: 1, changer: 1, changerTray: 1, phone: 1, washerDoor: 1 };
+  var BUSY = { washerCoin: 1, washerDial: 1, radioDial: 1, dryerFilter: 1, dryerStart: 1, changer: 1, changerTray: 1, phone: 1, washerDoor: 1 };
   var HAPTIC = { dialClick: 10, coin: 25, changer: [12, 40, 12], tray: [10, 30, 15], door: 20, mopPulse: 18, filterPulse: 7 };
 
   class Gameplay {
@@ -133,6 +133,7 @@
         return;
       }
       if (kind === 'washerCoin') { this._insertCoin(target.index); return; }
+      if (kind === 'dryerStart') { this._dryerCoin(target.index); return; }
       if (kind === 'changer') { this._changer(); return; }
       if (kind === 'changerTray') { this._pickTray(); return; }
       if (kind === 'washerDoor') { this._toggleDoor(target.index); return; }
@@ -219,7 +220,9 @@
     _dialClicks(w, clicks) {
       this._clicks(clicks.length);
       w.mesh.dial.rotation.y = -w.dial.angle * Math.PI / 180;
-      if (clicks.length && w.credit && !w.running) {
+      if (clicks.length && w.credit && !w.running && this.game.mod === 'sin_agua') {
+        this.say('nowater', '(La perilla gira, pero no entra agua. La lavadora solo zumba.)');
+      } else if (clicks.length && w.credit && !w.running) {
         w.credit = false;
         w.running = true;
         w.remaining = MR.Config.WASHER_CYCLE_MIN;
@@ -263,6 +266,18 @@
       this.audio.coin();
       // Vibración seca y metálica al meter la moneda.
       MR.Haptics.pulse(HAPTIC.coin);
+    }
+
+    /** Una moneda en la secadora: gira 40–60 minutos (y junta pelusa en el filtro). */
+    _dryerCoin(i) {
+      var d = this.dryers[i];
+      if (d.running) { this.say('dryerrunning', '(Esta secadora ya está girando.)'); return; }
+      if (this.coins <= 0) { this.say('nocoins', '(No tienes monedas. El cambiador está junto a la entrada.)'); return; }
+      this.coins -= 1;
+      this.audio.coin();
+      MR.Haptics.pulse(HAPTIC.coin);
+      this.startDryer(i);
+      this.say('dryer' + i, '(Metes una moneda. La secadora arranca con un golpe sordo.)', 3);
     }
 
     /** El botón del cambiador deja caer las monedas en la bandeja. */

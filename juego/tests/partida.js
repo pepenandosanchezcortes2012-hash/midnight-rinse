@@ -898,6 +898,32 @@
       return '«' + title + '»';
     }],
 
+    ['Noche sin agua: las lavadoras no arrancan; las secadoras y la música tapan el zumbido', async function () {
+      var ctx = await load('?noche=sin_agua');
+      var g = ctx.g;
+      var gp = g.gameplay;
+      var d = ctx.w.document;
+      start(ctx);
+      check(g.mod === 'sin_agua' && gp.runningWashers() === 0, 'las lavadoras siguen girando (' + gp.runningWashers() + ')');
+      gp.coins = 6;
+      gp._insertCoin(0);
+      gp._dialClicks(gp.washers[0], [1]);
+      check(!gp.washers[0].running && gp.washers[0].credit, 'la lavadora arrancó sin agua');
+      check(d.getElementById('subtitulos').textContent.indexOf('no entra agua') >= 0, 'no avisó que no hay agua');
+      var before = g.calmSources();
+      gp._dryerCoin(0); gp._dryerCoin(1);
+      gp._dryerCoin(1); // ya gira: no cobra
+      check(gp.coins === 3 && g.calmSources() === before + 2, 'secadoras: monedas ' + gp.coins + ', calma ' + g.calmSources());
+      gp.startDryer(2); gp.startDryer(3);
+      check(g.calmSources() >= 3, 'cuatro secadoras no tapan el zumbido (' + g.calmSources() + ')');
+      g.openTasks();
+      var nota = d.getElementById('nota-texto').textContent;
+      check(nota.indexOf('Secadoras funcionando: 4 de 4') >= 0 && nota.indexOf('✔ Secadoras') >= 0, 'tablilla: ' + nota.slice(0, 160));
+      g.closeNote();
+      noErrors(ctx);
+      return 'calma ' + g.calmSources() + ' con 4 secadoras';
+    }],
+
     ['La tele: su cara en la nieve solo cuando la miras de cerca', async function () {
       var ctx = await load();
       var g = ctx.g;

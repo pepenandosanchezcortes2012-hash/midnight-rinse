@@ -575,5 +575,15 @@ MR.TEXTOS_EN = {
  "En la foto": "In the picture",
  "Sácale una foto cuando no está.": "Take his picture when he isn't there.",
  "Noche {n} · {h}": "Night {n} · {h}",
- "Compartir": "Share"
+ "Compartir": "Share",
+ "<span class=\"tecla ancha\">clic</span> en una secadora": "<span class=\"tecla ancha\">click</span> on a dryer",
+ "Ponerla a girar con una moneda <span class=\"g-nota\">(junta pelusa en el filtro)</span>": "Start it with a coin <span class=\"g-nota\">(lint builds up in the filter)</span>",
+ "<span class=\"gesto\">☝ tocar</span> una secadora": "<span class=\"gesto\">☝ tap</span> a dryer",
+ "Corte de agua": "Water shutoff",
+ "Cortaron el agua hasta las seis. Las lavadoras no van a arrancar: pon las secadoras o algo de música para tapar el zumbido.": "The water is shut off until six. The washers won't start: run the dryers or put on some music to drown out the hum.",
+ "hoy no hay agua. Mete monedas en las secadoras para que giren, o pon tu música: el ruido tapa el zumbido.": "there's no water tonight. Put coins in the dryers to get them spinning, or play your music: the noise drowns out the hum.",
+ "Secadoras funcionando: {n} de 4 (hoy no hay agua: con 3 o más, o con tu música, se tapa el zumbido).": "Dryers running: {n} of 4 (no water tonight: with 3 or more, or with your music, the hum is drowned out).",
+ "(La perilla gira, pero no entra agua. La lavadora solo zumba.)": "(The knob turns, but no water comes in. The washer just hums.)",
+ "(Esta secadora ya está girando.)": "(This dryer is already spinning.)",
+ "(Metes una moneda. La secadora arranca con un golpe sordo.)": "(You put in a coin. The dryer starts with a dull thud.)"
 };
