@@ -1041,6 +1041,29 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Radio: la dedicatoria de las noches 3 a 6 (y tu nombre entre la estática)', async function () {
+      var casos = [[1, 'Pepe', false, false], [2, 'Pepe', true, true], [2, '', true, false], [7, 'Pepe', false, false]];
+      for (var i = 0; i < casos.length; i += 1) {
+        localStorage.setItem('midnight-rinse/noches', String(casos[i][0]));
+        var ctx = await load();
+        var g = ctx.g;
+        ctx.w.MR.Config.DEDICATORIA_MS = 30;
+        start(ctx);
+        g.options.name = casos[i][1];
+        g.gameplay.tuneTo(94.1);
+        g.minutes = ctx.w.MR.Config.RADIO_HOST - 0.05;
+        step(ctx, 3);
+        await wait(3700);
+        var sub = ctx.w.document.getElementById('subtitulos').textContent;
+        var night = casos[i][0] + 1;
+        check((sub.indexOf('doblando ropa ajena') >= 0) === casos[i][2], 'noche ' + night + ': dedicatoria ' + (casos[i][2] ? 'faltó' : 'sobró'));
+        check((sub.indexOf('dice tu nombre') >= 0) === casos[i][3], 'noche ' + night + ': nombre ' + (casos[i][3] ? 'faltó' : 'sobró'));
+        noErrors(ctx);
+      }
+      localStorage.removeItem('midnight-rinse/noches');
+      return 'noches 2, 3 (con y sin nombre) y 8';
+    }],
+
     ['Huellas mojadas al volver del bosque: sin mirar el banco aparecen; al verlas, «son de tu talla»', async function () {
       var ctx = await load();
       var g = ctx.g;

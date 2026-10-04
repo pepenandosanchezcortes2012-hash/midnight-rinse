@@ -4,10 +4,10 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
+- [ ] (P3) Variación de radio «Dedicatoria» (noche 3 en adelante, solo si escribiste tu nombre) — al final de la transmisión de las 02:40: «Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.» y, si diste nombre, un susurro con él entre la estática. Archivos: game.js (radio), historia.js; prueba: noche 3 con y sin nombre.
 
 ## Ideas (motor creativo, sin aprobar)
 - [ ] (P3) Variación de bosque «La segunda farola» (noches de niebla) — más adentro del sendero aparece otra farola encendida; si caminas hacia ella siempre está a la misma distancia; al darte vuelta y volver a mirar, está apagada. Sin sonido salvo el zumbido eléctrico, que se corta. Archivos: world.js (_forest), bosque.js; respeta «el bosque tiene borde» (CANON §1 y §7).
-- [ ] (P3) Variación de radio «Dedicatoria» (noche 3 en adelante, solo si escribiste tu nombre) — al final de la transmisión de las 02:40: «Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.» y, si diste nombre, un susurro con él entre la estática. Archivos: game.js (radio), historia.js; prueba: noche 3 con y sin nombre.
 
 ## Bloqueadas (necesitan decisión)
 - [ ] (P1) Lore: decidir las propuestas de Yesda — el embalse de 1986, las caras blancas, las órdenes de las máscaras negras, el bosque infinito y el nombre «Blackwood» (CANON.md §7). Hasta decidir, lore_check.py los rechaza en textos del juego. — BLOQUEADA: decisión de diseño de Yesda

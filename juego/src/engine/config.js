@@ -50,6 +50,7 @@
     WASHER_CYCLE_MIN: 30,
     COINS_PER_PRESS: 4,
     BACKDOOR_OPENS: 180, // 03:00: la puerta trasera queda entreabierta (pasillo de servicio)
+    DEDICATORIA_MS: 9000, // la dedicatoria de la radio llega después de la transmisión
     DEBUG_SPEED: speed
   };
 

@@ -425,6 +425,7 @@
             this.ui.subtitle(MR.tf('[Radio] {l}', { l: MR.t(line) }), 10);
             this.audio.speak(line, 'locutor');
             if (/cinco y trece/.test(line)) { this.flags.heardTrueTime = true; } // la noche 7 revela la hora verdadera
+            if (n >= 3 && n <= 6) { this._dedication(); }
           }
         } else if (prox > 0.05) {
           this.ui.subtitle('[Radio: una voz entre la estática. No se entiende.]', 4);
@@ -457,6 +458,26 @@
         this.ui.refreshRegistry();
         if (this.horror.customer.present) { this.horror.schedule('cliente_se_va', this.horror.customer.zone || 'banco', 4); }
       }
+    }
+
+    /** La dedicatoria de la radio (noches 3 a 6). Si diste tu nombre, se oye entre la estática. */
+    _dedication() {
+      var self = this;
+      var name = this.options.name;
+      setTimeout(function () {
+        if (self.state !== 'playing') { return; }
+        var d = MR.HISTORIA.dedicatoria;
+        self.ui.subtitle(MR.tf('[Radio] {l}', { l: MR.t(d) }), 7);
+        self.audio.speak(d, 'locutor');
+        if (name) {
+          setTimeout(function () {
+            if (self.state !== 'playing') { return; }
+            self.ui.subtitle(MR.tf('(Entre la estática, alguien dice tu nombre: «…{n}…».)', { n: name }), 4);
+            self.audio.speak(name, 'susurro', true);
+            self.dread = Math.min(1, self.dread + 0.05);
+          }, 3500);
+        }
+      }, MR.Config.DEDICATORIA_MS);
     }
 
     _customerTalks() {

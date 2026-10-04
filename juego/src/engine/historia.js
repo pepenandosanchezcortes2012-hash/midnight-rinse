@@ -43,6 +43,9 @@
       'Escucha, que se corta... no lo mires... faltan cinco minutos para las seis... las hojas... el claro...',
       'No lo mires a la cara. Faltan cinco minutos para las seis. Yo tampoco salí, ¿sabes? Sigo aquí, en el turno de antes.'
     ],
+    // Al final de la transmisión de las 02:40, en las noches 3 a 6: una dedicatoria (y, si diste tu nombre, tu nombre
+    // entre la estática).
+    dedicatoria: 'Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.',
     // Susurros (uno cambiado a mano para no empujar al jugador a una falta).
     susurros: [
       '…no levantes la vista…',

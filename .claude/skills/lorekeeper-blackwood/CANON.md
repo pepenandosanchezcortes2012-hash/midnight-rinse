@@ -37,7 +37,7 @@ Estado: **canon vigente** = lo que ya está en el juego (octubre de 2026). Lo qu
 7. Cifras fijas: 6 hojas, 7 casilleros, 6 lavadoras, 4 secadoras, Radio Nocturna **94.1** (8 transmisiones; después solo estática), tu música en la **99.9**, 6 llamadas del teléfono.
 
 ## 6. Inventario de textos (dónde vive cada cosa)
-- Hojas, radio, teléfono, susurros y los finales del bosque: `juego/src/engine/historia.js`.
+- Hojas, radio, teléfono, susurros y los finales del bosque: `juego/src/engine/historia.js` La radio, en las noches 3 a 6, cierra con una **dedicatoria** «para alguien que sigue doblando ropa ajena» (y tu nombre entre la estática, si lo diste).
 - Registro de la impresora: `juego/src/core/shiftLog.js` (idéntico al núcleo de Python; no se cambia sin cambiar ambos).
 - Objetos perdidos (15): `objetos.js` — calcetín de niño, anillo «14·10», moneda extranjera, botón de abrigo, **ticket de 1987** (turno de 01:10 a 05:12 con tu letra), reloj detenido a las 05:13, gafete de R., aguja de pino, llave del «casillero 7», diente de leche, foto instantánea (tú dormido en el banco), nota («Me gusta tu compañía»), espejo de bolsillo, rollo sin revelar («no las revelen»), llave de paso.
 - Casilleros: `pasillo.js`. Notas del gerente (noches especiales): `config.js`. Pistas, diálogo y finales: `game.js`.

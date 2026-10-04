@@ -640,5 +640,8 @@ MR.TEXTOS_EN = {
  "(Alguien dobló ropa que nadie trajo. Huele a tu suavizante.)": "(Someone folded clothes that nobody brought. They smell like your fabric softener.)",
  "(Está tibia, recién salida de una secadora que nadie usó.)": "(They're warm, fresh out of a dryer nobody used.)",
  "A veces alguien dobla ropa en el mostrador. Nadie la trajo.": "Sometimes someone folds clothes on the counter. Nobody brought them.",
- "(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)": "(There are wet footprints on the floor leading from the glass door to the yellow bench. They're your size.)"
+ "(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)": "(There are wet footprints on the floor leading from the glass door to the yellow bench. They're your size.)",
+ "Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.": "Before we go: this one's for someone who's still folding other people's laundry at this hour. They know who they are.",
+ "(Entre la estática, alguien dice tu nombre: «…{n}…».)": "(Through the static, someone says your name: “…{n}…”.)",
+ "Radio Nocturna tiene una dedicatoria para ti (noches 3 a 6).": "Night Radio has a dedication for you (nights 3 to 6)."
 };

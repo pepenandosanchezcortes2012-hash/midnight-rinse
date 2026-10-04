@@ -525,6 +525,11 @@ El proyecto pasó por dos etapas:
 - **El motor creativo aprendió:** `estado.py` ahora lista también los eventos que el mundo ya tiene preparados (comentarios «evento» de `world.js`), para no proponer lo que ya existe.
 - Prueba nueva. Resultado: 56/56.
 
+## 66. Radio: la dedicatoria (noches 3 a 6)
+- **Qué pasa:** en las noches 3 a 6, unos 9 s después de la transmisión de las 02:40 (si la escuchaste), el locutor agrega: «Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.» Si escribiste tu nombre en las opciones, 3,5 s después: «(Entre la estática, alguien dice tu nombre: «…Nombre…».)», con voz de susurro. Nunca en las noches 1, 2, 7 y 8 (la 7 revela la hora verdadera y la 8 es la despedida).
+- **Canon:** anotada en CANON.md §6. Va en el mismo horario de la radio, sin horarios nuevos.
+- Prueba nueva (noches 2, 3 con y sin nombre, y 8). Resultado: 57/57.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
