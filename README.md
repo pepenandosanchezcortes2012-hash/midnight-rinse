@@ -183,6 +183,7 @@ Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y 
 ### Accesibilidad y privacidad (pantalla de título)
 - **Filtro de televisor viejo (CRT)**, opcional: líneas de barrido y rejilla de fósforo.
 - **Brillo** (0,7–1,8): levanta los oscuros sin perder el tramado; útil en el celular con mucha luz. También aplica a las fotos.
+- **Fondo oscuro detrás de los subtítulos**, opcional, para leerlos en escenas claras.
 - **Ahorro de batería (30 FPS)**, activado por defecto en celulares: el teléfono se calienta menos durante el turno.
 - Subtítulos (activados) con **tres tamaños**, voces sintetizadas del navegador (opcionales), **reducir destellos de luz**, punto de mira opcional, sensibilidad, **campo de visión**, **invertir el eje vertical** y volumen.
 - **Capa meta-diegética (opcional y avisada):** puede usar la hora real de tu computadora. Si juegas entre las 02:00 y las 05:00, las anomalías se triplican.

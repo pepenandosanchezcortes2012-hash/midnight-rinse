@@ -475,6 +475,10 @@ El proyecto pasó por dos etapas:
 - **Para publicar algo nuevo:** se agrega una línea con un `id` mayor en `MR.NOVEDADES`, más su traducción. Está anotado en el README.
 - Prueba nueva. Resultado: 48/48.
 
+## 58. Subtítulos con fondo oscuro (opción)
+- **Opción** «Fondo oscuro detrás de los subtítulos»: una franja negra al 72 % detrás del texto, solo cuando hay subtítulos. Se lee mejor con brillo alto, en el bosque con luna llena o en el celular a pleno sol. Se guarda con las opciones y aparece en «Novedades».
+- Prueba nueva. Resultado: 49/49.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

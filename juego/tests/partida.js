@@ -1040,6 +1040,25 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Subtítulos con fondo oscuro (opción)', async function () {
+      var ctx = await load();
+      var d = ctx.w.document;
+      var box = d.getElementById('opt-subs-fondo');
+      check(!box.checked && !d.body.classList.contains('subs-fondo'), 'empezó con fondo');
+      box.checked = true;
+      box.dispatchEvent(new ctx.w.Event('input'));
+      check(d.body.classList.contains('subs-fondo'), 'no puso el fondo');
+      ctx.g.ui.subtitle('(prueba)', 3);
+      var bg = ctx.w.getComputedStyle(d.getElementById('subtitulos')).backgroundColor;
+      check(/rgba\(0, 0, 0, 0\.7/.test(bg), 'el fondo no se ve (' + bg + ')');
+      ctx = await load();
+      check(ctx.w.document.body.classList.contains('subs-fondo'), 'no se guardó');
+      ctx.w.document.getElementById('opt-subs-fondo').checked = false;
+      ctx.w.document.getElementById('opt-subs-fondo').dispatchEvent(new ctx.w.Event('input'));
+      noErrors(ctx);
+      return bg;
+    }],
+
     ['Novedades: «● nuevo» hasta que abres el panel', async function () {
       localStorage.removeItem('midnight-rinse/novedades');
       var ctx = await load();

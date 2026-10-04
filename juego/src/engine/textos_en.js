@@ -624,5 +624,7 @@ MR.TEXTOS_EN = {
  "Récords: tu mejor nota por dificultad y los cinco finales.": "Records: your best grade per difficulty and the five endings.",
  "English version: Options → Idioma · Language.": "English version: Options → Idioma · Language.",
  "Un final más, para quien hace todo en la misma noche.": "One more ending, for those who do everything in the same night.",
- "Filtro de televisor viejo (CRT) en las opciones.": "Old TV filter (CRT) in the options."
+ "Filtro de televisor viejo (CRT) en las opciones.": "Old TV filter (CRT) in the options.",
+ "Fondo oscuro detrás de los subtítulos": "Dark background behind subtitles",
+ "Opción de fondo oscuro detrás de los subtítulos.": "Option for a dark background behind subtitles."
 };

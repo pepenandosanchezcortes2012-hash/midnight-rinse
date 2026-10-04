@@ -73,7 +73,7 @@
     _loadOptions() {
       var defaults = { subtitles: true, voices: true, reduceFlashes: false, crosshair: false, meta: false, sensitivity: 1.2, volume: 0.8, name: '',
         vibration: true, gyro: true, lofi: true, mixMode: false, teleLink: '', fov: 70, invertY: false, subsScale: 1,
-        difficulty: 'normal', crt: false, brightness: 1, batterySaver: MR.isTouchDevice ? MR.isTouchDevice() : false };
+        difficulty: 'normal', crt: false, brightness: 1, subsBg: false, batterySaver: MR.isTouchDevice ? MR.isTouchDevice() : false };
       try {
         var saved = JSON.parse(window.localStorage.getItem(OPTIONS_KEY) || '{}');
         return Object.assign(defaults, saved);
@@ -94,7 +94,7 @@
         ['opt-volumen', 'volume', 'value'], ['opt-nombre', 'name', 'value'], ['opt-vibracion', 'vibration', 'checked'],
         ['opt-giroscopio', 'gyro', 'checked'], ['opt-lofi', 'lofi', 'checked'], ['opt-mezcla', 'mixMode', 'checked'],
         ['opt-fov', 'fov', 'value'], ['opt-invertir', 'invertY', 'checked'], ['opt-subs-tam', 'subsScale', 'value'],
-        ['opt-dificultad', 'difficulty', 'value'], ['opt-bateria', 'batterySaver', 'checked'], ['opt-crt', 'crt', 'checked'], ['opt-brillo', 'brightness', 'value']];
+        ['opt-dificultad', 'difficulty', 'value'], ['opt-bateria', 'batterySaver', 'checked'], ['opt-crt', 'crt', 'checked'], ['opt-brillo', 'brightness', 'value'], ['opt-subs-fondo', 'subsBg', 'checked']];
       map.forEach(function (m) {
         var input = $(m[0]);
         input[m[2]] = o[m[1]];
@@ -107,7 +107,7 @@
           if (m[1] === 'vibration') { MR.Haptics.enabled = o.vibration; if (o.vibration) { MR.Haptics.pulse(25); } }
           if (m[1] === 'lofi' && self.game.music) { self.game.music.setLofi(o.lofi); }
           if (m[1] === 'mixMode') { MR.Game.audioSession(o.mixMode); }
-          if (m[1] === 'fov' || m[1] === 'subsScale') { self.applyView(); }
+          if (m[1] === 'fov' || m[1] === 'subsScale' || m[1] === 'subsBg') { self.applyView(); }
           self._saveOptions();
         });
       });
@@ -152,6 +152,7 @@
     applyView() {
       var o = this.options;
       document.documentElement.style.setProperty('--subs-escala', String(o.subsScale || 1));
+      document.body.classList.toggle('subs-fondo', !!o.subsBg);
       var cam = this.game.player && this.game.player.camera;
       if (cam && o.fov) { cam.fov = o.fov; cam.updateProjectionMatrix(); }
     }
