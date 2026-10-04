@@ -210,7 +210,7 @@ def literales(fuente):
 CODIGO = re.compile(r'gl_|vec[234]|uniform |varying |attribute |float |void main|texture2D|#define|\bpx\b|\d+px|rgba?\(|hsla?\(|'
                     r'\[type=|\(pointer:|display-mode|position\.|\bmod\(|https?:|www\.|\.(js|html|png|json|css|mp3|ogg)\b|^midnight-rinse/|^#[0-9a-f]{3,8}$|monospace|=>|\)\s*;\s*$')
 NOMBRE = re.compile(r'^[\w\-./#:?=&%,*\[\]]+$')
-NO_TEXTO = {'use strict', 'Escape', 'Enter'}  # nombres de teclas y directivas, no texto
+NO_TEXTO = {'use strict', 'Escape', 'Enter', 'Digit', 'Numpad'}  # nombres de teclas y directivas, no texto
 
 
 def es_texto(s):

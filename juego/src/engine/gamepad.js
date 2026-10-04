@@ -133,7 +133,7 @@
       if (!btn[BTN.X] && this.wiping) { this.wiping = false; input.keys.delete('KeyE'); }
       if (hit(BTN.B)) { input.actions.add('blink'); }
       // Cruceta: respuestas (si alguien te habla) o consumibles.
-      if (g.question) {
+      if (g.question || g.dialog) {
         if (hit(BTN.LEFT)) { input.pressed.add('Digit1'); }
         if (hit(BTN.UP)) { input.pressed.add('Digit2'); }
         if (hit(BTN.RIGHT)) { input.pressed.add('Digit3'); }

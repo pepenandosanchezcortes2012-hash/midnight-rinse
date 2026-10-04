@@ -517,6 +517,7 @@
     }
 
     _ask() {
+      this.closeDialog(); // la pregunta de la hora corta cualquier conversación
       var real = MR.I18N.spokenTime(this.minutes);
       this.question = { timer: 20, repeated: false, real: real };
       var q = 'Disculpe... ¿qué hora es?';
@@ -546,6 +547,12 @@
     }
 
     _answerKeys(input) {
+      if (this.dialog && !this.question) {
+        for (var k = 1; k <= this.dialog.options.length; k += 1) {
+          if (input.hit('Digit' + k) || input.hit('Numpad' + k)) { this.answerChoice(k); return; }
+        }
+        return;
+      }
       if (!this.question) { return; }
       if (input.hit('Digit1') || input.hit('Numpad1')) { this._answer(1); }
       else if (input.hit('Digit2') || input.hit('Numpad2')) { this._answer(2); }
@@ -683,7 +690,27 @@
     onPuddleMopped() { this.stats.charcos += 1; MR.Haptics.pulse([25, 40, 12]); }
 
     /** Respuesta tocando una opción del diálogo (móvil) o con las teclas 1–3. */
-    answerChoice(n) { if (this.question) { this._answer(n); } }
+    answerChoice(n) {
+      if (this.question) { this._answer(n); return; }
+      if (this.dialog) { var d = this.dialog; this.closeDialog(); d.pick(n); }
+    }
+
+    /**
+     * Diálogo genérico (conversaciones con la clientela): pregunta, opciones y qué pasa al elegir (pick(n), 1 = la
+     * primera). Usa la misma lista que la pregunta de la hora, que siempre tiene prioridad.
+     */
+    openDialog(question, options, pick) {
+      if (this.question) { return false; }
+      this.dialog = { options: options, pick: pick };
+      this.ui.showChoices(question, options);
+      return true;
+    }
+
+    closeDialog() {
+      if (!this.dialog) { return; }
+      this.dialog = null;
+      if (!this.question) { this.ui.hideChoices(); }
+    }
 
     openNote() {
       this.flags.readNote = true;
@@ -803,6 +830,7 @@
         window.localStorage.setItem('midnight-rinse/noches', String(nights));
       } catch (e) { /* sin almacenamiento */ }
       if (this.question) { this.question = null; this.stats.respuesta = 'sin_respuesta'; }
+      this.dialog = null;
       this.ui.hideChoices();
       this.closeNote();
       // Transición: el mundo se desvanece en ~3 s (el texto final aparece después, por CSS).

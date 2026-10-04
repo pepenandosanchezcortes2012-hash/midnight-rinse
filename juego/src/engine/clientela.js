@@ -21,7 +21,7 @@
       this.world = game.world;
       this.visitors = [];
       this.nextId = 1;
-      this.used = { llegada: {}, tocar: {}, despedida: {}, ordenes: {} };
+      this.used = { llegada: {}, tocar: {}, despedida: {}, ordenes: {}, cierre: {} };
       this.ordersToday = 0;
       // Horario de la noche: caras blancas entre 01:15 y 02:15 (3 a 5) y quizá una tardía; máscaras a las 02:50 y quizá 04:05.
       var plan = [];
@@ -114,7 +114,7 @@
     }
 
     _line(key) {
-      var lines = MR.HISTORIA.blackwood[key];
+      var lines = key === 'cierre' ? MR.HISTORIA.blackwood.charla.cierre : MR.HISTORIA.blackwood[key];
       var used = this.used[key];
       var free = lines.map(function (l, i) { return i; }).filter(function (i) { return !used[i]; });
       if (!free.length) { this.used[key] = used = {}; free = lines.map(function (l, i) { return i; }); }
@@ -140,8 +140,40 @@
         return;
       }
       if (v.talked) { g.gameplay.say('cara' + id, '(Ya no te responde. Mira el tambor girar.)', 3); return; }
+      if (v.state !== 'llego') { this._say(v, 'tocar'); v.talked = true; return; } // de paso: solo un murmullo
+      this._converse(v, MR.HISTORIA.blackwood.charla.preguntas.slice());
+    }
+
+    /** Conversación: eliges una pregunta; responde, y puedes seguir preguntando (o dejarla en paz). */
+    _converse(v, left) {
+      var g = this.game;
+      var self = this;
+      var options = left.map(function (q) { return q[1]; }).concat(['(Dejarla en paz.)']);
+      v.talking = true;
+      g.openDialog(MR.t('Una cara blanca, sin mirarte:'), options, function (n) {
+        if (n > left.length || !self.visitors.includes(v)) { self._endTalk(v); return; }
+        var q = left[n - 1];
+        var answers = MR.HISTORIA.blackwood.charla[q[0]];
+        var i = Math.floor(Math.random() * answers.length);
+        g.ui.subtitle(MR.tf('(Una cara blanca, bajito: «{l}»)', { l: MR.t(answers[i]) }), 7);
+        g.audio.speak(answers[i], 'cara');
+        if (g.archivo) { g.archivo.chat(q[0] + i); }
+        var rest = left.filter(function (x) { return x !== q; });
+        if (!rest.length) { setTimeout(function () { self._endTalk(v); }, 3500); return; }
+        setTimeout(function () { if (v.talking && g.state === 'playing') { self._converse(v, rest); } }, 3500);
+      });
+    }
+
+    _endTalk(v) {
+      var g = this.game;
+      v.talking = false;
       v.talked = true;
-      this._say(v, 'tocar');
+      g.closeDialog();
+      if (this.visitors.includes(v)) {
+        var l = this._line('cierre');
+        g.ui.subtitle(MR.tf('(Una cara blanca, bajito: «{l}»)', { l: MR.t(l.text) }), 5);
+        g.audio.speak(l.text, 'cara');
+      }
     }
 
     // -------------------------------------------------------------------------------------------- cada cuadro
@@ -196,7 +228,10 @@
             // En la noche sin agua, la máquina tampoco arranca para ellos.
             if (!wa.running && g.mod !== 'sin_agua') { wa.running = true; wa.credit = false; wa.remaining = MR.Config.WASHER_CYCLE_MIN; g.audio.buzz(); }
           }
-          if (v.timer > 9) { this._leave(v); }
+          // Mientras conversa contigo no se va; si te alejas, la conversación termina.
+          if (v.talking) {
+            if (U.distXZ(g.player.pos, v.model.group.position) > 4) { this._endTalk(v); }
+          } else if (v.timer > 9) { this._leave(v); }
         } else if (v.timer > 6) {
           this._leave(v);
         }

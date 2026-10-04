@@ -24,6 +24,7 @@
       d.radio = d.radio || {};
       d.telefono = d.telefono || {};
       d.ordenes = d.ordenes || {};
+      d.charla = d.charla || {};
       return d;
     }
 
@@ -36,11 +37,12 @@
     radio(i) { if (!this.data.radio[i]) { this.data.radio[i] = this.game.night || 1; this._save(); } }
     phone(i) { if (!this.data.telefono[i]) { this.data.telefono[i] = this.game.night || 1; this._save(); } }
     order(i) { if (!this.data.ordenes[i]) { this.data.ordenes[i] = this.game.night || 1; this._save(); } }
+    chat(key) { if (!this.data.charla[key]) { this.data.charla[key] = this.game.night || 1; this._save(); } }
 
     count() { return Object.keys(this.data.paginas).length + Object.keys(this.data.radio).length + Object.keys(this.data.telefono).length +
-      Object.keys(this.data.ordenes).length; }
+      Object.keys(this.data.ordenes).length + Object.keys(this.data.charla).length; }
     total() { return MR.HISTORIA.paginas.length + MR.HISTORIA.radio.length + MR.HISTORIA.telefono.length +
-      MR.HISTORIA.blackwood.ordenes.length; }
+      MR.HISTORIA.blackwood.ordenes.length + 12; } // 12 = cuatro preguntas × tres respuestas
 
     /** Entradas para el panel: [{grupo, titulo, texto, encabezado, hecho}]. */
     view() {
@@ -67,6 +69,14 @@
         var have = !!d.ordenes[i];
         out.push({ grupo: 'Órdenes de la Administración del Embalse', titulo: MR.tf(have ? 'ORDEN N.º {n}' : 'Orden {n} · ???', { n: have ? (line.match(/N\.º (\d+)/) || [0, i + 1])[1] : i + 1 }),
           texto: line, encabezado: 'ADMINISTRACIÓN DEL EMBALSE · ORDEN IMPRESA', hecho: have });
+      });
+      var ch = MR.HISTORIA.blackwood.charla;
+      ch.preguntas.forEach(function (q) {
+        ch[q[0]].forEach(function (line, i) {
+          var have = !!d.charla[q[0] + i];
+          out.push({ grupo: 'Lo que dijeron las caras blancas', titulo: have ? q[1] : MR.tf('{q} · ???', { q: MR.t(q[1]) }),
+            texto: line, encabezado: 'UNA CARA BLANCA, BAJITO', hecho: have });
+        });
       });
       return out;
     }

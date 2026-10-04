@@ -595,6 +595,13 @@ El proyecto pasó por dos etapas:
 - **Pista zen / lo-fi procedural** (`audio.setForest`): acordes de Rem9, Sol9, Do maj9 y Lam9 (2,7 s por compás) con seno y triángulo un poco desafinados, como cinta, campanitas pentatónicas, crepitar de vinilo y un filtro pasa bajos. Sube al salir, baja con el miedo y se corta al volver. En pausa no acumula compases.
 - **Pruebas:** `probar.py` ahora corre Chrome con `--autoplay-policy=no-user-gesture-required`, así que las pruebas usan el audio de verdad (contexto `running`). Prueba nueva: dos vueltas, la secadora, el logro y la pista (que suena afuera y se corta adentro). El primer intento falló porque el parpadeo forzado se perdía si caía con los ojos todavía abriéndose; corregido. Resultado: 67/67.
 
+## 78. Sprint 4a: conversaciones con las caras blancas
+- **Diálogo genérico** (`game.openDialog` / `closeDialog`): usa la misma lista de respuestas que la pregunta de la hora, con teclas 1–4, toques y la cruceta del control. La pregunta de la hora siempre tiene prioridad y corta cualquier conversación. Al terminar el turno se cierra.
+- **Conversar:** al tocar a una cara blanca que ya está en su lavadora se abren cuatro preguntas («¿De dónde vienen?», «¿Qué pasó en 1986?», «¿Conocen al hombre del sombrero?», «¿Por qué su ropa nunca se seca?») más «(Dejarla en paz.)». Responde bajito, con voz y subtítulo, y vuelve a ofrecer las preguntas que quedan. Mientras hablan no se va; si te alejas más de 4 m, se despide. Si la tocas mientras camina, solo murmura.
+- **Respuestas:** 12, tres posibles por pregunta, más 4 despedidas. Generadas con Gemini, revisadas contra el canon (3 corregidas) y traducidas. Cada respuesta escuchada queda en el Archivo, en el grupo «Lo que dijeron las caras blancas».
+- **Detalle:** el extractor de textos ya no toma `'Digit'` ni `'Numpad'` como texto.
+- Prueba nueva. Resultado: 68/68.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -52,3 +52,10 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** la pista es procedural (Web Audio) en vez de un archivo de música. No pesa nada, no necesita derechos y se puede bajar con el miedo en tiempo real.
 - **Decisión:** las farolas anómalas y el tendedero ya existían (niebla y luna llena), así que este sprint no las duplica.
 - **Calidad:** las pruebas en Chrome sin ventana ahora permiten audio sin gesto, para probar el sonido de verdad. 67/67.
+
+## Sprint 4 — Personajes que hablan, anomalías y secretos
+
+### Conversaciones (hecho)
+- Las caras blancas conversan: cuatro preguntas, tres respuestas posibles cada una (Gemini, revisado) y una despedida. Lo que te dijeron queda en el Archivo.
+- **Decisión:** se reusa la lista de respuestas de la pregunta de la hora, sin una interfaz nueva, para no sumar HUD. Esa pregunta siempre gana: él es el centro del turno.
+- **Decisión:** las respuestas sobre él solo repiten las reglas (no mirarlo, la respuesta segura) y dan pistas («llegó antes del agua»). Nunca explican quién es.

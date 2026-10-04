@@ -102,6 +102,36 @@
         'Ya está. Nos vemos cuando vuelva a llover.',
         'Cuida al gato Pelusa del viento que baja del lago.'
       ],
+      // Conversación (tocar a una cara blanca): cuatro preguntas, tres respuestas posibles cada una. Gemini, revisado.
+      charla: {
+        preguntas: [['origen', '¿De dónde vienen?'], ['1986', '¿Qué pasó en 1986?'], ['el', '¿Conocen al hombre del sombrero?'], ['ropa', '¿Por qué su ropa nunca se seca?']],
+        'origen': [
+          'Cruzamos el puente viejo bajo el agua, pasando la farmacia de don Pedro.',
+          'De la plaza de Blackwood, donde la campana aún suena bajo el lodo.',
+          'Del bosque tras el vidrio; cada vereda da vuelta y regresa a ti.'
+        ],
+        '1986': [
+          'El agua cubrió despacio el pueblo y el reloj de la iglesia se apagó.',
+          'Llegó el embalse en 1986 y nos dijeron que el agua nunca aclararía.',
+          'La campana de la escuela sonó temprano. Los que nos quedamos ya no hablamos de eso.'
+        ],
+        'el': [
+          'Camina por la orilla fría; dile que faltan cinco minutos para las seis.',
+          'Llegó antes del agua. Si entra a preguntar la hora, no lo mires.',
+          'Nunca trae ropa; a veces solo espera de pie frente a los casilleros.'
+        ],
+        'ropa': [
+          'El lodo del fondo es terco; tus cuatro secadoras dan calor, nada más.',
+          'El jabón huele dulce, pero el agua honda de Blackwood nunca se marcha.',
+          'Sigue mojada desde 1986. Solo venimos por el rumor tibio de las lavadoras.'
+        ],
+        'cierre': [
+          'El agua sigue tibia. Gracias por no cerrar la puerta esta noche.',
+          'Esperaremos a que termine el ciclo, sin mojarte el piso.',
+          'La radio de la noche suena bien con el tambor girando despacio.',
+          'Acaricia a Pelusa de nuestra parte antes de que termine tu turno.'
+        ]
+      },
       ordenes: [
         'ORDEN N.º 01: A las 02:40, la radio del mostrador debe estar en la 94.1.',
         'ORDEN N.º 04: No abra los casilleros del uno al siete bajo ninguna circunstancia.',

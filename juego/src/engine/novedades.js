@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 30, texto: 'Puedes conversar con las caras blancas. Pregúntales por 1986.' },
     { id: 29, texto: 'El bosque no termina. Y ahora tiene música.' },
     { id: 28, texto: 'Dos vidrieras a la avenida: Blackwood está viva a la una de la mañana. Mira cómo cambia.' },
     { id: 27, texto: 'Pelusa tiene rutina: come, se acicala, mira por la puerta, hace su ronda y, al final, no se te despega.' },

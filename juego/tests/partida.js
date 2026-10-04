@@ -1041,6 +1041,44 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Conversar con una cara blanca: preguntas, respuestas, el Archivo y la prioridad de la pregunta de la hora', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var d = ctx.w.document;
+      var sub = function () { return d.getElementById('subtitulos').textContent; };
+      var opts = function () { return d.querySelectorAll('#dialogo-opciones li').length; };
+      start(ctx);
+      c.plan = [];
+      g.player.pos.set(-6, 0, 2.5);
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      var v = c.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      g.player.pos.set(v.model.group.position.x + 1, 0, v.model.group.position.z + 1.5);
+      c.talk(v.id);
+      check(g.dialog && !d.getElementById('dialogo').hidden && opts() === 5, 'no se abrió la conversación (' + opts() + ' opciones)');
+      g.answerChoice(2); // ¿Qué pasó en 1986?
+      check(sub().indexOf('Una cara blanca') >= 0, 'no respondió');
+      check(Object.keys(g.archivo.data.charla).some(function (k) { return k.indexOf('1986') === 0; }), 'la respuesta no quedó en el Archivo');
+      await wait(3700);
+      check(g.dialog && opts() === 4, 'no volvió a preguntar (' + opts() + ' opciones)');
+      step(ctx, 30 * 12);
+      check(c.visitors.indexOf(v) >= 0, 'se fue a mitad de la conversación');
+      g.input.pressed.add('Digit4'); step(ctx, 1); // «(Dejarla en paz.)» con el teclado
+      check(!g.dialog && v.talked && d.getElementById('dialogo').hidden, 'no terminó la conversación');
+      // La pregunta de la hora corta cualquier conversación.
+      var v2 = c.spawn('cara');
+      for (var j = 0; j < 30 * 30 && v2.state !== 'llego'; j += 1) { step(ctx, 1); }
+      g.player.pos.set(v2.model.group.position.x + 1, 0, v2.model.group.position.z + 1.5);
+      c.talk(v2.id);
+      check(g.dialog, 'no abrió la segunda conversación');
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g._ask();
+      check(!g.dialog && g.question && /Cliente|Customer/.test(d.getElementById('dialogo-pregunta').textContent), 'la pregunta de la hora no tuvo prioridad');
+      noErrors(ctx);
+      return Object.keys(g.archivo.data.charla).length + ' respuesta(s) en el Archivo';
+    }],
+
     ['Bosque infinito: al fondo o al costado, un parpadeo te devuelve; a la segunda vuelta, la secadora solitaria', async function () {
       var ctx = await load();
       var g = ctx.g;
