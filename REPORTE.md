@@ -449,6 +449,12 @@ El proyecto pasó por dos etapas:
 - **Arreglo:** los colores de las luces se calculaban solo dentro de `retro.render()`; ahora `retro.applyLights()` también lo usa la pasada del espejo.
 - **Prueba nueva:** el reflejo tiene luz, él ocupa más de 300 píxeles distintos y vuelve a su lugar, sin errores de WebGL, y el lavabo funciona. Lo revisé con capturas de Chrome sin ventana. Resultado: 44/44.
 
+## 53. Turno al azar (con semilla) y revisión en celular
+- **Prueba nueva:** tres turnos completos (normal; sin agua; apagones en inglés) con el reloj ×10. Cada 20 cuadros elige: acercarse a un objeto interactivo de su área, mirarlo y hacer clic (a veces mantener, moviendo el ratón para las perillas); caminar; o apretar una tecla (cigarro, petaca, porro, foto, parpadeo, lentes, respuestas). Responde la pregunta de la hora al azar. El azar del juego y el de la prueba tienen semilla, así que un fallo se puede repetir. Comprueba que nada quede en NaN, que el turno termine y que no haya errores. Toca de 9 a 16 tipos de objeto por turno.
+- **`probar.py --todo`** muestra el resultado de cada prueba, no solo las que fallan.
+- **En el celular:** capturas a 844×390 del título (se desplaza, con todos los paneles) y de la pausa (cinco botones en tres filas). No hubo que cambiar nada.
+- Resultado: 45/45.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

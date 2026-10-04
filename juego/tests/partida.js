@@ -899,6 +899,99 @@
       return '«' + title + '»';
     }],
 
+    ['Turno al azar: tocar todo, cruzar puertas y fumar, de 01:10 a 05:12, sin errores', async function () {
+      // Azar con semilla (el del juego también), para que si algo falla se pueda repetir.
+      function rng(seed) {
+        return function () {
+          seed = (seed + 0x6D2B79F5) | 0;
+          var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      var report = [];
+      var runs = [['', 1337], ['?noche=sin_agua', 2024], ['?noche=apagones&lang=en', 77]];
+      for (var r = 0; r < runs.length; r += 1) {
+        var ctx = await load(runs[r][0]);
+        var w = ctx.w;
+        var g = ctx.g;
+        var rand = rng(runs[r][1]);
+        w.Math.random = rng(runs[r][1] * 7 + 1);
+        var C = w.MR.Config;
+        var speed = C.GAME_SECONDS_PER_REAL_SECOND;
+        C.GAME_SECONDS_PER_REAL_SECOND = speed * 10; // el turno entero en ~2,5 minutos de juego
+        start(ctx);
+        var input = g.input;
+        var counts = {};
+        var hold = 0;
+        var walk = 0;
+        var frames = 0;
+        try {
+          while (g.state === 'playing' && frames < 4200) {
+            frames += 1;
+            if (g.noteOpen && rand() < 0.2) { g.closeNote(); }
+            if (g.question && rand() < 0.05) { g._answer(1 + Math.floor(rand() * (g._knowsTrueTime() ? 4 : 3))); }
+            if (hold > 0) {
+              hold -= 1;
+              input.buttons = 1;
+              input.mouseDX = (rand() - 0.5) * 40;
+              if (!hold) { input.buttons = 0; }
+            } else if (walk > 0) {
+              walk -= 1;
+              input.keys.add('KeyW');
+              if (!walk) { input.keys.delete('KeyW'); }
+            } else if (frames % 20 === 0) {
+              var roll = rand();
+              if (roll < 0.55) {
+                // Acercarse a algo de esta área, mirarlo y hacer clic (a veces mantener).
+                var cam = g.player.camera;
+                var here = cam.getWorldPosition(new w.THREE.Vector3());
+                var near = g.world.interactables.filter(function (m) {
+                  if (!g.gameplay._visible(m)) { return false; }
+                  return m.getWorldPosition(new w.THREE.Vector3()).distanceTo(here) < 9;
+                });
+                if (near.length) {
+                  var m = near[Math.floor(rand() * near.length)];
+                  var t = m.getWorldPosition(new w.THREE.Vector3());
+                  var ang = rand() * Math.PI * 2;
+                  g.player.pos.set(t.x + Math.sin(ang) * 1.3, g.player.pos.y, t.z + Math.cos(ang) * 1.3);
+                  step(ctx, 1); // la colisión lo saca de las paredes
+                  var p = g.player.pos;
+                  var dx = t.x - p.x;
+                  var dz = t.z - p.z;
+                  g.player.yaw = Math.atan2(-dx, -dz);
+                  g.player.pitch = Math.atan2(t.y - C.PLAYER_HEIGHT, Math.sqrt(dx * dx + dz * dz));
+                  input.buttonPressed = true;
+                  input.buttons = 1;
+                  hold = rand() < 0.4 ? Math.floor(rand() * 70) : 0;
+                  var kind = m.userData.interact.kind;
+                  counts[kind] = (counts[kind] || 0) + 1;
+                }
+              } else if (roll < 0.75) {
+                g.player.yaw = rand() * Math.PI * 2;
+                walk = 10 + Math.floor(rand() * 30);
+              } else {
+                var keys = ['KeyC', 'KeyF', 'KeyJ', 'KeyP', 'KeyB', 'KeyE', 'Digit1', 'Digit2'];
+                input.pressed.add(keys[Math.floor(rand() * keys.length)]);
+              }
+            } else if (input.buttons && !hold) {
+              input.buttons = 0;
+            }
+            g.update(1 / 30);
+            input.endFrame();
+            check(isFinite(g.minutes) && isFinite(g.player.pos.x) && isFinite(g.player.pos.z), 'algo quedó en NaN en el cuadro ' + frames);
+          }
+        } finally {
+          C.GAME_SECONDS_PER_REAL_SECOND = speed;
+        }
+        check(g.state === 'ended', 'el turno no terminó (' + g.state + ', ' + w.MR.Util.clockText(g.minutes) + ', ' + frames + ' cuadros)');
+        noErrors(ctx);
+        var touched = Object.keys(counts).length;
+        report.push(frames + ' cuadros, ' + touched + ' tipos de objeto, final «' + g.ending + '»');
+      }
+      return report.join(' · ');
+    }],
+
     ['El espejo del pasillo: refleja, tú no sales y a veces él está detrás', async function () {
       var ctx = await load();
       var g = ctx.g;

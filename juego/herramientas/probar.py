@@ -1,7 +1,7 @@
 """
 Corre las pruebas de partida (pruebas.html?auto) en un Chrome sin ventana y muestra el resultado.
 
-  py herramientas/probar.py [url]     (por defecto http://127.0.0.1:8765/pruebas.html?auto)
+  py herramientas/probar.py [url] [--todo]   (por defecto http://127.0.0.1:8765/pruebas.html?auto; --todo muestra cada prueba)
 
 Necesita el servidor local (py -m http.server 8765 --bind 127.0.0.1 desde juego/). Usa un perfil temporal, así que no
 toca el Chrome de todos los días. Chrome espera en tiempo virtual hasta que las pruebas terminan y entrega el HTML final.
@@ -20,7 +20,9 @@ CHROMES = [Path(r'C:\Program Files\Google\Chrome\Application\chrome.exe'),
 
 def main():
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-    url = sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:8765/pruebas.html?auto'
+    args = [a for a in sys.argv[1:] if a != '--todo']
+    todo = '--todo' in sys.argv
+    url = args[0] if args else 'http://127.0.0.1:8765/pruebas.html?auto'
     chrome = next((c for c in CHROMES if c.exists()), None)
     if not chrome:
         sys.exit('no encontré Chrome ni Edge')
@@ -41,6 +43,8 @@ def main():
         if clase == 'mal':
             malas += 1
             print('✗', texto[:400])
+        elif todo:
+            print('·', texto[:300])
     print('pasaron %d de %d' % (len(filas) - malas, len(filas)))
     sys.exit(1 if malas else 0)
 
