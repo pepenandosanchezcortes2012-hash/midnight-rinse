@@ -1041,6 +1041,34 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Luna llena: el tendedero con uniformes que se mecen sin viento', async function () {
+      var ctx = await load();
+      start(ctx);
+      ctx.g.bosque.go(); step(ctx, 40);
+      check(!ctx.g.world.forest.clothesline.visible, 'en noche normal no hay tendedero');
+      ctx = await load('?noche=luna');
+      var g = ctx.g;
+      var line = g.world.forest.clothesline;
+      start(ctx);
+      g.bosque.go(); step(ctx, 40);
+      check(line.visible, 'no apareció con luna llena');
+      var lo = 9, hi = -9;
+      for (var k = 0; k < 45; k += 1) {
+        step(ctx, 1);
+        var r = g.world.forest.shirts[0].rotation.x;
+        lo = Math.min(lo, r); hi = Math.max(hi, r);
+      }
+      check(hi - lo > 0.05, 'los uniformes no se mecen (vaivén ' + (hi - lo).toFixed(3) + ')');
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(line.position.x + 3, 0, line.position.z - 2.5);
+      g.player.yaw = Math.atan2(-(line.position.x - g.player.pos.x), -(line.position.z - g.player.pos.z));
+      g.player.pitch = 0;
+      step(ctx, 3);
+      check(ctx.w.document.getElementById('subtitulos').textContent.indexOf('tendedero') >= 0, 'no lo notó');
+      noErrors(ctx);
+      return 'solo con luna; se mece';
+    }],
+
     ['El sombrero: se queda en el banco cuando se va; al verlo, el subtítulo; al parpadear, ya no está', async function () {
       var ctx = await load();
       var g = ctx.g;

@@ -860,6 +860,26 @@
       this.box(0.5, 0.06, 0.06, m.metal, -4.27, 3.98, 103.2);
       var lampHead = this.box(0.38, 0.12, 0.24, mt.lamp, -4.05, 3.92, 103.2);
       this.collider(-4.65, -4.35, 103.05, 103.35);
+      // El tendedero (solo con luna llena): uniformes colgados entre dos postes junto al sendero, que se mecen sin
+      // viento (bosque.js).
+      var line = new THREE.Group();
+      line.position.set(-2.9, 0, 117.6);
+      line.rotation.y = -1.0;
+      [-1.4, 1.4].forEach(function (x) { this.box(0.1, 2.2, 0.1, mt.bark || m.wood, x, 1.1, 0, line); }, this);
+      this.box(2.8, 0.015, 0.015, m.metal, 0, 2.05, 0, line);
+      var uniMat = R.material({ texture: 'white', color: 0x6f7f8f, side: THREE.DoubleSide });
+      var shirts = [];
+      [-0.8, 0, 0.8].forEach(function (x) {
+        var pivot = new THREE.Group();
+        pivot.position.set(x, 2.04, 0);
+        var shirt = new THREE.Mesh(new THREE.PlaneGeometry(0.48, 0.66), uniMat);
+        shirt.position.y = -0.34;
+        pivot.add(shirt);
+        line.add(pivot);
+        shirts.push(pivot);
+      });
+      line.visible = false;
+      this.add(line);
       // La segunda farola: solo en noches de niebla, más adentro; nunca te acercas y, si la pierdes de vista, se apaga
       // (bosque.js). Sin colisión: nunca llegas a ella.
       var lamp2 = new THREE.Group();
@@ -1008,6 +1028,8 @@
         washerLamp: wmLamp,
         lampHead: lampHead,
         lamp2: lamp2,
+        clothesline: line,
+        shirts: shirts,
         lamp2Mat: lamp2Mat,
         anchors: forestAnchors,
         zones: Object.keys(zoneDefs),

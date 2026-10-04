@@ -553,6 +553,11 @@ El proyecto pasó por dos etapas:
 - **Qué pasa:** cuando él se va porque le dijiste la hora verdadera, su sombrero (ala y copa, como el de su modelo) queda sobre el banco amarillo. Al verlo: «(En el banco amarillo quedó su sombrero. Está seco.)». En el siguiente parpadeo, ya no está. Es lo único que deja, y solo un momento.
 - Prueba nueva. Resultado: 62/62.
 
+## 72. Luna llena: el tendedero
+- **Qué pasa:** solo en las noches de luna llena (sin lluvia ni viento), junto a la curva del sendero hay un tendedero entre dos pinos con tres uniformes colgados, que se mecen despacio. Al verlo de cerca: «(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)». Revisado con captura: queda entre el follaje, como dice el texto.
+- **Prueba:** la primera versión medía el vaivén en solo medio segundo y fallaba si justo estaba en el punto más alto del seno. Ahora mide el rango durante 1,5 s. Resultado: 63/63.
+- Con esto se terminaron las cinco ideas de la segunda tanda del motor creativo.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 25, texto: 'Con luna llena, alguien tendió ropa en el bosque.' },
     { id: 24, texto: 'Cuando se va con la hora verdadera, algo suyo se queda un momento.' },
     { id: 23, texto: 'Hay un cesto entre las lavadoras y las secadoras. Estaba vacío.' },
     { id: 22, texto: 'No te quedes quieto mucho rato en silencio.' },

@@ -96,11 +96,31 @@
         g.glasses.drop();
       }
       this._lamp2(dt);
+      this._clothesline(dt);
       // Ambiente: un búho de vez en cuando (las ramas que crujen las programa el director del horror).
       this.ambientTimer -= dt;
       if (this.ambientTimer <= 0) {
         this.ambientTimer = U.rand(18, 40);
         g.audio.buho();
+      }
+    }
+
+    /** El tendedero de luna llena: los uniformes se mecen (sin viento); al verlo de cerca, el subtítulo (una vez). */
+    _clothesline(dt) {
+      var line = this.f.clothesline;
+      if (!line.visible) { return; }
+      this.lineTime = (this.lineTime || 0) + dt;
+      var t = this.lineTime;
+      this.f.shirts.forEach(function (p, i) { p.rotation.x = Math.sin(t * 1.3 + i * 1.7) * 0.16; });
+      if (this.lineNoticed) { return; }
+      var g = this.game;
+      var v = (this.tmp3 || (this.tmp3 = new THREE.Vector3())).set(line.position.x, 1.6, line.position.z);
+      var close = U.distXZ(g.player.pos, v) < 7;
+      v.project(g.player.camera);
+      if (close && Math.abs(v.x) < 0.9 && Math.abs(v.y) < 0.9 && v.z < 1 && !g.player.eyesClosed) {
+        this.lineNoticed = true;
+        g.ui.subtitle('(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)', 5);
+        g.dread = Math.min(1, g.dread + 0.04);
       }
     }
 
@@ -181,6 +201,7 @@
       spots.forEach(function (s, i) { R.setLight(i, new THREE.Vector3(s[0], s[1], s[2]), s[3], s[4], s[5]); });
       // Noche de niebla: la segunda farola (ranura de luz 5, libre afuera).
       this.f.lamp2.visible = toOutside && g.mod === 'niebla';
+      this.f.clothesline.visible = toOutside && g.mod === 'luna';
       if (this.f.lamp2.visible) { this._lamp2Light(); }
       if (toOutside) {
         sh.uAmbient.value.copy(this.outAmbient);

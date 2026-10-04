@@ -658,5 +658,7 @@ MR.TEXTOS_EN = {
  "(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)": "(The basket is full of uniforms like yours. All dry. All warm.)",
  "Hay un cesto entre las lavadoras y las secadoras. Estaba vacío.": "There's a basket between the washers and the dryers. It was empty.",
  "(En el banco amarillo quedó su sombrero. Está seco.)": "(His hat was left on the yellow bench. It's dry.)",
- "Cuando se va con la hora verdadera, algo suyo se queda un momento.": "When he leaves at the true time, something of his stays behind for a moment."
+ "Cuando se va con la hora verdadera, algo suyo se queda un momento.": "When he leaves at the true time, something of his stays behind for a moment.",
+ "(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)": "(Between two pines there's a clothesline with uniforms hanging. They sway, but there's no wind.)",
+ "Con luna llena, alguien tendió ropa en el bosque.": "Under the full moon, someone hung laundry in the forest."
 };

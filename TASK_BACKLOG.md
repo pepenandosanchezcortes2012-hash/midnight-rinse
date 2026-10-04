@@ -4,9 +4,9 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
+- [ ] (P3) Variación de bosque «El tendedero» (noches de luna llena) — entre dos pinos junto al sendero, un tendedero con uniformes que se mecen sin viento; al verlo: «(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)». Archivos: world.js (_forest), bosque.js; prueba: solo en luna llena.
 
 ## Ideas (motor creativo, sin aprobar)
-- [ ] (P3) Variación de bosque «El tendedero» (noches de luna llena) — entre dos pinos junto al sendero, un tendedero con uniformes que se mecen sin viento; al verlo: «(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)». Archivos: world.js (_forest), bosque.js; prueba: solo en luna llena.
 
 ## Bloqueadas (necesitan decisión)
 - [ ] (P1) Lore: decidir las propuestas de Yesda — el embalse de 1986, las caras blancas, las órdenes de las máscaras negras, el bosque infinito y el nombre «Blackwood» (CANON.md §7). Hasta decidir, lore_check.py los rechaza en textos del juego. — BLOQUEADA: decisión de diseño de Yesda
