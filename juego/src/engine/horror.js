@@ -145,6 +145,7 @@
         table = [['apagon', 3], ['charco', 2], ['puerta_lavadora', 2], ['secadora_sola', 2], ['puerta_trasera', 1], ['trapeador_movido', 1],
           ['radio_sola', 1], ['golpe_secadora', 1.5], ['mano_lavadora', 1]];
         if (!g.gameplay.phoneRinging && g.minutes > MR.Config.PHONE_RINGS + 10) { table.push(['telefono_breve', 0.8]); }
+        if (g.flags.customerSeen && !g.tele.faceArmed && (g.tele.faceSeen || 0) < 2) { table.push(['tele_rostro', 1.2]); }
         if (this.customer.present) {
           table.push(['huellas', 1], ['mano_vidrio', 1]);
           if (g.talked) { table.push(['cliente_mueve', 0.6 + g.stats.mirada * 0.5]); }
@@ -191,6 +192,7 @@
           break;
         }
         case 'radio_sola': this.schedule('radio_sola', 'mostrador', 1); break;
+        case 'tele_rostro': this.game.tele.faceArmed = true; break; // sale cuando mires la tele (tele.js)
         case 'golpe_secadora': this.schedule('golpe_secadora', 'secadoras', 1, { index: Math.floor(Math.random() * 4) }); break;
         case 'telefono_breve': this.schedule('telefono_breve', 'mostrador', 1); break;
         case 'mano_lavadora': this.schedule('mano_lavadora', 'lavadoras', 2, { index: Math.floor(Math.random() * 6) }); break;

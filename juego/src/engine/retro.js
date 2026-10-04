@@ -70,6 +70,7 @@
   var SCREEN_FRAG = [
     'uniform float uOpen;',
     'uniform float uStatic;',
+    'uniform float uFace;',
     'uniform float uTime;',
     'uniform vec3 uFogColor;',
     'varying vec3 vUvW;',
@@ -84,6 +85,19 @@
     '  float a = max(cover, grain);',
     '  vec3 glass = vec3(0.03, 0.04, 0.04) + vLight * 0.04;',
     '  vec3 c = mix(glass * cover, vec3(0.75 * n), grain);',
+    // Su cara en la nieve (uFace 0..1): cabeza pálida, ojos y boca oscuros, sombrero; en píxeles gruesos de 64×48.
+    '  if (uFace > 0.0) {',
+    '    vec2 q = floor(uv * vec2(64.0, 48.0)) / vec2(64.0, 48.0);',
+    '    float head = step(length((q - vec2(0.5, 0.47)) / vec2(0.15, 0.22)), 1.0);',
+    '    float eyes = step(length((q - vec2(0.44, 0.52)) / vec2(0.035, 0.03)), 1.0) + step(length((q - vec2(0.56, 0.52)) / vec2(0.035, 0.03)), 1.0);',
+    '    float mouth = step(length((q - vec2(0.5, 0.36)) / vec2(0.05, 0.014)), 1.0);',
+    '    float hat = step(abs(q.y - 0.68), 0.025) * step(abs(q.x - 0.5), 0.24) + step(abs(q.y - 0.79), 0.09) * step(abs(q.x - 0.5), 0.13);',
+    '    float dark = clamp(eyes + mouth + hat, 0.0, 1.0);',
+    '    float pale = head * (1.0 - dark);',
+    '    float fm = uFace * clamp(pale + dark, 0.0, 1.0);',
+    '    c = mix(c, vec3(pale * (0.62 + 0.25 * n)), fm);',
+    '    a = max(a, fm);',
+    '  }',
     '  gl_FragColor = vec4(c * (1.0 - vFog) + uFogColor * vFog, a * (1.0 - vFog) + vFog);',
     '}'
   ].join('\n');
@@ -261,7 +275,7 @@
 
     /** Material de la pantalla de la tele (ver SCREEN_FRAG). uOpen 1 = se ve el video; uStatic 0..1 = estática. */
     screenMaterial() {
-      var uniforms = { uOpen: { value: 0 }, uStatic: { value: 0 }, uTime: { value: 0 } };
+      var uniforms = { uOpen: { value: 0 }, uStatic: { value: 0 }, uTime: { value: 0 }, uFace: { value: 0 } };
       Object.keys(this.shared).forEach(function (k) { uniforms[k] = this.shared[k]; }, this);
       return new THREE.ShaderMaterial({ uniforms: uniforms, vertexShader: WORLD_VERT, fragmentShader: SCREEN_FRAG });
     }

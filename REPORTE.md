@@ -427,6 +427,11 @@ El proyecto pasó por dos etapas:
 - **El susto:** desde que lo viste (o desde la segunda noche), con 35 % de probabilidad él sale en la foto, de pie frente a ti, aunque en el cuarto no haya nadie. Un rayo busca espacio libre para que no atraviese paredes, y su posición real se restaura después de la foto. Da un subtítulo, sube el miedo y desbloquea el logro oculto «En la foto». Nunca pasa en Paseo.
 - **También en inglés:** 15 textos nuevos, 574 en total. Prueba nueva. Resultado: 41/41.
 
+## 49. Su cara en la nieve de la tele
+- **Qué pasa:** desde que lo viste, el director puede dejar listo el susto «tele_rostro» (hasta dos por noche, solo en la sala). Aparece la próxima vez que miras la tele de cerca (a menos de 8 m, en pantalla y con luz): durante 0,85 s, entre la estática, se forma una cara pálida con sombrero, en píxeles gruesos de 64×48. Suena un zumbido y sube el miedo. Si tienes música en la tele, la cara tapa el video.
+- **Cómo:** uniforme `uFace` en el shader de la pantalla (cabeza, ojos, boca y sombrero con elipses y bandas), con entrada de 0,08 s y salida de 0,15 s. `tele._onScreen()` comprueba que la tele esté de verdad en el cuadro.
+- **Prueba nueva:** de espaldas no sale; al mirarla sale, llega a 1 y se va. Resultado: 42/42.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

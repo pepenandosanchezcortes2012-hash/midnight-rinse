@@ -898,6 +898,42 @@
       return '«' + title + '»';
     }],
 
+    ['La tele: su cara en la nieve solo cuando la miras de cerca', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var THREE = ctx.w.THREE;
+      var tele = g.tele;
+      start(ctx);
+      step(ctx, 10);
+      g.flags.customerSeen = true;
+      function look(yaw, pitch) {
+        g.player.yaw = yaw; g.player.pitch = pitch;
+        step(ctx, 1);
+        g.player.camera.updateMatrixWorld();
+        tele.frame(1 / 30, 1);
+      }
+      // Frente a la tele, a 3 m.
+      var a = tele.tv.anchor;
+      a.updateMatrixWorld();
+      var pos = new THREE.Vector3().setFromMatrixPosition(a.matrixWorld);
+      var n = new THREE.Vector3(); a.getWorldDirection(n); n.y = 0; n.normalize();
+      g.player.pos.set(pos.x + n.x * 3, 0, pos.z + n.z * 3);
+      // De espaldas: armada pero no sale.
+      var toTv = Math.atan2(-(pos.x - g.player.pos.x), -(pos.z - g.player.pos.z));
+      tele.faceArmed = true;
+      look(toTv + Math.PI, 0);
+      check(!tele.faceSeen, 'salió sin mirar la tele');
+      // Mirándola: busca la inclinación en que queda en pantalla.
+      for (var p = -0.1; p < 0.9 && !tele.faceSeen; p += 0.1) { look(toTv, p); }
+      check(tele.faceSeen === 1, 'no salió al mirar la tele');
+      var peak = 0;
+      for (var i = 0; i < 40; i += 1) { tele.frame(1 / 30, 1 + i / 30); peak = Math.max(peak, tele.tv.screen.material.uniforms.uFace.value); }
+      check(peak > 0.9 && tele.tv.screen.material.uniforms.uFace.value === 0, 'la cara no apareció y se fue (pico ' + peak.toFixed(2) + ')');
+      check(!tele.faceArmed, 'debería desarmarse');
+      noErrors(ctx);
+      return 'pico ' + peak.toFixed(2) + ' · ' + g.player.pos.distanceTo(pos).toFixed(1) + ' m';
+    }],
+
     ['Fotos: P, el botón de la pausa, la galería y él en la foto', async function () {
       localStorage.removeItem('midnight-rinse/fotos');
       var ctx = await load();

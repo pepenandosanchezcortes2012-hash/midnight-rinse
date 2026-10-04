@@ -22,6 +22,7 @@
 
   var API_URL = 'https://www.youtube.com/iframe_api';
   var PX_W = 480;          // tamaño del reproductor en el mundo, en CSS px (4:3 como la tele; YouTube pide ≥ 200x200)
+  var FACE_TIME = 0.85; // segundos que dura su cara en la nieve
   var PX_H = 360;
   var OVERSIZE = 1.08;     // un poco más grande que el hueco: los bordes del hueco siempre muestran video
   var ID_RE = /^[A-Za-z0-9_-]{11}$/;
@@ -288,6 +289,22 @@
         if (g.collapsed) { st = Math.max(st, 0.25); }
       }
       if (this.dropout > 0) { this.dropout -= dt; st = Math.max(st, 0.85); }
+      // Su cara en la nieve: el director la deja lista y aparece cuando miras la tele de cerca (menos de un segundo).
+      if (this.faceArmed && g.state === 'playing' && mode === 'mundo' && !hidden && !behind && distance < 8 && this.power &&
+          !g.bosque.outside && !g.pasillo.inside && this._onScreen(g.player.camera)) {
+        this.faceArmed = false;
+        this.face = FACE_TIME;
+        this.faceSeen = (this.faceSeen || 0) + 1;
+        g.audio.buzz();
+        g.dread = Math.min(1, g.dread + 0.08);
+      }
+      var faceAmt = 0;
+      if (this.face > 0) {
+        this.face = Math.max(0, this.face - dt);
+        faceAmt = Math.max(0, Math.min(1, this.face / 0.15, (FACE_TIME - this.face) / 0.08));
+        st = Math.max(st, 0.6);
+      }
+      u.uFace.value = faceAmt;
       u.uOpen.value = hasVideo && this.power ? 1 : 0;
       u.uStatic.value = !this.power ? 0 : (hasVideo ? st : 0.55);
       this.tv.led.material.uniforms.uEmissive.value = this.power ? 1.3 : 0;
@@ -308,6 +325,11 @@
       }
     }
   }
+
+  Tele.prototype._onScreen = function (camera) {
+    var p = (this._ndc = this._ndc || new THREE.Vector3()).setFromMatrixPosition(this.tv.anchor.matrixWorld).project(camera);
+    return Math.abs(p.x) < 0.85 && Math.abs(p.y) < 0.85 && p.z < 1;
+  };
 
   Tele.parseLink = parseLink;
   MR.Tele = Tele;
