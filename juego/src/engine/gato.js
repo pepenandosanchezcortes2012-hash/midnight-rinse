@@ -6,6 +6,9 @@
  * - ALARMA: si el Cliente Inmóvil está de pie a menos de 3.5 m del gato, se eriza, bufa (del lado en que está)
  *   y huye al punto más lejano. Si oyes un bufido, él está ahí.
  * - No sale al bosque (llueve): mientras estás afuera te espera sentado junto a la puerta y maúlla al verte volver.
+ * - RUTINA por hora del turno (sin quitarle la alarma, que manda): 01:10 duerme en la secadora · 01:40 come de su
+ *   plato · 02:00 se acicala · 02:30 mira por la puerta de vidrio (y a veces la rasca) · 03:00 hace la ronda ·
+ *   03:30 te sigue · 04:00 siesta en el banco o el mostrador · 04:30 se queda cerca de ti.
  * Animación a pasos (12 Hz), como las manos.
  */
 (function (MR) {
@@ -18,10 +21,26 @@
   // Red de puntos en el piso y lugares altos (con el punto desde el que se salta).
   var NODES = {
     F1: [-5.0, -2.0], F2: [-1.0, -2.0], F3: [2.5, -2.5], F4: [2.0, 2.6], F5: [4.8, 0.2],
-    F6: [-6.2, 3.7], F7: [-4.4, -0.3], F8: [1.6, -3.6], F9: [7.2, 1.0]
+    F6: [-6.2, 3.7], F7: [-4.4, -0.3], F8: [1.6, -3.6], F9: [7.2, 1.0],
+    PL: [7.25, 0.75],   // frente a su plato
+    PU: [0.6, 3.9]      // frente a la puerta de vidrio
   };
+  var BOWL = [7.25, 0.42];
+  var PATROL = ['F1', 'F6', 'F4', 'F5', 'F9', 'F3', 'F8', 'F2', 'F7'];
+
+  /** Qué toca a esta hora del turno (minutos desde la medianoche). */
+  function routine(min) {
+    if (min < 100) { return 'dormir'; }      // 01:10–01:40
+    if (min < 120) { return 'comer'; }       // 01:40–02:00
+    if (min < 150) { return 'acicalarse'; }  // 02:00–02:30
+    if (min < 180) { return 'ventana'; }     // 02:30–03:00
+    if (min < 210) { return 'ronda'; }       // 03:00–03:30
+    if (min < 240) { return 'seguirte'; }    // 03:30–04:00
+    if (min < 270) { return 'siesta'; }      // 04:00–04:30
+    return 'cerca';                          // 04:30–05:12
+  }
   var EDGES = [['F1', 'F2'], ['F2', 'F3'], ['F3', 'F5'], ['F5', 'F4'], ['F4', 'F2'], ['F1', 'F7'], ['F7', 'F2'],
-    ['F1', 'F6'], ['F4', 'F6'], ['F8', 'F3'], ['F8', 'F2'], ['F5', 'F9']];
+    ['F1', 'F6'], ['F4', 'F6'], ['F8', 'F3'], ['F8', 'F2'], ['F5', 'F9'], ['F9', 'PL'], ['F4', 'PU']];
   var PERCHES = {
     secadora: { from: 'F8', pos: [1.5, 1.3, -4.62], rot: 0 },
     banco: { from: 'F7', pos: [-4.65, 0.51, 0.6], rot: Math.PI },
@@ -103,6 +122,11 @@
         legs.push(leg);
       });
       w.scene.add(g);
+      // Su plato, junto al mostrador.
+      var bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.08, 0.05, 10), R.material({ texture: 'white', color: 0x8a3a32 }));
+      bowl.position.set(BOWL[0], 0.025, BOWL[1]);
+      w.add(bowl);
+      w.box(0.15, 0.01, 0.15, R.material({ texture: 'white', color: 0x7a5a3a }), BOWL[0], 0.052, BOWL[1]);
       // Tocar cualquier parte del gato = acariciarlo.
       g.traverse(function (o) { if (o.isMesh) { w.interactive(o, 'gato'); } });
       this.mesh = { root: g, body: body, head: head, eyes: eyes, tail: tail, legs: legs };
@@ -199,7 +223,11 @@
       switch (this.state) {
         case 'duerme':
         case 'sentado':
+        case 'come':
+        case 'acicala':
+        case 'ventana':
           this.timer -= dt;
+          this._activity(dt);
           if (this.timer <= 0) { this._decide(); }
           break;
         case 'eriza':
@@ -218,20 +246,86 @@
       this._pose(dt, tick);
     }
 
-    _decide() {
-      if (this.perch) { this._jump(null, true); return; }   // bajar de donde esté
-      var r = Math.random();
-      if (r < 0.25) {
-        // Subir a un lugar alto (si él no está sentado en el banco).
-        var h = this.game.horror;
-        var options = Object.keys(PERCHES).filter(function (k) { return !(k === 'banco' && h.customer.present && h.customer.seated); });
-        var target = U.pick(options);
-        if (this.node === PERCHES[target].from) { this._jump(target, false); } else { this.pendingPerch = target; this._goTo(PERCHES[target].from); }
-        return;
+    /** Sube a un lugar alto (caminando primero hasta el punto desde el que se salta). */
+    _toPerch(target) {
+      if (this.perch === target) { this.state = 'duerme'; this.timer = U.rand(25, 45); return; }
+      if (this.perch) { this._jump(null, true); return; }
+      if (this.node === PERCHES[target].from) { this._jump(target, false); return; }
+      this.pendingPerch = target;
+      this._goTo(PERCHES[target].from);
+    }
+
+    /** El punto de la red más cercano a ti. */
+    _nearPlayerNode() {
+      var p = this.game.player.pos;
+      var best = this.node;
+      var bd = 1e9;
+      Object.keys(NODES).forEach(function (k) {
+        var d = Math.hypot(NODES[k][0] - p.x, NODES[k][1] - p.z);
+        if (d < bd) { bd = d; best = k; }
+      });
+      return best;
+    }
+
+    /** Lo que hace mientras come, se acicala o mira por la puerta: sonidos chiquitos y el rasguño de la puerta. */
+    _activity(dt) {
+      var g = this.game;
+      if (this.state === 'come' && Math.random() < dt * 2.5) { g.audio.croqueta(this._pan()); }
+      if (this.state === 'ventana') {
+        this.scratch = (this.scratch || 0) - dt;
+        if (this.scratch <= 0) {
+          this.scratch = U.rand(5, 9);
+          this.scratching = 0.8;
+          g.audio.rasguno(this._pan());
+          if (!this.scratchSeen && U.distXZ(g.player.pos, this.mesh.root.position) < 4.5) {
+            this.scratchSeen = true;
+            g.ui.subtitle('(Pelusa rasca la puerta de vidrio, despacio, mirando hacia afuera.)', 4);
+          }
+        }
+        this.scratching = Math.max(0, (this.scratching || 0) - dt);
       }
-      if (r < 0.45) { this.state = 'sentado'; this.timer = U.rand(6, 14); return; }
-      var keys = Object.keys(NODES).filter(function (k) { return k !== this.node; }, this);
-      this._goTo(U.pick(keys));
+    }
+
+    /** Qué hacer ahora: lo decide la rutina de la hora (antes era al azar). */
+    _decide() {
+      var act = this.activity = routine(this.game.minutes);
+      var sleeps = act === 'dormir' || act === 'siesta';
+      if (this.perch && !sleeps) { this._jump(null, true); return; }   // bajar de donde esté
+      var h = this.game.horror;
+      var root = this.mesh.root;
+      switch (act) {
+        case 'dormir': this._toPerch('secadora'); return;
+        case 'siesta': {
+          var benchBusy = h.customer.present && h.customer.seated;
+          this._toPerch(this.perch === 'mostrador' || benchBusy ? 'mostrador' : 'banco');
+          return;
+        }
+        case 'comer':
+          if (this.node === 'PL') {
+            this.state = 'come'; this.timer = U.rand(12, 20);
+            root.rotation.y = Math.atan2(BOWL[0] - root.position.x, BOWL[1] - root.position.z);
+            return;
+          }
+          this._goTo('PL'); return;
+        case 'acicalarse': this.state = 'acicala'; this.timer = U.rand(10, 18); return;
+        case 'ventana':
+          if (this.node === 'PU') { this.state = 'ventana'; this.timer = U.rand(15, 25); root.rotation.y = 0; this.scratch = U.rand(1, 3); return; }
+          this._goTo('PU'); return;
+        case 'ronda': {
+          this.patrol = ((this.patrol || 0) + 1) % PATROL.length;
+          var next = PATROL[this.patrol] === this.node ? PATROL[(this.patrol + 1) % PATROL.length] : PATROL[this.patrol];
+          this._goTo(next);
+          return;
+        }
+        default: {
+          // Seguirte / quedarse cerca: va al punto más cercano a ti y se sienta a mirarte.
+          var near = U.distXZ(this.game.player.pos, root.position) < 1.8;
+          var target = this._nearPlayerNode();
+          if (near || target === this.node) { this.state = 'sentado'; this.timer = U.rand(3, 7); return; }
+          this._goTo(target);
+          return;
+        }
+      }
     }
 
     _walk(dt) {
@@ -244,7 +338,7 @@
           return;
         }
         this.state = 'sentado';
-        this.timer = U.rand(5, 12);
+        this.timer = U.rand(1, 2.5); // al llegar, enseguida sigue con su rutina
         return;
       }
       var n = NODES[this.route[0]];
@@ -335,6 +429,8 @@
       var m = this.mesh;
       var s = this.state;
       var walking = s === 'camina' || s === 'huye';
+      // Comer, acicalarse y mirar por la puerta son variantes de estar sentado.
+      if (s === 'come' || s === 'acicala' || s === 'ventana') { this._poseActivity(s); return; }
       m.legs.forEach(function (leg, i) { leg.visible = s !== 'duerme'; leg.rotation.x = walking ? Math.sin(this.phase + (i % 2 ? Math.PI : 0) + (i > 1 ? Math.PI / 2 : 0)) * 0.6 : 0; }, this);
       m.eyes.visible = s !== 'duerme';
       if (s === 'duerme') {
@@ -365,6 +461,33 @@
         m.head.rotation.set(0, 0, 0);
         m.tail.rotation.set(-0.5 + Math.sin(this.phase * 0.5) * 0.2, 0, 0);
         m.body.scale.set(1, 1, 1);
+      }
+    }
+
+    _poseActivity(s) {
+      var m = this.mesh;
+      m.legs.forEach(function (leg) { leg.visible = true; leg.rotation.x = 0; });
+      m.eyes.visible = s !== 'acicala';
+      m.body.position.y = 0.17;
+      m.body.scale.set(1, 1, 1);
+      this.phase += 0.4;
+      if (s === 'come') {
+        m.body.rotation.x = 0.25;
+        m.head.position.set(0, -0.02, 0.21);
+        m.head.rotation.set(0.7 + Math.sin(this.phase * 2) * 0.12, 0, 0);
+        m.tail.rotation.set(-0.3, Math.sin(this.phase * 0.5) * 0.4, 0);
+      } else if (s === 'acicala') {
+        m.body.rotation.x = -0.55;
+        m.head.position.set(0, 0.1, 0.19);
+        m.head.rotation.set(0.9, 0.5 + Math.sin(this.phase * 1.5) * 0.15, 0);
+        m.legs[0].rotation.x = -1.2 + Math.sin(this.phase * 1.5) * 0.2; // la pata delantera, a la cara
+        m.tail.rotation.set(0.9, 0.6, 0);
+      } else {
+        m.body.rotation.x = -0.55;
+        m.head.position.set(0, 0.1, 0.19);
+        m.head.rotation.set(0.25, Math.sin(this.phase * 0.2) * 0.25, 0);
+        m.tail.rotation.set(0.6, Math.sin(this.phase * 0.7) * 0.7, 0); // la cola barre el piso
+        if (this.scratching > 0) { m.legs[0].rotation.x = -1.4 + Math.sin(this.phase * 6) * 0.4; m.legs[1].rotation.x = -1.4 - Math.sin(this.phase * 6) * 0.4; }
       }
     }
 

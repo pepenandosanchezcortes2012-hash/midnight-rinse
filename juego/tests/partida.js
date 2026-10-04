@@ -1041,6 +1041,41 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Pelusa sigue su rutina: come, se acicala, mira por la puerta, hace la ronda, te sigue y duerme la siesta', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var cat = g.gato;
+      start(ctx);
+      g.horror.customer.present = false;
+      function at(min, frames) {
+        g.minutes = min;
+        cat.timer = 0;
+        for (var i = 0; i < frames; i += 1) { g.minutes = min; step(ctx, 1); }
+      }
+      var seen = {};
+      at(105, 30 * 40);
+      check(cat.activity === 'comer' && cat.state === 'come' && cat.node === 'PL', 'no fue a comer (' + cat.activity + ', ' + cat.state + ', ' + cat.node + ')');
+      seen.comer = true;
+      at(135, 30 * 2);
+      check(cat.state === 'acicala', 'no se acicaló (' + cat.state + ')');
+      at(165, 30 * 40);
+      check(cat.state === 'ventana' && cat.node === 'PU', 'no fue a la puerta (' + cat.state + ', ' + cat.node + ')');
+      var ry = cat.mesh.root.rotation.y;
+      check(Math.abs(ry) < 0.01, 'no mira hacia la puerta');
+      at(195, 30 * 20);
+      var nodes = {};
+      for (var k = 0; k < 30 * 30; k += 1) { g.minutes = 195; step(ctx, 1); nodes[cat.node] = true; }
+      check(Object.keys(nodes).length >= 3, 'la ronda no recorre la sala (' + Object.keys(nodes).join(',') + ')');
+      g.player.pos.set(-5.5, 0, 3.4);
+      at(225, 30 * 40);
+      var d = Math.hypot(cat.mesh.root.position.x - g.player.pos.x, cat.mesh.root.position.z - g.player.pos.z);
+      check(d < 2.6, 'no te siguió (' + d.toFixed(1) + ' m)');
+      at(255, 30 * 45);
+      check(cat.state === 'duerme' && (cat.perch === 'banco' || cat.perch === 'mostrador'), 'no se fue a la siesta (' + cat.state + ', ' + cat.perch + ')');
+      noErrors(ctx);
+      return 'come → acicala → puerta → ronda (' + Object.keys(nodes).length + ' puntos) → te sigue (' + d.toFixed(1) + ' m) → siesta en ' + cat.perch;
+    }],
+
     ['Blackwood: una cara blanca pone a lavar y se va; una máscara negra deja una orden impresa', async function () {
       var ctx = await load();
       var g = ctx.g;

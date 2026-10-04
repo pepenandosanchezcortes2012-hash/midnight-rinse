@@ -577,6 +577,11 @@ El proyecto pasó por dos etapas:
 - **Decisiones y lo verificado:** en `CHANGELOG.md`. Revisado con capturas: la máscara facetada junto al mostrador y la cara lisa frente a las lavadoras.
 - Prueba nueva. Resultado: 64/64.
 
+## 75. Sprint 2a: la rutina de Pelusa
+- **La rutina** decide qué hace Pelusa según la hora (antes era al azar), y la alarma cuando él está cerca sigue mandando: 01:10 duerme en la secadora · 01:40 come de su plato (nuevo, junto al mostrador; crujido de croqueta) · 02:00 se acicala (la pata a la cara) · 02:30 se sienta frente a la puerta de vidrio a mirar afuera, con la cola barriendo el piso, y cada tanto la rasca («(Pelusa rasca la puerta de vidrio, despacio, mirando hacia afuera.)»; la orden N.º 31 de la Administración habla de esto) · 03:00 hace la ronda por la sala · 03:30 te sigue · 04:00 siesta en el banco (o en el mostrador si él está sentado ahí) · 04:30 se queda cerca de ti.
+- **Red de caminos:** dos puntos nuevos (el plato y la puerta).
+- Prueba nueva (las ocho franjas). Resultado: 65/65.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

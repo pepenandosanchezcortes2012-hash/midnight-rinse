@@ -304,6 +304,15 @@
     obturador() { this._tone(2600, 0.02, 0.12, 'square'); this._burst(this.white, 'bandpass', 2400, 1.1, 0.07, 0.14); }
 
     click() { this._tone(1900, 0.018, 0.09, 'square'); this._burst(this.white, 'highpass', 3000, 0.7, 0.02, 0.05); }
+    /** Pelusa come: un crujido chiquito de croqueta. */
+    croqueta(pan) { this._burst(this.white, 'bandpass', 2600, 1.6, 0.035, 0.05, pan); }
+
+    /** Pelusa rasca la puerta de vidrio: tres arañazos suaves. */
+    rasguno(pan) {
+      var self = this;
+      [0, 140, 290].forEach(function (t) { setTimeout(function () { self._burst(self.white, 'highpass', 4200, 0.8, 0.09, 0.05, pan); }, t); });
+    }
+
     /** Pasos amortiguados en el techo: seis golpes graves que cruzan de un lado al otro. */
     pasosArriba() {
       var self = this;

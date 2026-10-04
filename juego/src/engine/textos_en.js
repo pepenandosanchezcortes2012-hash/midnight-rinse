@@ -709,5 +709,7 @@ MR.TEXTOS_EN = {
  "ORDEN N.º {n}": "ORDER No. {n}",
  "Orden {n} · ???": "Order {n} · ???",
  "ADMINISTRACIÓN DEL EMBALSE · ORDEN IMPRESA": "RESERVOIR ADMINISTRATION · PRINTED ORDER",
- "Blackwood: de noche vienen a lavar las caras blancas. Y las máscaras negras dejan órdenes.": "Blackwood: at night the white faces come to do their laundry. And the black masks leave orders."
+ "Blackwood: de noche vienen a lavar las caras blancas. Y las máscaras negras dejan órdenes.": "Blackwood: at night the white faces come to do their laundry. And the black masks leave orders.",
+ "(Pelusa rasca la puerta de vidrio, despacio, mirando hacia afuera.)": "(Pelusa scratches at the glass door, slowly, looking outside.)",
+ "Pelusa tiene rutina: come, se acicala, mira por la puerta, hace su ronda y, al final, no se te despega.": "Pelusa has a routine: eats, grooms, watches through the door, makes its rounds and, by the end, won't leave your side."
 };

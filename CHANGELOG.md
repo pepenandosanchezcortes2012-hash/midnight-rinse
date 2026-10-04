@@ -28,3 +28,10 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 ### Calidad
 - Pruebas: 64/64 partidas (nueva: «Blackwood: una cara blanca pone a lavar y se va; una máscara negra deja una orden impresa»), núcleo JS y Python, rutas sin 404 y versión en vivo.
 - Textos: 708 (todos traducidos).
+
+## Sprint 2 — Pelusa con rutinas y una ciudad con vida
+
+### Pelusa (hecho)
+- Rutina por hora: dormir, comer (plato nuevo), acicalarse, mirar y rascar la puerta de vidrio, ronda, seguirte, siesta y quedarse cerca.
+- **Decisión:** la alarma (bufar y huir cuando él está cerca) sigue mandando sobre la rutina. Es la mecánica que avisa dónde está él, y no se toca.
+- **Decisión:** la rutina va en el orden de la noche para que se note la progresión: primero tranquila y doméstica, después vigilante (la puerta, la ronda) y al final pegada a ti.
