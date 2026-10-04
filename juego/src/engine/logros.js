@@ -29,6 +29,7 @@
     { id: 'secreto', titulo: 'La hora verdadera', desc: 'Dile la hora que nadie más sabe.', oculto: true },
     { id: 'reflejo', titulo: 'Detrás de ti', desc: 'Velo en el vidrio de una lavadora.', oculto: true },
     { id: 'objetos', titulo: 'Objetos perdidos', desc: 'Encuentra seis objetos olvidados en las lavadoras.' },
+    { id: 'campana', titulo: 'La campana de la escuela', desc: 'Hazla sonar en el bosque que no termina.', oculto: true },
     { id: 'solitaria', titulo: 'La secadora solitaria', desc: 'Encuéntrala en el bosque que no termina.', oculto: true },
     { id: 'album', titulo: 'Álbum de la noche', desc: 'Saca fotos en la lavandería, el bosque y el pasillo en un mismo turno.' },
     { id: 'espejo', titulo: 'Dos en el espejo', desc: 'Míralo detrás de ti en el espejo del pasillo.', oculto: true },

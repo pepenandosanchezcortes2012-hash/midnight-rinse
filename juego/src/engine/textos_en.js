@@ -749,5 +749,11 @@ MR.TEXTOS_EN = {
  "Lo que dijeron las caras blancas": "What the white faces said",
  "{q} · ???": "{q} · ???",
  "UNA CARA BLANCA, BAJITO": "A WHITE FACE, SOFTLY",
- "Puedes conversar con las caras blancas. Pregúntales por 1986.": "You can talk with the white faces. Ask them about 1986."
+ "Puedes conversar con las caras blancas. Pregúntales por 1986.": "You can talk with the white faces. Ask them about 1986.",
+ "(La campana suena como si estuviera bajo el agua. Muy lejos, otra le contesta.)": "(The bell rings as if it were underwater. Far away, another one answers.)",
+ "(La campana todavía vibra. Del otro lado, nadie contesta otra vez.)": "(The bell is still trembling. On the other side, no one answers again.)",
+ "(Alguien escribió en el vaho del vidrio: «1986». Está al revés. Lo escribieron desde afuera.)": "(Someone wrote in the fog on the glass: “1986”. It's backwards. It was written from outside.)",
+ "La campana de la escuela": "The school bell",
+ "Hazla sonar en el bosque que no termina.": "Ring it in the forest that never ends.",
+ "Si el bosque te devuelve tres veces, escucharás una campana. Y alguien escribe en el vaho de la vidriera.": "If the forest sends you back three times, you will hear a bell. And someone writes in the fog on the window."
 };

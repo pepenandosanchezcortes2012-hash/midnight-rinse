@@ -139,6 +139,7 @@
       if (kind === 'visitante') { this.game.clientela.talk(target.index); return; }
       if (kind === 'vidriera') { this.game.ciudad.look(); return; }
       if (kind === 'secadoraSola') { this.game.bosque.touchLoneDryer(); return; }
+      if (kind === 'campana') { this.game.bosque.ringBell(); return; }
       if (kind === 'cesto') {
         var full = this.game.horror.basketLevel || 0;
         this.say('cesto', full ? '(Están tibios. Ninguno tiene nombre todavía.)' : '(Un cesto de plástico vacío.)', 3.5);

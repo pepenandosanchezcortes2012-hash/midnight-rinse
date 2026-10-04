@@ -181,6 +181,11 @@
       var g = this.game;
       var inSala = !g.bosque.outside && !g.pasillo.inside;
       // Llegadas programadas (solo si estás en la sala: si no, esperan a que vuelvas).
+      // Después de tocar la campana: una máscara viene a dejar la orden de la campana sumergida.
+      if (this.pendingOrder !== undefined && this.pendingOrder !== null && inSala && this.visitors.length < 2) {
+        var forced = this.spawn('mascara');
+        if (forced) { forced.forcedOrder = this.pendingOrder; this.pendingOrder = null; }
+      }
       while (this.plan.length && g.minutes >= this.plan[0].at && inSala && this.visitors.length < 2) {
         var p = this.plan.shift();
         if (!this.spawn(p.kind) && p.kind === 'cara') { /* todas las lavadoras ocupadas: hoy no vino */ }
@@ -253,7 +258,7 @@
         this._say(v, 'llegada');
       } else {
         // La impresora entrega una orden de la Administración del Embalse.
-        var l = this._line('ordenes');
+        var l = v.forcedOrder !== undefined ? { text: MR.HISTORIA.blackwood.ordenes[v.forcedOrder], index: v.forcedOrder } : this._line('ordenes');
         this.ordersToday += 1;
         g.gameplay.printReceipt();
         if (g.archivo) { g.archivo.order(l.index); }

@@ -602,6 +602,11 @@ El proyecto pasó por dos etapas:
 - **Detalle:** el extractor de textos ya no toma `'Digit'` ni `'Numpad'` como texto.
 - Prueba nueva. Resultado: 68/68.
 
+## 79. Sprint 4b: la campana de la escuela y el «1986» en el vaho
+- **Secreto: la campana de la escuela de Blackwood.** En la tercera vuelta del bosque infinito aparece un marco de madera con una campana de bronce, en un claro propio. Al tocarla suena como bajo el agua (parciales de campana con filtro grave) y, lejos, otra contesta. Logro oculto «La campana de la escuela». Al volver a la lavandería, una máscara negra viene enseguida a dejar la **ORDEN N.º 22** («Mantenga las cuatro secadoras apagadas si escucha sonar la campana sumergida»): causa y efecto, sin explicación.
+- **Anomalía: «1986» en el vaho.** Desde las 02:30, una vez por noche, con la vidriera fuera de vista (zona de oclusión nueva), aparece un parche de vaho con «1986» escrito con el dedo, **en espejo**, porque lo escribieron desde la calle. Al verlo: «(Alguien escribió en el vaho del vidrio: «1986». Está al revés. Lo escribieron desde afuera.)». La lluvia lo borra cuando dejas de mirar, 40 s después.
+- Revisado con capturas (la campana entre los pinos; el «1986» invertido sobre la avenida encendida). Pruebas nuevas. Resultado: 70/70.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

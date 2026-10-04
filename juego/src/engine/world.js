@@ -739,6 +739,22 @@
       group.add(inert(rain));
       this.add(group);
       // Vidrieras: tocar la ventana = mirar afuera (ciudad.js dice lo que ves).
+      // «1986» escrito con el dedo en el vaho, del lado de afuera (horror.js, «vidriera_escrita»): se lee al revés.
+      var fogTex = MR.Textures.dynamic(64, 32);
+      var fx = fogTex.ctx;
+      fx.fillStyle = '#4a545a'; fx.fillRect(0, 0, 64, 32);
+      fx.save(); fx.translate(64, 0); fx.scale(-1, 1); // en espejo: lo escribieron desde la calle
+      fx.strokeStyle = '#0d1012'; fx.lineWidth = 3; fx.lineCap = 'round'; fx.font = 'bold 22px monospace';
+      fx.strokeText('1986', 6, 25);
+      fx.restore();
+      fogTex.texture.needsUpdate = true;
+      var writing = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.45), R.material({ map: fogTex.texture, emissive: 0.35 }));
+      writing.rotation.y = Math.PI;
+      writing.position.set(4.7, 1.7, 5.035);
+      writing.visible = false;
+      this.add(inert(writing));
+      this.fogWriting = writing;
+
       var nothing = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }); // no pinta nada, pero se puede tocar
       [[-6.45, 2.3], [5.55, 4.1]].forEach(function (wdef) {
         var pane = new THREE.Mesh(new THREE.PlaneGeometry(wdef[1], 1.5), nothing);
@@ -785,6 +801,7 @@
         almacen: { center: new V3(-7.3, 1.2, 3.5), radius: 1.2 },
         cambiador: { center: new V3(-4.5, 0.8, 4.6), radius: 0.8 },
         cesto: { center: new V3(0.45, 0.4, -3.75), radius: 0.6 },
+        vidriera: { center: new V3(4.7, 1.7, 5.0), radius: 0.7 },
         puerta_trasera: { center: new V3(6.8, 1.1, -4.7), radius: 0.9 }
       };
     }
@@ -1141,6 +1158,7 @@
         if (Math.hypot(x - 6, z - 140.5) < 5.2) { continue; }
         if (Math.hypot(x + 4.5, z - 103.2) < 1.5) { continue; }
         if (Math.hypot(x + 14.5, z - 129) < 2.6) { continue; }      // el claro de la secadora solitaria
+        if (Math.hypot(x - 8.5, z - 121) < 2.4) { continue; }       // la campana de la escuela
         var blocked = false;
         for (var n = 0; n < forestAnchors.length && !blocked; n += 1) {
           var an = this.anchors[forestAnchors[n]];
@@ -1188,6 +1206,24 @@
       [loneBody, lonePort].forEach(function (o) { this.interactive(o, 'secadoraSola'); }, this);
       lone.visible = false;
       this.add(lone);
+      // La campana de la escuela de Blackwood (tercera vuelta del bosque infinito): marco de madera y campana de bronce.
+      var bell = new THREE.Group();
+      bell.position.set(8.5, 0, 121);
+      bell.rotation.y = -0.4;
+      var frameMat = R.material({ texture: 'corteza', color: 0x6a5240 });
+      this.box(0.12, 2.3, 0.12, frameMat, -0.6, 1.15, 0, bell);
+      this.box(0.12, 2.3, 0.12, frameMat, 0.6, 1.15, 0, bell);
+      this.box(1.4, 0.12, 0.14, frameMat, 0, 2.3, 0, bell);
+      var bronze = R.material({ texture: 'metal', color: 0x8a6a3a, emissive: 0.15 });
+      var cup = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.26, 0.4, 10, 1, true), bronze);
+      cup.position.set(0, 1.98, 0);
+      bell.add(cup);
+      var cap = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.06, 10), bronze);
+      cap.position.set(0, 2.2, 0);
+      bell.add(cap);
+      [cup, cap].concat(bell.children.slice(0, 3)).forEach(function (o) { this.interactive(o, 'campana'); }, this);
+      bell.visible = false;
+      this.add(bell);
 
       // Bordes: no se puede salir del bosque (ni rodear la fachada). El bosque infinito (bosque.js) te devuelve antes.
       this.collider(-23.5, -22.2, 98, 152);
@@ -1205,6 +1241,8 @@
         lampHead: lampHead,
         lamp2: lamp2,
         loneDryer: lone,
+        bell: bell,
+        bellCup: cup,
         lonePort: lonePort,
         clothesline: line,
         shirts: shirts,

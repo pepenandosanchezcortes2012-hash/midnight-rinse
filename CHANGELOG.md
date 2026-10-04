@@ -59,3 +59,9 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - Las caras blancas conversan: cuatro preguntas, tres respuestas posibles cada una (Gemini, revisado) y una despedida. Lo que te dijeron queda en el Archivo.
 - **Decisión:** se reusa la lista de respuestas de la pregunta de la hora, sin una interfaz nueva, para no sumar HUD. Esa pregunta siempre gana: él es el centro del turno.
 - **Decisión:** las respuestas sobre él solo repiten las reglas (no mirarlo, la respuesta segura) y dan pistas («llegó antes del agua»). Nunca explican quién es.
+
+### Secretos y anomalías (hecho)
+- **La campana de la escuela** (tercera vuelta del bosque): suena bajo el agua, otra contesta y, al volver, una máscara deja la ORDEN N.º 22. Logro oculto.
+- **«1986» en el vaho**, escrito al revés desde afuera, sin que lo veas escribirse.
+- **Decisión:** la campana y la orden 22 se conectan por causa y efecto, y nunca se explica. Es la regla del canon: cada cosa agrega una pista, nunca la respuesta.
+- **Decisión:** el «1986» va en espejo. Es un detalle que se entiende solo («desde afuera»), sin texto de más.

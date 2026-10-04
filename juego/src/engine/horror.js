@@ -116,6 +116,7 @@
       this._stepsAbove(dt, player);
       this._basket(player);
       this._hat(player);
+      this._writing(player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -155,6 +156,7 @@
         if (!this.coinDone && g.gameplay.coins > 0 && g.gameplay.trayCoins === 0) { table.push(['moneda_canto', 0.8]); }
         if (!this.clothesDone) { table.push(['ropa_doblada', 0.8]); }
         if ((this.basketLevel || 0) < 3 && g.flags.customerSeen) { table.push(['cesto', 1]); }
+        if (!this.writingDone && g.minutes > 150) { table.push(['vidriera_escrita', 0.8]); }
         if (g.flags.customerSeen && !g.tele.faceArmed && (g.tele.faceSeen || 0) < 2) { table.push(['tele_rostro', 1.2]); }
         if (this.customer.present) {
           table.push(['huellas', 1], ['mano_vidrio', 1]);
@@ -206,6 +208,7 @@
         case 'moneda_canto': this.schedule('moneda_canto', 'cambiador', 1); break;
         case 'ropa_doblada': this.schedule('ropa_doblada', 'mostrador', 1); break;
         case 'cesto': this.schedule('cesto', 'cesto', 1); break;
+        case 'vidriera_escrita': this.schedule('vidriera_escrita', 'vidriera', 1); break;
         case 'tele_rostro': this.game.tele.faceArmed = true; break; // sale cuando mires la tele (tele.js)
         case 'espejo': this.game.espejo.armed = true; break; // sale cuando te mires en el espejo (espejo.js)
         case 'golpe_secadora': this.schedule('golpe_secadora', 'secadoras', 1, { index: Math.floor(Math.random() * 4) }); break;
@@ -327,6 +330,14 @@
         case 'bombilla':
           this.flickers[0] = Math.max(this.flickers[0], U.rand(0.5, 1.6));
           audio.buzz();
+          break;
+        case 'vidriera_escrita':
+          // Mientras no mirabas la vidriera: alguien escribió en el vaho, desde afuera.
+          if (this.writingDone) { break; }
+          this.writingDone = true;
+          w.fogWriting.visible = true;
+          this.writingSeenAt = null;
+          audio.lint();
           break;
         case 'cesto': {
           // Mientras no lo mirabas, el cesto tiene un uniforme más (tres en total). Roce de tela.
@@ -530,6 +541,20 @@
       if (!force && Math.random() < 0.5) { return; }
       this.printsFromForest = true;
       this.schedule('huellas', 'banco', 1);
+    }
+
+    /** El «1986» en el vaho: al verlo, el subtítulo; la lluvia lo borra cuando dejas de mirar (40 s después). */
+    _writing(player) {
+      var wr = this.world.fogWriting;
+      if (!wr.visible) { return; }
+      var seen = this.zoneVisible('vidriera') > 0.4 && U.distXZ(player.pos, wr.position) < 5;
+      if (seen && this.writingSeenAt === null) {
+        this.writingSeenAt = this.clock;
+        this.game.ui.subtitle('(Alguien escribió en el vaho del vidrio: «1986». Está al revés. Lo escribieron desde afuera.)', 6);
+        this.game.dread = Math.min(1, this.game.dread + 0.05);
+      } else if (!seen && this.writingSeenAt !== null && this.clock - this.writingSeenAt > 40) {
+        wr.visible = false; // la lluvia lo borró
+      }
     }
 
     /** Su sombrero en el banco: al verlo, el subtítulo; en el siguiente parpadeo ya no está. */

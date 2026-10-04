@@ -98,6 +98,7 @@
       this._lamp2(dt);
       this._infinite();
       this._loneDryer(dt);
+      if (this.bellSwing > 0) { this.bellSwing = Math.max(0, this.bellSwing - dt); this.f.bellCup.rotation.z = Math.sin(this.bellSwing * 9) * this.bellSwing * 0.25; }
       g.audio.setForest(1 - g.dread * 0.6);
       this._clothesline(dt);
       // Ambiente: un búho de vez en cuando (las ramas que crujen las programa el director del horror).
@@ -149,6 +150,7 @@
       this.wraps = (this.wraps || 0) + 1;
       if (this.wraps === 1) { g.ui.subtitle('(Parpadeas. El sendero sigue igual que hace un momento. Demasiado igual.)', 5); }
       if (this.wraps === 2) { this.f.loneDryer.visible = true; }
+      if (this.wraps === 3) { this.f.bell.visible = true; }
       g.dread = Math.min(1, g.dread + 0.03);
     }
 
@@ -165,6 +167,23 @@
         g.audio.buzz();
         g.ui.subtitle('(Entre los pinos hay una secadora sola, encendida. El tambor gira. No tiene cable.)', 5);
       }
+    }
+
+    /**
+     * La campana de la escuela (secreto): suena como bajo el agua y, lejos, otra contesta. Al volver a la lavandería,
+     * una máscara negra viene a dejar la ORDEN N.º 22 (la de la campana sumergida).
+     */
+    ringBell() {
+      var g = this.game;
+      g.audio.campana();
+      this.bellSwing = 1.2;
+      if (this.bellRung) { g.gameplay.say('campana', '(La campana todavía vibra. Del otro lado, nadie contesta otra vez.)', 4); return; }
+      this.bellRung = true;
+      g.ui.subtitle('(La campana suena como si estuviera bajo el agua. Muy lejos, otra le contesta.)', 6);
+      g.dread = Math.min(1, g.dread + 0.05);
+      if (g.logros) { g.logros.unlock('campana'); }
+      var ordenes = MR.HISTORIA.blackwood.ordenes;
+      for (var i = 0; i < ordenes.length; i += 1) { if (/N\.º 22/.test(ordenes[i])) { g.clientela.pendingOrder = i; } }
     }
 
     /** Tocar la secadora solitaria. */

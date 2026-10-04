@@ -379,6 +379,32 @@
       }
     }
 
+    /** La campana de la escuela bajo el agua: parciales de campana, filtro grave y, lejos, otra que contesta. */
+    campana() {
+      var ctx = this.ctx;
+      if (!ctx) { return; }
+      var self = this;
+      function ring(when, vol, pan) {
+        var t = ctx.currentTime + when;
+        var lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = 650;
+        var p = ctx.createStereoPanner();
+        p.pan.value = pan;
+        lp.connect(p); p.connect(self.master);
+        [1, 2.0, 2.76, 5.4].forEach(function (k, i) {
+          var o = ctx.createOscillator();
+          o.frequency.value = 196 * k;
+          var g = ctx.createGain();
+          g.gain.setValueAtTime(vol / (i + 1), t);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + 6 - i);
+          o.connect(g); g.connect(lp);
+          o.start(t); o.stop(t + 6.1);
+        });
+      }
+      ring(0, 0.16, 0);
+      ring(2.2, 0.035, 0.8); // la que contesta, lejos
+    }
+
     /** El murmullo de la avenida por la vidriera (0 = nada, 1 = tráfico de la una de la mañana). */
     setCity(level) {
       if (!this.cityLoop || !this.ctx) { return; }

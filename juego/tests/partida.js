@@ -1041,6 +1041,64 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Secreto: la campana de la escuela (tercera vuelta) trae a una máscara con la ORDEN N.º 22', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var b = g.bosque;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = [];
+      b.go(); step(ctx, 40);
+      b.wraps = 2;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(2, 0, 147.9); g.player.yaw = Math.PI; g.player.pitch = 0;
+      for (var i = 0; i < 90 && b.wraps < 3; i += 1) { g.input.keys.add('KeyW'); step(ctx, 1); }
+      g.input.keys.delete('KeyW');
+      check(b.wraps === 3 && g.world.forest.bell.visible, 'no apareció la campana en la tercera vuelta');
+      b.ringBell();
+      check(sub().indexOf('bajo el agua') >= 0 && g.logros.has('campana'), 'la campana no sonó');
+      check(g.clientela.pendingOrder !== null && g.clientela.pendingOrder !== undefined, 'no quedó pendiente la orden');
+      b.go(); step(ctx, 40);
+      g.player.pos.set(-5, 0, -1);
+      var m = g.clientela.visitors.filter(function (v) { return v.kind === 'mascara'; })[0];
+      check(m && m.forcedOrder !== undefined, 'no vino la máscara');
+      for (var k = 0; k < 30 * 30 && m.state !== 'llego'; k += 1) { step(ctx, 1); }
+      await wait(1100);
+      check(sub().indexOf('N.º 22') >= 0, 'la orden no fue la 22 (' + sub().slice(-90) + ')');
+      noErrors(ctx);
+      return 'campana → ORDEN N.º 22';
+    }],
+
+    ['Anomalía: «1986» en el vaho de la vidriera, escrito desde afuera, solo sin mirar', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var wr = g.world.fogWriting;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = [];
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(4.2, 0, 2.6);
+      var toward = Math.atan2(-(wr.position.x - 4.2), -(wr.position.z - 2.6));
+      g.player.yaw = toward; g.player.pitch = 0.1;
+      step(ctx, 2);
+      check(h.zoneVisible('vidriera') > 0.4, 'la vidriera no estaba a la vista');
+      h.schedule('vidriera_escrita', 'vidriera', 1);
+      step(ctx, 20);
+      check(!wr.visible, 'apareció mientras mirabas');
+      g.player.yaw = toward + Math.PI;
+      step(ctx, 20);
+      check(wr.visible, 'no apareció de espaldas');
+      g.player.yaw = toward;
+      step(ctx, 3);
+      check(sub().indexOf('Lo escribieron desde afuera') >= 0, 'no lo notó');
+      g.player.yaw = toward + Math.PI;
+      step(ctx, 30 * 42);
+      check(!wr.visible, 'la lluvia no lo borró');
+      noErrors(ctx);
+      return 'aparece a espaldas, se nota y se borra';
+    }],
+
     ['Conversar con una cara blanca: preguntas, respuestas, el Archivo y la prioridad de la pregunta de la hora', async function () {
       var ctx = await load();
       var g = ctx.g;
