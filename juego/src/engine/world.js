@@ -93,6 +93,7 @@
       this._tv();
       this._cafe();
       this._entrance();
+      this._city();
       this._closet();
       this._puddles();
       this._customer();
@@ -142,13 +143,25 @@
       right.rotation.y = -Math.PI / 2;
       right.position.set(8, 1.5, 0);
       this.add(right);
-      // Pared frontal con hueco para las puertas de vidrio (x ∈ [-1.6, 1.6]).
-      [[-4.8, 6.4], [4.8, 6.4]].forEach(function (p) {
-        var wall = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(p[1], 3, 6, 3), p[1] / 2, 1), m.wall);
+      // Pared frontal con hueco para las puertas de vidrio (x ∈ [-1.6, 1.6]) y dos vidrieras a la avenida:
+      // x ∈ [-7.6, -5.3] y x ∈ [3.5, 7.6], de 0.95 m a 2.45 m de alto (la ciudad, en _city()).
+      [[-8, -7.6, 0, 3], [-7.6, -5.3, 0, 0.95], [-7.6, -5.3, 2.45, 3], [-5.3, -1.6, 0, 3],
+        [1.6, 3.5, 0, 3], [3.5, 7.6, 0, 0.95], [3.5, 7.6, 2.45, 3], [7.6, 8, 0, 3]].forEach(function (r) {
+        var w = r[1] - r[0];
+        var h = r[3] - r[2];
+        var wall = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(w, h, Math.max(1, Math.round(w)), Math.max(1, Math.round(h))), w / 2, h / 3), m.wall);
         wall.rotation.y = Math.PI;
-        wall.position.set(p[0], 1.5, 5);
+        wall.position.set((r[0] + r[1]) / 2, (r[2] + r[3]) / 2, 5);
         this.add(wall);
       }, this);
+      // Marcos de las vidrieras (y el parteluz de la grande).
+      [[-6.45, 2.3], [5.55, 4.1]].forEach(function (v) {
+        this.box(v[1] + 0.1, 0.08, 0.16, m.metal, v[0], 0.95, 4.97);
+        this.box(v[1] + 0.1, 0.06, 0.1, m.metal, v[0], 2.45, 4.98);
+        this.box(0.06, 1.5, 0.1, m.metal, v[0] - v[1] / 2, 1.7, 4.98);
+        this.box(0.06, 1.5, 0.1, m.metal, v[0] + v[1] / 2, 1.7, 4.98);
+      }, this);
+      this.box(0.06, 1.5, 0.1, m.metal, 5.55, 1.7, 4.98);
       var lintel = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(3.2, 0.6, 3, 1), 1.6, 0.2), m.wall);
       lintel.rotation.y = Math.PI;
       lintel.position.set(0, 2.7, 5);
@@ -592,6 +605,155 @@
         entrada: { x: 0.4, z: 4.3, rot: Math.PI, seated: false, zone: 'entrada' },
         almacen: { x: -7.3, z: 3.5, rot: -Math.PI / 2, seated: false, zone: 'almacen' }
       };
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * La avenida por la vidriera (canon §7): Blackwood como era antes del agua. Vereda, asfalto mojado, edificios con
+     * ventanas encendidas, letreros, farolas, autos, gente con paraguas y lluvia. ciudad.js la anima con la hora: se
+     * vacía, se apaga y, desde las 03:30, el agua sube y la tapa. Lo fijo va unido en pocas geometrías (celular).
+     */
+    _city() {
+      var R = this.retro;
+      var m = this.mat;
+      var self = this;
+      var M = THREE.Matrix4;
+      var box = new THREE.BoxGeometry(1, 1, 1);
+      function part(list, x, y, z, w, h, d, su, sv) { list.push({ geo: box, matrix: new M().makeTranslation(x, y, z).multiply(new M().makeScale(w, h, d)), su: su || 1, sv: sv || 1 }); }
+      var group = new THREE.Group();
+      // Veredas y cordones (concreto) · asfalto · líneas.
+      var walk = [];
+      part(walk, 0, 0.06, 5.8, 44, 0.12, 1.6, 22, 1);
+      part(walk, 0, 0.06, 11.8, 44, 0.12, 1.6, 22, 1);
+      group.add(inert(new THREE.Mesh(mergeParts(walk), R.material({ texture: 'concreto', color: 0x8d9093 }))));
+      var road = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(44, 4.4, 22, 2), 22, 2), R.material({ texture: 'concreto', color: 0x2c2f33, emissive: 0.06 }));
+      road.rotation.x = -Math.PI / 2;
+      road.position.set(0, 0.01, 8.8);
+      group.add(inert(road));
+      var marks = [];
+      for (var mx = -21; mx <= 21; mx += 3) { part(marks, mx, 0.015, 8.8, 1.4, 0.01, 0.1); }
+      group.add(inert(new THREE.Mesh(mergeParts(marks), R.material({ texture: 'white', color: 0xb8b49a, emissive: 0.2 }))));
+      // Edificios (ladrillo) con su fachada pintada en un lienzo: ventanas que se apagan una por una (ciudad.js).
+      var bricks = [];
+      var facades = [];
+      [[-13, 6.5, 8], [-6.8, 5.5, 6], [-1.2, 5.2, 9], [4.4, 5.6, 7], [10.2, 5.8, 10], [16.2, 6, 7]].forEach(function (b, i) {
+        part(bricks, b[0], b[2] / 2, 15.6, b[1], b[2], 5, b[1] / 2, b[2] / 2);
+        var tex = MR.Textures.dynamic(32, 40);
+        var face = new THREE.Mesh(new THREE.PlaneGeometry(b[1] - 0.2, b[2] - 0.4), R.material({ map: tex.texture, emissive: 1.25 }));
+        face.rotation.y = Math.PI;
+        face.position.set(b[0], b[2] / 2 - 0.1, 13.09);
+        group.add(inert(face));
+        var windows = [];
+        for (var r = 0; r < 5; r += 1) { for (var c = 0; c < 4; c += 1) { windows.push({ r: r, c: c, at: Math.random() }); } }
+        facades.push({ tex: tex, windows: windows, lit: -1, seed: i });
+      });
+      group.add(inert(new THREE.Mesh(mergeParts(bricks), R.material({ texture: 'ladrillo', color: 0x6a5048 }))));
+      // Letreros: la farmacia de don Pedro (la cruz verde nunca se apaga), la tortillería y el hotel.
+      function sign(text, color, x, y, w) {
+        var t = MR.Textures.dynamic(64, 16);
+        var c = t.ctx;
+        c.fillStyle = '#0b0d0c'; c.fillRect(0, 0, 64, 16);
+        c.fillStyle = color; c.font = 'bold 9px monospace'; c.textAlign = 'center'; c.fillText(text, 32, 12);
+        t.texture.needsUpdate = true;
+        var mat = R.material({ map: t.texture, emissive: 1.3 });
+        var s = new THREE.Mesh(new THREE.PlaneGeometry(w, w / 4), mat);
+        s.rotation.y = Math.PI;
+        s.position.set(x, y, 12.95);
+        group.add(inert(s));
+        return mat;
+      }
+      var signs = {
+        farmacia: sign(MR.t('+ FARMACIA'), '#5dff8a', -1.2, 3.1, 3.2), // la tortillería y el hotel no se traducen
+        tortilleria: sign('TORTILLERIA', '#ffcf5a', 4.4, 2.9, 3.0),
+        hotel: sign('HOTEL', '#ff6a8a', -6.8, 4.2, 2.4)
+      };
+      // Farolas (postes de metal y focos de sodio) con su charco de luz en el piso.
+      var poles = [];
+      var heads = [];
+      var pools = [];
+      [-12, -4, 4, 12].forEach(function (x) {
+        part(poles, x, 2.0, 11.4, 0.12, 4.0, 0.12);
+        part(poles, x, 3.98, 11.1, 0.06, 0.06, 0.6);
+        part(heads, x, 3.92, 10.85, 0.34, 0.1, 0.24);
+        pools.push({ geo: new THREE.CircleGeometry(1.6, 10), matrix: new M().makeTranslation(x, 0.02, 10.6).multiply(new M().makeRotationX(-Math.PI / 2)) });
+      });
+      group.add(inert(new THREE.Mesh(mergeParts(poles), R.material({ texture: 'metal' })))); // material propio: su niebla es otra
+      var lampMat = R.material({ texture: 'white', color: 0xffb060, emissive: 1.3 });
+      group.add(inert(new THREE.Mesh(mergeParts(heads), lampMat)));
+      var poolMat = R.material({ texture: 'water', color: 0xb07a3a, emissive: 0.55 });
+      group.add(inert(new THREE.Mesh(mergeParts(pools), poolMat)));
+      // El agua que sube (empieza escondida bajo el asfalto).
+      var water = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(44, 9, 22, 4), 16, 3), R.material({ texture: 'water', color: 0x3a5560, emissive: 0.25 }));
+      water.rotation.x = -Math.PI / 2;
+      water.position.set(0, -0.6, 9.4);
+      group.add(inert(water));
+      // Autos (cuerpo, cabina y luces) y gente con paraguas: se reciclan (ciudad.js los mueve).
+      var cars = [];
+      [0x5a6b7a, 0x7a4a3a, 0xb5b0a0].forEach(function (col) {
+        var car = new THREE.Group();
+        var body = [];
+        part(body, 0, 0.42, 0, 2.0, 0.5, 0.86);
+        part(body, -0.1, 0.84, 0, 1.0, 0.38, 0.76);
+        car.add(inert(new THREE.Mesh(mergeParts(body), R.material({ texture: 'metal', color: col }))));
+        var head = [];
+        part(head, 1.0, 0.45, 0.28, 0.04, 0.12, 0.16);
+        part(head, 1.0, 0.45, -0.28, 0.04, 0.12, 0.16);
+        car.add(inert(new THREE.Mesh(mergeParts(head), R.material({ texture: 'white', color: 0xfff4d8, emissive: 1.6 }))));
+        var tail = [];
+        part(tail, -1.0, 0.48, 0.3, 0.04, 0.1, 0.14);
+        part(tail, -1.0, 0.48, -0.3, 0.04, 0.1, 0.14);
+        car.add(inert(new THREE.Mesh(mergeParts(tail), R.material({ texture: 'white', color: 0xff3a2a, emissive: 1.4 }))));
+        car.visible = false;
+        group.add(car);
+        cars.push({ group: car, active: false });
+      });
+      var people = [];
+      [0x3a3f47, 0x5a4c3e, 0x4a5a4f].forEach(function (col, i) {
+        var p = new THREE.Group();
+        var body = [];
+        part(body, -0.08, 0.42, 0, 0.12, 0.84, 0.14);
+        part(body, 0.08, 0.42, 0, 0.12, 0.84, 0.14);
+        part(body, 0, 1.16, 0, 0.4, 0.66, 0.26);
+        part(body, 0, 1.6, 0, 0.18, 0.22, 0.18);
+        p.add(inert(new THREE.Mesh(mergeParts(body), R.material({ texture: 'coat', color: col }))));
+        var umb = new THREE.Mesh(new THREE.ConeGeometry(0.55, 0.24, 8), R.material({ texture: 'white', color: [0x1c1d22, 0x6b2a2a, 0x223a5a][i] }));
+        umb.position.y = 1.98;
+        p.add(inert(umb));
+        p.visible = false;
+        group.add(p);
+        people.push({ group: p, active: false });
+      });
+      // Lluvia afuera: líneas de 1 px que caen entre la vidriera y la avenida (una sola geometría).
+      var drops = 180;
+      var rp = new Float32Array(drops * 6);
+      for (var k = 0; k < drops; k += 1) {
+        var rx = -10 + Math.random() * 20;
+        var ry = Math.random() * 4.5;
+        var rz = 5.3 + Math.random() * 5.5;
+        rp.set([rx, ry, rz, rx, ry - 0.35, rz], k * 6);
+      }
+      var rainGeo = new THREE.BufferGeometry();
+      rainGeo.setAttribute('position', new THREE.BufferAttribute(rp, 3));
+      var rain = new THREE.LineSegments(rainGeo, new THREE.LineBasicMaterial({ color: 0x8fa3ad }));
+      rain.frustumCulled = false;
+      group.add(inert(rain));
+      this.add(group);
+      // Vidrieras: tocar la ventana = mirar afuera (ciudad.js dice lo que ves).
+      var nothing = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }); // no pinta nada, pero se puede tocar
+      [[-6.45, 2.3], [5.55, 4.1]].forEach(function (wdef) {
+        var pane = new THREE.Mesh(new THREE.PlaneGeometry(wdef[1], 1.5), nothing);
+        pane.rotation.y = Math.PI;
+        pane.position.set(wdef[0], 1.7, 5.02);
+        group.add(pane);
+        self.interactive(pane, 'vidriera');
+      });
+      // Niebla propia para la avenida (más lejana que la de la sala): que se vea viva por la vidriera.
+      group.traverse(function (o) {
+        if (o.material && o.material.uniforms && o.material.uniforms.uFogNear) {
+          o.material.uniforms = Object.assign({}, o.material.uniforms, { uFogNear: { value: 9 }, uFogFar: { value: 34 } });
+        }
+      });
+      this.city = { group: group, facades: facades, signs: signs, lampMat: lampMat, poolMat: poolMat, water: water, cars: cars, people: people, rain: rain };
     }
 
     _lights() {

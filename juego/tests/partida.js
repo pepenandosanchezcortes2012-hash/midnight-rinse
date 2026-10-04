@@ -1041,6 +1041,45 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['La avenida por la vidriera: autos y gente a la 01:20; vacía y bajo el agua a las 04:50', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var city = g.world.city;
+      var ci = g.ciudad;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = [];
+      var cars = 0, people = 0;
+      for (var i = 0; i < 30 * 60; i += 1) {
+        g.minutes = 80; step(ctx, 1);
+        if (city.cars.some(function (c) { return c.active; })) { cars += 1; }
+        if (city.people.some(function (p) { return p.active; })) { people += 1; }
+      }
+      check(cars > 0 && people > 0, 'la avenida no tiene vida a la 01:20 (autos ' + cars + ', gente ' + people + ')');
+      check(city.water.position.y < -0.5, 'el agua ya estaba arriba');
+      var lit = city.facades.reduce(function (s, f) { return s + f.lit; }, 0);
+      ci.look();
+      check(sub().indexOf('despierta') >= 0, 'la vidriera no dice lo que se ve temprano');
+      // 04:50: vacía, apagada y con agua.
+      for (var j = 0; j < 30 * 8; j += 1) { g.minutes = 290; step(ctx, 1); }
+      city.cars.forEach(function (c) { c.active = false; c.group.visible = false; });
+      city.people.forEach(function (p) { p.active = false; p.group.visible = false; });
+      for (var k = 0; k < 30 * 40; k += 1) { g.minutes = 290; step(ctx, 1); }
+      check(!city.cars.some(function (c) { return c.active; }) && !city.people.some(function (p) { return p.active; }), 'siguió pasando gente o autos');
+      check(city.water.position.y > 0.5, 'el agua no subió (' + city.water.position.y.toFixed(2) + ')');
+      var litLate = city.facades.reduce(function (s, f) { return s + f.lit; }, 0);
+      check(litLate < lit, 'no se apagaron ventanas (' + lit + ' → ' + litLate + ')');
+      check(city.signs.tortilleria.uniforms.uEmissive.value === 0, 'la tortillería sigue encendida');
+      g.gameplay.messageCooldown = {};
+      ci.look();
+      check(sub().indexOf('El agua ya cubre') >= 0, 'la vidriera no dice lo del agua');
+      // En el bosque no se dibuja.
+      g.bosque.go(); step(ctx, 40);
+      check(!city.group.visible, 'la avenida se dibuja estando en el bosque');
+      noErrors(ctx);
+      return 'ventanas ' + lit + ' → ' + litLate + ' · agua a ' + city.water.position.y.toFixed(2) + ' m';
+    }],
+
     ['Pelusa sigue su rutina: come, se acicala, mira por la puerta, hace la ronda, te sigue y duerme la siesta', async function () {
       var ctx = await load();
       var g = ctx.g;

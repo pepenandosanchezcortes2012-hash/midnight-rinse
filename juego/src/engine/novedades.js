@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 28, texto: 'Dos vidrieras a la avenida: Blackwood está viva a la una de la mañana. Mira cómo cambia.' },
     { id: 27, texto: 'Pelusa tiene rutina: come, se acicala, mira por la puerta, hace su ronda y, al final, no se te despega.' },
     { id: 26, texto: 'Blackwood: de noche vienen a lavar las caras blancas. Y las máscaras negras dejan órdenes.' },
     { id: 25, texto: 'Con luna llena, alguien tendió ropa en el bosque.' },

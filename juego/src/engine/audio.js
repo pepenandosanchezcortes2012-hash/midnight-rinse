@@ -101,6 +101,7 @@
       // Ambiente: lluvia, zumbido fluorescente, drone.
       this.rain = this._loop(this.white, [['bandpass', 1500, 0.6], ['lowpass', 3800, 0.7]], 0.05);
       this.wind = this._loop(this.brown, [['lowpass', 260, 0.7]], 0.05); // retumbo; afuera, viento
+      this.cityLoop = this._loop(this.brown, [['bandpass', 140, 0.6], ['lowpass', 500, 0.7]], 0); // la avenida (ciudad.js)
       this.hum = ctx.createGain();
       this.hum.gain.value = 0.012;
       this.hum.connect(this.master);
@@ -304,6 +305,32 @@
     obturador() { this._tone(2600, 0.02, 0.12, 'square'); this._burst(this.white, 'bandpass', 2400, 1.1, 0.07, 0.14); }
 
     click() { this._tone(1900, 0.018, 0.09, 'square'); this._burst(this.white, 'highpass', 3000, 0.7, 0.02, 0.05); }
+    /** El murmullo de la avenida por la vidriera (0 = nada, 1 = tráfico de la una de la mañana). */
+    setCity(level) {
+      if (!this.cityLoop || !this.ctx) { return; }
+      this.cityLoop.gain.gain.setTargetAtTime(level * 0.05, this.ctx.currentTime, 0.6);
+    }
+
+    /** Un auto que pasa por la avenida mojada: siseo de llantas que cruza de un lado al otro (dir 1 = a la derecha). */
+    autoPasa(dir) {
+      var ctx = this.ctx;
+      if (!ctx) { return; }
+      var t = ctx.currentTime;
+      var src = ctx.createBufferSource();
+      src.buffer = this.white;
+      var f = ctx.createBiquadFilter();
+      f.type = 'bandpass'; f.frequency.value = 700; f.Q.value = 0.7;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0005, t);
+      g.gain.exponentialRampToValueAtTime(0.1, t + 0.9);
+      g.gain.exponentialRampToValueAtTime(0.0005, t + 1.9);
+      var p = ctx.createStereoPanner();
+      p.pan.setValueAtTime(-dir * 0.9, t);
+      p.pan.linearRampToValueAtTime(dir * 0.9, t + 1.9);
+      src.connect(f); f.connect(g); g.connect(p); p.connect(this.master);
+      src.start(t, Math.random()); src.stop(t + 2.0);
+    }
+
     /** Pelusa come: un crujido chiquito de croqueta. */
     croqueta(pan) { this._burst(this.white, 'bandpass', 2600, 1.6, 0.035, 0.05, pan); }
 

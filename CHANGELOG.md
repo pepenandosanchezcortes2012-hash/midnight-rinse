@@ -35,3 +35,11 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - Rutina por hora: dormir, comer (plato nuevo), acicalarse, mirar y rascar la puerta de vidrio, ronda, seguirte, siesta y quedarse cerca.
 - **Decisión:** la alarma (bufar y huir cuando él está cerca) sigue mandando sobre la rutina. Es la mecánica que avisa dónde está él, y no se toca.
 - **Decisión:** la rutina va en el orden de la noche para que se note la progresión: primero tranquila y doméstica, después vigilante (la puerta, la ronda) y al final pegada a ti.
+
+### La avenida (hecho)
+- Dos vidrieras a la avenida de Blackwood: autos, gente con paraguas, ventanas, letreros y lluvia. Se vacía con la hora y, desde las 03:30, se inunda.
+- **Decisión:** la puerta de vidrio sigue llevando al bosque, y por las vidrieras se ve la ciudad. El contraste es a propósito: Blackwood es un lugar que no es lo que parece desde adentro.
+- **Decisión:** la ciudad se inunda despacio en vez de desaparecer de golpe. Es la forma «tranqui» de contar el embalse de 1986, sin sustos.
+- **Decisión:** vidrieras sin vidrio dibujado. Un vidrio semitransparente agujerearía el lienzo (el canal alfa se usa para la tele), así que se ven abiertas, con lluvia afuera.
+- **Decisión:** solo el letrero de la farmacia se traduce en la versión en inglés. La tortillería y el hotel son nombres del lugar.
+- Rendimiento: 151 llamadas de dibujo en la sala (umbral 220).

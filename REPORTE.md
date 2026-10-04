@@ -582,6 +582,13 @@ El proyecto pasó por dos etapas:
 - **Red de caminos:** dos puntos nuevos (el plato y la puerta).
 - Prueba nueva (las ocho franjas). Resultado: 65/65.
 
+## 76. Sprint 2b: la avenida con vida por la vidriera
+- **La pared del frente** tiene ahora dos vidrieras abiertas, con marco: x ∈ [−7,6; −5,3] y x ∈ [3,5; 7,6], de 0,95 a 2,45 m. Las caras de pared se rearmaron alrededor, sin tocar el cambiador, la máquina de café ni el teléfono. El jugador sigue sin poder salir por ahí (límites de la sala).
+- **`world._city()`:** veredas, asfalto mojado con líneas, seis edificios de ladrillo con fachada pintada en lienzo (ventanas que se encienden y apagan; alguna con luz azul de tele), letreros («+ FARMACIA», que se traduce; «TORTILLERIA» y «HOTEL», que no), cuatro farolas con su charco de luz, tres autos con faros y luces traseras, tres personas con paraguas, lluvia (líneas de 1 px en una sola geometría) y el agua que sube. Lo fijo va unido por material. La avenida tiene su propia niebla (9–34 m) para verse viva a través de la de la sala (5–17 m), con materiales propios para no tocar los compartidos. Las vidrieras se tocan sin dibujarse (`colorWrite: false`).
+- **`ciudad.js`:** la vida va de 1 a 0 entre las 01:50 y las 04:00 (autos cada 5 a 30 s, gente cada 6 a 25 s, ventanas y letreros que se apagan; la farmacia nunca). El agua sube de 03:30 a 05:00 hasta cubrir la vereda. Hay murmullo de tráfico según la vida y siseo de llantas que cruza de un lado al otro. Tocar la vidriera describe lo que se ve, según la hora. En el bosque y el pasillo no se dibuja.
+- **Rendimiento:** sala de 142 a 151 llamadas de dibujo (umbral 220). Revisado con capturas a la 01:20 y a las 04:50.
+- Prueba nueva. Resultado: 66/66.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

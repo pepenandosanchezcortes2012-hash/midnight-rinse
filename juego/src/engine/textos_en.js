@@ -711,5 +711,11 @@ MR.TEXTOS_EN = {
  "ADMINISTRACIÓN DEL EMBALSE · ORDEN IMPRESA": "RESERVOIR ADMINISTRATION · PRINTED ORDER",
  "Blackwood: de noche vienen a lavar las caras blancas. Y las máscaras negras dejan órdenes.": "Blackwood: at night the white faces come to do their laundry. And the black masks leave orders.",
  "(Pelusa rasca la puerta de vidrio, despacio, mirando hacia afuera.)": "(Pelusa scratches at the glass door, slowly, looking outside.)",
- "Pelusa tiene rutina: come, se acicala, mira por la puerta, hace su ronda y, al final, no se te despega.": "Pelusa has a routine: eats, grooms, watches through the door, makes its rounds and, by the end, won't leave your side."
+ "Pelusa tiene rutina: come, se acicala, mira por la puerta, hace su ronda y, al final, no se te despega.": "Pelusa has a routine: eats, grooms, watches through the door, makes its rounds and, by the end, won't leave your side.",
+ "(El agua ya cubre la calle. Las farolas siguen encendidas debajo, y la cruz de la farmacia también.)": "(The water already covers the street. The streetlights are still on underneath, and so is the pharmacy cross.)",
+ "(Afuera, la avenida sigue despierta: un taxi, alguien con paraguas, la farmacia de don Pedro encendida.)": "(Outside, the avenue is still awake: a taxi, someone with an umbrella, Don Pedro's pharmacy lit up.)",
+ "(La avenida se va quedando sola. Las ventanas de enfrente se apagan una por una.)": "(The avenue is emptying out. The windows across the street go dark one by one.)",
+ "(Ya no pasa nadie. Solo la farmacia sigue encendida, como si esperara a alguien.)": "(No one passes anymore. Only the pharmacy is still lit, as if waiting for someone.)",
+ "+ FARMACIA": "+ PHARMACY",
+ "Dos vidrieras a la avenida: Blackwood está viva a la una de la mañana. Mira cómo cambia.": "Two windows onto the avenue: Blackwood is alive at one in the morning. Watch how it changes."
 };

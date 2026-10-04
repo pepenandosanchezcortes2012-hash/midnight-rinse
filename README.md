@@ -109,12 +109,16 @@ La Espuma está en la orilla del embalse que cubrió **Blackwood** en 1986. De n
 
 Los diálogos los escribió Gemini y se revisaron contra el canon. Detalles en `CHANGELOG.md`.
 
+### La avenida por la vidriera
+La lavandería tiene dos vidrieras a la avenida de Blackwood. A la 01:10 está viva: autos que pasan sobre el asfalto mojado (se oyen cruzar de un lado al otro), gente con paraguas, ventanas encendidas, la tortillería, el hotel y la farmacia de don Pedro. A medida que avanza el turno se vacía y se apaga, y desde las 03:30 el agua sube por la calle. Toca la vidriera para mirar afuera. Por la puerta de vidrio, en cambio, se sale al bosque.
+
 ### Pelusa, el gato
 Un gato negro vive en la lavandería.
 - **Su vida:** duerme sobre una secadora, el banco o el mostrador, baja de un salto, camina por la sala y se sienta a mirarte.
 - **Acariciarlo:** tócalo y ronronea; baja el pavor y el teléfono o el control vibra con el ronroneo.
 - **Es tu alarma:** si el Cliente Inmóvil anda de pie cerca de él, **se eriza, bufa del lado donde está y huye**.
 - **El bosque:** no sale, porque llueve; te espera junto a la puerta y maúlla cuando vuelves.
+- **Su rutina:** duerme, come de su plato, se acicala, mira (y rasca) la puerta de vidrio, hace la ronda, te sigue y duerme la siesta, según la hora.
 
 ### El bosque
 Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en la pausa, y sales a un bosque de pinos bajo la lluvia.
