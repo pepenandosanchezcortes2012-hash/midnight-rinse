@@ -1040,6 +1040,26 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Continuar turno: recuerda las fotos del álbum y los sustos ya vistos', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      start(ctx);
+      step(ctx, 5);
+      check(g.fotos.take({ ghost: false }), 'no sacó la foto');
+      g.tele.faceSeen = 2; g.espejo.ghosts = 1; g.espejo.noticed = true;
+      check(ctx.w.MR.Partida.save(g), 'no guardó el turno');
+      ctx = await load();
+      ctx.w.document.getElementById('btn-continuar-turno').click();
+      step(ctx, 2);
+      g = ctx.g;
+      check(g.state === 'playing', 'no continuó');
+      check(g.fotos.areas.sala && g.fotos.tonight === 1, 'olvidó las fotos del turno (' + JSON.stringify(g.fotos.areas) + ')');
+      check(g.tele.faceSeen === 2 && g.espejo.ghosts === 1 && g.espejo.noticed, 'olvidó los sustos ya vistos');
+      ctx.w.MR.Partida.clear();
+      noErrors(ctx);
+      return 'fotos y sustos restaurados';
+    }],
+
     ['Fotos: el álbum de la noche y Pelusa (que siempre sale movida)', async function () {
       var ctx = await load();
       var g = ctx.g;

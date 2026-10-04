@@ -40,7 +40,10 @@
         },
         horror: { present: h.customer.present, anchor: h.customer.anchor, nextEvent: h.nextEvent },
         gato: { pets: g.gato.pets, hisses: g.gato.hisses },
-        pasillo: { unlocked: g.pasillo.unlocked, inside: g.pasillo.inside, visits: g.pasillo.visits, fuses: g.pasillo.fuses }
+        pasillo: { unlocked: g.pasillo.unlocked, inside: g.pasillo.inside, visits: g.pasillo.visits, fuses: g.pasillo.fuses },
+        // Lo del turno que no debe repetirse ni perderse al continuar: sustos ya vistos y las fotos del «Álbum».
+        sustos: { tele: g.tele.faceSeen || 0, espejo: g.espejo.ghosts, espejoVisto: g.espejo.noticed },
+        fotos: { areas: copy(g.fotos.areas), tonight: g.fotos.tonight, ghosts: g.fotos.ghosts, gato: g.fotos.catSeen }
       };
     },
 
@@ -115,6 +118,13 @@
       }
       g.gato.pets = d.gato.pets;
       g.gato.hisses = d.gato.hisses;
+      if (d.sustos) { g.tele.faceSeen = d.sustos.tele; g.espejo.ghosts = d.sustos.espejo; g.espejo.noticed = !!d.sustos.espejoVisto; }
+      if (d.fotos) {
+        g.fotos.areas = copy(d.fotos.areas) || {};
+        g.fotos.tonight = d.fotos.tonight || 0;
+        g.fotos.ghosts = d.fotos.ghosts || 0;
+        g.fotos.catSeen = !!d.fotos.gato;
+      }
       // Jugador (después del cruce, que lo pone en la puerta).
       g.player.pos.set(d.player.x, 0, d.player.z);
       g.player.yaw = d.player.yaw;

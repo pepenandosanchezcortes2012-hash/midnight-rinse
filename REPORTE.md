@@ -489,6 +489,10 @@ El proyecto pasó por dos etapas:
 - **Novedades:** se agregaron esta noche y el «Álbum de la noche».
 - Prueba nueva: 4 relámpagos en un minuto de juego y luces que parpadean con el trueno. Resultado: 51/51.
 
+## 61. «Continuar turno» recuerda lo nuevo
+- **El autoguardado** ahora incluye los sustos ya vistos esa noche (la cara en la tele, él en el espejo, si ya notaste que no te reflejas) y las fotos del turno (lugares del «Álbum», cuántas, si ya salió él o Pelusa). Al recargar, los sustos no pasan de su límite por noche y no se pierde el progreso del álbum. Los guardados viejos siguen sirviendo: los campos nuevos son opcionales.
+- Prueba nueva. Resultado: 52/52.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
