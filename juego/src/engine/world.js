@@ -293,6 +293,17 @@
       this.box(0.08, 0.02, 0.03, this.mat.metal, 0, 0.015, -0.14, board);
       this.interactive(board, 'tareas');
       this.interactive(sheet, 'tareas');
+      // «Ropa doblada»: una pila que nadie trajo (horror.js la muestra cuando no miras el mostrador).
+      var clothes = new THREE.Group();
+      clothes.position.set(6.5, 1.05, 1.8);
+      clothes.rotation.y = -0.12;
+      [[0x5d6670, 0], [0x8a9bb0, 0.02], [0xc9bfa8, -0.015]].forEach(function (c, i) {
+        var fold = this.box(0.3, 0.05, 0.24, this.retro.material({ texture: 'white', color: c[0] }), c[1], 0.025 + i * 0.05, c[1] * 0.6, clothes);
+        this.interactive(fold, 'ropaDoblada');
+      }, this);
+      clothes.visible = false;
+      this.add(clothes);
+      this.foldedClothes = clothes;
       // La hoja del registro sobre el mostrador.
       var note = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.28), m.paper);
       note.rotation.x = -Math.PI / 2;

@@ -515,6 +515,11 @@ El proyecto pasó por dos etapas:
 - **Proceso:** salió del backlog (idea del motor creativo, aprobada por el ciclo autónomo por ser chica y no tocar el canon). Pasó por el verificador del canon y por la auditoría PS1, y tiene su traducción y su línea en «Novedades».
 - **Prueba nueva:** no ocurre mientras miras el cambiador, sí de espaldas; el subtítulo solo sale al verla; recogerla devuelve la moneda; no se repite la misma noche. Resultado: 54/54.
 
+## 64. Microanomalía «Ropa doblada»
+- **Qué pasa:** una vez por noche, con el mostrador fuera de vista (despachador de oclusión), aparece una pila de ropa doblada (gris, azul y beige) entre la impresora y la hoja del registro, con dos roces de tela a tus espaldas. Al verla de cerca: «(Alguien dobló ropa que nadie trajo. Huele a tu suavizante.)». Al tocarla: «(Está tibia, recién salida de una secadora que nadie usó.)». Tres parpadeos después de verla, ya no está. Nunca en Paseo.
+- **Proceso:** segunda idea del backlog. Pasó por el canon y la auditoría PS1, y la revisé con una captura en Chrome sin ventana: la pila queda apoyada en el mostrador.
+- Prueba nueva (no aparece mientras miras; sí de espaldas; aviso; tacto; tres parpadeos). Resultado: 55/55.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

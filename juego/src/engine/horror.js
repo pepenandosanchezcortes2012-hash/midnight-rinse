@@ -111,6 +111,7 @@
       this._reflection(dt, player);
       this._watch(dt, player);
       this._edgeCoin(dt, player);
+      this._clothes(player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -148,6 +149,7 @@
           ['radio_sola', 1], ['golpe_secadora', 1.5], ['mano_lavadora', 1]];
         if (!g.gameplay.phoneRinging && g.minutes > MR.Config.PHONE_RINGS + 10) { table.push(['telefono_breve', 0.8]); }
         if (!this.coinDone && g.gameplay.coins > 0 && g.gameplay.trayCoins === 0) { table.push(['moneda_canto', 0.8]); }
+        if (!this.clothesDone) { table.push(['ropa_doblada', 0.8]); }
         if (g.flags.customerSeen && !g.tele.faceArmed && (g.tele.faceSeen || 0) < 2) { table.push(['tele_rostro', 1.2]); }
         if (this.customer.present) {
           table.push(['huellas', 1], ['mano_vidrio', 1]);
@@ -197,6 +199,7 @@
         }
         case 'radio_sola': this.schedule('radio_sola', 'mostrador', 1); break;
         case 'moneda_canto': this.schedule('moneda_canto', 'cambiador', 1); break;
+        case 'ropa_doblada': this.schedule('ropa_doblada', 'mostrador', 1); break;
         case 'tele_rostro': this.game.tele.faceArmed = true; break; // sale cuando mires la tele (tele.js)
         case 'espejo': this.game.espejo.armed = true; break; // sale cuando te mires en el espejo (espejo.js)
         case 'golpe_secadora': this.schedule('golpe_secadora', 'secadoras', 1, { index: Math.floor(Math.random() * 4) }); break;
@@ -318,6 +321,16 @@
           this.flickers[0] = Math.max(this.flickers[0], U.rand(0.5, 1.6));
           audio.buzz();
           break;
+        case 'ropa_doblada': {
+          // Mientras no mirabas el mostrador: una pila de ropa doblada que nadie trajo; roce de tela a tus espaldas.
+          if (this.clothesDone) { break; }
+          this.clothesDone = true;
+          w.foldedClothes.visible = true;
+          audio.lint();
+          setTimeout(function () { audio.lint(); }, 380);
+          g.dread = Math.min(1, g.dread + 0.03);
+          break;
+        }
         case 'moneda_canto': {
           // Mientras no mirabas: te falta una moneda y en la bandeja hay una parada de canto, girando apenas.
           if (this.coinDone || gp.coins <= 0 || gp.trayCoins > 0) { break; }
@@ -490,6 +503,22 @@
      * Te observa: mientras su zona no está a la vista (o parpadeas), su cabeza gira despacio hacia ti
      * (hasta ±75°). Cuando vuelves a mirarlo, la cabeza se queda donde quedó.
      */
+    /** La ropa doblada: al verla de cerca, el subtítulo; tres parpadeos después, ya no está. */
+    _clothes(player) {
+      var pile = this.world.foldedClothes;
+      if (!pile.visible) { return; }
+      if (!this.clothesNoticed) {
+        if (this.zoneVisible('mostrador') > 0.5 && U.distXZ(player.pos, pile.position) < 3.5) {
+          this.clothesNoticed = true;
+          this.clothesBlinks = player.blinkCount;
+          this.game.ui.subtitle('(Alguien dobló ropa que nadie trajo. Huele a tu suavizante.)', 5);
+          this.game.dread = Math.min(1, this.game.dread + 0.04);
+        }
+      } else if (player.eyesClosed && player.blinkCount - this.clothesBlinks >= 3) {
+        pile.visible = false;
+      }
+    }
+
     /** La moneda de canto gira despacio; al verla de cerca, el subtítulo (una vez). */
     _edgeCoin(dt, player) {
       var gp = this.game.gameplay;

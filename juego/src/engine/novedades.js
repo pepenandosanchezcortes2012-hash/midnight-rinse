@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 18, texto: 'A veces alguien dobla ropa en el mostrador. Nadie la trajo.' },
     { id: 17, texto: 'Revisa tus monedas. Y la bandeja del cambiador.' },
     { id: 16, texto: 'Noche especial «Tormenta eléctrica»: relámpagos seguidos y la luz parpadea con los truenos.' },
     { id: 15, texto: 'Logro «Álbum de la noche»: fotos en los tres lugares en un mismo turno.' },

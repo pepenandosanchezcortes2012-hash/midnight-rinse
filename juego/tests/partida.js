@@ -1041,6 +1041,39 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Ropa doblada: aparece en el mostrador solo sin mirar; al verla, el subtítulo; tres parpadeos y ya no está', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var pile = g.world.foldedClothes;
+      var d = ctx.w.document;
+      start(ctx);
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      var c = pile.position;
+      g.player.pos.set(c.x - 2.2, 0, c.z + 1.4);
+      g.player.yaw = Math.atan2(-(c.x - g.player.pos.x), -(c.z - g.player.pos.z));
+      g.player.pitch = -0.25;
+      step(ctx, 2);
+      check(h.zoneVisible('mostrador') > 0.5, 'el mostrador no estaba a la vista');
+      h.schedule('ropa_doblada', 'mostrador', 1);
+      step(ctx, 30);
+      check(!pile.visible, 'apareció mientras mirabas');
+      g.player.yaw += Math.PI;
+      step(ctx, 30);
+      check(pile.visible, 'no apareció de espaldas');
+      check(d.getElementById('subtitulos').textContent.indexOf('dobló ropa') < 0, 'el subtítulo salió sin verla');
+      g.player.yaw -= Math.PI;
+      step(ctx, 3);
+      check(d.getElementById('subtitulos').textContent.indexOf('dobló ropa') >= 0, 'no la notó al verla');
+      g.gameplay._begin({ kind: 'ropaDoblada', index: 0 }, g.input);
+      check(d.getElementById('subtitulos').textContent.indexOf('tibia') >= 0, 'tocarla no dijo nada');
+      // Tres parpadeos.
+      for (var b = 0; b < 3; b += 1) { g.player.blink.timer = 0; step(ctx, 12); g.player.blink.timer = 999; }
+      check(!pile.visible, 'seguía ahí después de tres parpadeos');
+      noErrors(ctx);
+      return 'oclusión, aviso, tacto y parpadeos';
+    }],
+
     ['La moneda de canto: solo mientras no miras el cambiador; al verla, el subtítulo; recogerla la devuelve', async function () {
       var ctx = await load();
       var g = ctx.g;

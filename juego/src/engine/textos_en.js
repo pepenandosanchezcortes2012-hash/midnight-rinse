@@ -636,5 +636,8 @@ MR.TEXTOS_EN = {
  "Logro «Álbum de la noche»: fotos en los tres lugares en un mismo turno.": "“Night album” achievement: photos in all three places in a single shift.",
  "(La moneda está tibia, como si alguien la hubiera tenido en la mano.)": "(The coin is warm, as if someone had been holding it.)",
  "(En la bandeja del cambiador hay una moneda parada de canto. En tu bolsillo falta una.)": "(There's a coin standing on its edge in the change machine tray. One is missing from your pocket.)",
- "Revisa tus monedas. Y la bandeja del cambiador.": "Check your coins. And the change machine tray."
+ "Revisa tus monedas. Y la bandeja del cambiador.": "Check your coins. And the change machine tray.",
+ "(Alguien dobló ropa que nadie trajo. Huele a tu suavizante.)": "(Someone folded clothes that nobody brought. They smell like your fabric softener.)",
+ "(Está tibia, recién salida de una secadora que nadie usó.)": "(They're warm, fresh out of a dryer nobody used.)",
+ "A veces alguien dobla ropa en el mostrador. Nadie la trajo.": "Sometimes someone folds clothes on the counter. Nobody brought them."
 };
