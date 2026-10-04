@@ -536,6 +536,10 @@ El proyecto pasó por dos etapas:
 - **Sin colisión:** nunca llegas a ella. Las noches normales no cambian.
 - Prueba nueva (no aparece en noche normal; retrocede; aviso; se apaga a espaldas; segundo aviso). Resultado: 58/58.
 
+## 68. El banco amarillo se puede tocar
+- **Qué pasa:** el asiento y el respaldo son tocables. Antes de que él aparezca: «(El banco está frío.)». Con él sentado: «(No te atreves a sentarte a su lado.)». Cuando ya se fue: «(El banco está tibio, como si alguien acabara de levantarse.)», y el miedo sube un poco. Es la primera idea de la segunda tanda del motor creativo, que además propuso: pasos arriba, el cesto, el sombrero y el tendedero (en el backlog).
+- Prueba nueva. Resultado: 59/59.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

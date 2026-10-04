@@ -646,5 +646,9 @@ MR.TEXTOS_EN = {
  "Radio Nocturna tiene una dedicatoria para ti (noches 3 a 6).": "Night Radio has a dedication for you (nights 3 to 6).",
  "(Entre la niebla hay otra farola, más adentro. No la habías visto.)": "(Through the fog there's another streetlight, deeper in. You hadn't seen it before.)",
  "(La farola de adentro está apagada. Como si nunca hubiera estado encendida.)": "(The streetlight deeper in is off. As if it had never been on.)",
- "En las noches de niebla, el bosque tiene otra farola. No intentes alcanzarla.": "On foggy nights, the forest has another streetlight. Don't try to reach it."
+ "En las noches de niebla, el bosque tiene otra farola. No intentes alcanzarla.": "On foggy nights, the forest has another streetlight. Don't try to reach it.",
+ "(No te atreves a sentarte a su lado.)": "(You don't dare sit next to him.)",
+ "(El banco está frío.)": "(The bench is cold.)",
+ "(El banco está tibio, como si alguien acabara de levantarse.)": "(The bench is warm, as if someone just got up.)",
+ "Puedes tocar el banco amarillo. Fíjate si está frío.": "You can touch the yellow bench. Notice whether it's cold."
 };

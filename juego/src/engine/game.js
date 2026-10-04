@@ -624,6 +624,19 @@
       }
     }
 
+    /** Tocar el banco amarillo: frío antes de que él llegue; si está sentado, no te atreves; si se fue, tibio. */
+    touchBench() {
+      var h = this.horror;
+      if (h.customer.present && h.customer.anchor === 'banco') {
+        this.gameplay.say('banco', '(No te atreves a sentarte a su lado.)', 3);
+      } else if (!this.flags.customerSeen) {
+        this.gameplay.say('banco', '(El banco está frío.)', 3);
+      } else {
+        this.gameplay.say('banco', '(El banco está tibio, como si alguien acabara de levantarse.)', 4);
+        this.dread = Math.min(1, this.dread + 0.02);
+      }
+    }
+
     onCustomerAppeared() {
       this.flags.customerSeen = true;
       this.ui.subtitle('(Alguien está sentado en el banco amarillo. No lo oíste entrar.)', 5);

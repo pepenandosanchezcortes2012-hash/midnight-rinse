@@ -245,8 +245,9 @@
 
     _bench() {
       var m = this.mat;
-      this.box(3.0, 0.08, 0.5, m.yellow, -3.5, 0.47, 0.62);
-      this.box(3.0, 0.5, 0.06, m.yellow, -3.5, 0.78, 0.88);
+      // El banco amarillo se puede tocar: frío, tibio… o él sentado ahí (game.touchBench).
+      this.interactive(this.box(3.0, 0.08, 0.5, m.yellow, -3.5, 0.47, 0.62), 'banco');
+      this.interactive(this.box(3.0, 0.5, 0.06, m.yellow, -3.5, 0.78, 0.88), 'banco');
       [-4.85, -2.15].forEach(function (x) {
         this.box(0.06, 0.45, 0.4, m.metal, x, 0.22, 0.62);
       }, this);

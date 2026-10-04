@@ -4,11 +4,11 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
+- [ ] (P2) Microanomalía «El banco tibio» (sala) — tocar el banco amarillo cuando él no está: «(El banco está tibio, como si alguien acabara de levantarse.)»; antes de que aparezca la primera vez: «(El banco está frío.)». Archivos: world.js (banco interactivo), gameplay.js; prueba: antes y después de que se vaya.
 
 ## Ideas (motor creativo, sin aprobar)
 - [ ] (P2) Microanomalía «Pasos arriba» (sala, solo sonido) — si te quedas quieto con menos de 3 máquinas sonando, se oyen pasos amortiguados en el techo, de un lado al otro (paneo); «(Arriba se oyen pasos. La lavandería no tiene segundo piso.)». Una vez por noche, nunca en Paseo. Archivos: audio.js (pasos con filtro grave), horror.js; prueba: quieto y en silencio sí, caminando o con 3 lavadoras no.
 - [ ] (P2) Microanomalía «El cesto» (sala) — un cesto de ropa junto a las secadoras que se va llenando en 3 pasos, cada vez que no lo miras; al tercero: «(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)». Archivos: world.js (cesto y 3 montones), horror.js (zona secadoras, oclusión); prueba: no crece mientras lo miras.
-- [ ] (P2) Microanomalía «El banco tibio» (sala) — tocar el banco amarillo cuando él no está: «(El banco está tibio, como si alguien acabara de levantarse.)»; antes de que aparezca la primera vez: «(El banco está frío.)». Archivos: world.js (banco interactivo), gameplay.js; prueba: antes y después de que se vaya.
 - [ ] (P3) Variación de cliente «El sombrero» — cuando se va con la hora verdadera, su sombrero queda en el banco amarillo; al verlo: «(En el banco amarillo quedó su sombrero. Está seco.)»; al siguiente parpadeo ya no está. Archivos: world.js (sombrero suelto), game.js (respuesta 4), horror.js; prueba: con la respuesta secreta.
 - [ ] (P3) Variación de bosque «El tendedero» (noches de luna llena) — entre dos pinos junto al sendero, un tendedero con uniformes que se mecen sin viento; al verlo: «(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)». Archivos: world.js (_forest), bosque.js; prueba: solo en luna llena.
 

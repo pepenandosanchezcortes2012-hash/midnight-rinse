@@ -1041,6 +1041,27 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['El banco amarillo: frío, «no te atreves» con él sentado y tibio cuando se fue', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.touchBench();
+      check(sub().indexOf('está frío') >= 0, 'antes de que llegue debería estar frío');
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true; g.flags.customerSeen = true;
+      g.gameplay.messageCooldown = {};
+      g.touchBench();
+      check(sub().indexOf('No te atreves') >= 0, 'con él sentado debería no atreverse');
+      g.horror.customer.present = false;
+      g.gameplay.messageCooldown = {};
+      g.touchBench();
+      check(sub().indexOf('tibio') >= 0, 'cuando se fue debería estar tibio');
+      var kinds = g.world.interactables.filter(function (m) { return m.userData.interact.kind === 'banco'; }).length;
+      check(kinds === 2, 'el banco no es tocable (' + kinds + ')');
+      noErrors(ctx);
+      return 'frío → no te atreves → tibio';
+    }],
+
     ['Noche de niebla: la segunda farola retrocede y, si la pierdes de vista, se apaga', async function () {
       var ctx = await load();
       start(ctx);

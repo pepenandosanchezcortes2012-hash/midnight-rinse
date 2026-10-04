@@ -135,6 +135,7 @@
       if (kind === 'washerCoin') { this._insertCoin(target.index); return; }
       if (kind === 'dryerStart') { this._dryerCoin(target.index); return; }
       if (kind === 'lavabo') { this.game.espejo.sink(); return; }
+      if (kind === 'banco') { this.game.touchBench(); return; }
       if (kind === 'ropaDoblada') { this.say('ropa', '(Está tibia, recién salida de una secadora que nadie usó.)', 4); return; }
       if (kind === 'changer') { this._changer(); return; }
       if (kind === 'changerTray') { this._pickTray(); return; }
