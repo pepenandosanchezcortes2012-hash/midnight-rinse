@@ -113,6 +113,7 @@
       this._edgeCoin(dt, player);
       this._clothes(player);
       this._prints(player);
+      this._stepsAbove(dt, player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -515,6 +516,25 @@
       if (!force && Math.random() < 0.5) { return; }
       this.printsFromForest = true;
       this.schedule('huellas', 'banco', 1);
+    }
+
+    /**
+     * Pasos arriba: si te quedas quieto 6 s en la sala, con menos de 3 máquinas tapando el zumbido, se oyen pasos en el
+     * techo (la lavandería no tiene segundo piso). Una vez por noche, desde que él apareció; nunca en Paseo.
+     */
+    _stepsAbove(dt, player) {
+      var g = this.game;
+      if (this.stepsDone || (g.diff && g.diff.sinSustos) || !g.flags.customerSeen) { return; }
+      var inSala = !(g.bosque && g.bosque.outside) && !(g.pasillo && g.pasillo.inside);
+      var still = player.vel.lengthSq() < 0.01;
+      this.stillFor = inSala && still && g.calmSources() < 3 ? (this.stillFor || 0) + dt : 0;
+      if (this.stillFor < 6) { return; }
+      this.stepsDone = true;
+      g.audio.pasosArriba();
+      g.dread = Math.min(1, g.dread + 0.06);
+      setTimeout(function () {
+        if (g.state === 'playing') { g.ui.subtitle('(Arriba se oyen pasos. La lavandería no tiene segundo piso.)', 5); }
+      }, 3300);
     }
 
     /** Las huellas mojadas: al verlas de cerca, «son de tu talla» (una vez cada vez que aparecen). */

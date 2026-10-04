@@ -304,6 +304,19 @@
     obturador() { this._tone(2600, 0.02, 0.12, 'square'); this._burst(this.white, 'bandpass', 2400, 1.1, 0.07, 0.14); }
 
     click() { this._tone(1900, 0.018, 0.09, 'square'); this._burst(this.white, 'highpass', 3000, 0.7, 0.02, 0.05); }
+    /** Pasos amortiguados en el techo: seis golpes graves que cruzan de un lado al otro. */
+    pasosArriba() {
+      var self = this;
+      for (var i = 0; i < 6; i += 1) {
+        (function (k) {
+          setTimeout(function () {
+            self._burst(self.brown, 'lowpass', 160, 0.7, 0.22, 0.32, -0.8 + k * 0.32);
+            self._tone(55, 0.12, 0.05, 'sine', 40);
+          }, k * 560);
+        })(i);
+      }
+    }
+
     /** Una moneda que gira sola, muy bajito: tintineos cada vez más juntos hasta caer. */
     monedaGira() {
       var self = this;

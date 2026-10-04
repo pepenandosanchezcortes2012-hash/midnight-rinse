@@ -1041,6 +1041,32 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Pasos arriba: quieto y en silencio, sí; caminando o con tres lavadoras, no', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      start(ctx);
+      g.flags.customerSeen = true;
+      // Con tres lavadoras sonando: no.
+      g.gameplay.washers.forEach(function (w, i) { w.running = i < 3; w.remaining = 30; });
+      step(ctx, 30 * 7);
+      check(!h.stepsDone, 'sonaron con tres lavadoras');
+      // Caminando en silencio: no.
+      g.gameplay.washers.forEach(function (w) { w.running = false; });
+      g.gameplay.dryers.forEach(function (d) { d.running = false; });
+      g.input.keys.add('KeyW');
+      for (var i = 0; i < 30 * 7; i += 1) { g.player.yaw += 0.02; step(ctx, 1); g.input.keys.add('KeyW'); }
+      g.input.keys.delete('KeyW');
+      check(!h.stepsDone, 'sonaron mientras caminabas');
+      // Quieto y en silencio: sí.
+      step(ctx, 30 * 7);
+      check(h.stepsDone, 'no sonaron quieto y en silencio');
+      await wait(3500);
+      check(ctx.w.document.getElementById('subtitulos').textContent.indexOf('segundo piso') >= 0, 'faltó el subtítulo');
+      noErrors(ctx);
+      return 'solo quieto y en silencio';
+    }],
+
     ['El banco amarillo: frío, «no te atreves» con él sentado y tibio cuando se fue', async function () {
       var ctx = await load();
       var g = ctx.g;

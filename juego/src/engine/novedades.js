@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 22, texto: 'No te quedes quieto mucho rato en silencio.' },
     { id: 21, texto: 'Puedes tocar el banco amarillo. Fíjate si está frío.' },
     { id: 20, texto: 'En las noches de niebla, el bosque tiene otra farola. No intentes alcanzarla.' },
     { id: 19, texto: 'Radio Nocturna tiene una dedicatoria para ti (noches 3 a 6).' },

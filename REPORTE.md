@@ -540,6 +540,10 @@ El proyecto pasó por dos etapas:
 - **Qué pasa:** el asiento y el respaldo son tocables. Antes de que él aparezca: «(El banco está frío.)». Con él sentado: «(No te atreves a sentarte a su lado.)». Cuando ya se fue: «(El banco está tibio, como si alguien acabara de levantarse.)», y el miedo sube un poco. Es la primera idea de la segunda tanda del motor creativo, que además propuso: pasos arriba, el cesto, el sombrero y el tendedero (en el backlog).
 - Prueba nueva. Resultado: 59/59.
 
+## 69. Pasos arriba (solo sonido)
+- **Qué pasa:** desde que él apareció, si te quedas quieto 6 s en la sala con menos de 3 máquinas tapando el zumbido (`calmSources() < 3`), se oyen seis pasos graves y amortiguados en el techo, cruzando de izquierda a derecha. Después: «(Arriba se oyen pasos. La lavandería no tiene segundo piso.)». Una vez por noche, nunca en Paseo. No hay nada que ver: es pura paranoia de sonido, y premia mantener las máquinas andando.
+- Prueba nueva (con 3 lavadoras no; caminando no; quieto y en silencio sí, con subtítulo). Resultado: 60/60.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
