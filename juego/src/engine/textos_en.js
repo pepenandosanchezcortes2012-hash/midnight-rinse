@@ -626,5 +626,8 @@ MR.TEXTOS_EN = {
  "Un final más, para quien hace todo en la misma noche.": "One more ending, for those who do everything in the same night.",
  "Filtro de televisor viejo (CRT) en las opciones.": "Old TV filter (CRT) in the options.",
  "Fondo oscuro detrás de los subtítulos": "Dark background behind subtitles",
- "Opción de fondo oscuro detrás de los subtítulos.": "Option for a dark background behind subtitles."
+ "Opción de fondo oscuro detrás de los subtítulos.": "Option for a dark background behind subtitles.",
+ "(Revisas la foto: Pelusa sale movida, como en todas las fotos.)": "(You check the photo: Pelusa came out blurry, like in every photo.)",
+ "Álbum de la noche": "Night album",
+ "Saca fotos en la lavandería, el bosque y el pasillo en un mismo turno.": "Take photos in the laundromat, the forest, and the corridor in a single shift."
 };

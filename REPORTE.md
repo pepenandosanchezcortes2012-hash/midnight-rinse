@@ -479,6 +479,11 @@ El proyecto pasó por dos etapas:
 - **Opción** «Fondo oscuro detrás de los subtítulos»: una franja negra al 72 % detrás del texto, solo cuando hay subtítulos. Se lee mejor con brillo alto, en el bosque con luna llena o en el celular a pleno sol. Se guarda con las opciones y aparece en «Novedades».
 - Prueba nueva. Resultado: 49/49.
 
+## 59. Álbum de la noche y Pelusa en las fotos
+- **Logro «Álbum de la noche»:** sacar fotos en la lavandería, el bosque y el pasillo en el mismo turno. Invita a explorar con la cámara.
+- **Pelusa en la foto:** si el gato sale en cuadro (a menos de 4,5 m), al revisar la foto: «Pelusa sale movida, como en todas las fotos». Una vez por turno, y nunca en la foto en que sale él.
+- Prueba nueva. Resultado: 50/50.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

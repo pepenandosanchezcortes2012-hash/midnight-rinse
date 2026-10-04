@@ -23,6 +23,8 @@
       this.canvas.width = W;
       this.canvas.height = H;
       this.ray = new THREE.Raycaster();
+      this.areas = {}; // dónde sacaste fotos este turno (logro «Álbum de la noche»)
+      this.catSeen = false;
     }
 
     _load() {
@@ -50,6 +52,14 @@
       if (g.diff && g.diff.sinSustos) { return false; }
       if (!g.flags.customerSeen && (g.night || 1) < 2) { return false; }
       return !(g.world.customer.group.visible && g.horror.customer.present);
+    }
+
+    /** ¿Ese punto sale en la foto (en pantalla y a menos de `max` metros)? */
+    _inFrame(p, cam, max) {
+      var v = p.clone();
+      if (v.distanceTo(cam.getWorldPosition(new THREE.Vector3())) > max) { return false; }
+      v.project(cam);
+      return Math.abs(v.x) < 0.9 && Math.abs(v.y) < 0.9 && v.z < 1;
     }
 
     /** Dónde ponerlo: frente a la cámara, sin atravesar paredes. Devuelve la distancia o 0 si no hay espacio. */
@@ -128,6 +138,17 @@
       MR.Haptics.pulse(20);
       g.ui.showPolaroid(foto);
       g.ui.renderFotos(this);
+      // Álbum: una foto en cada lugar (lavandería, bosque y pasillo) en el mismo turno.
+      var area = g.bosque.outside ? 'bosque' : (g.pasillo.inside ? 'pasillo' : 'sala');
+      this.areas[area] = true;
+      if (this.areas.sala && this.areas.bosque && this.areas.pasillo && g.logros) { g.logros.unlock('album'); }
+      // Pelusa en la foto (una vez por turno): siempre sale movida.
+      if (!dist && !this.catSeen && g.gato && g.gato.mesh.root.visible && this._inFrame(g.gato.position(), cam, 4.5)) {
+        this.catSeen = true;
+        setTimeout(function () {
+          if (g.state === 'playing') { g.ui.subtitle('(Revisas la foto: Pelusa sale movida, como en todas las fotos.)', 4); }
+        }, 700);
+      }
       if (dist) {
         this.ghosts += 1;
         setTimeout(function () {

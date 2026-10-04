@@ -1040,6 +1040,36 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Fotos: el álbum de la noche y Pelusa (que siempre sale movida)', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var THREE = ctx.w.THREE;
+      start(ctx);
+      step(ctx, 5);
+      // Pelusa frente a la cámara.
+      g.player.camera.updateMatrixWorld();
+      var cam = g.player.camera;
+      var dir = new THREE.Vector3(); cam.getWorldDirection(dir);
+      var p = cam.getWorldPosition(new THREE.Vector3()).add(dir.multiplyScalar(2));
+      g.gato.mesh.root.visible = true;
+      g.gato.mesh.root.position.set(p.x, Math.max(0, p.y - 1.2), p.z);
+      check(g.fotos.take({ ghost: false }), 'no sacó la foto en la sala');
+      await wait(800);
+      check(ctx.w.document.getElementById('subtitulos').textContent.indexOf('Pelusa sale movida') >= 0, 'no notó a Pelusa en la foto');
+      g.bosque.go(); step(ctx, 40);
+      g.fotos.cooldown = 0;
+      check(g.fotos.take({ ghost: false }), 'no sacó la foto en el bosque');
+      g.bosque.go(); step(ctx, 40);
+      g.pasillo.unlock(true); g.pasillo.go(); step(ctx, 40);
+      check(g.pasillo.inside, 'no entró al pasillo');
+      g.fotos.cooldown = 0;
+      check(!g.logros.has('album'), 'el álbum se dio antes de tiempo');
+      g.fotos.take({ ghost: false });
+      check(g.logros.has('album'), 'no dio el logro del álbum');
+      noErrors(ctx);
+      return Object.keys(g.fotos.areas).join(', ');
+    }],
+
     ['Subtítulos con fondo oscuro (opción)', async function () {
       var ctx = await load();
       var d = ctx.w.document;
