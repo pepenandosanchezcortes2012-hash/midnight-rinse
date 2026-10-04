@@ -163,7 +163,7 @@ En **Opciones → Dificultad**:
 - **Pesadilla:** sustos casi el doble de seguidos, 2 cigarros, 2 tragos y 1 porro. Solo se perdona **una** falta para el final bueno.
 
 ### Fotos
-Saca fotos con la cámara del celular: **P** en el teclado, **Y/△** en el control o «Sacar una foto» en la pausa (en el celular). Tienen flash, asoman un momento como polaroid y se guardan las últimas 12 en el panel «Fotos» del título, desde donde puedes descargarlas. Revísalas bien: a veces sale alguien que no estaba ahí.
+Saca fotos con la cámara del celular: **P** en el teclado, **Y/△** en el control o «Sacar una foto» en la pausa (en el celular). Tienen flash, asoman un momento como polaroid y se guardan las últimas 12 en el panel «Fotos» del título, desde donde puedes descargarlas o compartirlas. En el celular, «Compartir resultado» adjunta la última foto de la noche. Revísalas bien: a veces sale alguien que no estaba ahí.
 
 ### Récords
 En la pantalla de título: turnos terminados, tu mejor evaluación en cada dificultad y los cinco finales (dos están ocultos hasta que los ves). Si superas tu mejor nota, el resumen del final dice «¡Nuevo récord!».
@@ -238,6 +238,7 @@ Abre `juego/pruebas.html` (en local o en GitHub Pages) y pulsa **Correr pruebas*
 - **Qué cubre:** arranque, lienzo opaco, guía de controles, consumibles, enlaces de la tele, bosque (salir, caminar, chocar, volver), el Cliente Inmóvil en el bosque, un turno completo, la app instalable y «Reiniciar todo».
 - **Tus datos:** respalda y restaura lo que tengas guardado.
 - **Modo automático:** `pruebas.html?auto` arranca solo.
+- **Sin abrir el navegador:** con el servidor local corriendo (`py -m http.server 8765 --bind 127.0.0.1` desde `juego/`), `py juego/herramientas/probar.py` las corre en un Chrome sin ventana, con un perfil temporal, y muestra cuántas pasaron.
 
 ## Publicar una versión nueva
 

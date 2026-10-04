@@ -39,6 +39,9 @@
 
     count() { return this.list.length; }
 
+    /** La última foto que sacaste en este turno (o null). */
+    lastTonight() { return this.tonight > 0 && this.list.length ? this.list[this.list.length - 1] : null; }
+
     update(dt) { this.cooldown = Math.max(0, this.cooldown - dt); }
 
     /** ¿Puede salir él en esta foto? (ya lo viste o no es tu primera noche; nunca en Paseo; no si ya está a la vista). */
@@ -138,6 +141,21 @@
       return foto;
     }
   }
+
+  /** Foto → archivo JPEG para compartirlo (sin esperas: Safari pide compartir dentro del mismo toque). */
+  Fotos.toFile = function (f) {
+    var b64 = String(f.src).split(',')[1] || '';
+    var bin = window.atob(b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i += 1) { bytes[i] = bin.charCodeAt(i); }
+    return new File([bytes], 'midnight-rinse-noche' + f.noche + '-' + String(f.hora).replace(':', '') + '.jpg', { type: 'image/jpeg' });
+  };
+
+  /** ¿Este navegador puede compartir una foto (menú del teléfono)? */
+  Fotos.canShare = function (f) {
+    if (!f || !navigator.share || !navigator.canShare) { return false; }
+    try { return navigator.canShare({ files: [Fotos.toFile(f)] }); } catch (e) { return false; }
+  };
 
   MR.Fotos = Fotos;
 })(window.MR = window.MR || {});

@@ -980,6 +980,15 @@
       check(!d.getElementById('visor').hidden && /^data:image/.test(d.getElementById('visor-descargar').href), 'no abrió el visor');
       ctx.w.dispatchEvent(new ctx.w.KeyboardEvent('keydown', { key: 'Escape', code: 'Escape' }));
       check(d.getElementById('visor').hidden, 'Esc no cerró el visor');
+      // Compartir: la foto viaja como JPEG (con un menú de compartir de mentira, para no abrir el del sistema).
+      var file = ctx.w.MR.Fotos.toFile(g.fotos.list[2]);
+      check(file.type === 'image/jpeg' && file.size > 2000 && /\.jpg$/.test(file.name), 'archivo ' + file.name + ' ' + file.size);
+      var shared = null;
+      Object.defineProperty(ctx.w.navigator, 'share', { configurable: true, value: function (data) { shared = data; return Promise.resolve(); } });
+      Object.defineProperty(ctx.w.navigator, 'canShare', { configurable: true, value: function () { return true; } });
+      g.end('fin'); step(ctx, 3);
+      d.getElementById('btn-compartir').click();
+      check(shared && shared.files && shared.files[0].type === 'image/jpeg' && /Midnight Rinse/.test(shared.text), 'no compartió la foto con el resultado');
       noErrors(ctx);
       return '3 fotos · él a ' + dist.toFixed(1) + ' m · ' + Math.round(g.fotos.list[0].src.length / 1024) + ' KB';
     }],

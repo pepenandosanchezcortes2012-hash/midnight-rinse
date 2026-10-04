@@ -432,6 +432,11 @@ El proyecto pasó por dos etapas:
 - **Cómo:** uniforme `uFace` en el shader de la pantalla (cabeza, ojos, boca y sombrero con elipses y bandas), con entrada de 0,08 s y salida de 0,15 s. `tele._onScreen()` comprueba que la tele esté de verdad en el cuadro.
 - **Prueba nueva:** de espaldas no sale; al mirarla sale, llega a 1 y se va. Resultado: 42/42.
 
+## 50. Compartir con foto y pruebas sin ventana
+- **Compartir resultado** en el celular: si sacaste fotos esa noche, la última va adjunta como JPEG (Web Share con archivos). Sin soporte, se comparte o copia el texto como antes. El visor de fotos tiene un botón «Compartir» que solo aparece si el navegador lo permite. La foto se convierte a archivo de forma síncrona, porque Safari pide compartir dentro del mismo toque.
+- **`herramientas/probar.py`:** corre `pruebas.html?auto` en un Chrome sin ventana (perfil temporal, SwiftShader, tiempo virtual) y lee el resultado del DOM final. Tarda unos 30 s y no depende de la extensión del navegador.
+- **Prueba:** la de fotos ahora también comparte, con un `navigator.share` de mentira. Resultado: 42/42.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

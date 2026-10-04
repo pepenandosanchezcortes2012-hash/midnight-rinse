@@ -574,5 +574,6 @@ MR.TEXTOS_EN = {
  "(Revisas la foto. Hay alguien de pie frente a ti. Levantas la vista: no hay nadie.)": "(You check the photo. Someone is standing right in front of you. You look up: no one is there.)",
  "En la foto": "In the picture",
  "Sácale una foto cuando no está.": "Take his picture when he isn't there.",
- "Noche {n} · {h}": "Night {n} · {h}"
+ "Noche {n} · {h}": "Night {n} · {h}",
+ "Compartir": "Share"
 };

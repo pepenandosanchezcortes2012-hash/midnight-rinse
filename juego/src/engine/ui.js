@@ -34,6 +34,9 @@
       $('btn-bosque').addEventListener('click', function () { game.travelFromPause(); });
       $('btn-foto').addEventListener('click', function () { game.photoFromPause(); });
       $('btn-visor-cerrar').addEventListener('click', function () { self.showVisor(null); });
+      $('btn-visor-compartir').addEventListener('click', function () {
+        if (self.visorFoto) { navigator.share({ files: [MR.Fotos.toFile(self.visorFoto)], title: 'Midnight Rinse' }).catch(function () { /* cancelado */ }); }
+      });
       $('btn-guia-cerrar').addEventListener('click', function () { self.showGuide(false); });
       $('guia-tab-escritorio').addEventListener('click', function () { self._guideTab('escritorio'); });
       $('guia-tab-tactil').addEventListener('click', function () { self._guideTab('tactil'); });
@@ -216,7 +219,9 @@
     /** Una foto en grande, con «Descargar». showVisor(null) la cierra. */
     showVisor(f) {
       $('visor').hidden = !f;
+      this.visorFoto = f;
       if (!f) { return; }
+      $('btn-visor-compartir').hidden = !MR.Fotos.canShare(f);
       $('visor-img').src = f.src;
       $('visor-pie').textContent = MR.tf('Noche {n} · {h}', { n: f.noche, h: f.hora });
       var a = $('visor-descargar');
@@ -449,6 +454,12 @@
       var text = this.shareText();
       var url = location.origin + location.pathname.replace(/[^/]*$/, '');
       var status = $('compartir-estado');
+      // Con la última foto de la noche, si el teléfono deja compartir imágenes.
+      var foto = this.game.fotos && this.game.fotos.lastTonight();
+      if (foto && MR.Fotos.canShare(foto)) {
+        navigator.share({ files: [MR.Fotos.toFile(foto)], title: 'Midnight Rinse', text: text + ' ' + url }).catch(function () { /* cancelado */ });
+        return;
+      }
       if (navigator.share) {
         navigator.share({ title: 'Midnight Rinse', text: text, url: url }).catch(function () { /* cancelado */ });
         return;
