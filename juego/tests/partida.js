@@ -1041,6 +1041,41 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Huellas mojadas al volver del bosque: sin mirar el banco aparecen; al verlas, «son de tu talla»', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var fp = g.world.footprints;
+      var d = ctx.w.document;
+      start(ctx);
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      check(!h.customer.present, 'él no debería estar todavía');
+      g.bosque.go(); step(ctx, 40);
+      h.printsFromForest = false;
+      var orig = h.onReturnFromForest.bind(h);
+      h.onReturnFromForest = function () { orig(true); }; // sin azar
+      g.bosque.go(); step(ctx, 40);
+      check(!g.bosque.outside && h.printsFromForest, 'no las programó al volver');
+      // De espaldas al banco: aparecen.
+      var mid = fp.children[4].position;
+      g.player.pos.set(mid.x + 1.5, 0, mid.z + 0.8);
+      g.player.yaw = Math.atan2(-(mid.x - g.player.pos.x), -(mid.z - g.player.pos.z)) + Math.PI;
+      step(ctx, 30);
+      check(fp.visible, 'no aparecieron sin mirar el banco');
+      check(d.getElementById('subtitulos').textContent.indexOf('de tu talla') < 0, 'el aviso salió sin verlas');
+      g.player.yaw -= Math.PI; g.player.pitch = -0.5;
+      step(ctx, 5);
+      check(d.getElementById('subtitulos').textContent.indexOf('de tu talla') >= 0, 'no las notó al verlas');
+      // Una vez por noche.
+      h.printsFromForest = true;
+      fp.visible = false;
+      g.bosque.go(); step(ctx, 40); g.bosque.go(); step(ctx, 40);
+      g.player.yaw += Math.PI; step(ctx, 30);
+      check(!fp.visible, 'se repitieron la misma noche');
+      noErrors(ctx);
+      return 'oclusión, aviso y una vez por noche';
+    }],
+
     ['Ropa doblada: aparece en el mostrador solo sin mirar; al verla, el subtítulo; tres parpadeos y ya no está', async function () {
       var ctx = await load();
       var g = ctx.g;

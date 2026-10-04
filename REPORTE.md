@@ -520,6 +520,11 @@ El proyecto pasó por dos etapas:
 - **Proceso:** segunda idea del backlog. Pasó por el canon y la auditoría PS1, y la revisé con una captura en Chrome sin ventana: la pila queda apoyada en el mostrador.
 - Prueba nueva (no aparece mientras miras; sí de espaldas; aviso; tacto; tres parpadeos). Resultado: 55/55.
 
+## 65. Huellas mojadas: al volver del bosque y «son de tu talla»
+- **La idea venía duplicada:** el motor creativo propuso «Huellas mojadas» sin ver que ya existía el susto `huellas` (del vidrio al banco, solo con él presente y sin subtítulo). En vez de duplicarlo, el ciclo lo **amplió**: al volver del bosque, la mitad de las veces (una por noche, nunca en Paseo), aparecen aunque él no esté, programadas en la zona del banco (solo cuando no la miras). Al verlas de cerca: «(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)».
+- **El motor creativo aprendió:** `estado.py` ahora lista también los eventos que el mundo ya tiene preparados (comentarios «evento» de `world.js`), para no proponer lo que ya existe.
+- Prueba nueva. Resultado: 56/56.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

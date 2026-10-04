@@ -35,6 +35,10 @@ def main():
     extra = sorted(set(re.findall(r"table\.push\(\['([a-z_]+)'", horror)))
     print('  extra    ' + ', '.join(extra))
     print('  armados  tele_rostro (tele.js), espejo (espejo.js), él en la foto (fotos.js), relámpago revela (clima.js), reflejo en lavadora (horror.js)')
+    # Lo que el mundo ya tiene preparado para esos sustos (comentarios de world.js con «evento»): leerlos antes de proponer.
+    mundo = (ENGINE / 'world.js').read_text(encoding='utf-8')
+    for c in re.findall(r'//\s*([^\n]*evento[^\n]*)', mundo, re.I):
+        print('  mundo    ' + c.strip()[:120])
     config = leer('config.js')
     bloque = config[config.index('MR.NOCHES_ESPECIALES = {'):config.index('MR.DIFICULTAD = {')]
     noches = re.findall(r"^\s+(\w+): \{ nombre: '([^']+)'", bloque, re.M)

@@ -112,6 +112,7 @@
       this._watch(dt, player);
       this._edgeCoin(dt, player);
       this._clothes(player);
+      this._prints(player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._flickers(dt);
@@ -294,6 +295,7 @@
         case 'cierra_trasera': this.backDoorTarget = g.pasillo && g.pasillo.unlocked ? -0.3 : 0; break;
         case 'huellas':
           w.footprints.visible = true;
+          this.printsNoticed = false;
           this.later(90, 'huellas_secan', 'entrada', 0);
           break;
         case 'huellas_secan': w.footprints.visible = false; break;
@@ -503,6 +505,30 @@
      * Te observa: mientras su zona no está a la vista (o parpadeas), su cabeza gira despacio hacia ti
      * (hasta ±75°). Cuando vuelves a mirarlo, la cabeza se queda donde quedó.
      */
+    /**
+     * Al volver del bosque: la mitad de las veces (una por noche, nunca en Paseo), huellas mojadas del vidrio al
+     * banco amarillo cuando no mires el banco. `force` (pruebas) las programa siempre.
+     */
+    onReturnFromForest(force) {
+      var g = this.game;
+      if (this.printsFromForest || (g.diff && g.diff.sinSustos) || this.world.footprints.visible) { return; }
+      if (!force && Math.random() < 0.5) { return; }
+      this.printsFromForest = true;
+      this.schedule('huellas', 'banco', 1);
+    }
+
+    /** Las huellas mojadas: al verlas de cerca, «son de tu talla» (una vez cada vez que aparecen). */
+    _prints(player) {
+      var fp = this.world.footprints;
+      if (!fp.visible || this.printsNoticed) { return; }
+      var mid = fp.children[4].position;
+      if (this.zoneVisible('banco') > 0.3 && U.distXZ(player.pos, mid) < 3.5) {
+        this.printsNoticed = true;
+        this.game.ui.subtitle('(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)', 5);
+        this.game.dread = Math.min(1, this.game.dread + 0.04);
+      }
+    }
+
     /** La ropa doblada: al verla de cerca, el subtítulo; tres parpadeos después, ya no está. */
     _clothes(player) {
       var pile = this.world.foldedClothes;

@@ -4,9 +4,9 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
+- [ ] (P2) Microanomalía «Huellas mojadas» (sala) — al volver del bosque, huellas mojadas van del vidrio de la entrada al banco amarillo, solo si nadie entró; se secan en 60 s. Gotas (ASMR) cerca de las huellas. «(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)». Archivos: world.js (calcomanías), bosque.js (al volver), horror.js.
 
 ## Ideas (motor creativo, sin aprobar)
-- [ ] (P2) Microanomalía «Huellas mojadas» (sala) — al volver del bosque, huellas mojadas van del vidrio de la entrada al banco amarillo, solo si nadie entró; se secan en 60 s. Gotas (ASMR) cerca de las huellas. «(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)». Archivos: world.js (calcomanías), bosque.js (al volver), horror.js.
 - [ ] (P3) Variación de bosque «La segunda farola» (noches de niebla) — más adentro del sendero aparece otra farola encendida; si caminas hacia ella siempre está a la misma distancia; al darte vuelta y volver a mirar, está apagada. Sin sonido salvo el zumbido eléctrico, que se corta. Archivos: world.js (_forest), bosque.js; respeta «el bosque tiene borde» (CANON §1 y §7).
 - [ ] (P3) Variación de radio «Dedicatoria» (noche 3 en adelante, solo si escribiste tu nombre) — al final de la transmisión de las 02:40: «Antes de irnos: esta va para alguien que sigue doblando ropa ajena a esta hora. Ya sabe quién es.» y, si diste nombre, un susurro con él entre la estática. Archivos: game.js (radio), historia.js; prueba: noche 3 con y sin nombre.
 

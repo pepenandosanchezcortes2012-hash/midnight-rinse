@@ -167,6 +167,8 @@
         if (h.customer.present && /^bosque_/.test(h.customer.anchor || '')) {
           h.later(U.rand(3, 6), 'cliente_mueve', 'entrada', 3, { to: 'entrada' });
         }
+        // A veces, al volver, hay huellas mojadas hacia el banco… aunque él no esté (una vez por noche).
+        h.onReturnFromForest();
       }
     }
 

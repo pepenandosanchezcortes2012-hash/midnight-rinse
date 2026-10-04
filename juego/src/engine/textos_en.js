@@ -639,5 +639,6 @@ MR.TEXTOS_EN = {
  "Revisa tus monedas. Y la bandeja del cambiador.": "Check your coins. And the change machine tray.",
  "(Alguien dobló ropa que nadie trajo. Huele a tu suavizante.)": "(Someone folded clothes that nobody brought. They smell like your fabric softener.)",
  "(Está tibia, recién salida de una secadora que nadie usó.)": "(They're warm, fresh out of a dryer nobody used.)",
- "A veces alguien dobla ropa en el mostrador. Nadie la trajo.": "Sometimes someone folds clothes on the counter. Nobody brought them."
+ "A veces alguien dobla ropa en el mostrador. Nadie la trajo.": "Sometimes someone folds clothes on the counter. Nobody brought them.",
+ "(Hay huellas mojadas en el piso que van del vidrio al banco amarillo. Son de tu talla.)": "(There are wet footprints on the floor leading from the glass door to the yellow bench. They're your size.)"
 };
