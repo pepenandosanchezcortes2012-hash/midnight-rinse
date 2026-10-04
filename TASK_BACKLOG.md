@@ -4,7 +4,6 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P3) Variación de bosque «El tendedero» (noches de luna llena) — entre dos pinos junto al sendero, un tendedero con uniformes que se mecen sin viento; al verlo: «(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)». Archivos: world.js (_forest), bosque.js; prueba: solo en luna llena.
 
 ## Ideas (motor creativo, sin aprobar)
 
@@ -12,6 +11,7 @@ Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas de
 - [ ] (P1) Lore: decidir las propuestas de Yesda — el embalse de 1986, las caras blancas, las órdenes de las máscaras negras, el bosque infinito y el nombre «Blackwood» (CANON.md §7). Hasta decidir, lore_check.py los rechaza en textos del juego. — BLOQUEADA: decisión de diseño de Yesda
 
 ## Hechas
+- [x] (P3) Variación de bosque «El tendedero» (noches de luna llena) — entre dos pinos junto al sendero, un tendedero con uniformes que se mecen sin viento; al verlo: «(Entre dos pinos hay un tendedero con uniformes colgados. Se mecen, pero no hay viento.)». Archivos: world.js (_forest), bosque.js; prueba: solo en luna llena. — commit 726adaf (2026-10-04)
 - [x] (P3) Variación de cliente «El sombrero» — cuando se va con la hora verdadera, su sombrero queda en el banco amarillo; al verlo: «(En el banco amarillo quedó su sombrero. Está seco.)»; al siguiente parpadeo ya no está. Archivos: world.js (sombrero suelto), game.js (respuesta 4), horror.js; prueba: con la respuesta secreta. — commit 70819bb (2026-10-04)
 - [x] (P2) Microanomalía «El cesto» (sala) — un cesto de ropa junto a las secadoras que se va llenando en 3 pasos, cada vez que no lo miras; al tercero: «(El cesto está lleno de uniformes como el tuyo. Todos secos. Todos tibios.)». Archivos: world.js (cesto y 3 montones), horror.js (zona secadoras, oclusión); prueba: no crece mientras lo miras. — commit e1f8459 (2026-10-04)
 - [x] (P2) Microanomalía «Pasos arriba» (sala, solo sonido) — si te quedas quieto con menos de 3 máquinas sonando, se oyen pasos amortiguados en el techo, de un lado al otro (paneo); «(Arriba se oyen pasos. La lavandería no tiene segundo piso.)». Una vez por noche, nunca en Paseo. Archivos: audio.js (pasos con filtro grave), horror.js; prueba: quieto y en silencio sí, caminando o con 3 lavadoras no. — commit 6c8397b (2026-10-04)
