@@ -1051,8 +1051,9 @@
         start(ctx);
         g.options.name = casos[i][1];
         g.gameplay.tuneTo(94.1);
-        g.minutes = ctx.w.MR.Config.RADIO_HOST - 0.05;
+        g.minutes = ctx.w.MR.Config.RADIO_HOST - 0.01; // tres cuadros (0,027 min de juego) cruzan las 02:40
         step(ctx, 3);
+        check(g.archivo.data.radio[casos[i][0]] || casos[i][0] >= 8, 'noche ' + (casos[i][0] + 1) + ': la radio no habló');
         await wait(3700);
         var sub = ctx.w.document.getElementById('subtitulos').textContent;
         var night = casos[i][0] + 1;
