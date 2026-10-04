@@ -629,8 +629,12 @@
         this.dread = Math.min(1, this.dread + 0.08);
         return;
       }
-      var line ='No lo mires a la cara. Si te pregunta la hora... faltan cinco minutos para las seis. Faltan cinco minutos para las seis.';
-      this.ui.subtitle(MR.tf('[Teléfono] {l}', { l: MR.t(line) }), 9);
+      var calls = MR.HISTORIA.telefono;
+      var n = Math.min(this.night || 1, calls.length);
+      var line = calls[n - 1];
+      this.archivo.phone(n - 1);
+      // Desde la sexta noche, la voz del teléfono es la tuya.
+      this.ui.subtitle(MR.tf(n >= calls.length ? '[Teléfono, con tu propia voz] {l}' : '[Teléfono] {l}', { l: MR.t(line) }), 9);
       this.audio.speak(line, 'telefono');
       this.flags.phone = true;
     }

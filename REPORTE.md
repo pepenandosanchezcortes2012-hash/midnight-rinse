@@ -465,6 +465,11 @@ El proyecto pasó por dos etapas:
 - **Qué hace:** en el posproceso, una corrección gamma (`pow(col, 1/uGamma)`) antes del tramado RGB555. Levanta los oscuros sin quemar los claros ni perder el aspecto PS1. El rango va de 0,7 a 1,8 (1 = sin cambio). Se guarda con las opciones y también aplica a las fotos. Se ve en vivo en el título, porque el fondo se sigue dibujando.
 - **Prueba nueva:** con brillo 1,6, la luminosidad media del cuadro pasa de 34,7 a 71,1, y la opción se guarda. Resultado: 46/46.
 
+## 56. Una llamada distinta cada noche (y tu propia voz)
+- **El teléfono público (03:50):** seis llamadas en `MR.HISTORIA.telefono`, una por noche. Todas dicen «faltan cinco minutos para las seis», la instrucción que hace falta para el final bueno. La cuarta advierte del espejo y la quinta se corta, mencionando las hojas y el claro. Desde la sexta noche el subtítulo es «[Teléfono, con tu propia voz]»: «Yo tampoco salí… Sigo aquí, en el turno de antes».
+- **Archivo:** nuevo grupo «Teléfono público», con las llamadas que contestaste. Ahora son 20 entradas en total.
+- **También en inglés:** 613 textos. Prueba nueva (noches 1, 4, 6 y 10, más el archivo). Resultado: 47/47.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

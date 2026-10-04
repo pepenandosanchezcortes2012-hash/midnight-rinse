@@ -1040,6 +1040,29 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['El teléfono: una llamada por noche; desde la sexta, con tu propia voz', async function () {
+      var lines = [];
+      var nights = [0, 3, 5, 9];
+      for (var i = 0; i < nights.length; i += 1) {
+        localStorage.setItem('midnight-rinse/noches', String(nights[i]));
+        var ctx = await load();
+        start(ctx);
+        ctx.g.gameplay.phoneGhost = false;
+        ctx.g.onPhoneAnswered();
+        var sub = ctx.w.document.getElementById('subtitulos').textContent;
+        check(ctx.g.flags.phone && sub.toLowerCase().indexOf('faltan cinco minutos para las seis') >= 0, 'noche ' + (nights[i] + 1) + ': sin la instrucción');
+        lines.push(sub.slice(sub.lastIndexOf('[')));
+        noErrors(ctx);
+      }
+      check(lines[0] !== lines[1] && lines[1] !== lines[2], 'las llamadas no cambian de noche en noche');
+      check(lines[2].indexOf('con tu propia voz') >= 0 && lines[3].indexOf('con tu propia voz') >= 0, 'la sexta noche no es tu voz');
+      check(lines[0].indexOf('propia voz') < 0, 'la primera noche ya era tu voz');
+      var arch = ctx.g.archivo.data.telefono;
+      check(arch[0] && arch[3] && arch[5] && !arch[1], 'el archivo no guardó las llamadas (' + JSON.stringify(arch) + ')');
+      localStorage.removeItem('midnight-rinse/noches');
+      return 'noches 1, 4, 6 y 10';
+    }],
+
     ['Brillo: la opción levanta los oscuros (y se guarda)', async function () {
       var ctx = await load();
       var g = ctx.g;

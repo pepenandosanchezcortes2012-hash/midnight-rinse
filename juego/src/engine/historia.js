@@ -33,6 +33,16 @@
       'Son las dos y cuarenta en Radio Nocturna. Grábate bien este secreto: la hora verdadera son las cinco y trece. Si logras ver ese minuto en tu reloj, tal vez vuelvas a casa.',
       'Son las dos y cuarenta en Radio Nocturna, y esta es nuestra última transmisión para ti. Ya reconoces al hombre del abrigo, ¿verdad? Buen turno eterno, amigo; de aquí ya nadie sale.'
     ],
+    // El teléfono público a las 03:50: una llamada distinta por noche, siempre con la instrucción que importa.
+    // Desde la sexta noche, la voz es la tuya.
+    telefono: [
+      'No lo mires a la cara. Si te pregunta la hora... faltan cinco minutos para las seis. Faltan cinco minutos para las seis.',
+      'Soy yo otra vez. No lo mires a la cara. Si te pregunta la hora, faltan cinco minutos para las seis. No le digas nada más.',
+      'Ya estuviste aquí, ¿verdad? Se te nota en la voz. No lo mires a la cara. Faltan cinco minutos para las seis.',
+      'No te quedes mucho frente al espejo del pasillo. Y si te pregunta la hora: faltan cinco minutos para las seis.',
+      'Escucha, que se corta... no lo mires... faltan cinco minutos para las seis... las hojas... el claro...',
+      'No lo mires a la cara. Faltan cinco minutos para las seis. Yo tampoco salí, ¿sabes? Sigo aquí, en el turno de antes.'
+    ],
     // Susurros (uno cambiado a mano para no empujar al jugador a una falta).
     susurros: [
       '…no levantes la vista…',

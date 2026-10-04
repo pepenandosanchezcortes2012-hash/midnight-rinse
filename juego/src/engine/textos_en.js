@@ -603,5 +603,15 @@ MR.TEXTOS_EN = {
  "Doce exposiciones. En la etiqueta, con tu letra: «no las revelen».": "Twelve exposures. On the label, in your handwriting: “don't develop them”.",
  "Una llave de paso": "A water shutoff key",
  "Fría y mojada. Alguien cerró el agua a propósito.": "Cold and wet. Someone shut off the water on purpose.",
- "Brillo": "Brightness"
+ "Brillo": "Brightness",
+ "[Teléfono, con tu propia voz] {l}": "[Phone, in your own voice] {l}",
+ "Soy yo otra vez. No lo mires a la cara. Si te pregunta la hora, faltan cinco minutos para las seis. No le digas nada más.": "It's me again. Don't look at his face. If he asks you the time, it's five minutes to six. Don't tell him anything else.",
+ "Ya estuviste aquí, ¿verdad? Se te nota en la voz. No lo mires a la cara. Faltan cinco minutos para las seis.": "You've been here before, haven't you? I can hear it in your voice. Don't look at his face. It's five minutes to six.",
+ "No te quedes mucho frente al espejo del pasillo. Y si te pregunta la hora: faltan cinco minutos para las seis.": "Don't stand too long in front of the corridor mirror. And if he asks you the time: it's five minutes to six.",
+ "Escucha, que se corta... no lo mires... faltan cinco minutos para las seis... las hojas... el claro...": "Listen, it's breaking up... don't look at him... it's five minutes to six... the pages... the clearing...",
+ "No lo mires a la cara. Faltan cinco minutos para las seis. Yo tampoco salí, ¿sabes? Sigo aquí, en el turno de antes.": "Don't look at his face. It's five minutes to six. I never got out either, you know. I'm still here, on the shift before yours.",
+ "Teléfono público": "Payphone",
+ "Noche {n} en adelante": "Night {n} onward",
+ "TELÉFONO PÚBLICO · TU PROPIA VOZ · 03:50": "PAYPHONE · YOUR OWN VOICE · 03:50",
+ "TELÉFONO PÚBLICO · NOCHE {n} · 03:50": "PAYPHONE · NIGHT {n} · 03:50"
 };

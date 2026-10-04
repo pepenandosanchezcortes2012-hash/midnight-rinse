@@ -136,6 +136,7 @@ El juego cuenta tus noches («Noche 3» en el título).
 - **Los susurros** también cambian.
 - **La respuesta secreta:** con las seis hojas, tu casillero o lo que dice la radio, aparece una cuarta respuesta cuando él te pregunta la hora…
 - **¿Y si haces todo en la misma noche?** Hay un final más, el verdadero, para quien le dice la hora verdadera y cierra el ciclo en el claro.
+- **El teléfono** dice algo distinto cada noche (siempre con la instrucción que importa). Desde la sexta, la voz es la tuya.
 
 ### Qué hacer durante el turno
 - **Primeras noches:** si te atoras, el juego te da una **pista** suave (una sola vez cada una), en las noches 1 y 2 o siempre en Tranquilo.
@@ -171,7 +172,7 @@ Saca fotos con la cámara del celular: **P** en el teclado, **Y/△** en el cont
 En la pantalla de título: turnos terminados, tu mejor evaluación en cada dificultad y los cinco finales (dos están ocultos hasta que los ves). Si superas tu mejor nota, el resumen del final dice «¡Nuevo récord!».
 
 ### Archivo
-Todo lo que lees (las hojas del bosque) y escuchas (Radio Nocturna a las 02:40) queda en el **Archivo** de la pantalla de título, para releerlo cuando quieras y armar la historia completa.
+Todo lo que lees (las hojas del bosque) y escuchas (Radio Nocturna a las 02:40) queda en el **Archivo** de la pantalla de título, para releerlo cuando quieras y armar la historia completa. También guarda las llamadas del teléfono público que contestaste.
 
 ### Objetos perdidos
 Cuando una lavadora termina su ciclo, a veces queda **algo olvidado** adentro. Abre la puerta para encontrarlo. Hay **15 objetos**, algunos normales y otros no tanto, y se guardan en una colección permanente (**Objetos perdidos**, en la pantalla de título).
