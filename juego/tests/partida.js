@@ -1040,6 +1040,34 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Brillo: la opción levanta los oscuros (y se guarda)', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var d = ctx.w.document;
+      start(ctx);
+      step(ctx, 5);
+      function mean() {
+        g.retro.render(g.world.scene, g.player.camera, { blink: 0, dread: 0, time: 1, flash: 0, collapse: 0, high: 0, gamma: g.ui.options.brightness });
+        var gl = g.retro.renderer.getContext();
+        var w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
+        var px = new Uint8Array(w * h * 4);
+        gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px);
+        var s = 0;
+        for (var i = 0; i < px.length; i += 16) { s += px[i] + px[i + 1] + px[i + 2]; }
+        return s / (px.length / 16) / 3;
+      }
+      var base = mean();
+      var input = d.getElementById('opt-brillo');
+      input.value = '1.6';
+      input.dispatchEvent(new ctx.w.Event('input'));
+      check(g.ui.options.brightness === 1.6, 'la opción no cambió (' + g.ui.options.brightness + ')');
+      var bright = mean();
+      check(bright > base * 1.15, 'no se ve más claro (' + base.toFixed(1) + ' → ' + bright.toFixed(1) + ')');
+      check(JSON.parse(localStorage.getItem('midnight-rinse/opciones')).brightness === 1.6, 'no se guardó');
+      noErrors(ctx);
+      return 'brillo medio ' + base.toFixed(1) + ' → ' + bright.toFixed(1);
+    }],
+
     ['Noche sin agua: las lavadoras no arrancan; las secadoras y la música tapan el zumbido', async function () {
       var ctx = await load('?noche=sin_agua');
       var g = ctx.g;

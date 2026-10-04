@@ -102,7 +102,7 @@
       }
       // La foto: un cuadro con flash, copiado al instante (antes de que el navegador limpie el lienzo).
       g.retro.render(g.world.scene, cam, { blink: 0, dread: g.dread, time: performance.now() / 1000, flash: 0.1, collapse: g.collapsed ? 1 : 0,
-        high: g.consumables.high, crt: false });
+        high: g.consumables.high, crt: false, gamma: g.ui.options.brightness });
       var x2 = this.canvas.getContext('2d');
       x2.imageSmoothingEnabled = false;
       x2.fillStyle = '#000';

@@ -602,5 +602,6 @@ MR.TEXTOS_EN = {
  "Un rollo de fotos sin revelar": "An undeveloped roll of film",
  "Doce exposiciones. En la etiqueta, con tu letra: «no las revelen».": "Twelve exposures. On the label, in your handwriting: “don't develop them”.",
  "Una llave de paso": "A water shutoff key",
- "Fría y mojada. Alguien cerró el agua a propósito.": "Cold and wet. Someone shut off the water on purpose."
+ "Fría y mojada. Alguien cerró el agua a propósito.": "Cold and wet. Someone shut off the water on purpose.",
+ "Brillo": "Brightness"
 };

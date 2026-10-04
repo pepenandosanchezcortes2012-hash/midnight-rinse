@@ -119,6 +119,7 @@
     'uniform float uCollapse;',
     'uniform float uHigh;',
     'uniform float uCrt;',
+    'uniform float uGamma;',
     'varying vec2 vUv;',
     'float rand(vec2 co) { return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453); }',
     'void main() {',
@@ -156,6 +157,7 @@
     '  float vf = mix(1.0, vig, 0.45 + uDread * 0.4);',
     '  col *= vf;',
     '  A = 1.0 - (1.0 - A) * vf;',
+    '  col = pow(max(col, 0.0), vec3(1.0 / uGamma));', // opción «Brillo»: levanta los oscuros (1 = sin cambio)
     '  col += vec3(uFlash);',
     '  col *= 1.0 - uBlink;',
     '  A = 1.0 - (1.0 - A) * (1.0 - uBlink);',
@@ -241,7 +243,8 @@
           uFlash: { value: 0 },
           uCollapse: { value: 0 },
           uHigh: { value: 0 },
-          uCrt: { value: 0 }
+          uCrt: { value: 0 },
+          uGamma: { value: 1 }
         },
         vertexShader: POST_VERT,
         fragmentShader: POST_FRAG,
@@ -315,6 +318,7 @@
       u.uCollapse.value = fx.collapse;
       u.uHigh.value = fx.high || 0;
       u.uCrt.value = fx.crt ? 1 : 0;
+      u.uGamma.value = fx.gamma || 1;
       this.renderer.setRenderTarget(this.target);
       this.renderer.render(scene, camera);
       this.renderer.setRenderTarget(null);

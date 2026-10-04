@@ -461,6 +461,10 @@ El proyecto pasó por dos etapas:
 - **Tres objetos perdidos nuevos**, ligados a lo que se agregó: un espejo de bolsillo, un rollo de fotos sin revelar y una llave de paso. Ahora son 15 en total. También en inglés: 602 textos.
 - Resultado: 45/45.
 
+## 55. Opción «Brillo»
+- **Qué hace:** en el posproceso, una corrección gamma (`pow(col, 1/uGamma)`) antes del tramado RGB555. Levanta los oscuros sin quemar los claros ni perder el aspecto PS1. El rango va de 0,7 a 1,8 (1 = sin cambio). Se guarda con las opciones y también aplica a las fotos. Se ve en vivo en el título, porque el fondo se sigue dibujando.
+- **Prueba nueva:** con brillo 1,6, la luminosidad media del cuadro pasa de 34,7 a 71,1, y la opción se guarda. Resultado: 46/46.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
