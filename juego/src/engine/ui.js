@@ -183,6 +183,12 @@
       });
     }
 
+    /** Panel de récords: turnos, mejor nota por dificultad y finales vistos. */
+    renderHistorial(historial) {
+      $('historial-cuenta').textContent = historial.count() + '/' + historial.total();
+      this._renderList($('historial-lista'), historial.view(), '▣', '□');
+    }
+
     /** Panel de objetos perdidos (misma presentación que los logros). */
     renderObjetos(objetos) {
       $('objetos-cuenta').textContent = objetos.count() + '/' + objetos.total();

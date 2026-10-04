@@ -416,6 +416,11 @@ El proyecto pasó por dos etapas:
 - **Cambios para que todo se pueda traducir:** unas 45 concatenaciones pasaron a ser plantillas. Las pruebas se cargan con `lang=es`.
 - **Prueba nueva:** juega en inglés (menús, tablilla, susurros, teléfono, diálogo, logro, bosque, final y compartir) y falla si algún texto llega sin traducir. Resultado: 39/39.
 
+## 47. Récords y finales vistos
+- **Panel «Récords · finales»** en el título: turnos terminados, mejor nota y puntos por dificultad (con la noche en que se logró) y los cinco finales: la una y diez, 05:12, paseo, el bosque y el verdadero. Los dos últimos salen como «???» hasta verlos. Se guarda en `midnight-rinse/historial`; «Reiniciar todo» lo borra.
+- **Al terminar:** si superas tu mejor nota en esa dificultad, el resumen dice «¡Nuevo récord en …!». El primer turno no cuenta como récord.
+- **También en inglés:** 18 textos nuevos, 559 en total. Prueba nueva. Resultado: 40/40.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -56,6 +56,8 @@
       this.logros = new MR.Logros(this);
       this.objetos = new MR.Objetos(this);
       this.archivo = new MR.Archivo(this);
+      this.historial = new MR.Historial();
+      this.ui.renderHistorial(this.historial);
       this.ui.renderLogros(this.logros);
       this.ui.renderObjetos(this.objetos);
       this.ui.renderArchivo(this.archivo);
@@ -767,6 +769,13 @@
       var grade = MR.Game.grade(score);
       summary.unshift(MR.tf('Evaluación del turno: {nota} ({p} puntos)', { nota: grade[0], p: Math.max(0, Math.round(score)) }));
       this.grade = grade[0];
+      // Récords: qué final fue (en el mismo orden que la pantalla final de abajo) y si es la mejor nota en esta dificultad.
+      var truth = reason === 'bosque' && this.flags.secreto;
+      this.ending = truth ? 'verdadero' : (reason === 'bosque' ? 'bosque' : (diff.sinSustos ? 'paseo' : (good ? 'bueno' : 'bucle')));
+      if (this.historial.record({ score: score, grade: grade[0], difficulty: this.options.difficulty, ending: this.ending, night: this.night })) {
+        summary.splice(1, 0, MR.tf('¡Nuevo récord en {d}!', { d: MR.t(diff.nombre) }));
+      }
+      this.ui.renderHistorial(this.historial);
       // Logros del final del turno.
       var L = this.logros;
       L.unlock('primer_turno');
@@ -780,7 +789,6 @@
         if (good) { this.audio.ding(); this.audio.door(); } else { this.audio.thud(); this.audio.buzz(); }
       }
       // Final verdadero: en la misma noche le dijiste la hora verdadera (se fue) y cerraste el ciclo en el claro.
-      var truth = reason === 'bosque' && this.flags.secreto;
       if (truth) { L.unlock('verdadero'); }
       if (diff.sinSustos && reason !== 'bosque') {
         this.ui.showEnd('05:12 · Paseo nocturno', 'Recorriste la lavandería, el bosque y el pasillo sin que nadie te mirara. Afuera sigue lloviendo. Esta vez fue solo un paseo.', summary);

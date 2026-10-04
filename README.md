@@ -162,6 +162,9 @@ En **Opciones → Dificultad**:
 - **Normal:** el juego original, hasta 3 faltas.
 - **Pesadilla:** sustos casi el doble de seguidos, 2 cigarros, 2 tragos y 1 porro. Solo se perdona **una** falta para el final bueno.
 
+### Récords
+En la pantalla de título: turnos terminados, tu mejor evaluación en cada dificultad y los cinco finales (dos están ocultos hasta que los ves). Si superas tu mejor nota, el resumen del final dice «¡Nuevo récord!».
+
 ### Archivo
 Todo lo que lees (las hojas del bosque) y escuchas (Radio Nocturna a las 02:40) queda en el **Archivo** de la pantalla de título, para releerlo cuando quieras y armar la historia completa.
 

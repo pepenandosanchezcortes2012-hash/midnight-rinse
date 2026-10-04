@@ -898,6 +898,37 @@
       return '«' + title + '»';
     }],
 
+    ['Récords: turnos, mejor nota por dificultad, finales vistos y «nuevo récord»', async function () {
+      localStorage.removeItem('midnight-rinse/historial');
+      var ctx = await load();
+      var g = ctx.g;
+      var d = ctx.w.document;
+      check(d.getElementById('historial-cuenta').textContent === '0/5', 'cuenta inicial ' + d.getElementById('historial-cuenta').textContent);
+      start(ctx);
+      g.end('fin'); step(ctx, 5); // primer turno: la una y diez, sin «nuevo récord» (no había antes)
+      check(g.ending === 'bucle', 'final ' + g.ending);
+      var resumen1 = d.getElementById('final-resumen').textContent;
+      check(resumen1.indexOf('Nuevo récord') < 0, 'el primer turno no debería decir «nuevo récord»');
+      ctx = await load();
+      g = ctx.g;
+      d = ctx.w.document;
+      start(ctx);
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      g.bosque.found = [true, true, true, true, true, true];
+      g._ask(); g._answer(4);
+      g.bosque.go(); step(ctx, 40);
+      g.bosque.touchWasher(); step(ctx, 30 * 4);
+      check(g.ending === 'verdadero', 'final ' + g.ending);
+      check(d.getElementById('final-resumen').textContent.indexOf('¡Nuevo récord en Normal!') >= 0, 'no avisó del récord');
+      var h = g.historial.d;
+      check(h.turnos === 2 && h.finales.bucle === 1 && h.finales.verdadero === 1 && h.mejor.normal.grade === g.grade, 'historial ' + JSON.stringify(h));
+      check(d.getElementById('historial-cuenta').textContent === '2/5', 'cuenta ' + d.getElementById('historial-cuenta').textContent);
+      var lista = d.getElementById('historial-lista').textContent;
+      check(lista.indexOf('Turnos terminados: 2') >= 0 && lista.indexOf('05:13 · Fin del turno') >= 0 && lista.indexOf('???') >= 0, 'lista: ' + lista.slice(0, 120));
+      noErrors(ctx);
+      return '2 turnos · mejor ' + h.mejor.normal.grade + ' (' + h.mejor.normal.score + ') · finales 2/5';
+    }],
+
     ['Versión en inglés: menús, diálogo, tablilla, bosque y final sin textos sin traducir', async function () {
       var ctx = await load('?lang=en');
       var w = ctx.w;
