@@ -158,3 +158,7 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Se corrigió el z-fighting de las fachadas (las «rayas» eran eso) y de otras superficies lejanas. Edificios con cornisa y puertas, autos con ruedas y ventanillas, gente con cara y paraguas en la mano.
 - **Decisión:** separar las superficies según la precisión real (z²/3277 m) en vez de cambiar el buffer de profundidad. Es más seguro en celulares viejos.
+
+## Sprint 18 — Todos los modelos (2): la sala
+
+- Teléfono público completo, cambiador con letrero y ranura, café con vasito y luz, tele con antenas.

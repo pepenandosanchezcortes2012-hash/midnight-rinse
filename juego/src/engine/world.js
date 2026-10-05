@@ -421,6 +421,9 @@
       knob.position.set(0.27, 0.08, 0.22);
       tv.add(knob);
       var led = this.box(0.025, 0.015, 0.01, this.retro.material({ texture: 'white', color: 0xff3020, emissive: 0.2 }), 0.27, -0.12, 0.22, tv);
+      // Antenas de conejo.
+      this.box(0.1, 0.03, 0.08, m.metal, 0, 0.275, -0.05, tv);
+      [-1, 1].forEach(function (s) { this.box(0.012, 0.36, 0.012, m.metal, 0.07 * s, 0.43, -0.05, tv).rotation.z = -0.45 * s; }, this);
       this.interactive(body, 'tele');
       this.interactive(screen, 'tele');
       this.interactive(knob, 'teleCanal');
@@ -446,6 +449,10 @@
       this.add(face);
       var slot = this.box(0.06, 0.1, 0.03, this.mat.dark, -2.98, 0.95, 4.43);
       this.box(0.3, 0.22, 0.04, this.mat.dark, -3.2, 0.45, 4.43);
+      var cup = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.028, 0.08, 8), R.material({ texture: 'white', color: 0xe8e2d4, emissive: 0.2 })); // un vasito de papel
+      cup.position.set(-3.2, 0.38, 4.39);
+      this.add(inert(cup));
+      this.box(0.7, 0.05, 0.02, R.material({ texture: 'white', color: 0xffcf8a, emissive: 1.0 }), -3.2, 1.78, 4.435); // la franja de luz
       [body, face, slot].forEach(function (mesh) { this.interactive(mesh, 'cafe'); }, this);
       this.collider(-3.6, -2.8, 4.42, 5);
     }
@@ -494,6 +501,26 @@
 
       // Cambiador de monedas.
       this.box(0.6, 1.5, 0.4, m.metal, -4.5, 0.75, 4.75);
+      var chg = MR.Textures.dynamic(32, 16);
+      chg.ctx.fillStyle = '#1b1d20'; chg.ctx.fillRect(0, 0, 32, 16);
+      chg.ctx.fillStyle = '#ffd23a'; chg.ctx.font = 'bold 8px monospace'; chg.ctx.textAlign = 'center';
+      chg.ctx.fillText(MR.t('CAMBIO'), 16, 11);
+      chg.texture.needsUpdate = true;
+      var chgPlate = new THREE.Mesh(new THREE.PlaneGeometry(0.44, 0.2), this.retro.material({ map: chg.texture, emissive: 0.7 }));
+      chgPlate.rotation.y = Math.PI;
+      chgPlate.position.set(-4.5, 1.36, 4.546);
+      this.add(inert(chgPlate));
+      this.box(0.24, 0.03, 0.02, m.dark, -4.5, 0.98, 4.545);                // ranura de billetes
+      var trim = [];
+      var Mt = THREE.Matrix4;
+      var bxt = new THREE.BoxGeometry(1, 1, 1);
+      [[-4.5, 1.49, 0.62, 0.03], [-4.5, 0.01, 0.62, 0.03]].forEach(function (t) {
+        trim.push({ geo: bxt, matrix: new Mt().makeTranslation(t[0], t[1], 4.54).multiply(new Mt().makeScale(t[2], t[3], 0.04)), su: 1, sv: 1 });
+      });
+      [-4.79, -4.21].forEach(function (tx2) {
+        trim.push({ geo: bxt, matrix: new Mt().makeTranslation(tx2, 0.75, 4.54).multiply(new Mt().makeScale(0.03, 1.5, 0.04)), su: 1, sv: 1 });
+      });
+      this.add(inert(new THREE.Mesh(mergeParts(trim), this.retro.material({ texture: 'metal', color: 0x55595e }))));
       var button = this.box(0.12, 0.12, 0.05, this.retro.material({ texture: 'yellow', emissive: 0.4 }), -4.5, 1.15, 4.53);
       this.interactive(button, 'changer');
       this.collider(-4.85, -4.15, 4.5, 5);
@@ -518,11 +545,45 @@
       this.interactive(edge, 'changerTray');
       this.edgeCoin = edge;
 
-      // Teléfono público.
-      this.box(0.24, 0.34, 0.1, m.dark, 2.7, 1.4, 4.94);
-      var handset = this.box(0.06, 0.24, 0.06, m.metal, 2.62, 1.42, 4.87);
+      // Teléfono público: caparazón de metal, aparato con teclado y ranura, el auricular colgado y su cordón.
+      var M = THREE.Matrix4;
+      var bx = new THREE.BoxGeometry(1, 1, 1);
+      function pz(list, x, y, z, w, h, d) { list.push({ geo: bx, matrix: new M().makeTranslation(x, y, z).multiply(new M().makeScale(w, h, d)), su: 1, sv: 1 }); }
+      var hood = [];
+      pz(hood, 2.7, 1.45, 4.975, 0.52, 0.8, 0.03);
+      pz(hood, 2.445, 1.45, 4.84, 0.03, 0.8, 0.3);
+      pz(hood, 2.955, 1.45, 4.84, 0.03, 0.8, 0.3);
+      pz(hood, 2.7, 1.865, 4.84, 0.55, 0.03, 0.32);
+      this.add(inert(new THREE.Mesh(mergeParts(hood), this.retro.material({ texture: 'metal', color: 0x9aa4ad }))));
+      var telTex = MR.Textures.dynamic(16, 24);
+      var tx = telTex.ctx;
+      tx.fillStyle = '#26282b'; tx.fillRect(0, 0, 16, 24);
+      tx.fillStyle = '#7d858c'; tx.fillRect(2, 2, 9, 3);       // la pantallita
+      tx.fillStyle = '#0c0c0c'; tx.fillRect(13, 2, 1, 5);       // la ranura de monedas
+      tx.fillStyle = '#c9cdd1';
+      for (var kr = 0; kr < 4; kr += 1) { for (var kc = 0; kc < 3; kc += 1) { tx.fillRect(2 + kc * 4, 8 + kr * 4, 2, 2); } }
+      telTex.texture.needsUpdate = true;
+      var telBody = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.34, 0.1), [m.dark, m.dark, m.dark, m.dark, m.dark, this.retro.material({ map: telTex.texture, emissive: 0.15 })]);
+      telBody.position.set(2.72, 1.4, 4.92);
+      this.add(telBody);
+      var handset = this.box(0.06, 0.24, 0.06, m.dark, 2.62, 1.42, 4.85);
+      this.box(0.085, 0.055, 0.075, m.dark, 0, 0.12, -0.006, handset);  // para el oído
+      this.box(0.085, 0.055, 0.075, m.dark, 0, -0.12, -0.006, handset); // para la boca
       this.interactive(handset, 'phone');
+      handset.children.forEach(function (c) { this.interactive(c, 'phone'); }, this);
       this.phone = handset;
+      var cord = [];
+      [[2.63, 1.24], [2.66, 1.19], [2.63, 1.14], [2.66, 1.09], [2.7, 1.06]].forEach(function (c) { pz(cord, c[0], c[1], 4.88, 0.03, 0.035, 0.03); });
+      this.add(inert(new THREE.Mesh(mergeParts(cord), m.dark)));
+      var telSign = MR.Textures.dynamic(64, 16);
+      telSign.ctx.fillStyle = '#16314f'; telSign.ctx.fillRect(0, 0, 64, 16);
+      telSign.ctx.fillStyle = '#e8eef4'; telSign.ctx.font = 'bold 9px monospace'; telSign.ctx.textAlign = 'center';
+      telSign.ctx.fillText(MR.t('TELÉFONO'), 32, 12);
+      telSign.texture.needsUpdate = true;
+      var telPlate = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.125), this.retro.material({ map: telSign.texture, emissive: 0.6 }));
+      telPlate.rotation.y = Math.PI;
+      telPlate.position.set(2.7, 1.95, 4.69);
+      this.add(inert(telPlate));
     }
 
     _closet() {

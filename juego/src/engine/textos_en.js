@@ -886,5 +886,7 @@ MR.TEXTOS_EN = {
  "A veces viene un niño. Si Pelusa está cerca, déjalo acariciarla.": "Sometimes a child comes. If Pelusa is nearby, let the child pet it.",
  "Ahora se ve la ropa girar por el ojo de buey.": "Now you can see the clothes spinning through the porthole.",
  "Pelusa ahora tiene un cerebro de mosca de la fruta: recuerda quién la acaricia.": "Pelusa now has a fruit fly brain: it remembers who pets it.",
- "Mira por la vidriera: la avenida por fin tiene ventanas (antes eran rayas).": "Look out the window: the avenue finally has windows (they used to be stripes)."
+ "Mira por la vidriera: la avenida por fin tiene ventanas (antes eran rayas).": "Look out the window: the avenue finally has windows (they used to be stripes).",
+ "TELÉFONO": "PHONE",
+ "CAMBIO": "CHANGE"
 };

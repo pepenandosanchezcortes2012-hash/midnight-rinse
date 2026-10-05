@@ -803,6 +803,19 @@ El proyecto pasó por dos etapas:
 - **Rendimiento:** la sala pasó de 147 a 148 llamadas (puertas y zócalos van juntos en una malla). Autos y gente suman pocas, y solo cuando pasan.
 - **QA:** captura de antes y después y medición PSX. Resultado: 83/83.
 
+## 98. Sprint 18: todos los modelos, 2.ª parte. La sala
+- **Teléfono público:** antes era un rectángulo negro diminuto, aunque es el que suena a las 03:50 con la llamada de cada noche. Ahora tiene:
+  - un caparazón de metal;
+  - el aparato con teclado, pantallita y ranura de monedas;
+  - el auricular, con su parte para el oído y para la boca (tocable);
+  - el cordón y un letrero azul «TELÉFONO».
+- **Cambiador:** letrero «CAMBIO», ranura de billetes y marco.
+- **Máquina de café:** un vasito de papel en el hueco y una franja de luz arriba.
+- **Tele:** antenas de conejo.
+- Todo lo decorativo es inerte (no tapa los toques) y va unido en pocas mallas.
+- **Galería:** vistas nuevas de la tele, el café, el cambiador, el almacén, el techo y el teléfono.
+- **QA:** capturas de antes y después y letreros traducidos. Resultado: 83/83.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
