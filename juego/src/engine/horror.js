@@ -6,6 +6,13 @@
  * durante un parpadeo. La zona especial "jugador" tiene visibilidad 1 siempre: lo que está "detrás de ti"
  * solo puede pasar mientras parpadeas.
  * También vigila la mirada al rostro del Cliente Inmóvil (regla del registro: NO lo mires a la cara).
+ *
+ * Su cerebro (director de IA, src/core/director.js): cuando se mueve no salta a cualquier lado. Elige por utilidad un
+ * modo según cómo está la tienda (luces que fallan, la radio en estática, tu miedo, si lo miraste fijo): al borde de tu
+ * vista, más cerca y a tu espalda, o su rutina (el banco, mirar los tambores) para que bajes la guardia. Y elige un lugar
+ * que no estés viendo: nunca aparece a la vista. Si lo miraste, tarda de 3 a 5 s en reaccionar. A veces, donde estaba
+ * parado, deja una moneda mojada o un ticket doblado. En el bosque se esconde detrás de los pinos: se corre de lado para
+ * que siempre quede un tronco entre él y tus ojos.
  */
 (function (MR) {
   'use strict';
@@ -49,6 +56,11 @@
       this.reflectCooldown = 20;
       this.lastHover = null;
       this.reflectMat = this.game.retro.material({ texture: 'reflejo', emissive: 0.4 });
+      this.recientes = [];             // sus últimas anclas: no vuelve enseguida a la misma
+      this.miradoEn = -99;             // cuándo lo tuviste en foco por última vez
+      this.pausaEl = U.rand(3, 5);     // cuánto tarda en reaccionar después (pausa de contemplación)
+      this.senuelos = { moneda: null, ticket: null };
+      this.arbol = -1;                 // el pino detrás del que se esconde en el bosque
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -120,6 +132,8 @@
       this._basket(player);
       this._hat(player);
       this._writing(player);
+      this._senuelosVistos(dt, player);
+      this._arboreo(dt, player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
       this._tilt(dt, player);
@@ -239,9 +253,9 @@
           break;
         }
         case 'cliente_mueve': {
-          var targets = ['banco', 'banco', 'lavadoras', 'lavadoras_mira', 'secadoras', 'entrada', 'almacen', 'mostrador'];
-          var to = U.pick(targets.filter(function (t) { return t !== this.customer.anchor; }, this));
-          this.schedule('cliente_mueve', this.world.anchors[to].zone, 3, { to: to });
+          // A dónde, lo decide al moverse (un punto ciego): aquí se programa en la zona donde está, para que no lo veas irse.
+          var desde = this.customer.zone && this.zones[this.customer.zone] ? this.customer.zone : 'banco';
+          this.schedule('cliente_mueve', desde, 3, {});
           break;
         }
         default: break;
@@ -271,14 +285,20 @@
             g.onCustomerAppeared();
           }
           break;
-        case 'cliente_mueve':
+        case 'cliente_mueve': {
           if (!this.customer.present) { break; }
-          if (this.customer.behind || this.zoneVisible(this.customer.zone) === 0 || g.player.eyesClosed) {
-            this.placeCustomer(e.to);
-          } else {
-            this.later(2, 'cliente_mueve', zoneName, 3, { to: e.to });
+          var suelto = this.customer.behind || this.zoneVisible(this.customer.zone) === 0 || g.player.eyesClosed;
+          if (!suelto) { this.later(2, 'cliente_mueve', zoneName, 3, { to: e.to }); break; }
+          if (e.to) { this.placeCustomer(e.to); break; }
+          // Sin destino fijo: espera su pausa si lo miraste hace poco, y elige un punto ciego (si no hay, espera).
+          var to = this.clock - this.miradoEn < this.pausaEl ? null : this._puntoCiego();
+          if (!to) {
+            if ((e.intentos || 0) < 20) { this.later(1.5, 'cliente_mueve', zoneName, 3, { intentos: (e.intentos || 0) + 1 }); }
+            break;
           }
+          this._moverEl(to);
           break;
+        }
         case 'cliente_detras':
           if (this.customer.present) {
             this.placeBehindPlayer(g.player);
@@ -452,6 +472,130 @@
       MR.Haptics.pulse(steps === 3 ? [70, 110, 70, 110, 95] : [60, 140, 60]);
     }
 
+    /**
+     * A dónde se mueve él (director de IA). Primero el modo, por utilidad según la tienda: su rutina (el banco, mirar
+     * los tambores: para que bajes la guardia), la periferia (justo afuera del borde de tu vista) o acercarse (a tu
+     * espalda; más con las luces fallando, la radio en estática, tu miedo y cada vez que lo miraste fijo). Después, un
+     * ancla que no estés viendo. Devuelve su nombre, o null si no hay ninguna oculta.
+     */
+    _puntoCiego() {
+      var g = this.game;
+      var D = MR.Director;
+      var p = g.player;
+      var falla = this.flickers.some(function (f) { return f > 0; }) ? 1 : 0;
+      var estatica = 1 - (g.gameplay.radioProximity || 0);
+      var modo = D.elegirUna({
+        rutina: 0.3 + 0.3 * (1 - g.dread) + (g.calmSources() >= 3 ? 0.1 : 0),
+        periferia: 0.35 + 0.2 * g.dread + 0.12 * estatica,
+        acercarse: 0.12 + 0.3 * g.dread + 0.25 * falla + 0.2 * (1 - this.lightLevel()) + 0.1 * Math.min(3, g.stats.mirada || 0)
+      }, Math.random, 0.15);
+      var anchors = this.world.anchors;
+      var cands = ['banco', 'lavadoras', 'lavadoras_mira', 'secadoras', 'entrada', 'almacen', 'mostrador'].map(function (n) {
+        var a = anchors[n];
+        return { nombre: n, x: a.x, z: a.z, visible: this.zoneVisible(a.zone), rutina: n === 'banco' || n === 'lavadoras_mira' };
+      }, this);
+      var ojos = { x: p.pos.x, z: p.pos.z, yaw: p.yaw, ojosCerrados: p.eyesClosed, limpiando: !!(g.glasses && g.glasses.wiping) };
+      var c = D.elegirPuntoCiego(cands, ojos, { modo: modo, actual: this.customer.anchor, recientes: this.recientes, rnd: Math.random });
+      this.modoEl = modo;
+      return c ? c.nombre : null;
+    }
+
+    /** Se mueve a un punto ciego; a veces deja un señuelo donde estaba parado. */
+    _moverEl(to) {
+      var g = this.game;
+      var c = this.customer;
+      var pos = this.world.customer.group.position;
+      var enSala = !(g.bosque && g.bosque.outside) && !(g.pasillo && g.pasillo.inside);
+      if (enSala && !c.seated && !c.behind && this.anchorEnSala(c.anchor) && !(g.diff && g.diff.sinSustos) && Math.random() < 0.25) {
+        this.dejarSenuelo(pos.x, pos.z);
+      }
+      this.placeCustomer(to);
+      this.recientes.push(to);
+      if (this.recientes.length > 2) { this.recientes.shift(); }
+      this.pausaEl = U.rand(3, 5);
+    }
+
+    anchorEnSala(name) { return !!name && !/^(bosque_|pasillo_)/.test(name) && name !== 'detras'; }
+
+    /** Deja en el piso una moneda mojada o un ticket doblado (se turnan; uno de cada uno a la vez). */
+    dejarSenuelo(x, z, kind) {
+      var k = kind || ((this.nSenuelos = (this.nSenuelos || 0) + 1) % 2 ? 'moneda' : 'ticket');
+      var d = this.world.decoys[k];
+      if (d.visible) { return false; }
+      d.position.set(x + U.rand(-0.08, 0.08), 0, z + U.rand(-0.08, 0.08));
+      d.visible = true;
+      this.senuelos[k] = { visto: false, t: 0, parpadeos: 0 };
+      this.game.dread = Math.min(1, this.game.dread + 0.02);
+      return true;
+    }
+
+    /** Un señuelo visto de cerca: el subtítulo (una vez); dos parpadeos después ya no está (o a los 2 min, sin verlo). */
+    _senuelosVistos(dt, player) {
+      var self = this;
+      ['moneda', 'ticket'].forEach(function (k) {
+        var d = self.world.decoys[k];
+        var s = self.senuelos[k];
+        if (!d.visible || !s) { return; }
+        s.t += dt;
+        var punto = self.tmpSen || (self.tmpSen = new V3());
+        punto.set(d.position.x, 0.05, d.position.z);
+        var visto = !player.eyesClosed && self.frustum.containsPoint(punto) && U.distXZ(player.pos, d.position) < 3;
+        if (visto && !s.visto) {
+          s.visto = true;
+          s.parpadeos = player.blinkCount;
+          self.game.ui.subtitle(k === 'moneda' ? '(En el piso, justo donde él estaba parado, hay una moneda mojada.)' :
+            '(Donde él estaba parado quedó un ticket doblado. Está húmedo.)', 5);
+          self.game.dread = Math.min(1, self.game.dread + 0.03);
+        } else if ((s.visto && player.eyesClosed && player.blinkCount - s.parpadeos >= 2) || (!s.visto && s.t > 120 && !visto)) {
+          d.visible = false;
+          self.senuelos[k] = null;
+        }
+      });
+    }
+
+    /**
+     * En el bosque (mimetismo arbóreo): mientras no lo ves, se corre de lado, de pino en pino, para que siempre quede un
+     * tronco entre él y tus ojos; queda de pie detrás del árbol, de cara a ti. A la vista no se mueve.
+     */
+    _arboreo(dt, player) {
+      var g = this.game;
+      var c = this.customer;
+      if (!c.present || !(g.bosque && g.bosque.outside) || !/^bosque_/.test(c.anchor || '')) { this.arbol = -1; return; }
+      var D = MR.Director;
+      var arboles = this.world.forest.treePos;
+      var grp = this.world.customer.group;
+      var pos = grp.position;
+      var j = { x: player.pos.x, z: player.pos.z, yaw: player.yaw };
+      var cabeza = this.customerHead(this.tmpArb || (this.tmpArb = new V3()));
+      // Lo ves si está en tu vista con los ojos abiertos. Detrás de un tronco y lejos (más de 7 m, en la oscuridad) no se
+      // le ve moverse; de cerca, el tronco no tapa todo el abrigo: ahí no se mueve.
+      var lejos = Math.hypot(pos.x - j.x, pos.z - j.z) > 7;
+      var visto = !player.eyesClosed && !(g.glasses && g.glasses.wiping) && this.frustum.containsPoint(cabeza) &&
+        !(lejos && D.tapado(j, pos, arboles, 0.2));
+      this.arbolT = (this.arbolT || 0) - dt;
+      if (this.arbolT <= 0) {
+        this.arbolT = 0.4;
+        var t = this.arbol >= 0 ? arboles[this.arbol] : null;
+        var dj = t ? Math.hypot(t[0] - j.x, t[1] - j.z) : 0;
+        if (!t || dj < 3.5 || dj > 14) {
+          var nuevo = D.elegirArbol(j, pos, arboles, { min: 4, max: 13, alcance: 6, separacion: 0.55 });
+          if (nuevo >= 0) { this.arbol = nuevo; }
+        }
+      }
+      if (this.arbol < 0 || visto) { return; }
+      var h = D.escondite(j, arboles[this.arbol], 0.55);
+      var dx = h.x - pos.x;
+      var dz = h.z - pos.z;
+      var d = Math.hypot(dx, dz);
+      if (d > 1e-3) {
+        var paso = Math.min(d, 2.4 * dt);
+        pos.x += dx / d * paso;
+        pos.z += dz / d * paso;
+      }
+      c.rot = Math.atan2(-(j.x - pos.x), -(j.z - pos.z)); // de cara a ti, asomado detrás del tronco
+      grp.rotation.y = c.rot;
+    }
+
     placeCustomer(name) {
       var wasPresent = this.customer.present && this.world.customer.group.visible;
       this._placeAt(name);
@@ -534,6 +678,7 @@
       var faceDir = new V3(-Math.sin(rot), 0, -Math.cos(rot));
       var faceVisible = faceDir.dot(new V3(-toHead.x, 0, -toHead.z).normalize()) > 0.3;
       var staring = angle < C.STARE_ANGLE_DEG && dist < C.STARE_DISTANCE && faceVisible;
+      if (angle < 20 && dist < 14) { this.miradoEn = this.clock; } // lo tienes en foco: después tarda en reaccionar
       if (staring) {
         this.stareTime += dt;
         if (this.stareTime >= C.STARE_SECONDS && !this.stareFlagged) {

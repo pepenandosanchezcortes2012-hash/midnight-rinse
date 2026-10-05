@@ -902,6 +902,34 @@ El proyecto pasó por dos etapas:
 - **Borde dorado:** en el panel «Fotos», las miniaturas que revelaron algo llevan el marco dorado. Las demás conservan el blanco de polaroid.
 - **QA:** la prueba de la avenida inundada ahora verifica el borde dorado y el pie del visor. La prueba de inglés encontró el pie de «él» sin traducir, y se tradujeron los cinco. Resultado: 91/91.
 
+## 111. Director de IA: los NPCs dejan de ser predecibles (skill uncanny-ai-director)
+- **Pedido de Yesda:** que los clientes y las entidades dejen el «cerebro de mosca» para moverse y decidir, y se sientan impredecibles, conscientes de ti y orgánicos. Se hizo **adaptado al canon** (ver «Decisiones»).
+- **Núcleo nuevo, puro y probado en node:** `juego/src/core/director.js` (`MR.Director`):
+  - `percibir`: cuánto te mira el jugador (foco <20°, periferia hasta el borde de la vista de 43°, fuera, ojos cerrados, limpiando el vaho).
+  - `Utilidad`: decisiones por puntaje con compromiso (no cambia de idea a cada cuadro), tiempo mínimo y ruido con semilla.
+  - `Contemplacion`: mirarlo de golpe (venía de fuera de vista hace < 0,35 s) lo congela 3–5 s. Una mirada lenta o un parpadeo, no.
+  - `Mirada`: cuello lento (tope 0,9 rad/s) y ojos que se clavan 1 s después.
+  - `Respiracion`: a < 1,3 m contiene el aire y para los micro-movimientos; vuelve despacio al alejarte.
+  - `Agente`: fuerzas de dirección (buscar, llegar frenando con v² = 2·a·d, deslizarse por el borde de las cajas, apartarse de los demás, espacio personal de 1 m) con inercia, paso pesado, desatasco y **A\* de respaldo** (cuadrícula de 20 cm, a demanda, ~0,1 ms) cuando no ve libre el camino. Si le tapas la puerta, espera; si solo estás en medio, te rodea sin rozarte.
+  - `elegirPuntoCiego` y el mimetismo arbóreo (`elegirArbol`, `escondite`, `tapado`).
+- **En el juego:**
+  - `clientela.js`: caras blancas, el niño y las máscaras caminan con `Agente` (nada de líneas rectas entre puntos; cada uno con su propia línea). Las caras eligen su rutina por utilidad (mirar el tambor, doblar una prenda que no está, contar monedas o correrse al borde de tu vista; más inquietas con luces que fallan, estática y miedo) y solo cambian de pose cuando no las miras de frente. Si insistes en hablarles, señalan el tambor con un dedo anguloso y después se inclinan hacia ti sin mirarte. Las máscaras te siguen con el cuello y luego con la máscara; a veces vienen dos (una vigila la puerta de vidrio, pasos desfasados 0,8 s); desde las 03:00 salen por la puerta trasera y la dejan entreabierta.
+  - `horror.js` (él): se mueve solo a puntos ciegos, con un modo por utilidad (rutina, periferia o acercarse) según luces, radio, miedo y cuántas veces lo miraste; tarda 3–5 s si lo miraste; a veces deja una moneda mojada o un ticket doblado donde estaba parado; en el bosque, siempre un pino entre los dos (solo se corre detrás del tronco si está a más de 7 m: de cerca, el tronco no tapa todo el abrigo).
+- **Decisiones (adaptado al canon):** la «secadora 07» no existe (4 secadoras): el ciclo de las máscaras es la orden del mostrador. La «salida trasera hacia el bosque» es la puerta trasera al pasillo, y solo cuando ya está abierta (03:00): así de verdad puedes seguirlas. Las caras blancas no compran: su comunicación sin palabras aparece cuando insistes. El cuello que te sigue es de las máscaras: él solo se mueve sin que lo mires y las caras blancas nunca te miran.
+- **Lo que encontraron las pruebas en el camino:** (1) un NPC bajo el mostrador no lograba subir rodeándolo de forma local → se agregó el A\*; (2) por la inercia se detenía a 0,78 m en vez de 1 m → frena con anticipación; (3) al plantarse en el punto final frenaba en seco y, al exigir velocidad casi nula, orbitaba el punto → ahora se planta y termina de frenar quieto; (4) dos máscaras se trababan en la puerta trasera (se apartaban entre sí sobre el mismo punto) → al cruzar una puerta no se apartan; (5) un cliente te esperaba para siempre si estabas parado en medio de la sala → te rodea si no le tapas el destino.
+- **QA:** `director.test.js` con 14 pruebas en node (entre ellas 300 viajes al azar por la sala sin un solo atasco, nunca dentro de una caja, sin cambios de velocidad en seco). 7 partidas nuevas «Director de IA» (estables en 6 corridas seguidas). Ya integrado sobre los Sprints 27–29: partidas 98/98, núcleo JS 7/7, director 14/14 y las 203 pruebas de Python. Fuzz: 12/12 turnos completos con semilla (todas las noches especiales, dificultades e idiomas; dos al final verdadero con amanecer), sin errores.
+- **Rendimiento** (misma página, código de antes y de después, Chrome sin ventana; mediana de 5 corridas de 600 cuadros):
+
+  | Escenario | Lógica del cuadro (`g.update`) | Clientela | Él (`horror`) | Llamadas · triángulos |
+  |---|---|---|---|---|
+  | Sala sin visitas | 0,40 → 0,35 ms | 0,002 → 0,002 ms | 0,018 → 0,016 ms | 145 · 3388 (igual) |
+  | Sala con visitas (2 caras caminando, el niño, 2 máscaras y él) | 0,53 → 0,52 ms | 0,036 → **0,070** ms | 0,025 → 0,022 ms | 147 · 3412 (igual) |
+  | Bosque con él (escondiéndose) | 0,49 → 0,58 ms | 0,018 → 0,048 ms | 0,026 → 0,033 ms | 44 · 20 257 (igual) |
+
+  El director suma unos **0,03 ms por cuadro** con todas las visitas en escena: un 0,1 % del presupuesto de 33 ms a 30 FPS. Llamadas de dibujo y triángulos idénticos: **sin caída de FPS**. (Con render incluido, los ms de SwiftShader varían ±1,5 ms entre corridas en ambas versiones: ruido, no tendencia.)
+
+- **Herramientas:** skill `uncanny-ai-director` con `revisar_ia.py`; `centinela.py` corre también `director.test.js`; `pruebas.html?auto&solo=texto`; `rendimiento.html` mide la sala con visitas y el bosque con él.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

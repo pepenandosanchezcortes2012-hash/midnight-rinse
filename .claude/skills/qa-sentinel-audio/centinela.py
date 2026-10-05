@@ -12,6 +12,7 @@ Estático (sin navegador):
   4. Textos en inglés completos (herramientas/textos.py).
 Pruebas:
   5. Núcleo JS contra los vectores de Python (node juego/tests/nucleo.test.js): despachador de oclusión incluido.
+     Y el director de IA de los NPCs (node --test juego/tests/director.test.js, skill uncanny-ai-director).
   6. Partida en Chrome sin ventana (herramientas/probar.py), con el desbloqueo del audio y el despachador en juego.
   7. (completo) Python: core/tests con unittest.
   8. (completo) En vivo: cada recurso de index.html responde 200 en GitHub Pages y las pruebas pasan allá.
@@ -100,6 +101,10 @@ def pruebas(completo):
     pas = re.search(r'pass (\d+)', p.stdout)
     fal = re.search(r'fail (\d+)', p.stdout)
     ok(p.returncode == 0 and fal and fal.group(1) == '0', 'node: %s pasan, %s fallan' % (pas.group(1) if pas else '?', fal.group(1) if fal else '?'))
+    p = subprocess.run(['node', '--test', str(JUEGO / 'tests' / 'director.test.js')], capture_output=True, text=True, encoding='utf-8', errors='replace')
+    pas = re.search(r'pass (\d+)', p.stdout)
+    fal = re.search(r'fail (\d+)', p.stdout)
+    ok(p.returncode == 0 and fal and fal.group(1) == '0', 'director de IA (node): %s pasan, %s fallan' % (pas.group(1) if pas else '?', fal.group(1) if fal else '?'))
     print('6. Partida en Chrome sin ventana')
     if True:  # probar.py levanta un servidor temporal si no hay uno corriendo
         p = subprocess.run([sys.executable, str(JUEGO / 'herramientas' / 'probar.py')], capture_output=True, text=True,

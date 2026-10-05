@@ -6,14 +6,28 @@
  * - Máscaras negras (la Administración del Embalse): a las 02:50 (y a veces a las 04:05) uno se para frente al mostrador
  *   sin hablar; la impresora térmica entrega una ORDEN numerada, que queda en el Archivo.
  * Nada de esto es un susto: es vida rara. Diálogos en MR.HISTORIA.blackwood (borrador de Gemini, revisado).
+ *
+ * Cómo se mueven y deciden (director de IA, src/core/director.js): caminan por fuerzas de dirección, con inercia, paso
+ * pesado y rodeando lo que estorba (nada de ir en línea recta de un punto a otro); si les bloqueas el paso, se detienen a
+ * un metro, ladean la cabeza y esperan. Si los miras de golpe, se quedan inmóviles de 3 a 5 s antes de seguir. Si te
+ * acercas demasiado, dejan de respirar. Las caras blancas, mientras esperan su lavado, eligen por utilidad una rutina
+ * (mirar el tambor, doblar una prenda que no está, contar monedas) o se corren al borde de tu vista, y solo cambian de
+ * pose cuando no las miras de frente. Las máscaras siguen tu cara con el cuello y, un segundo después, con la máscara; a
+ * veces vienen dos (una vigila la puerta de vidrio) y, si la puerta trasera ya está abierta, se van por ahí.
  */
 (function (MR) {
   'use strict';
 
   var U = MR.Util;
+  var D = MR.Director;
   var SPEED = 0.95;
   var COATS = [0x8a7f62, 0x5f6366, 0x2f3a4a, 0x4f5a45, 0x6b4f4a];
   var ENTRY = { x: 0.4, z: 4.35 };
+  var SALA = { minX: -8, maxX: 8, minZ: -5, maxZ: 5 };
+  var VIGIA = [1.7, 3.3];                  // donde espera la máscara que vigila la puerta de vidrio
+  var PUERTA_TRASERA = [6.8, -4.6];
+  var FUERA = { nivel: 'fuera', oculto: true, distancia: 99, angulo: Math.PI, lado: 1 }; // estás en el bosque o el pasillo
+  function azar() { return Math.random(); } // (las pruebas reemplazan Math.random)
 
   class Clientela {
     constructor(game) {
@@ -30,9 +44,9 @@
       var n = 3 + Math.floor(Math.random() * 3);
       for (var i = 0; i < n; i += 1) { plan.push({ at: U.rand(76, 135), kind: 'cara' }); }
       if (Math.random() < 0.5) { plan.push({ at: U.rand(282, 300), kind: 'cara' }); }
-      plan.push({ at: 170, kind: 'mascara' });
+      plan.push({ at: 170, kind: 'mascara', par: Math.random() < 0.35 }); // a veces vienen dos
       this.approach = null;
-      if (Math.random() < 0.6) { plan.push({ at: 245, kind: 'mascara' }); }
+      if (Math.random() < 0.6) { plan.push({ at: 245, kind: 'mascara', par: Math.random() < 0.5 }); }
       this.plan = plan.sort(function (a, b) { return a.at - b.at; });
       this.tmp = new THREE.Vector3();
     }
@@ -55,6 +69,10 @@
         return j;
       }
       var kid = kind === 'nino';
+      var chest;
+      var neck = null;
+      var finger = null;
+      g.rotation.order = 'YXZ'; // inclinarse hacia adelante es hacia donde mira, no hacia −z del mundo
       if (kind === 'cara' || kid) {
         var coat = R.material({ texture: 'white', color: kid ? 0xc9a43a : COATS[Math.floor(Math.random() * COATS.length)] }); // el niño: impermeable amarillo
         var wet = R.material({ texture: 'white', color: 0x2b2f33 });
@@ -72,6 +90,7 @@
         coatBody.position.set(0, 1.1, 0);
         coatBody.rotation.y = Math.PI / 6;
         g.add(coatBody);
+        chest = coatBody;
         w.box(0.46, 0.09, 0.25, coat, 0, 1.56, 0, g);
         // Brazos desde el hombro, con la mano pálida.
         armL = joint(-0.255, 1.55);
@@ -83,6 +102,15 @@
         if (!kid) {
           var bag = w.box(0.34, 0.3, 0.22, R.material({ texture: 'white', color: 0x7a7d80 }), 0.36, 0.8, -0.05, g); // la ropa empapada
           bag.rotation.z = 0.1;
+          // El índice, largo y anguloso (dos falanges en ángulo): solo se ve cuando señala.
+          finger = new THREE.Group();
+          finger.position.set(0, -0.71, -0.01);
+          var f1 = w.box(0.022, 0.1, 0.022, pale, 0, -0.05, 0, finger);
+          f1.rotation.x = 0.25;
+          var f2 = w.box(0.018, 0.08, 0.018, pale, 0, -0.13, -0.045, finger);
+          f2.rotation.x = 0.75;
+          finger.visible = false;
+          armR.add(finger);
         }
         var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.1, 6), pale);
         neck.position.set(0, 1.64, 0);
@@ -104,7 +132,7 @@
           w.box(0.15, 1.0, 0.17, suit, 0, -0.5, 0, hip);
           return hip;
         });
-        w.box(0.5, 0.85, 0.3, suit, 0, 1.42, 0, g);
+        chest = w.box(0.5, 0.85, 0.3, suit, 0, 1.42, 0, g);
         w.box(0.58, 0.1, 0.33, suit, 0, 1.82, 0, g);                 // hombreras
         armL = joint(-0.3, 1.8);
         armR = joint(0.3, 1.8);
@@ -118,16 +146,20 @@
           var l = w.box(0.08, 0.36, 0.02, lapel, 0.1 * s, 1.64, -0.158, g); // solapas
           l.rotation.z = 0.28 * s;
         });
-        w.box(0.09, 0.1, 0.09, suit, 0, 1.91, 0, g);                 // cuello
+        // El cuello gira solo (sigue tu cara despacio); la máscara gira sobre él, un segundo después.
+        neck = new THREE.Group();
+        neck.position.set(0, 1.86, 0);
+        g.add(neck);
+        w.box(0.09, 0.1, 0.09, suit, 0, 0.05, 0, neck);              // cuello
         // La máscara: negra, de caras planas (Gouraud por vértice: se ven las facetas).
         head = new THREE.Mesh(new THREE.OctahedronGeometry(0.17, 0), R.material({ texture: 'white', color: 0x0c0c10, emissive: 0.05 }));
         head.scale.set(0.9, 1.2, 0.9);
-        head.position.set(0, 2.08, 0);
-        g.add(head);
+        head.position.set(0, 0.22, 0);
+        neck.add(head);
       }
       if (kid) { g.scale.setScalar(0.62); }
       g.visible = true;
-      return { group: g, head: head, armR: armR, armL: armL, legs: legs, face: faceMesh };
+      return { group: g, head: head, armR: armR, armL: armL, legs: legs, face: faceMesh, chest: chest, neck: neck, finger: finger };
     }
 
     // -------------------------------------------------------------------------------------------- el niño
@@ -142,7 +174,10 @@
       Array.prototype.push.apply(this.world.interactables, parts);
       var lines = MR.HISTORIA.blackwood.nino.entre;
       v.child = { model: model, bob: 0, petted: false, petTimer: 0, talks: 0, chatTimer: 7, chatIndex: Math.floor(Math.random() * lines.length),
-        brain: new MR.Mosca(200 + v.id, { curiosidad: 0.9, miedo: 0.8 }), senseAcc: 0 };
+        brain: new MR.Mosca(200 + v.id, { curiosidad: 0.9, miedo: 0.8 }), senseAcc: 0,
+        agente: new D.Agente({ x: ENTRY.x + 0.45, z: ENTRY.z + 0.35, velMax: SPEED * 1.2, aceleracion: 1.8, frenado: 2.4, radio: 0.16,
+          zancada: 0.8, rnd: azar }),
+        respira: new D.Respiracion(azar, { ritmo: 2.1 }) };
     }
 
     /**
@@ -181,19 +216,24 @@
         tx = a.position.x + Math.cos(ry) * 0.45 + Math.sin(ry) * 0.35;
         tz = a.position.z - Math.sin(ry) * 0.45 + Math.cos(ry) * 0.35;
       }
-      var dx = tx - pos.x;
-      var dz = tz - pos.z;
-      var d = Math.hypot(dx, dz);
-      if (d > 0.06) {
-        var stepLen = Math.min(d, SPEED * 1.2 * dt);
-        pos.x += dx / d * stepLen;
-        pos.z += dz / d * stepLen;
-        grp.rotation.y = Math.atan2(-dx, -dz);
-        c.bob += dt * 9;
-        pos.y = Math.abs(Math.sin(c.bob)) * 0.02;
-        this._limbs(c.model, c.bob, 0.5);
-        return;
+      // Camina por fuerzas (rodea lo que estorba, con inercia), sin chocar con su adulto ni con nadie más.
+      var ag = c.agente;
+      var fin = ag.ruta && ag.ruta[ag.ruta.length - 1];
+      if (!fin || Math.hypot(fin[0] - tx, fin[1] - tz) > 0.05) { ag.ponerRuta([[tx, tz]]); }
+      if (!ag.llego) {
+        ag.paso(dt, this._mundo(v.child, v));
+        pos.x = ag.x;
+        pos.z = ag.z;
+        if (!ag.llego) {
+          grp.rotation.y = ag.rumbo;
+          var marcha = Math.min(1, ag.v / ag.velMax);
+          pos.y = Math.abs(Math.sin(ag.fase)) * 0.02 * marcha;
+          this._limbs(c.model, ag.fase, 0.5 * marcha);
+          return;
+        }
       }
+      var resp = c.respira.actualizar(dt, U.distXZ(g.player.pos, pos));
+      c.model.chest.scale.set(1 + resp.pecho * 0.02, 1, 1 + resp.pecho * 0.03);
       pos.y = 0;
       this._limbs(c.model, 0, 0);
       if (catNear) {
@@ -209,7 +249,7 @@
         g.gato.timer = Math.max(g.gato.timer, 7);
         return;
       }
-      grp.rotation.y = a.rotation.y;
+      grp.rotation.y += D.envolver(a.rotation.y - grp.rotation.y) * Math.min(1, dt * 3); // se da vuelta de a poco, como su adulto
       var at = c.brain.atencion(); // la cabeza, hacia lo que le llama la atención (Pelusa, sobre todo)
       var mira = at.fuerza > 0.12 ? U.clamp(at.angulo, -1.0, 1.0) : 0;
       c.model.head.rotation.y += (mira - c.model.head.rotation.y) * Math.min(1, dt * 3);
@@ -269,8 +309,8 @@
         v.model.armL.rotation.x = f;
         v.model.armR.rotation.x = f;
       }
-      // Apenas se balancea al esperar (más si está inquieta).
-      v.model.group.rotation.z = Math.sin(v.timer * 1.3) * 0.02 * (0.3 + b.impulso('explorar'));
+      // Apenas se balancea al esperar (más si está inquieta; nada si estás tan cerca que contiene el aire).
+      v.model.group.rotation.z = Math.sin(v.timer * 1.3) * 0.02 * (0.3 + b.impulso('explorar')) * (v.respira ? v.respira.micro : 1);
       var at = b.atencion();
       return at.fuerza > 0.12 ? U.clamp(at.angulo, -1.0, 1.0) : 0;
     }
@@ -462,8 +502,12 @@
     }
 
     // -------------------------------------------------------------------------------------------- llegada
-    /** Un visitante entra por la puerta de vidrio. kind: 'cara' | 'mascara'. Devuelve el visitante (o null). */
-    spawn(kind) {
+    /**
+     * Un visitante entra por la puerta de vidrio. kind: 'cara' | 'mascara'. Devuelve el visitante (o null).
+     * o (máscaras): { rol: 'vigia' (se queda vigilando la puerta), demora (s antes de echar a andar), mudo (sin puerta) }.
+     */
+    spawn(kind, o) {
+      o = o || {};
       var g = this.game;
       var target;
       if (kind === 'cara') {
@@ -476,25 +520,157 @@
         var wi = free[Math.floor(Math.random() * free.length)];
         var wx = -6.75 + wi;
         target = { path: [[0.4, 1.8], [0.4, -3.2], [wx, -3.35]], rot: 0, washer: wi };
+      } else if (o.rol === 'vigia') {
+        // Se para junto a la puerta de vidrio, de cara a la sala.
+        target = { path: [[1.4, 3.85], VIGIA], rot: D.rumbo(-VIGIA[0], -VIGIA[1]), washer: null };
       } else {
         target = { path: [[1.2, 3.8], [3.4, 3.5], [5.9, 3.1]], rot: 0, washer: null };
       }
       var model = this._model(kind);
-      model.group.position.set(ENTRY.x, 0, ENTRY.z);
+      var sx = ENTRY.x + (o.rol === 'vigia' ? 0.45 : 0);
+      model.group.position.set(sx, 0, ENTRY.z);
       this.world.add(model.group);
       var id = this.nextId++;
       // Todas sus piezas se pueden tocar (también las que cuelgan de una articulación: brazos y piernas).
       var parts = [];
-      model.group.traverse(function (o) { if (o.isMesh) { o.userData.interact = { kind: 'visitante', index: id }; parts.push(o); } });
+      model.group.traverse(function (m) { if (m.isMesh) { m.userData.interact = { kind: 'visitante', index: id }; parts.push(m); } });
       model.parts = parts;
       Array.prototype.push.apply(this.world.interactables, parts);
-      var v = { id: id, kind: kind, model: model, path: target.path.slice(), rot: target.rot, washer: target.washer, state: 'entra', timer: 0, said: false };
-      // Las caras blancas llevan cerebro de mosca (las máscaras no: obedecen órdenes).
-      if (kind === 'cara') { v.brain = new MR.Mosca(100 + id, { curiosidad: 0.5, miedo: 0.6 }); }
+      var v = { id: id, kind: kind, model: model, rot: target.rot, washer: target.washer, state: 'entra', timer: 0, said: false,
+        rol: o.rol || (kind === 'cara' ? 'cliente' : 'operador'), demora: o.demora || 0 };
+      // Director de IA: navegación por fuerzas, pausa de contemplación y respiración (las máscaras, también la mirada).
+      var cara = kind === 'cara';
+      v.agente = new D.Agente({ x: sx, z: ENTRY.z, rumbo: 0, rnd: azar, velMax: cara ? SPEED * U.rand(0.92, 1.06) : 0.85,
+        aceleracion: cara ? 1.2 : 0.9, frenado: 1.8, pesadez: cara ? 0.3 : 0.6, zancada: cara ? 1.25 : 1.5 });
+      v.agente.ponerRuta(this._organica(target.path));
+      v.contempla = new D.Contemplacion(azar);
+      v.respira = new D.Respiracion(azar, cara ? null : { ritmo: 1.0 });
+      if (!cara) { v.mirada = new D.Mirada(); }
+      // Las caras blancas llevan cerebro de mosca (las máscaras no: obedecen órdenes) y eligen su rutina por utilidad.
+      if (cara) {
+        v.brain = new MR.Mosca(100 + id, { curiosidad: 0.5, miedo: 0.6 });
+        v.mente = this._menteCara(v);
+      }
       this.visitors.push(v);
-      if (kind === 'cara' && this.childPlan && !this.childCame && g.minutes >= 90) { this.childCame = true; this._addChild(v); }
-      g.audio.door();
+      if (cara && this.childPlan && !this.childCame && g.minutes >= 90) { this.childCame = true; this._addChild(v); }
+      if (!o.mudo) { g.audio.door(); }
       return v;
+    }
+
+    /** Dos máscaras: una va al mostrador y la otra, 0,8 s después (sus pasos nunca coinciden), vigila la puerta. */
+    _spawnPar() {
+      var a = this.spawn('mascara');
+      var b = this.spawn('mascara', { rol: 'vigia', demora: 0.8, mudo: true });
+      a.pareja = b;
+      b.pareja = a;
+      return a;
+    }
+
+    // -------------------------------------------------------------------------------------------- director de IA
+    /** Las cajas de colisión de la sala (lo que hay que rodear), calculadas una vez. */
+    _obstaculos() {
+      if (!this.obst) {
+        this.obst = this.world.colliders.filter(function (b) { return b.maxX > -8.5 && b.minX < 8.5 && b.maxZ > -5.5 && b.minZ < 5.5; });
+      }
+      return this.obst;
+    }
+
+    /** La ruta con un poco de variación: cada uno camina su propia línea (los puntos intermedios se corren un poco). */
+    _organica(path) {
+      var obst = this._obstaculos();
+      return path.map(function (p, i) {
+        if (i === path.length - 1 || p[2]) { return p.slice(); }
+        for (var k = 0; k < 4; k += 1) {
+          var q = [p[0] + U.rand(-0.22, 0.22), p[1] + U.rand(-0.22, 0.22)];
+          if (!D.choca(q[0], q[1], obst, 0.35)) { return q; }
+        }
+        return p.slice();
+      });
+    }
+
+    /** Lo que el director necesita saber de ti (posición, hacia dónde miras, si parpadeas o limpias el vaho). */
+    _ojos() {
+      var g = this.game;
+      var o = this.ojosJugador || (this.ojosJugador = {});
+      o.x = g.player.pos.x;
+      o.z = g.player.pos.z;
+      o.yaw = g.player.yaw;
+      o.ojosCerrados = g.player.eyesClosed;
+      o.limpiando = !!(g.glasses && g.glasses.wiping);
+      return o;
+    }
+
+    /** Cuánto lo miras (si no estás en la sala, nada). */
+    _percibir(v, inSala) {
+      return inSala ? D.percibir(this._ojos(), v.model.group.position) : FUERA;
+    }
+
+    /** El mundo para un caminante: la sala, tú (espacio personal) y los demás (sin contar a su niño o a su adulto). */
+    _mundo(quien, junto) {
+      var g = this.game;
+      var inSala = !g.bosque.outside && !g.pasillo.inside;
+      var otros = [];
+      this.visitors.forEach(function (o) {
+        if (o.agente !== quien.agente && o !== junto) { otros.push({ x: o.agente.x, z: o.agente.z, r: o.agente.radio }); }
+        if (o.child && o.child !== quien && o !== quien) { otros.push({ x: o.child.agente.x, z: o.child.agente.z, r: 0.16 }); }
+      });
+      var el = g.horror.customerCollider();
+      if (el) { otros.push(el); }
+      return { obstaculos: this._obstaculos(), limites: SALA, otros: otros, espacio: quien.kind ? 1.0 : 0.8, // el niño, más cerca
+        jugador: inSala ? g.player.pos : null };
+    }
+
+    /** Respira (el pecho sube y baja); si estás demasiado cerca, contiene el aire. */
+    _respirar(v, dt, per) {
+      var r = v.respira.actualizar(dt, per.distancia);
+      var k = v.kind === 'mascara' ? 0.012 : 0.02;
+      v.model.chest.scale.set(1 + r.pecho * k, 1, 1 + r.pecho * k * 1.5);
+      return r;
+    }
+
+    /** Las máscaras te siguen con la mirada: el cuello despacio y, un segundo después, la máscara. */
+    _mirarJugador(v, dt, inSala) {
+      var g = this.game;
+      var pos = v.model.group.position;
+      var cerca = inSala && U.distXZ(g.player.pos, pos) < 6.5;
+      var obj = cerca ? D.envolver(D.rumbo(g.player.pos.x - pos.x, g.player.pos.z - pos.z) - v.model.group.rotation.y) : null;
+      v.mirada.actualizar(dt, obj);
+      v.model.neck.rotation.y = v.mirada.cuello;
+      v.model.head.rotation.y = v.mirada.ojos;
+    }
+
+    /**
+     * La mente de una cara blanca mientras espera su lavado (utilidad): mirar el tambor girar, doblar una prenda que no
+     * está, contar monedas, o correrse al borde de tu vista. Más inquieta con la tienda rara (luces que fallan, estática,
+     * miedo). Las rutinas empiezan cuando ya cargó su ropa.
+     */
+    _menteCara(v) {
+      var self = this;
+      var g = this.game;
+      return new D.Utilidad({
+        tambor: function () { return 0.5 + (v.loaded ? 0.15 : 0.4); },
+        doblar: function () { return v.timer > 7 ? 0.42 : 0; },
+        monedas: function () { return v.timer > 7 ? 0.36 + (g.gameplay.coins > 0 ? 0.04 : 0) : 0; },
+        periferia: function (c) {
+          if (v.timer < 7 || v.talking || v.child || !c.inSala || c.per.distancia > 9 || c.per.distancia < 2.2) { return 0; }
+          var luz = g.horror.lightLevel();
+          return 0.22 + 0.3 * g.dread + 0.25 * (1 - luz) + 0.15 * (1 - g.gameplay.radioProximity) + (self.visitors.length > 1 ? 0 : 0.05);
+        }
+      }, { rnd: azar, minimo: 4, ruido: 0.12, inicial: 'tambor' });
+    }
+
+    /** Un lugar frente a las lavadoras, cerca de la suya, justo en el borde de tu vista. */
+    _bordeDeVista(v) {
+      var o = this._ojos();
+      var wx = -6.75 + v.washer;
+      var mejor = null;
+      var md = Infinity;
+      for (var x = Math.max(-6.6, wx - 1.6); x <= Math.min(-0.95, wx + 1.6); x += 0.2) {
+        var p = D.percibir({ x: o.x, z: o.z, yaw: o.yaw }, { x: x, z: -3.35 });
+        var d = Math.abs(p.angulo - (D.FOV_MEDIO - 0.06)) + Math.abs(x - wx) * 0.05;
+        if (d < md) { md = d; mejor = [x, -3.35]; }
+      }
+      return mejor;
     }
 
     _remove(v) {
@@ -537,11 +713,29 @@
         g.gameplay.say('mascara', '(No dice nada. La máscara refleja la luz del techo en cada una de sus caras.)', 4);
         return;
       }
-      if (v.talked) { g.gameplay.say('cara' + id, '(Ya no te responde. Mira el tambor girar.)', 3); return; }
+      if (v.talked) { this._insistir(v); return; }
       if (v.state !== 'llego') { this._say(v, 'tocar'); v.talked = true; return; } // de paso: solo un murmullo
       var questions = this._extraQuestions(v).concat(MR.HISTORIA.blackwood.charla.preguntas);
       if (this.coinPlan && !this.coinAsked && g.minutes >= 100) { this._askCoin(v, questions); return; }
       this._converse(v, questions);
+    }
+
+    /**
+     * Insistir cuando ya no te responde (comunicación sin palabras): la primera vez mira el tambor; la segunda lo señala
+     * con un dedo largo y anguloso; desde la tercera se inclina hacia ti, muy despacio, invadiendo tu vista sin mirarte.
+     */
+    _insistir(v) {
+      var g = this.game;
+      v.insiste = (v.insiste || 0) + 1;
+      if (v.insiste === 1 || v.state !== 'llego') { g.gameplay.say('cara' + v.id, '(Ya no te responde. Mira el tambor girar.)', 3); return; }
+      if (v.insiste === 2) {
+        v.senala = 4.5;
+        g.gameplay.say('cara' + v.id, '(Señala el tambor con un dedo largo y anguloso. No dice nada.)', 4);
+        return;
+      }
+      v.inclina = 10;
+      v.timer = Math.min(v.timer, 14); // no se va mientras tanto
+      g.gameplay.say('cara' + v.id, '(Se inclina hacia ti, muy despacio, sin mirarte.)', 4);
     }
 
     /**
@@ -644,7 +838,9 @@
       while (this.plan.length && g.minutes >= this.plan[0].at && inSala && this.visitors.length < 2 && !this.approach) {
         var p = this.plan.shift();
         // Las caras blancas primero cruzan la avenida (se ven por la vidriera) y después entran.
-        if (p.kind === 'cara') { this._startApproach(); } else { this.spawn(p.kind); }
+        if (p.kind === 'cara') { this._startApproach(); }
+        else if (p.par && !this.visitors.length) { this._spawnPar(); }
+        else { this.spawn(p.kind); }
       }
       if (this.approach) { this._stepApproach(dt, inSala); }
       if (this.waver && this.waver.group.visible) {
@@ -662,61 +858,228 @@
 
     _step(v, dt) {
       var g = this.game;
+      if (v.state !== 'entra' && v.state !== 'sale' && v.state !== 'llego') { return; } // p. ej. 'quieta' (pruebas)
+      var inSala = !g.bosque.outside && !g.pasillo.inside;
+      var per = this._percibir(v, inSala);
+      this._respirar(v, dt, per);
+      // Pausa de contemplación: si lo miras de golpe, se queda inmóvil (a media zancada, si caminaba) de 3 a 5 s.
+      var congelado = v.contempla.actualizar(dt, per.nivel, per.distancia < 9);
+      if (v.mirada && !congelado) { this._mirarJugador(v, dt, inSala); }
+      if (v.state === 'llego') {
+        v.timer += dt;
+        this._llego(v, dt, per, congelado, inSala);
+        return;
+      }
+      if (v.demora > 0) { v.demora -= dt; return; } // la segunda máscara, 0,8 s después
+      if (congelado) { v.agente.v = 0; return; }
+      this._caminar(v, dt, inSala);
+    }
+
+    /** Camina su ruta por fuerzas de dirección. Al llegar se queda (o, si salía, se va). */
+    _caminar(v, dt, inSala) {
+      var g = this.game;
       var grp = v.model.group;
       var pos = grp.position;
-      if (v.state === 'entra' || v.state === 'sale') {
-        var tgt = v.path[0];
-        if (!tgt) {
-          if (v.state === 'sale') {
-            g.audio.door();
-            this._remove(v);
-            if (v.kind === 'cara' && Math.random() < 0.5) { this._wave(); } // a veces se despide desde la otra vereda
-            return;
-          }
-          v.state = 'llego';
-          v.timer = 0;
-          grp.rotation.y = v.rot;
-          this._limbs(v.model, 0, 0); // llega y se queda quieto (no a media zancada)
-          this._arrive(v);
-          return;
-        }
-        var dx = tgt[0] - pos.x;
-        var dz = tgt[1] - pos.z;
-        var d = Math.hypot(dx, dz);
-        // Si estás en su camino, espera (nunca te empuja ni te atraviesa).
-        var pp = g.player.pos;
-        var ahead = Math.hypot(pp.x - (pos.x + dx / Math.max(d, 0.01) * 0.5), pp.z - (pos.z + dz / Math.max(d, 0.01) * 0.5));
-        if (ahead < 0.55) { this._limbs(v.model, 0, 0); return; }
-        var stepLen = SPEED * dt;
-        if (d <= stepLen) { pos.set(tgt[0], 0, tgt[1]); v.path.shift(); }
-        else { pos.x += dx / d * stepLen; pos.z += dz / d * stepLen; }
-        grp.rotation.y = Math.atan2(-dx, -dz);
-        v.bob = (v.bob || 0) + dt * 7;
-        pos.y = Math.abs(Math.sin(v.bob)) * 0.03;
-        this._limbs(v.model, v.bob, v.kind === 'cara' ? 0.42 : 0.16);
-      } else if (v.state === 'llego') {
-        v.timer += dt;
-        this._limbs(v.model, 0, 0);
-        if (v.kind === 'cara') {
-          // Nunca te mira: si lo miras de cerca, gira la cara hacia otro lado. Si no, mira hacia donde atiende su
-          // cerebro de mosca (Pelusa, el niño, su ropa girando, el autobús), nunca hacia ti.
-          var lookAt = this._watched(v);
-          var mira = lookAt ? 1.1 : this._mindLook(v, dt);
-          v.model.head.rotation.y += (mira - v.model.head.rotation.y) * Math.min(1, dt * 3);
-          if (v.timer > 2.5 && !v.loaded) {
-            v.loaded = true;
-            var wa = g.gameplay.washers[v.washer];
-            // En la noche sin agua, la máquina tampoco arranca para ellos.
-            if (!wa.running && g.mod !== 'sin_agua') { wa.running = true; wa.credit = false; wa.remaining = MR.Config.WASHER_CYCLE_MIN; g.audio.buzz(); }
-          }
-          // Mientras conversa contigo no se va; si te alejas, la conversación termina.
-          if (v.talking) {
-            if (U.distXZ(g.player.pos, v.model.group.position) > 4) { this._endTalk(v); }
-          } else if (v.timer > 22) { this._leave(v); } // espera el centrifugado (como dicen ellas)
-        } else if (v.timer > 6) {
-          this._leave(v);
-        }
+      var ag = v.agente;
+      ag.paso(dt, this._mundo(v));
+      if (ag.atascado && this._percibir(v, inSala).oculto) { // no debería pasar; si pasa, nadie lo ve resolverse
+        var f = ag.ruta[ag.ruta.length - 1];
+        ag.x = f[0];
+        ag.z = f[1];
+        ag.v = 0;
+        ag.llego = true;
       }
+      pos.x = ag.x;
+      pos.z = ag.z;
+      grp.rotation.y = ag.rumbo;
+      // Los pasos van con lo que avanza: pisadas pesadas, y nunca patina.
+      var marcha = Math.min(1, ag.v / ag.velMax);
+      pos.y = Math.abs(Math.sin(ag.fase)) * 0.03 * marcha;
+      this._limbs(v.model, ag.fase, (v.kind === 'cara' ? 0.42 : 0.16) * marcha);
+      // Si le bloqueas el paso: se detiene a un metro, ladea la cabeza 15° y espera en silencio.
+      var ladeo = ag.esperando ? 0.26 : 0;
+      v.model.head.rotation.z += (ladeo - v.model.head.rotation.z) * Math.min(1, dt * 2);
+      if (v.porAtras && !v.abrio && Math.hypot(ag.x - PUERTA_TRASERA[0], ag.z - PUERTA_TRASERA[1]) < 1.7) { this._abrirTrasera(v, inSala); }
+      if (!ag.llego) { return; }
+      if (v.state === 'sale') { this._salio(v); return; }
+      v.state = 'llego';
+      v.timer = 0;
+      pos.y = 0;
+      this._limbs(v.model, 0, 0); // llega y se queda quieto (no a media zancada)
+      this._arrive(v);
+    }
+
+    /** Gira el cuerpo hacia un rumbo, con tope de velocidad (rad/s). */
+    _girar(v, rumbo, vel, dt) {
+      var grp = v.model.group;
+      var d = D.envolver(rumbo - grp.rotation.y);
+      grp.rotation.y = D.envolver(grp.rotation.y + U.clamp(d, -vel * dt, vel * dt));
+      v.agente.rumbo = grp.rotation.y;
+    }
+
+    _llego(v, dt, per, congelado, inSala) {
+      var m = v.model;
+      if (!congelado) { m.head.rotation.z += (0 - m.head.rotation.z) * Math.min(1, dt * 2); } // endereza la cabeza
+      if (v.kind === 'cara') { this._caraLlego(v, dt, per, congelado, inSala); return; }
+      if (!congelado) { this._girar(v, v.rot, 3, dt); }
+      if (v.rol === 'vigia') {
+        // Vigila la puerta hasta que la otra se va; sale 0,8 s después (sus pasos nunca coinciden).
+        var p = v.pareja;
+        if (!p || !this.visitors.includes(p) || p.state === 'sale') {
+          v.esperaSalida = (v.esperaSalida || 0) + dt;
+          if (v.esperaSalida > 0.8 && !congelado) { this._leave(v); }
+        }
+        return;
+      }
+      if (v.timer > 6 && !congelado) { this._leave(v); }
+    }
+
+    /**
+     * Una cara blanca espera su lavado: carga la ropa, elige su rutina (utilidad) y, si la miras de frente, no cambia de
+     * pose; si insistes en hablarle, señala el tambor y después se inclina hacia ti, sin mirarte.
+     */
+    _caraLlego(v, dt, per, congelado, inSala) {
+      var g = this.game;
+      var m = v.model;
+      if (v.timer > 2.5 && !v.loaded) {
+        v.loaded = true;
+        var wa = g.gameplay.washers[v.washer];
+        // En la noche sin agua, la máquina tampoco arranca para ellos.
+        if (!wa.running && g.mod !== 'sin_agua') { wa.running = true; wa.credit = false; wa.remaining = MR.Config.WASHER_CYCLE_MIN; g.audio.buzz(); }
+      }
+      // Mientras conversa contigo no se va; si te alejas, la conversación termina.
+      if (v.talking && U.distXZ(g.player.pos, m.group.position) > 4) { this._endTalk(v); }
+      if (congelado) { return; } // inmóvil: ni la cabeza, ni las manos, ni un balanceo
+      var insiste = this._insistencia(v, dt);
+      var c = insiste ? 'tambor' : v.mente.actualizar(dt, { inSala: inSala, per: per }, per.nivel !== 'foco');
+      var camina = !insiste && this._moverEnEspera(v, dt, c, per);
+      if (!camina && !insiste) { this._girar(v, v.rot, 4, dt); }
+      // Nunca te mira: si la miras de cerca (o se inclina hacia ti), gira la cara. Si no, mira hacia donde atiende su
+      // cerebro de mosca (Pelusa, el niño, su ropa girando, el autobús), nunca hacia ti.
+      var mira = this._watched(v) || v.lean < -0.05 ? 1.1 : this._mindLook(v, dt);
+      m.head.rotation.y += (mira - m.head.rotation.y) * Math.min(1, dt * 3);
+      if (!camina) { this._rutina(v, insiste ? null : c, dt); }
+      if (!v.talking && v.timer > 22 && !insiste) { this._leave(v); } // espera el centrifugado (como dicen ellas)
+    }
+
+    /**
+     * Correrse al borde de tu vista (periferia) o volver a su lavadora. Solo da pasos mientras no la miras de frente
+     * (si la miras, se queda a medio paso). Devuelve true si está caminando.
+     */
+    _moverEnEspera(v, dt, c, per) {
+      var ag = v.agente;
+      var grp = v.model.group;
+      var meta = [-6.75 + v.washer, -3.35];
+      if (c === 'periferia') {
+        v.bordeT = (v.bordeT || 0) - dt;
+        if (v.bordeT <= 0 || !v.borde) { v.bordeT = 1.5; v.borde = this._bordeDeVista(v); }
+        if (v.borde) { meta = v.borde; }
+      }
+      var fin = ag.ruta && ag.ruta[ag.ruta.length - 1];
+      if (Math.hypot(ag.x - meta[0], ag.z - meta[1]) > 0.08 && (!fin || Math.hypot(fin[0] - meta[0], fin[1] - meta[1]) > 0.05)) {
+        ag.ponerRuta([meta]);
+      }
+      if (ag.llego) { return false; }
+      if (per.nivel === 'foco') { ag.v = 0; return true; } // aproximación por oclusión: mirándola, no se mueve
+      ag.paso(dt, this._mundo(v));
+      grp.position.x = ag.x;
+      grp.position.z = ag.z;
+      grp.rotation.y = ag.rumbo;
+      var marcha = Math.min(1, ag.v / ag.velMax);
+      grp.position.y = Math.abs(Math.sin(ag.fase)) * 0.03 * marcha;
+      this._limbs(v.model, ag.fase, 0.42 * marcha);
+      if (ag.llego) { grp.position.y = 0; this._limbs(v.model, 0, 0); }
+      return !ag.llego;
+    }
+
+    /**
+     * Las manos y la cabeza según la rutina: mirar el tambor (cabeza baja), doblar una prenda que no está (las dos
+     * manos adelante, plegando) o contar monedas (la vista en la mano). Todo se mueve de a poco y con su respiración.
+     */
+    _rutina(v, c, dt) {
+      var m = v.model;
+      var t = v.timer;
+      var micro = v.respira.micro;
+      var aL = 0;
+      var aR = 0;
+      var zL = 0;
+      var zR = 0;
+      var cab = 0;
+      if (v.senala > 0) { aR = 1.35; } // señala el tambor
+      else if (c === 'tambor') { cab = -0.12; }
+      else if (c === 'doblar') {
+        aL = 0.95 + Math.sin(t * 1.6) * 0.25 * micro;
+        aR = 0.95 + Math.sin(t * 1.6 + Math.PI) * 0.25 * micro;
+        zL = -0.28;
+        zR = 0.28;
+        cab = -0.3;
+      } else if (c === 'monedas') {
+        aL = 0.62;
+        aR = 0.72 + (Math.sin(t * 5.3) > 0.55 ? 0.06 * micro : 0); // pasa una moneda de una mano a la otra
+        zL = -0.2;
+        zR = 0.16;
+        cab = -0.45;
+      }
+      if (v.flinch > 0) { return; } // el sobresalto manda sobre las manos (_mindLook)
+      var k = Math.min(1, dt * 3);
+      m.armL.rotation.x += (aL - m.armL.rotation.x) * k;
+      m.armR.rotation.x += (aR - m.armR.rotation.x) * k;
+      m.armL.rotation.z += (zL - m.armL.rotation.z) * k;
+      m.armR.rotation.z += (zR - m.armR.rotation.z) * k;
+      m.head.rotation.x += (cab - m.head.rotation.x) * k;
+      if (Math.abs(aL) + Math.abs(aR) + Math.abs(zL) + Math.abs(zR) === 0 && Math.abs(m.armL.rotation.x) + Math.abs(m.armR.rotation.x) < 0.003) {
+        this._limbs(m, 0, 0); // del todo quieta (exacto), como al llegar
+        m.armL.rotation.z = 0;
+        m.armR.rotation.z = 0;
+      }
+    }
+
+    /**
+     * Si insistes en hablarle: señala el tambor (unos segundos) y, si sigues, se inclina hacia ti muy despacio, sin
+     * mirarte, mientras estés cerca. Devuelve true mientras dura.
+     */
+    _insistencia(v, dt) {
+      var g = this.game;
+      var m = v.model;
+      var grp = m.group;
+      if (m.finger) { m.finger.visible = v.senala > 0; }
+      if (v.senala > 0) { v.senala -= dt; }
+      var cerca = U.distXZ(g.player.pos, grp.position) < 3.2;
+      v.lean = v.lean || 0;
+      if (v.inclina > 0 && cerca) {
+        v.inclina -= dt;
+        v.lean = Math.max(-0.32, v.lean - dt * 0.05); // muy despacio
+        this._girar(v, D.rumbo(g.player.pos.x - grp.position.x, g.player.pos.z - grp.position.z), 0.6, dt);
+      } else {
+        v.inclina = 0;
+        v.lean = Math.min(0, v.lean + dt * 0.12);
+      }
+      grp.rotation.x = v.lean;
+      return v.senala > 0 || v.lean < -0.005;
+    }
+
+    /** La máscara (o las dos) abren la puerta trasera y la dejan entreabierta: se cierra sola cuando no la mires. */
+    _abrirTrasera(v, inSala) {
+      var g = this.game;
+      v.abrio = true;
+      if (v.pareja && v.pareja.abrio) { return; }
+      g.horror.backDoorTarget = -0.6;
+      g.audio.door();
+      if (inSala && g.horror.zoneVisible('puerta_trasera') > 0.3) {
+        g.ui.subtitle(v.pareja ? '(Las máscaras salen por la puerta trasera y la dejan entreabierta.)' :
+          '(La máscara sale por la puerta trasera y la deja entreabierta.)', 5);
+      }
+    }
+
+    _salio(v) {
+      var g = this.game;
+      if (v.porAtras) {
+        if (!v.pareja || !this.visitors.includes(v.pareja)) { g.horror.later(40, 'cierra_trasera', 'puerta_trasera', 0); }
+      } else {
+        g.audio.door();
+      }
+      this._remove(v);
+      if (v.kind === 'cara' && Math.random() < 0.5) { this._wave(); } // a veces se despide desde la otra vereda
     }
 
     _watched(v) {
@@ -732,6 +1095,9 @@
       var g = this.game;
       if (v.kind === 'cara') {
         this._say(v, 'llegada');
+      } else if (v.rol === 'vigia') {
+        // La segunda no va al mostrador: se queda junto a la puerta de vidrio, de cara a la sala, siguiéndote con la máscara.
+        if (!g.bosque.outside && !g.pasillo.inside) { g.ui.subtitle('(Dos máscaras. Una se queda junto a la puerta de vidrio, de cara a la sala.)', 5); }
       } else {
         // La impresora entrega una orden de la Administración del Embalse.
         var l = v.forcedOrder !== undefined ? { text: MR.HISTORIA.blackwood.ordenes[v.forcedOrder], index: v.forcedOrder } : this._line('ordenes');
@@ -752,10 +1118,27 @@
       }
     }
 
+    /**
+     * Se va. Las caras blancas, por la puerta de vidrio. Las máscaras, si la puerta trasera ya está abierta (desde las
+     * 03:00), por ahí, con paso firme y rodeando el mostrador, y la dejan entreabierta (para que quieras seguirlas).
+     */
     _leave(v) {
+      var g = this.game;
       v.state = 'sale';
-      v.model.head.rotation.y = 0;
-      v.path = v.kind === 'cara' ? [[0.4, -3.2], [0.4, 1.8], [ENTRY.x, ENTRY.z], [0, 5.3]] : [[3.4, 3.5], [1.2, 3.8], [ENTRY.x, ENTRY.z], [0, 5.3]];
+      if (v.kind === 'cara') { v.model.head.rotation.y = 0; }
+      var ruta;
+      if (v.kind === 'cara') {
+        ruta = [[0.4, -3.2], [0.4, 1.8], [ENTRY.x, ENTRY.z], [0, 5.3, true]];
+      } else if (g.pasillo && g.pasillo.unlocked) {
+        v.porAtras = true;
+        ruta = [[4.2, 2.9], [4.2, 1.0], [6.8, -3.6], PUERTA_TRASERA, [6.8, -5.6, true]];
+      } else {
+        ruta = [[3.4, 3.5], [1.2, 3.8], [ENTRY.x, ENTRY.z], [0, 5.3, true]];
+      }
+      v.agente.ponerRuta(this._organica(ruta));
+      v.model.group.rotation.x = 0;
+      v.lean = 0;
+      if (v.model.finger) { v.model.finger.visible = false; }
       if (v.kind === 'cara' && Math.random() < 0.6) { this._say(v, 'despedida'); }
     }
   }

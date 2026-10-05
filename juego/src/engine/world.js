@@ -700,6 +700,27 @@
         entrada: { x: 0.4, z: 4.3, rot: Math.PI, seated: false, zone: 'entrada' },
         almacen: { x: -7.3, z: 3.5, rot: -Math.PI / 2, seated: false, zone: 'almacen' }
       };
+
+      // Señuelos (horror.js): a veces, donde él estaba parado queda una moneda mojada o un ticket doblado.
+      var R = this.retro;
+      var wet = R.material({ texture: 'white', color: 0x15181b });
+      var coin = new THREE.Group();
+      var ring = new THREE.Mesh(new THREE.CircleGeometry(0.11, 8), wet); // el agua que dejó alrededor
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.y = 0.004;
+      coin.add(ring);
+      var disc = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.008, 8), R.material({ texture: 'yellow', color: 0x9c9474, emissive: 0.25 }));
+      disc.position.y = 0.009;
+      coin.add(disc);
+      var ticket = new THREE.Group();
+      var paper = R.material({ texture: 'white', color: 0xb9b4a4, emissive: 0.2 });
+      [-1, 1].forEach(function (s) { // doblado al medio, como una carpa chica
+        var half = this.box(0.07, 0.003, 0.05, paper, 0, 0.012, s * 0.023, ticket);
+        half.rotation.x = s * 0.45;
+      }, this);
+      ticket.rotation.y = 0.7;
+      [coin, ticket].forEach(function (d) { d.visible = false; this.add(d); }, this);
+      this.decoys = { moneda: coin, ticket: ticket };
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -1544,6 +1565,7 @@
         anchors: forestAnchors,
         zones: Object.keys(zoneDefs),
         trees: trees.length,
+        treePos: trees, // [x, z] de cada pino: para esconderse detrás (mimetismo arbóreo, horror.js)
         spawnOutside: { x: 0, z: 101.6, yaw: Math.PI },
         spawnInside: { x: 0, z: 4.2, yaw: 0 },
         flashlight: 4,

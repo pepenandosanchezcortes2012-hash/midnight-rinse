@@ -133,6 +133,16 @@ Pelusa, las caras blancas, el niño y la gente de la avenida llevan un **cerebro
 - **Las caras blancas** miran a Pelusa, a su niño, su ropa girando o el autobús; nunca a ti.
 - Él y las máscaras no lo llevan: uno es una anomalía, las otras obedecen órdenes.
 
+### Director de IA (cómo se mueven y deciden)
+La mosca decide a qué le prestan atención; el **director de IA** (`src/core/director.js`, skill `uncanny-ai-director`) decide cómo se mueve un cuerpo y cómo reacciona a ti:
+- **Caminan como cuerpos con peso**, no de un punto a otro en línea recta: rodean lavadoras, el banco y el mostrador, arrancan y frenan de a poco y nunca se atascan (si no ven el camino, lo planifican). Cada uno toma su propia línea.
+- **Espacio personal:** si les bloqueas la puerta, se detienen a un metro, ladean la cabeza y esperan en silencio. Si solo estás en medio, te rodean sin rozarte.
+- **Si los miras de golpe, se quedan inmóviles** de 3 a 5 segundos, a medio paso, antes de seguir. Si la mirada llega despacio, no.
+- **Si te acercas demasiado, dejan de respirar** hasta que te alejas.
+- **Las caras blancas**, mientras esperan su lavado, eligen una rutina (mirar el tambor, doblar una prenda que no está, contar monedas) o se corren al borde de tu vista. Solo cambian de pose cuando no las miras de frente. Si insistes en hablarles, señalan el tambor con un dedo largo y anguloso; si sigues, se inclinan hacia ti, muy despacio, sin mirarte.
+- **Las máscaras** te siguen con el cuello y, un segundo después, con la máscara. A veces vienen dos: una vigila la puerta de vidrio y sus pasos nunca coinciden. Desde las 03:00 se van por la puerta trasera y la dejan entreabierta.
+- **Él** nunca aparece a la vista: elige un punto ciego (al borde de tu vista, más cerca y a tu espalda, o el banco para que bajes la guardia), según cómo está la tienda: luces que fallan, estática en la radio, tu miedo. Si lo miraste, tarda en reaccionar. A veces, donde estaba parado, queda una moneda mojada o un ticket doblado. En el bosque se esconde detrás de los pinos y se corre de lado para que siempre haya un tronco entre los dos.
+
 ### El bosque
 Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en la pausa, y sales a un bosque de pinos bajo la lluvia.
 - **Qué hay afuera:** la fachada iluminada, una farola de sodio y un sendero que lleva a un claro… donde hay una lavadora encendida que no está conectada a nada.
@@ -220,7 +230,7 @@ Hay 13 logros, algunos ocultos. Se ven en la pantalla de título (**Logros**) y 
 
 ## Skills del proyecto (Claude Code)
 
-En `.claude/skills/` hay cinco skills que se cargan al trabajar en esta carpeta. Cada una tiene su `SKILL.md` y sus herramientas:
+En `.claude/skills/` hay seis skills que se cargan al trabajar en esta carpeta. Cada una tiene su `SKILL.md` y sus herramientas:
 | Skill | Para qué | Herramienta |
 |---|---|---|
 | `midnight-creative-engine` | Propone 3 microanomalías y 2 variaciones (cliente, bosque o radio) al cerrar cada tarea, en clave de terror sutil | `estado.py` (inventario del contenido, para no repetir) |
@@ -228,6 +238,7 @@ En `.claude/skills/` hay cinco skills que se cargan al trabajar en esta carpeta.
 | `perpetual-task-runner` | El ciclo autónomo sobre `TASK_BACKLOG.md`: tomar, hacer, probar, publicar, marcar | `backlog.py` |
 | `qa-sentinel-audio` | Pruebas (Python, JS, partidas), rutas relativas sin 404, audio y despachador de oclusión | `centinela.py [completo]` |
 | `lorekeeper-blackwood` | El canon (`CANON.md`) y la revisión de todo texto nuevo | `lore_check.py ["texto"]` |
+| `uncanny-ai-director` | La IA de los NPCs: decisiones por utilidad, navegación por fuerzas sin atascos, contemplación, mirada desfasada, puntos ciegos y mimetismo arbóreo | `revisar_ia.py [partida]` (pruebas del núcleo, integración y parámetros del diseño) |
 
 ## Estructura
 
@@ -239,6 +250,7 @@ midnight-rinse/
 │   ├── src/core/                  núcleo verificado: ports exactos de core/ a JavaScript
 │   │   ├── dispatcher.js          Blind-Spot Dispatcher (campeón de Gemini G002)
 │   │   ├── shiftLog.js            bitácora monótona y persistente (campeón de Gemini G007)
+│   │   ├── director.js            director de IA de los NPCs: utilidad, navegación por fuerzas, mirada, puntos ciegos
 │   │   ├── bayer.js · vertexSnap.js · steppedHold.js · detentDial.js · clockAnomaly.js
 │   ├── src/engine/                motor del juego
 │   │   ├── config.js · util.js    constantes del turno y utilidades
@@ -256,7 +268,7 @@ midnight-rinse/
 │   │   ├── gameplay.js            interacción táctil y sistemas (lavadoras, secadoras, charcos…)
 │   │   ├── horror.js              Blind-Spot Engine: eventos por zona y el Cliente Inmóvil
 │   │   ├── ui.js · game.js        pantallas, director del turno, infracciones y finales
-│   └── tests/                     nucleo.test.js + vectores.json (dorados desde Python)
+│   └── tests/                     nucleo.test.js + vectores.json (dorados desde Python), director.test.js, partida.js
 ├── core/                          núcleo lógico en Python 3.9+ (especificación ejecutable)
 │   ├── midnight_rinse_core/       los 7 módulos
 │   ├── tests/                     203 pruebas (las 7 baterías del Coliseo + integración)
@@ -310,6 +322,7 @@ Si agregas un texto nuevo, que sea un literal (o una plantilla de `MR.tf`), no u
 ```bash
 cd core && py -m unittest discover -s tests -t .      # 203 pruebas del núcleo Python
 node --test juego/tests/nucleo.test.js               # ports JS idénticos a Python (7 baterías)
+node --test juego/tests/director.test.js             # director de IA: navegación sin atascos, contemplación, punto ciego
 py core/generar_vectores.py                          # regenerar los vectores dorados
 ```
 

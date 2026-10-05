@@ -56,9 +56,18 @@
       frames(5);
       g.player.pos.set(-2, 0, 1); g.player.yaw = 0.3;
       out.push(medir('sala'));
+      // Con visitas (director de IA): dos caras blancas caminando (una con su niño), dos máscaras y él en el banco.
+      var c = g.clientela;
+      c.plan = []; c.childPlan = true; c.coinPlan = false; g.minutes = Math.max(g.minutes, 120);
+      g.gameplay.washers.forEach(function (x) { x.running = false; x.credit = false; });
+      g.horror.placeCustomer('banco'); g.horror.customer.present = true;
+      c.spawn('cara'); c.spawn('cara'); c.spawn('mascara'); c.spawn('mascara');
+      out.push(medir('sala con visitas'));
       g.bosque.go(); frames(40);
       g.player.yaw = Math.PI;
       out.push(medir('bosque'));
+      g.horror.placeCustomer('bosque_b'); // él, escondiéndose detrás de los pinos
+      out.push(medir('bosque con él'));
       g.bosque.go(); frames(40);
       g.pasillo.unlock(true); g.pasillo.go(); frames(40);
       var X = g.espejo.planeX - 1.465;

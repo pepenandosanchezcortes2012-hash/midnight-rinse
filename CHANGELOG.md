@@ -221,3 +221,17 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 ## Sprint 30 — El álbum recuerda
 
 - Pie de foto con lo que la cámara reveló y borde dorado en las fotos que revelaron algo.
+
+## Director de IA — los clientes dejan de tener «cerebro de mosca» para moverse (pedido por Yesda)
+
+- Skill nueva **`uncanny-ai-director`** y núcleo puro `juego/src/core/director.js` (se prueba en node): percepción de tu mirada, decisiones por utilidad, pausa de contemplación, mirada desfasada, respiración, navegación por fuerzas con A* de respaldo, puntos ciegos y mimetismo arbóreo.
+- **Caras blancas, el niño y las máscaras** caminan con inercia y paso pesado, rodean lo que estorba, nunca se atascan y te esperan a un metro si les tapas la puerta (si solo estás en medio, te rodean). Si los miras de golpe se congelan de 3 a 5 s; si te acercas, dejan de respirar.
+- **Caras blancas:** rutinas por utilidad (mirar el tambor, doblar una prenda que no está, contar monedas, correrse al borde de tu vista), que solo cambian cuando no las miras de frente. Si insistes: señalan el tambor y después se inclinan hacia ti sin mirarte.
+- **Máscaras:** el cuello te sigue y la máscara se clava un segundo después. A veces vienen dos (una vigila la puerta de vidrio, pasos desfasados 0,8 s). Desde las 03:00 se van por la puerta trasera y la dejan entreabierta.
+- **Él:** se mueve solo a puntos ciegos (borde de tu vista, a tu espalda o su rutina), según luces, radio y miedo; tarda 3–5 s en reaccionar si lo miraste; deja señuelos (moneda mojada, ticket doblado); en el bosque, siempre un pino entre los dos.
+- **Decisiones (adaptado al canon):**
+  - «La secadora 07» no existe (canon: 4 secadoras). El «ciclo» de las máscaras es la orden que imprime el mostrador.
+  - «La salida trasera hacia el bosque»: por la puerta de vidrio se sale al bosque, y por la trasera, al pasillo de servicio. Las máscaras se van por la trasera solo cuando ya está abierta (03:00), así de verdad puedes seguirlas. Antes de esa hora salen por el vidrio.
+  - «Señalan el producto si no los atiendes»: las caras blancas no compran nada. Su comunicación sin palabras aparece cuando insistes en hablarles: señalan su tambor y después se inclinan, siempre sin mirarte («nunca te miran a los ojos»).
+  - «El cuello gira siguiendo la cámara»: lo hacen las máscaras. Él solo se mueve cuando no lo miras (canon §3), y las caras blancas nunca te miran.
+- **Herramientas:** `revisar_ia.py`; `centinela.py` corre también `director.test.js`; `pruebas.html?auto&solo=texto` corre solo algunas partidas; `rendimiento.html` mide la sala con visitas y el bosque con él.

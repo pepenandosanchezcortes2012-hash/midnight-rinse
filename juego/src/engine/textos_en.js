@@ -934,5 +934,13 @@ MR.TEXTOS_EN = {
  "caras con su rostro de antes": "faces with the faces they used to have",
  "nadie frente al mostrador": "no one at the counter",
  "la avenida bajo el agua": "the avenue underwater",
- "un río bajo el puente": "a river under the bridge"
+ "un río bajo el puente": "a river under the bridge",
+ "(Señala el tambor con un dedo largo y anguloso. No dice nada.)": "(It points at the drum with a long, angular finger. It says nothing.)",
+ "(Se inclina hacia ti, muy despacio, sin mirarte.)": "(It leans toward you, very slowly, without looking at you.)",
+ "(Las máscaras salen por la puerta trasera y la dejan entreabierta.)": "(The masks go out through the back door and leave it ajar.)",
+ "(La máscara sale por la puerta trasera y la deja entreabierta.)": "(The mask goes out through the back door and leaves it ajar.)",
+ "(Dos máscaras. Una se queda junto a la puerta de vidrio, de cara a la sala.)": "(Two masks. One stays by the glass door, facing the room.)",
+ "(En el piso, justo donde él estaba parado, hay una moneda mojada.)": "(On the floor, right where he was standing, there's a wet coin.)",
+ "(Donde él estaba parado quedó un ticket doblado. Está húmedo.)": "(Where he was standing there's a folded ticket. It's damp.)",
+ "Los clientes tienen cerebro nuevo. Si miras de golpe, se quedan quietos. Si insistes, se inclinan. Y a él no lo vas a ver llegar.": "The customers have new brains. Look at them suddenly and they freeze. Insist, and they lean in. And you won't see him coming."
 };

@@ -2993,6 +2993,334 @@
       return (frames / 30).toFixed(0) + ' s simulados; ' + g.bosque.visits + ' salidas; final: ' + ctx.w.document.getElementById('final-titulo').textContent;
     }],
 
+    ['Director de IA (1): las caras blancas caminan por fuerzas (nunca atraviesan nada, sin frenar en seco) y te esperan a un metro', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var D = ctx.w.MR.Director;
+      var U = ctx.w.MR.Util;
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      g.horror.customer.present = false; g.horror.nextEvent = 9999; g.gato.stared = true;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(-6, 0, 2.5); g.player.yaw = Math.PI / 2; // mirando la pared del almacén: no las ves llegar
+      var obst = c._obstaculos();
+      check(obst.length >= 8, 'el director no tiene las cajas de la sala (' + obst.length + ')');
+      var peorAcel = 0;
+      var lavadoras = {};
+      for (var n = 0; n < 6; n += 1) {
+        g.gameplay.washers.forEach(function (x) { x.running = false; x.credit = false; });
+        var v = c.spawn('cara');
+        var v0 = 0;
+        for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) {
+          step(ctx, 1);
+          var p = v.model.group.position;
+          check(!D.choca(p.x, p.z, obst, v.agente.radio - 0.01), 'una cara atravesó algo en (' + p.x.toFixed(2) + ', ' + p.z.toFixed(2) + ')');
+          peorAcel = Math.max(peorAcel, Math.abs(v.agente.v - v0) * 30);
+          v0 = v.agente.v;
+        }
+        check(v.state === 'llego', 'no llegó a la lavadora ' + v.washer);
+        check(Math.abs(v.model.group.position.x - (-6.75 + v.washer)) < 0.06, 'no quedó frente a su lavadora');
+        lavadoras[v.washer] = true;
+        c._remove(v);
+      }
+      check(peorAcel <= 2.0 + 1e-6, 'arrancó o frenó en seco (' + peorAcel.toFixed(2) + ' m/s²)');
+      // Le bloqueas la puerta cuando se va (de espaldas a ella): se detiene a un metro, ladea la cabeza y espera en
+      // silencio; si te apartas, sigue y sale.
+      g.gameplay.washers.forEach(function (x) { x.running = false; x.credit = false; });
+      var v2 = c.spawn('cara');
+      for (var a = 0; a < 30 * 30 && v2.state !== 'llego'; a += 1) { step(ctx, 1); }
+      c._leave(v2);
+      g.player.pos.set(0.4, 0, 4.55); g.player.yaw = Math.PI; // en la puerta, mirando hacia afuera
+      var minD = 99;
+      var espero = false;
+      var ladeo = 0;
+      for (var k = 0; k < 30 * 14; k += 1) {
+        step(ctx, 1);
+        minD = Math.min(minD, U.distXZ(v2.model.group.position, g.player.pos));
+        if (v2.agente.esperando) { espero = true; }
+        ladeo = Math.max(ladeo, v2.model.head.rotation.z);
+      }
+      check(espero && c.visitors.indexOf(v2) >= 0, 'no esperó');
+      check(minD >= 0.9, 'se te vino encima (' + minD.toFixed(2) + ' m)');
+      check(ladeo > 0.2, 'no ladeó la cabeza (' + ladeo.toFixed(2) + ')');
+      g.player.pos.set(-3, 0, 3.4);
+      for (var q = 0; q < 30 * 25 && c.visitors.indexOf(v2) >= 0; q += 1) { step(ctx, 1); }
+      check(c.visitors.indexOf(v2) < 0, 'no salió cuando te apartaste');
+      noErrors(ctx);
+      return Object.keys(lavadoras).length + ' lavadoras · aceleración máx. ' + peorAcel.toFixed(2) + ' m/s² · esperó a ' + minD.toFixed(2) + ' m';
+    }],
+
+    ['Director de IA (2): si miras de golpe a una cara blanca se queda inmóvil 3–5 s; de cerca, no respira', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      g.horror.customer.present = false; g.horror.nextEvent = 9999; g.gato.stared = true;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.gameplay.washers.forEach(function (x) { x.running = false; x.credit = false; });
+      g.player.pos.set(-6, 0, 2.5); g.player.yaw = Math.PI / 2;
+      var v = c.spawn('cara');
+      step(ctx, 30 * 2);
+      check(v.state === 'entra' && v.agente.v > 0.3, 'no venía caminando');
+      // Giras de golpe hacia ella.
+      var p = v.model.group.position;
+      g.player.yaw = Math.atan2(-(p.x - g.player.pos.x), -(p.z - g.player.pos.z));
+      step(ctx, 1);
+      var x0 = p.x;
+      var z0 = p.z;
+      var quieta = 0;
+      while (quieta < 30 * 7 && Math.hypot(p.x - x0, p.z - z0) < 1e-9) { step(ctx, 1); quieta += 1; }
+      var s = quieta / 30;
+      check(s >= 2.9 && s <= 5.2, 'no se quedó inmóvil de 3 a 5 s (' + s.toFixed(1) + ' s)');
+      // Si la mirada llega despacio (desde la periferia), no se sobresalta.
+      var otra = c.spawn('cara');
+      g.player.yaw = Math.PI / 2;
+      step(ctx, 30 * 2);
+      var tope = otra.contempla.veces;
+      var op = otra.model.group.position;
+      for (var r = 0; r < 120; r += 1) { // gira despacio (0,6 rad/s) hacia ella
+        var meta = Math.atan2(-(op.x - g.player.pos.x), -(op.z - g.player.pos.z));
+        var dif = ctx.w.MR.Director.envolver(meta - g.player.yaw);
+        g.player.yaw += Math.max(-0.02, Math.min(0.02, dif));
+        step(ctx, 1);
+      }
+      check(otra.contempla.veces === tope, 'se congeló con una mirada lenta');
+      for (var i = 0; i < 30 * 30 && !(v.state === 'llego' && otra.state === 'llego'); i += 1) { step(ctx, 1); }
+      check(v.state === 'llego', 'no llegó');
+      // Lejos respira (el pecho sube y baja); a menos de un metro contiene el aire.
+      var zs = [];
+      for (var k = 0; k < 60; k += 1) { step(ctx, 1); zs.push(v.model.chest.scale.z); }
+      check(Math.max.apply(null, zs) - Math.min.apply(null, zs) > 0.004, 'no respira');
+      var vp = v.model.group.position;
+      g.player.pos.set(vp.x + 0.5, 0, vp.z + 0.75);
+      step(ctx, 15);
+      var s0 = v.model.chest.scale.z;
+      step(ctx, 30);
+      check(v.respira.contenida && Math.abs(v.model.chest.scale.z - s0) < 1e-9, 'siguió respirando contigo encima');
+      noErrors(ctx);
+      return 'inmóvil ' + s.toFixed(1) + ' s · mirada lenta: nada · contiene el aire';
+    }],
+
+    ['Director de IA (3): dos máscaras (una vigila la puerta, pasos desfasados), te siguen con el cuello y luego la máscara, y se van por la puerta trasera', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var h = g.horror;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.childPlan = false; c.coinPlan = false;
+      h.customer.present = false; h.nextEvent = 9999; g.gato.stared = true;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.pasillo.unlock(true);
+      g.player.pos.set(3.5, 0, 0.3); g.player.yaw = Math.PI; // mirando la puerta de vidrio
+      c.plan = [{ at: g.minutes, kind: 'mascara', par: true }];
+      step(ctx, 1);
+      check(c.visitors.length === 2 && c.visitors.every(function (v) { return v.kind === 'mascara'; }), 'no vinieron dos máscaras');
+      var op = c.visitors.filter(function (v) { return v.rol === 'operador'; })[0];
+      var vi = c.visitors.filter(function (v) { return v.rol === 'vigia'; })[0];
+      check(op && vi && op.pareja === vi, 'no se repartieron los papeles');
+      step(ctx, 12);
+      check(op.agente.v > 0.05 && vi.agente.v === 0, 'la segunda no esperó 0,8 s para echar a andar');
+      // La mirada: el cuello gira primero; la máscara, un segundo después.
+      var cuelloAntes = false;
+      var ojosEn = -1;
+      for (var i = 0; i < 30 * 4; i += 1) {
+        step(ctx, 1);
+        if (Math.abs(op.model.neck.rotation.y) > 0.15 && Math.abs(op.model.head.rotation.y) < 1e-9 && ojosEn < 0) { cuelloAntes = true; }
+        if (ojosEn < 0 && Math.abs(op.model.head.rotation.y) > 0.02) { ojosEn = i + 13; }
+      }
+      check(cuelloAntes, 'el cuello no se adelantó a la máscara');
+      check(ojosEn >= 30, 'la máscara se clavó antes del segundo (' + ojosEn + ' cuadros)');
+      for (var k = 0; k < 30 * 30 && !(op.state === 'llego' && vi.state === 'llego'); k += 1) { step(ctx, 1); }
+      check(op.state === 'llego' && vi.state === 'llego', 'no llegaron a sus lugares');
+      check(ctx.w.MR.Util.distXZ(vi.model.group.position, { x: 1.7, z: 3.3 }) < 0.1, 'la vigía no quedó junto a la puerta');
+      check(sub().indexOf('Dos máscaras') >= 0, 'no se notó que eran dos');
+      // Se van por la puerta trasera (abierta desde las 03:00): la abren y la dejan entreabierta.
+      g.player.pos.set(3.0, 0, -1.5);
+      g.player.yaw = Math.atan2(-(6.8 - 3.0), -(-4.7 + 1.5));
+      var abierta = 0;
+      var sale = -1;
+      for (var q = 0; q < 30 * 45 && c.visitors.length; q += 1) {
+        step(ctx, 1);
+        abierta = Math.min(abierta, h.backDoorTarget);
+        if (sale < 0 && op.state === 'sale') { sale = q; }
+        if (sale >= 0 && vi.state === 'sale' && vi.salioEn === undefined) { vi.salioEn = q; }
+      }
+      check(!c.visitors.length, 'no se fueron: ' + c.visitors.map(function (v) {
+        var a = v.agente;
+        return v.rol + ' ' + v.state + ' en (' + a.x.toFixed(2) + ', ' + a.z.toFixed(2) + ') punto ' + a.i + '/' + (a.ruta ? a.ruta.length : 0) +
+          (a.ruta && a.ruta[a.i] ? ' → (' + a.ruta[a.i][0].toFixed(2) + ', ' + a.ruta[a.i][1].toFixed(2) + ')' : '') +
+          ' v=' + a.v.toFixed(2) + (a.esperando ? ' esperando' : '') + (a.atascado ? ' atascado' : '') + (v.contempla.congelado > 0 ? ' congelada' : '');
+      }).join(' | '));
+      check(op.porAtras && vi.porAtras, 'no salieron por la puerta trasera');
+      check(vi.salioEn - sale >= 20, 'salieron al unísono');
+      check(abierta <= -0.55, 'no abrieron la puerta trasera');
+      check(sub().indexOf('puerta trasera') >= 0, 'no se notó la salida');
+      // La puerta se cierra (a su posición de siempre) cuando no la miras.
+      g.player.yaw += Math.PI;
+      step(ctx, 30 * 42);
+      check(Math.abs(h.backDoorTarget + 0.3) < 1e-6, 'la puerta no volvió a entreabierta (' + h.backDoorTarget + ')');
+      noErrors(ctx);
+      return 'cuello → máscara en ' + ojosEn + ' cuadros · desfase ' + (vi.salioEn - sale) + ' cuadros · puerta trasera';
+    }],
+
+    ['Director de IA (4): si insistes, la cara blanca señala el tambor y después se inclina hacia ti sin mirarte', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var D = ctx.w.MR.Director;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      g.horror.customer.present = false; g.horror.nextEvent = 9999; g.gato.stared = true;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.gameplay.washers.forEach(function (x) { x.running = false; x.credit = false; });
+      g.player.pos.set(-6, 0, 2.5); g.player.yaw = Math.PI / 2;
+      var v = c.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      var vp = v.model.group.position;
+      g.player.pos.set(vp.x + 0.6, 0, vp.z + 1.6);
+      g.player.yaw = Math.atan2(-(vp.x - g.player.pos.x), -(vp.z - g.player.pos.z)) + 0.6; // cerca, sin mirarla de frente
+      v.talked = true;
+      g.gameplay.messageCooldown = {};
+      c.talk(v.id);
+      check(sub().indexOf('Ya no te responde') >= 0, 'la primera vez no siguió mirando el tambor');
+      g.gameplay.messageCooldown = {};
+      c.talk(v.id);
+      step(ctx, 30);
+      check(sub().indexOf('Señala el tambor') >= 0 && v.model.finger.visible, 'no señaló');
+      check(v.model.armR.rotation.x > 1.0, 'el brazo no apunta al tambor (' + v.model.armR.rotation.x.toFixed(2) + ')');
+      step(ctx, 30 * 4);
+      check(!v.model.finger.visible, 'no bajó el dedo');
+      g.gameplay.messageCooldown = {};
+      c.talk(v.id);
+      check(sub().indexOf('Se inclina hacia ti') >= 0, 'no avisó que se inclina');
+      step(ctx, 30 * 6);
+      var hacia = D.rumbo(g.player.pos.x - vp.x, g.player.pos.z - vp.z);
+      check(v.model.group.rotation.x < -0.2, 'no se inclinó (' + v.model.group.rotation.x.toFixed(2) + ')');
+      check(Math.abs(D.envolver(v.model.group.rotation.y - hacia)) < 0.5, 'no se volvió hacia ti');
+      check(v.model.head.rotation.y > 0.9, 'te miró (la cabeza en ' + v.model.head.rotation.y.toFixed(2) + ')');
+      check(c.visitors.indexOf(v) >= 0 && v.state === 'llego', 'se fue mientras se inclinaba');
+      // Te alejas: se endereza.
+      g.player.pos.set(-6, 0, 2.5);
+      step(ctx, 30 * 4);
+      check(v.model.group.rotation.x > -0.01, 'no se enderezó');
+      noErrors(ctx);
+      return 'mira el tambor → señala → se inclina (sin mirarte) → se endereza';
+    }],
+
+    ['Director de IA (5): él elige un punto ciego (nunca aparece a la vista), con modos que cambian y una pausa si lo miraste', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      start(ctx);
+      g.clientela.plan = []; h.nextEvent = 9999; g.gato.stared = true;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      h.placeCustomer('banco'); h.customer.present = true;
+      var poses = [[2, 3, Math.PI], [0, 0, 0], [-5, -2, Math.PI / 2], [5, -2, -Math.PI / 2], [0, 3, Math.PI / 4], [-3, 3, -2.5],
+        [6, 0, 1.2], [-6, 3.6, 0.3], [3, -2.5, 2.6], [-1, -1, -1.9], [1.5, 2, 0.9], [-4, -2.6, 3.0]];
+      var modos = {};
+      var movidas = 0;
+      var nulos = 0;
+      poses.forEach(function (ps) {
+        for (var rep = 0; rep < 3; rep += 1) {
+          g.player.pos.set(ps[0], 0, ps[1]); g.player.yaw = ps[2] + rep * 0.4; g.player.pitch = 0;
+          step(ctx, 2);
+          h.miradoEn = -99;
+          var to = h._puntoCiego();
+          if (h.modoEl) { modos[h.modoEl] = true; }
+          if (!to) { nulos += 1; continue; }
+          check(h.zoneVisible(g.world.anchors[to].zone) === 0, 'eligió ' + to + ', que estabas viendo');
+          check(to !== h.customer.anchor, 'eligió donde ya estaba');
+          if (h.zoneVisible(h.customer.zone) === 0) {
+            h._apply({ type: 'cliente_mueve' }, h.customer.zone);
+            check(h.zoneVisible(h.customer.zone) === 0, 'apareció a la vista (' + h.customer.anchor + ')');
+            movidas += 1;
+          }
+        }
+      });
+      check(movidas >= 10, 'casi no se movió (' + movidas + ')');
+      check(Object.keys(modos).length >= 2, 'siempre el mismo modo (' + Object.keys(modos).join(', ') + ')');
+      // Si lo acabas de mirar, no reacciona al instante.
+      g.player.pos.set(2, 0, 3); g.player.yaw = Math.PI; step(ctx, 2);
+      var antes = h.customer.anchor;
+      h.miradoEn = h.clock;
+      h._apply({ type: 'cliente_mueve' }, h.customer.zone);
+      check(h.customer.anchor === antes, 'se movió sin su pausa de contemplación');
+      noErrors(ctx);
+      return movidas + ' movidas, todas a puntos ciegos · modos: ' + Object.keys(modos).join(', ') + ' · ' + nulos + ' veces esperó';
+    }],
+
+    ['Director de IA (6): a veces él deja un señuelo donde estaba parado (una moneda mojada, un ticket doblado)', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; h.nextEvent = 9999; g.gato.stared = true;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      h.placeCustomer('secadoras'); h.customer.present = true;
+      var donde = g.world.customer.group.position.clone();
+      var rnd = ctx.w.Math.random;
+      ctx.w.Math.random = function () { return 0.1; };
+      h._moverEl('banco');
+      ctx.w.Math.random = rnd;
+      var d = g.world.decoys.moneda.visible ? g.world.decoys.moneda : g.world.decoys.ticket;
+      check(d.visible && ctx.w.MR.Util.distXZ(d.position, donde) < 0.15, 'no dejó nada donde estaba parado');
+      check(h.customer.anchor === 'banco', 'no se movió');
+      // Lo ves de cerca: el subtítulo; dos parpadeos después ya no está.
+      g.player.pos.set(donde.x - 1.2, 0, donde.z + 1.2);
+      g.player.yaw = Math.atan2(-(donde.x - g.player.pos.x), -(donde.z - g.player.pos.z));
+      g.player.pitch = -0.5;
+      step(ctx, 3);
+      check(/moneda mojada|ticket doblado/.test(sub()), 'no lo notaste');
+      g.player.forceBlink(); step(ctx, 12);
+      g.player.forceBlink(); step(ctx, 12);
+      check(!d.visible, 'el señuelo no desapareció');
+      noErrors(ctx);
+      return (d === g.world.decoys.moneda ? 'moneda mojada' : 'ticket doblado') + ' → visto → desapareció';
+    }],
+
+    ['Director de IA (7): en el bosque él se esconde detrás de los pinos y se corre de lado para que siempre haya un tronco entre los dos', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var D = ctx.w.MR.Director;
+      start(ctx);
+      g.clientela.plan = []; h.nextEvent = 9999; g.gato.stared = true;
+      h.placeCustomer('banco'); h.customer.present = true;
+      g.bosque.go(); step(ctx, 40);
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      var arboles = g.world.forest.treePos;
+      check(arboles && arboles.length > 100, 'el bosque no expone sus pinos');
+      h.placeCustomer('bosque_b');
+      var pos = g.world.customer.group.position;
+      g.player.pos.set(0.3, 0, 108); g.player.yaw = 0; g.player.pitch = 0; // de espaldas al bosque
+      step(ctx, 30 * 3);
+      function ojos() { return { x: g.player.pos.x, z: g.player.pos.z, yaw: g.player.yaw }; }
+      check(h.arbol >= 0 && D.tapado(ojos(), pos, arboles, 0.2), 'no se escondió detrás de un pino');
+      // Caminas de lado por el sendero sin mirarlo: se corre y sigue tapado.
+      var tapados = 0;
+      for (var i = 0; i < 6; i += 1) {
+        g.player.pos.x += 0.5; g.player.pos.z += 1.2;
+        step(ctx, 30);
+        if (D.tapado(ojos(), pos, arboles, 0.2)) { tapados += 1; }
+      }
+      check(tapados >= 5, 'quedó a la vista (' + tapados + ' de 6)');
+      // Si lo ves, no se mueve.
+      var x0 = pos.x;
+      var z0 = pos.z;
+      g.player.yaw = Math.atan2(-(pos.x - g.player.pos.x), -(pos.z - g.player.pos.z));
+      g.player.pos.x += 0.4;
+      step(ctx, 30);
+      var visto = h.frustum.containsPoint(h.customerHead()) && !D.tapado(ojos(), pos, arboles, 0.2);
+      check(!visto || Math.hypot(pos.x - x0, pos.z - z0) < 1e-6, 'se movió a la vista');
+      noErrors(ctx);
+      return 'tapado ' + tapados + ' de 6 al caminar · quieto a la vista';
+    }],
+
     ['App instalable: manifiesto, iconos y modo sin conexión', async function () {
       var res = await fetch('manifest.webmanifest', { cache: 'no-store' });
       check(res.ok, 'no se encontró el manifiesto');
@@ -3080,6 +3408,10 @@
       return 'claves del juego borradas; la ajena intacta';
     }]
   ];
+
+  // pruebas.html?auto&solo=texto corre solo las pruebas cuyo nombre lo contiene (para iterar rápido).
+  var solo = (location.search.match(/[?&]solo=([^&]+)/) || [])[1];
+  if (solo) { solo = decodeURIComponent(solo); tests = tests.filter(function (t) { return t[0].indexOf(solo) >= 0; }); }
 
   async function runAll() {
     var btn = document.getElementById('correr');
