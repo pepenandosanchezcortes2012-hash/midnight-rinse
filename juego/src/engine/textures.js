@@ -152,16 +152,38 @@
       noise(x, 8, 8, 16, 41);
       return c;
     },
+    // Piel pálida, lisa (las manos de él): antes llevaba los ojos y la boca de la cara.
     paleSkin: function () {
       var c = canvas(16, 16);
       var x = c.getContext('2d');
       x.fillStyle = '#b7b3a6';
       x.fillRect(0, 0, 16, 16);
-      x.fillStyle = '#1a1a1a';
-      x.fillRect(4, 6, 2, 2);
-      x.fillRect(10, 6, 2, 2);
-      x.fillRect(6, 11, 4, 1);
       noise(x, 16, 16, 12, 43);
+      return c;
+    },
+    // El rostro de él: la sombra del ala sobre la frente, cuencas hundidas sin brillo y una boca que no cierra.
+    rostro: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#a8a496';
+      x.fillRect(0, 0, 32, 32);
+      var sombra = x.createLinearGradient(0, 0, 0, 14);
+      sombra.addColorStop(0, 'rgba(10,10,12,0.9)');
+      sombra.addColorStop(1, 'rgba(10,10,12,0)');
+      x.fillStyle = sombra;
+      x.fillRect(0, 0, 32, 14);
+      [10, 22].forEach(function (cx) {
+        x.fillStyle = '#3a3733';
+        x.beginPath(); x.ellipse(cx, 14, 3.4, 4.2, 0, 0, Math.PI * 2); x.fill();
+        x.fillStyle = '#0b0b0b';
+        x.beginPath(); x.ellipse(cx, 15, 1.7, 2.6, 0, 0, Math.PI * 2); x.fill();
+      });
+      x.fillStyle = '#7d7a6f';
+      x.fillRect(15, 16, 2, 7);
+      x.fillStyle = '#1b1a18';
+      x.fillRect(10, 26, 12, 1);
+      x.fillRect(12, 27, 8, 1);
+      noise(x, 32, 32, 14, 51);
       return c;
     },
     water: function () {

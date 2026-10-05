@@ -43,29 +43,57 @@
       var m = w.mat;
       var g = new THREE.Group();
       var head;
+      var armR;
       if (kind === 'cara') {
         var coat = R.material({ texture: 'white', color: COATS[Math.floor(Math.random() * COATS.length)] });
         var wet = R.material({ texture: 'white', color: 0x2b2f33 });
-        w.box(0.13, 0.85, 0.15, wet, -0.09, 0.43, 0, g);
-        w.box(0.13, 0.85, 0.15, wet, 0.09, 0.43, 0, g);
-        w.box(0.44, 0.72, 0.28, coat, 0, 1.2, 0, g);
-        w.box(0.09, 0.68, 0.11, coat, -0.27, 1.18, 0, g);
-        w.box(0.09, 0.68, 0.11, coat, 0.27, 1.18, 0, g);
+        var pale = R.material({ texture: 'white', color: 0xe9e7e0, emissive: 0.3 }); // cuello y manos, tan blancos como la cara
+        var shoe = R.material({ texture: 'white', color: 0x17181a });
+        // Pantalón empapado y zapatos.
+        w.box(0.12, 0.66, 0.14, wet, -0.09, 0.41, 0, g);
+        w.box(0.12, 0.66, 0.14, wet, 0.09, 0.41, 0, g);
+        w.box(0.13, 0.08, 0.21, shoe, -0.09, 0.04, -0.03, g);
+        w.box(0.13, 0.08, 0.21, shoe, 0.09, 0.04, -0.03, g);
+        // Abrigo largo que se abre hacia abajo (seis caras, como en PS1), con hombros.
+        var coatBody = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.27, 0.92, 6), coat);
+        coatBody.position.set(0, 1.1, 0);
+        coatBody.rotation.y = Math.PI / 6;
+        g.add(coatBody);
+        w.box(0.46, 0.09, 0.25, coat, 0, 1.56, 0, g);
+        var armL = w.box(0.09, 0.62, 0.11, coat, -0.255, 1.24, 0, g);
+        armR = w.box(0.09, 0.62, 0.11, coat, 0.255, 1.24, 0, g);
+        [armL, armR].forEach(function (a) { w.box(0.07, 0.09, 0.07, pale, 0, -0.355, 0, a); }); // las manos
         var bag = w.box(0.34, 0.3, 0.22, R.material({ texture: 'white', color: 0x7a7d80 }), 0.36, 0.8, -0.05, g); // la ropa empapada
         bag.rotation.z = 0.1;
-        // La cara: lisa y blanca, sin rasgos (solo la cara de -z).
-        var white = R.material({ texture: 'white', color: 0xe9e7e0, emissive: 0.25 });
-        head = new THREE.Mesh(new THREE.BoxGeometry(0.21, 0.25, 0.21), [wet, wet, wet, wet, wet, white]);
-        head.position.set(0, 1.7, 0);
-        g.add(head);
+        var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.1, 6), pale);
+        neck.position.set(0, 1.64, 0);
+        g.add(neck);
+        // La cabeza: pelo oscuro y mojado; la cara, lisa y blanca, sin rasgos (hacia -z).
+        head = w.box(0.2, 0.25, 0.21, wet, 0, 1.8, 0, g);
+        var faceMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.17, 0.21), R.material({ texture: 'white', color: 0xeeece5, emissive: 0.45 }));
+        faceMesh.rotation.y = Math.PI;
+        faceMesh.position.set(0, -0.015, -0.1065);
+        head.add(faceMesh);
       } else {
         var suit = R.material({ texture: 'white', color: 0x15161a });
+        var lapel = R.material({ texture: 'white', color: 0x262830 });
+        var shirt = R.material({ texture: 'white', color: 0xd9d7d0, emissive: 0.1 });
+        var glove = R.material({ texture: 'white', color: 0x0b0b0d });
         w.box(0.15, 1.0, 0.17, suit, -0.1, 0.5, 0, g);
         w.box(0.15, 1.0, 0.17, suit, 0.1, 0.5, 0, g);
         w.box(0.5, 0.85, 0.3, suit, 0, 1.42, 0, g);
+        w.box(0.58, 0.1, 0.33, suit, 0, 1.82, 0, g);                 // hombreras
         w.box(0.09, 0.85, 0.11, suit, -0.3, 1.38, 0, g);
-        w.box(0.09, 0.85, 0.11, suit, 0.3, 1.38, 0, g);
-        w.box(0.05, 0.4, 0.02, R.material({ texture: 'white', color: 0x3a3c42 }), 0, 1.55, -0.16, g); // corbata
+        armR = w.box(0.09, 0.85, 0.11, suit, 0.3, 1.38, 0, g);
+        w.box(0.09, 0.11, 0.09, glove, -0.3, 0.91, 0, g);            // guantes
+        w.box(0.09, 0.11, 0.09, glove, 0.3, 0.91, 0, g);
+        w.box(0.18, 0.36, 0.02, shirt, 0, 1.63, -0.153, g);          // camisa blanca: la corbata y la máscara contrastan
+        w.box(0.05, 0.42, 0.02, R.material({ texture: 'white', color: 0x3a3c42 }), 0, 1.55, -0.166, g); // corbata
+        [-1, 1].forEach(function (s) {
+          var l = w.box(0.08, 0.36, 0.02, lapel, 0.1 * s, 1.64, -0.158, g); // solapas
+          l.rotation.z = 0.28 * s;
+        });
+        w.box(0.09, 0.1, 0.09, suit, 0, 1.91, 0, g);                 // cuello
         // La máscara: negra, de caras planas (Gouraud por vértice: se ven las facetas).
         head = new THREE.Mesh(new THREE.OctahedronGeometry(0.17, 0), R.material({ texture: 'white', color: 0x0c0c10, emissive: 0.05 }));
         head.scale.set(0.9, 1.2, 0.9);
@@ -73,7 +101,7 @@
         g.add(head);
       }
       g.visible = true;
-      return { group: g, head: head };
+      return { group: g, head: head, armR: armR };
     }
 
     // -------------------------------------------------------------------------------------------- afuera
@@ -166,7 +194,7 @@
       if (g.bosque.outside || g.pasillo.inside) { return; }
       if (!this.waver) {
         this.waver = this._model('cara');
-        var arm = this.waver.group.children[4];
+        var arm = this.waver.armR;
         arm.rotation.z = Math.PI;      // el brazo, arriba
         arm.position.y = 1.78;
         this.world.add(this.waver.group);

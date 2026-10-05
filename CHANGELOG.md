@@ -120,3 +120,11 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** la moneda que te dan es la que ya existía en la colección («de ningún país que conozcas»). Así su descripción por fin tiene historia: es dinero de Blackwood.
 - **Decisión:** la cara pide la moneda antes de la charla y después la charla sigue. El favor no reemplaza la conversación.
 - **Decisión:** el 86 bajo el agua es solo luz y sonido. Sin el autobús entero, el agua sigue siendo opaca (el canvas no usa transparencias).
+
+## Sprint 12 — Modelos 3D
+
+- Pelusa, las caras blancas, las máscaras negras y él, mejorados sin dejar el estilo PS1 (pocas caras, sin suavizado, texturas de 16 a 32 px). Hay una galería para revisarlos.
+- **Decisión:** formas de pocas caras (esferas de 7×5, cilindros de 6 lados) en vez de solo cajas. Mejora la silueta sin perder el aire de PS1 y casi sin costo.
+- **Decisión:** el rostro de él sigue siendo pequeño y está en sombra. Asusta más lo que apenas se ve, y el juego pide no mirarlo a la cara.
+- **Decisión:** el collar de Pelusa queda casi oculto bajo la cabeza, como en un gato de verdad; se ve de costado.
+- Herramientas: servidor temporal en las pruebas (ya no hace falta dejar uno encendido).

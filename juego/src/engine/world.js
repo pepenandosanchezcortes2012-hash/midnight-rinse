@@ -74,7 +74,8 @@
       m.yellow = R.material({ texture: 'yellow' });
       m.coat = R.material({ texture: 'coat' });
       m.skin = R.material({ texture: 'skin' });
-      m.face = R.material({ texture: 'paleSkin' });
+      m.face = R.material({ texture: 'rostro' });
+      m.skin = R.material({ texture: 'paleSkin' });
       m.hair = R.material({ texture: 'black' });
       m.water = R.material({ texture: 'water', emissive: 0.15 });
       m.darkWater = R.material({ texture: 'darkWater', emissive: 0.05 });
@@ -561,6 +562,7 @@
 
     _customer() {
       var m = this.mat;
+      var self = this;
       var group = new THREE.Group();
       var seated = new THREE.Group();
       var standing = new THREE.Group();
@@ -571,13 +573,16 @@
         var h = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.27, 0.23), [m.hair, m.hair, m.hair, m.hair, m.hair, m.face]);
         h.position.set(0, y, 0);
         parent.add(h);
-        // Sombrero de ala ancha (gira con la cabeza): le ensombrece la cara.
-        var brim = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.02, 10), m.dark);
+        // Sombrero de ala ancha, un poco caída (gira con la cabeza): le ensombrece la cara. Copa con cinta.
+        var brim = new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.3, 0.03, 10), m.dark);
         brim.position.set(0, 0.15, 0);
         h.add(brim);
-        var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.15, 10), m.dark);
-        crown.position.set(0, 0.23, 0);
+        var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.14, 0.17, 8), m.dark);
+        crown.position.set(0, 0.24, 0);
         h.add(crown);
+        var band = new THREE.Mesh(new THREE.CylinderGeometry(0.142, 0.142, 0.035, 8), self.retro.material({ texture: 'white', color: 0x2c2522 }));
+        band.position.set(0, 0.18, 0);
+        h.add(band);
         return h;
       }
       // Sentado (mirando hacia -z, hacia las lavadoras).
@@ -585,18 +590,31 @@
       this.box(0.32, 0.5, 0.14, m.coat, 0, 0.25, -0.4, seated);
       this.box(0.34, 0.06, 0.24, m.dark, 0, 0.03, -0.5, seated);
       this.box(0.46, 0.64, 0.28, m.coat, 0, 0.88, 0.02, seated);
+      this.box(0.52, 0.09, 0.3, m.coat, 0, 1.18, 0.02, seated);   // hombros
       this.box(0.1, 0.5, 0.12, m.coat, -0.29, 0.78, -0.06, seated);
       this.box(0.1, 0.5, 0.12, m.coat, 0.29, 0.78, -0.06, seated);
+      this.box(0.08, 0.09, 0.08, m.skin, -0.29, 0.5, -0.1, seated);  // manos sobre las rodillas
+      this.box(0.08, 0.09, 0.08, m.skin, 0.29, 0.5, -0.1, seated);
+      this.box(0.3, 0.17, 0.05, m.coat, 0, 1.28, 0.13, seated);    // el cuello del abrigo, levantado
+      this.box(0.05, 0.17, 0.2, m.coat, -0.14, 1.28, 0.03, seated);
+      this.box(0.05, 0.17, 0.2, m.coat, 0.14, 1.28, 0.03, seated);
       this.seatedHead = head(seated, 1.34);
       // De pie: más alto que una persona (~2 m), abrigo hasta las rodillas, brazos que cuelgan de más.
       this.box(0.15, 1.0, 0.17, m.dark, -0.1, 0.5, 0, standing);
       this.box(0.15, 1.0, 0.17, m.dark, 0.1, 0.5, 0, standing);
-      this.box(0.54, 0.8, 0.34, m.coat, 0, 0.82, 0, standing);  // falda del abrigo
+      var skirt = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.34, 0.82, 6), m.coat); // falda del abrigo, que se abre
+      skirt.position.set(0, 0.8, 0);
+      skirt.rotation.y = Math.PI / 6;
+      standing.add(skirt);
       this.box(0.5, 0.82, 0.31, m.coat, 0, 1.52, 0, standing);  // torso
+      this.box(0.6, 0.1, 0.34, m.coat, 0, 1.9, 0, standing);    // hombros
       this.box(0.1, 0.92, 0.12, m.coat, -0.31, 1.24, 0, standing);
       this.box(0.1, 0.92, 0.12, m.coat, 0.31, 1.24, 0, standing);
-      this.box(0.08, 0.1, 0.08, m.face, -0.31, 0.74, 0, standing); // manos pálidas
-      this.box(0.08, 0.1, 0.08, m.face, 0.31, 0.74, 0, standing);
+      this.box(0.08, 0.12, 0.08, m.skin, -0.31, 0.72, 0, standing); // manos pálidas, largas
+      this.box(0.08, 0.12, 0.08, m.skin, 0.31, 0.72, 0, standing);
+      this.box(0.3, 0.2, 0.05, m.coat, 0, 2.0, 0.13, standing);     // el cuello del abrigo, levantado hasta la cara
+      this.box(0.05, 0.2, 0.22, m.coat, -0.145, 2.0, 0.02, standing);
+      this.box(0.05, 0.2, 0.22, m.coat, 0.145, 2.0, 0.02, standing);
       this.standingHead = head(standing, 2.06);
       group.visible = false;
       this.add(group);

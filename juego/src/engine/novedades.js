@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 39, texto: 'Pelusa, las caras blancas, las máscaras y él tienen modelos nuevos. A él, igual, no lo mires a la cara.' },
     { id: 38, texto: 'Si una cara blanca te pide una moneda, dásela.' },
     { id: 37, texto: 'Deja la radio en la 94.1: el locutor habla más de una vez por noche.' },
     { id: 36, texto: 'Esta noche pasa el 86. Si bajan dos, escucha lo que se dicen.' },

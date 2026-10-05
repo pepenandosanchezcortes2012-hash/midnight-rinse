@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Galería de modelos · Midnight Rinse</title>
+<style>html, body { margin: 0; background: #000; } iframe { border: 0; width: 1036px; height: 647px; }</style>
+</head>
+<body>
+<!--
+  Galería de modelos (herramienta, para revisar modelos 3D con capturas):
+    tests/galeria.html?m=el | el_sentado | cara | mascara | gato    [&giro=0.6 rota el modelo, en radianes; &fov=25 acerca]
+  Pone el modelo en el pasillo central de la sala, iluminado, frente a la cámara y a su altura, sin manos en cuadro.
+-->
+<iframe id="m" src="../index.html?noche=ninguna&lang=es"></iframe>
+<script>
+  var q = (location.search.match(/[?&]m=([a-z_]+)/) || [0, 'el'])[1];
+  var giro = parseFloat((location.search.match(/[?&]giro=([-0-9.]+)/) || [0, '0'])[1]);
+  var fov = parseFloat((location.search.match(/[?&]fov=([0-9.]+)/) || [0, '0'])[1]); // zoom (grados), p. ej. 25 para el gato
+  var marco = document.getElementById('m');
+  marco.onload = function () {
+    var w = marco.contentWindow;
+    (function poll() {
+      var g = w.midnightRinse;
+      if (!g) { setTimeout(poll, 50); return; }
+      w.requestAnimationFrame = function () {}; // sin el bucle del juego: dibujamos un solo cuadro, a mano
+      w.document.getElementById('btn-comenzar').click();
+      function frames(n) { for (var i = 0; i < n; i += 1) { g.update(1 / 30); g.input.endFrame(); } }
+      frames(3);
+      g.clientela.plan = [];
+      g.horror.customer.present = false;
+      g.gato.stared = true;
+      g.ciudad.busPlan = []; g.ciudad.sweepAt = null; g.ciudad.ghostAt = null;
+      var T = new w.THREE.Vector3(0, 0, -1.2); // dónde va el modelo
+      var dist = 2.6;
+      var alto = 1.1;
+      var gato = g.gato;
+      if (q === 'el' || q === 'el_sentado') {
+        var c = g.world.customer;
+        c.standing.visible = q === 'el';
+        c.seated.visible = q === 'el_sentado';
+        c.group.position.copy(T);
+        c.group.rotation.y = Math.PI + giro; // 0 = mira a -z; a la cámara (en +z), PI
+        alto = q === 'el' ? 1.2 : 0.75;
+        dist = q === 'el' ? 3.2 : 2.3;
+      } else if (q === 'cara' || q === 'mascara') {
+        var o = g.clientela._model(q);
+        g.world.add(o.group);
+        o.group.position.copy(T);
+        o.group.rotation.y = Math.PI + giro;
+        alto = 1.15;
+        dist = 3.0;
+      } else if (q === 'gato') {
+        gato.perch = null;
+        gato.route = [];
+        gato.state = 'sentado';
+        gato.timer = 999;
+        alto = 0.3;
+        dist = 1.15;
+      }
+      var p = g.player;
+      p.pos.set(T.x, 0, T.z + dist);
+      p.yaw = 0;
+      p.pitch = Math.atan2(alto - 1.62, dist);
+      p.blink.phase = 'open'; p.blink.amount = 0; p.blink.timer = 999;
+      frames(6);
+      if (q === 'el' || q === 'el_sentado') { g.world.customer.group.visible = true; }
+      if (q === 'gato') {
+        gato.mesh.root.position.set(T.x, 0, T.z);
+        gato.mesh.root.rotation.y = giro; // el gato mira a +z con rotación 0
+        gato.state = 'sentado';
+        gato.stepAcc = 1;
+        gato._pose(0, true);
+      }
+      if (fov) { p.camera.fov = fov; p.camera.updateProjectionMatrix(); }
+      p.camera.children.forEach(function (ch) { ch.visible = false; }); // sin manos
+      p.camera.updateMatrixWorld(true);
+      g.retro.render(g.world.scene, p.camera, { blink: 0, dread: 0, time: 1, flash: 0, collapse: 0, high: 0, crt: false, gamma: 1 });
+      var s = w.document.getElementById('subtitulos');
+      if (s) { s.textContent = ''; }
+    })();
+  };
+</script>
+</body>
+</html>

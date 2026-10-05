@@ -100,27 +100,58 @@
       var g = new THREE.Group();
       var body = new THREE.Group();
       g.add(body);
-      w.box(0.15, 0.14, 0.36, fur, 0, 0, 0, body);
+      // Cuerpo: un óvalo de pocas caras (PS1), con el pecho un poco más alto.
+      var torso = new THREE.Mesh(new THREE.SphereGeometry(0.1, 7, 5), fur);
+      torso.scale.set(0.78, 0.72, 1.85);
+      body.add(torso);
+      var chest = new THREE.Mesh(new THREE.SphereGeometry(0.072, 6, 4), fur);
+      chest.position.set(0, 0.02, 0.12);
+      body.add(chest);
       var head = new THREE.Group();
       head.position.set(0, 0.08, 0.2);
       body.add(head);
-      w.box(0.13, 0.11, 0.11, fur, 0, 0, 0, head);
-      w.box(0.035, 0.05, 0.02, fur, -0.04, 0.075, 0, head);
-      w.box(0.035, 0.05, 0.02, fur, 0.04, 0.075, 0, head);
-      var eyeMat = R.material({ texture: 'white', color: 0x9dff7a, emissive: 1.4 });
+      var skull = new THREE.Mesh(new THREE.SphereGeometry(0.064, 7, 5), fur);
+      skull.scale.set(1.08, 0.92, 0.95);
+      head.add(skull);
+      w.box(0.058, 0.038, 0.04, fur, 0, -0.024, 0.048, head); // hocico
+      // Orejas en punta (se echan hacia atrás cuando algo la inquieta: _pose).
+      var ears = [-1, 1].map(function (s) {
+        var ear = new THREE.Group();
+        ear.position.set(0.036 * s, 0.045, -0.004);
+        ear.rotation.z = -0.28 * s;
+        head.add(ear);
+        var cone = new THREE.Mesh(new THREE.ConeGeometry(0.027, 0.064, 4), fur);
+        cone.position.y = 0.028;
+        cone.rotation.y = Math.PI / 4;
+        ear.add(cone);
+        return ear;
+      });
+      var eyeMat = R.material({ texture: 'white', color: 0x9dff7a, emissive: 1.0 }); // verdes (con más brillo se veían blancos)
       var eyes = new THREE.Group();
       head.add(eyes);
-      w.box(0.025, 0.018, 0.01, eyeMat, -0.03, 0.01, 0.056, eyes);
-      w.box(0.025, 0.018, 0.01, eyeMat, 0.03, 0.01, 0.056, eyes);
+      w.box(0.024, 0.017, 0.01, eyeMat, -0.027, 0.01, 0.058, eyes);
+      w.box(0.024, 0.017, 0.01, eyeMat, 0.027, 0.01, 0.058, eyes);
+      // El collar rojo con su plaquita dorada («Pelusa»).
+      var collar = new THREE.Mesh(new THREE.CylinderGeometry(0.046, 0.05, 0.02, 8, 1, true), R.material({ texture: 'white', color: 0x9a2a26 }));
+      collar.position.set(0, -0.066, -0.022);
+      collar.rotation.x = 0.9; // a lo largo del cuello, que sube del pecho hacia la cabeza
+      head.add(collar);
+      w.box(0.018, 0.022, 0.006, R.material({ texture: 'white', color: 0xd8b24a, emissive: 0.4 }), 0, -0.094, 0.016, head);
       var tail = new THREE.Group();
       tail.position.set(0, 0.04, -0.17);
       body.add(tail);
-      w.box(0.03, 0.03, 0.26, fur, 0, 0, -0.13, tail);
+      var tailMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.021, 0.27, 5), fur); // más fina en la punta
+      tailMesh.rotation.x = -Math.PI / 2;
+      tailMesh.position.set(0, 0, -0.135);
+      tail.add(tailMesh);
       var legs = [];
       [[-0.05, 0.12], [0.05, 0.12], [-0.05, -0.12], [0.05, -0.12]].forEach(function (p) {
         var leg = new THREE.Group();
         leg.position.set(p[0], -0.05, p[1]);
-        w.box(0.035, 0.12, 0.035, fur, 0, -0.06, 0, leg);
+        var bone = new THREE.Mesh(new THREE.CylinderGeometry(0.017, 0.02, 0.12, 5), fur);
+        bone.position.y = -0.06;
+        leg.add(bone);
+        w.box(0.032, 0.016, 0.042, fur, 0, -0.118, 0.006, leg); // la pata
         body.add(leg);
         legs.push(leg);
       });
@@ -132,7 +163,7 @@
       w.box(0.15, 0.01, 0.15, R.material({ texture: 'white', color: 0x7a5a3a }), BOWL[0], 0.052, BOWL[1]);
       // Tocar cualquier parte del gato = acariciarlo.
       g.traverse(function (o) { if (o.isMesh) { w.interactive(o, 'gato'); } });
-      this.mesh = { root: g, body: body, head: head, eyes: eyes, tail: tail, legs: legs };
+      this.mesh = { root: g, body: body, head: head, eyes: eyes, tail: tail, legs: legs, ears: ears };
     }
 
     _placeAtPerch(name) {
@@ -556,6 +587,9 @@
       var m = this.mesh;
       var s = this.state;
       var walking = s === 'camina' || s === 'huye';
+      // Las orejas, hacia atrás cuando algo la inquieta (erizada o mirando el banco vacío).
+      var flat = s === 'eriza' || s === 'mira';
+      m.ears.forEach(function (e) { e.rotation.x = flat ? -0.85 : 0; });
       // Comer, acicalarse y mirar por la puerta son variantes de estar sentado.
       if (s === 'come' || s === 'acicala' || s === 'ventana') { this._poseActivity(s); return; }
       m.legs.forEach(function (leg, i) { leg.visible = s !== 'duerme'; leg.rotation.x = walking ? Math.sin(this.phase + (i % 2 ? Math.PI : 0) + (i > 1 ? Math.PI / 2 : 0)) * 0.6 : 0; }, this);

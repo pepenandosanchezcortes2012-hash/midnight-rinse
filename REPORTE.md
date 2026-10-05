@@ -707,6 +707,23 @@ El proyecto pasó por dos etapas:
 - **Herramienta:** la medición PSX (`tests/rendimiento.html`) falló una vez sin decir por qué. Ahora detiene el bucle del juego (mide solo sus propios cuadros) y, si algo falla, escribe el error y `auditar_psx.py` lo muestra. Después: 3 de 3.
 - **QA:** prueba nueva. El azar de cada noche se decide al crear el objeto (`coinPlan`, `giftOnReturn`), así las pruebas lo fijan sin tocar `Math.random`. 862 textos traducidos. Resultado: 80/80.
 
+## 90. Herramientas sin servidor encendido
+- El servidor de fondo (`py -m http.server 8765`) lo apagó Claude Code porque la computadora se quedó sin memoria. Ahora `probar.py`, `fuzz.py`, `auditar_psx.py` y `centinela.py` levantan uno **temporal** (`juego/herramientas/servidor.py`) si no hay otro, y lo apagan al terminar. Si hay uno corriendo, lo usan. Así no queda nada ocupando memoria entre una prueba y otra.
+
+## 91. Sprint 12: modelos 3D mejorados (estilo PS1)
+- **Galería de modelos:** `juego/tests/galeria.html?m=el|el_sentado|cara|mascara|gato[&giro=…][&fov=…]` pone un modelo frente a la cámara en la sala iluminada, para revisarlo con capturas de antes y después.
+- **Pelusa:**
+  - antes era una caja negra con un palito de cola, y de frente no se le veían las orejas;
+  - ahora tiene cuerpo y cabeza ovalados de pocas caras, hocico, orejas en punta (que **se echan hacia atrás** cuando se eriza o mira el banco vacío), ojos verdes (antes el brillo los dejaba blancos), una cola que se afina, patas y el **collar rojo con su plaquita dorada** («En su collar dice Pelusa»).
+- **Las caras blancas:** ahora tienen zapatos, un abrigo largo que se abre hacia abajo, hombros, cuello y manos tan blancos como la cara, y una **cara lisa y blanca** bien definida sobre la cabeza de pelo mojado. Antes la cabeza se veía mitad negra y mitad blanca.
+- **Las máscaras negras:** ahora tienen camisa blanca, solapas, hombreras y guantes. La máscara y la corbata por fin contrastan; antes eran una mancha negra.
+- **Él:**
+  - abrigo que se abre, hombros, **el cuello del abrigo levantado** hasta la cara y sombrero con cinta y ala un poco caída;
+  - un rostro nuevo (`rostro`, 32 px): la sombra del ala en la frente, **cuencas hundidas sin brillo** y una boca que no cierra. Antes tenía ojos y boca de caricatura;
+  - sus manos ya no tienen cara: usaban la misma textura.
+- **Código:** el modelo de la clientela devuelve el brazo derecho por nombre (`armR`). La despedida ya no depende del orden de las piezas.
+- **QA:** dos verificaciones nuevas (las orejas hacia atrás y la mano en alto en la despedida). PSX dentro de umbrales; cada modelo suma pocas llamadas, y solo cuando está en pantalla. Resultado: 80/80.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

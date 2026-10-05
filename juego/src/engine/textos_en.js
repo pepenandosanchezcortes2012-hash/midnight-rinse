@@ -863,5 +863,6 @@ MR.TEXTOS_EN = {
  "¿Tienes una moneda? La secadora no acepta las nuestras.": "Do you have a coin? The dryer won't take ours.",
  "Gracias. Toma una de las nuestras; aquí no sirve para nada.": "Thank you. Take one of ours; it's no use here.",
  "No importa. Nuestra ropa no se va a secar de todos modos.": "It doesn't matter. Our clothes won't dry anyway.",
- "Si una cara blanca te pide una moneda, dásela.": "If a white face asks you for a coin, give it one."
+ "Si una cara blanca te pide una moneda, dásela.": "If a white face asks you for a coin, give it one.",
+ "Pelusa, las caras blancas, las máscaras y él tienen modelos nuevos. A él, igual, no lo mires a la cara.": "Pelusa, the white faces, the masks and him have new models. Still, don't look at his face."
 };

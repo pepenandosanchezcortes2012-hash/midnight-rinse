@@ -1084,6 +1084,7 @@
       check(!c.visitors.length && c.waver && c.waver.group.visible, 'no se despidió desde la avenida');
       check(c.waver.group.position.z > 11, 'la despedida no fue del otro lado de la avenida');
       check(sub().indexOf('Se está despidiendo') >= 0, 'faltó el subtítulo de la despedida');
+      check(Math.abs(c.waver.armR.rotation.z - Math.PI) < 1e-6, 'no levantó la mano');
       step(ctx, 30 * 9);
       check(!c.waver.group.visible, 'la despedida no terminó');
       // En el espejo: una cara blanca (esa noche vino una).
@@ -1594,6 +1595,7 @@
       check(sub().indexOf('mira fijo el banco amarillo') >= 0, 'no notó que Pelusa mira el banco');
       step(ctx, 30 * 3);
       check(!cat.creaked && cat.state === 'mira', 'el banco crujió sin mirarlo');
+      check(cat.mesh.ears.every(function (e) { return e.rotation.x < -0.5; }), 'no echó las orejas hacia atrás');
       g.gameplay.messageCooldown = {};
       cat.pet();
       check(sub().indexOf('no aparta la vista') >= 0, 'acariciarla no la distrajo (y no debía)');
