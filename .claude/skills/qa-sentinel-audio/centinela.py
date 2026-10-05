@@ -107,8 +107,9 @@ def pruebas(completo):
     ok(p.returncode == 0 and fal and fal.group(1) == '0', 'director de IA (node): %s pasan, %s fallan' % (pas.group(1) if pas else '?', fal.group(1) if fal else '?'))
     print('6. Partida en Chrome sin ventana')
     if True:  # probar.py levanta un servidor temporal si no hay uno corriendo
+        # Con ~100 partidas y el posible reintento de probar.py, 900 s ya no alcanzaban.
         p = subprocess.run([sys.executable, str(JUEGO / 'herramientas' / 'probar.py')], capture_output=True, text=True,
-                           encoding='utf-8', errors='replace', timeout=900)
+                           encoding='utf-8', errors='replace', timeout=1800)
         print('    ' + p.stdout.strip().replace('\n', '\n    '))
         ok(p.returncode == 0, 'partida: ' + (p.stdout.strip().splitlines() or ['sin salida'])[-1])
     if completo:
@@ -135,7 +136,7 @@ def vivo():
     ok(not malas, '%d recursos responden 200%s' % (len(refs), (' — ' + ', '.join(malas[:5])) if malas else ''))
     commit = subprocess.run(['git', 'rev-parse', '--short=7', 'HEAD'], cwd=str(RAIZ), capture_output=True, text=True).stdout.strip()
     p = subprocess.run([sys.executable, str(JUEGO / 'herramientas' / 'probar.py'), VIVO + 'juego/pruebas.html?auto&r=' + commit],
-                       capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=900)
+                       capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=2400)  # en vivo carga desde Pages: más lento
     ok(p.returncode == 0, 'pruebas en vivo: ' + (p.stdout.strip().splitlines() or ['sin salida'])[-1])
 
 
