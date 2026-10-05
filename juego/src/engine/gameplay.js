@@ -373,12 +373,14 @@
           w.mesh.drum.rotation.z += dt * 6;
           if (w.remaining <= 0) { w.running = false; self.audio.buzz(); if (self.game.objetos) { self.game.objetos.onCycleEnd(w); } }
         }
+        w.mesh.drum.visible = w.running; // la ropa girando, por el ojo de buey
         w.mesh.lamp.material.uniforms.uEmissive.value = w.running ? 1.6 : (w.credit ? 0.8 : 0.1);
         w.mesh.lamp.material.uniforms.uColor.value.setHex(w.running ? 0x55ff66 : (w.credit ? 0xffcc44 : 0x3a5a3a));
         w.door += (w.doorTarget - w.door) * Math.min(1, dt * 3);
         w.mesh.doorPivot.rotation.y = -w.door;
       });
       this.dryers.forEach(function (d, i) {
+        d.mesh.drum.visible = d.running;
         if (d.running) {
           d.lint = Math.min(1, d.lint + gameMinutesDelta / 25);
           d.mesh.drum.rotation.z += dt * 8;

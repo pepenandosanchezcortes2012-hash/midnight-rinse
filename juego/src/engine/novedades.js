@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 41, texto: 'Ahora se ve la ropa girar por el ojo de buey.' },
     { id: 40, texto: 'A veces viene un niño. Si Pelusa está cerca, déjalo acariciarla.' },
     { id: 39, texto: 'Pelusa, las caras blancas, las máscaras y él tienen modelos nuevos. A él, igual, no lo mires a la cara.' },
     { id: 38, texto: 'Si una cara blanca te pide una moneda, dásela.' },

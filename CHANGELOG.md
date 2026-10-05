@@ -140,3 +140,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** el niño es un acompañante del adulto, no un visitante. No rompe los límites de visitas ni cambia el ritmo de la noche.
 - **Decisión:** el impermeable amarillo lo hace legible de lejos en la sala gris y repite el amarillo del banco y de la placa del cambiador.
 - **Decisión:** nunca se explica qué le pasó. La melancolía queda en lo que pregunta («¿Mis calcetines ya están secos?»).
+
+## Sprint 15 — La ropa gira
+
+- Ropa que gira por el ojo de buey de las lavadoras y en las secadoras en marcha (antes no se veía nada).
+- **Decisión:** se reemplazó la barra oculta en vez de hacer transparente el vidrio. El canvas usa alfa 0 para la tele de YouTube, así que el juego evita las transparencias.

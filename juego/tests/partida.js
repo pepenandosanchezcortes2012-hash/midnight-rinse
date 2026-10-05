@@ -1891,6 +1891,11 @@
       check(sub().indexOf('Una cara blanca') >= 0, 'no murmuró al llegar');
       step(ctx, 30 * 3);
       check(g.gameplay.washers[v.washer].running, 'no puso a lavar');
+      var drum = g.world.washers[v.washer].drum;
+      var r0 = drum.rotation.z;
+      step(ctx, 5);
+      check(drum.visible && drum.rotation.z !== r0, 'no se ve la ropa girar por el ojo de buey');
+      check(g.world.washers.filter(function (x, i) { return x.drum.visible && !g.gameplay.washers[i].running; }).length === 0, 'se ve ropa en una lavadora quieta');
       c.talk(v.id);
       check(sub().indexOf('Una cara blanca') >= 0, 'no respondió al hablarle');
       for (var j = 0; j < 30 * 40 && c.visitors.length; j += 1) { step(ctx, 1); }

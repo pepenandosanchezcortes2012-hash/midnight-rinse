@@ -199,9 +199,12 @@
         doorPivot.add(porthole);
         this.interactive(porthole, 'washerDoor', i);
         this.interactive(handle, 'washerDoor', i);
-        var drum = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.04, 0.02), m.dark);
-        drum.position.set(x, 0.5, -4.13);
-        this.add(drum);
+        // La ropa que gira detrás del vidrio: solo se ve con la lavadora en marcha (gameplay.js). Se toca como la puerta.
+        var drum = new THREE.Mesh(new THREE.CircleGeometry(0.15, 12), this.retro.material({ texture: 'ropaGira', emissive: 0.3 }));
+        drum.position.set(0.22, 0, 0.028);
+        drum.visible = false;
+        doorPivot.add(drum);
+        this.interactive(drum, 'washerDoor', i);
 
         var dial = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.05, 10), m.metal);
         dial.rotation.x = Math.PI / 2;
@@ -229,8 +232,10 @@
           [m.white, m.white, m.white, m.white, m.dryerFront, m.white]);
         body.position.set(x, 0.8, -4.6);
         this.add(body);
-        var drum = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.05, 0.02), m.dark);
-        drum.position.set(x, 0.78, -4.19);
+        // La ropa que da vueltas en la secadora (solo se ve en marcha: gameplay.js).
+        var drum = new THREE.Mesh(new THREE.CircleGeometry(0.15, 12), this.retro.material({ texture: 'ropaSeca', emissive: 0.35 }));
+        drum.position.set(x, 0.78, -4.195);
+        drum.visible = false;
         this.add(drum);
         var filter = this.box(0.5, 0.06, 0.05, m.metal, x, 1.2, -4.19);
         this.interactive(filter, 'dryerFilter', i);

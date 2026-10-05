@@ -752,6 +752,14 @@ El proyecto pasó por dos etapas:
 - **Gemini:** escribió las líneas del niño y del adulto; se revisaron como dato. Se corrigieron tres cosas: «la secadora cuatro» (el adulto usa una lavadora), «siéntate en la banca» (el banco es el de él) y «her ears» (Pelusa no tiene género).
 - **QA:** prueba nueva (llega, acaricia, se esconde, habla, pregunta bajito y se van juntos) y revisión con captura. 882 textos traducidos. Resultado: 82/82.
 
+## 95. Sprint 15: la ropa gira de verdad
+- **El problema:** el «tambor» de las lavadoras era una barra oscura **detrás del vidrio opaco** del ojo de buey. Nunca se vio girar nada; una lavadora en marcha solo se notaba por la luz verde. En las secadoras, el tambor era una raya.
+- **Ahora:** por el ojo de buey de cada lavadora en marcha se ve **ropa empapada dando vueltas**: uniformes, una camisa roja y espuma (textura `ropaGira`). En las secadoras, ropa seca de colores claros (`ropaSeca`). Al detenerse, el vidrio vuelve a verse vacío.
+- **Táctil:** el disco de ropa queda delante del vidrio, así que se toca como la puerta. Si no, taparía el toque, como pasó con el parteluz de la vidriera.
+- **Rendimiento:** la sala bajó de 151 a 147 llamadas de dibujo, porque los tambores quietos ya no se dibujan.
+- Por fin es verdad lo que dicen las caras blancas: «Mira el tambor girar».
+- **QA:** verificación nueva en la prueba de la cara blanca que pone a lavar (la ropa gira y no aparece en lavadoras quietas). Resultado: 82/82.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

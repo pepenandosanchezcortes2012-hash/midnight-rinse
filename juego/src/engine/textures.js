@@ -207,6 +207,42 @@
       noise(x, 16, 16, 8, 53);
       return c;
     },
+    // Ropa empapada girando en el tambor: uniformes, una camisa roja, espuma (el ojo de buey de una lavadora en marcha).
+    ropaGira: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#0d1a24';
+      x.fillRect(0, 0, 32, 32);
+      var colores = ['#3d5a78', '#6f7f8f', '#8a2f2a', '#c9c3b2', '#2f4a3a', '#4b5f8a'];
+      for (var i = 0; i < 9; i += 1) {
+        var a = i / 9 * Math.PI * 2;
+        var r = 8 + (i % 3) * 2.5;
+        x.fillStyle = colores[i % colores.length];
+        x.beginPath(); x.ellipse(16 + Math.cos(a) * r, 16 + Math.sin(a) * r, 5.5, 3.4, a, 0, Math.PI * 2); x.fill();
+      }
+      x.fillStyle = 'rgba(220,230,235,0.8)'; // espuma
+      for (var k = 0; k < 16; k += 1) { x.fillRect((k * 7) % 30 + 1, (k * 13) % 30 + 1, 2, 2); }
+      x.fillStyle = 'rgba(200,220,235,0.25)'; // el brillo del vidrio
+      x.fillRect(6, 5, 12, 2);
+      noise(x, 32, 32, 10, 61);
+      return c;
+    },
+    // Ropa seca dando vueltas en una secadora: colores claros y tibios, sin espuma.
+    ropaSeca: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#2a2420';
+      x.fillRect(0, 0, 32, 32);
+      var colores = ['#b9b2a2', '#8fa3b8', '#c98f7a', '#d8d2c0', '#9aa88a'];
+      for (var i = 0; i < 8; i += 1) {
+        var a = i / 8 * Math.PI * 2;
+        var r = 7 + (i % 2) * 4;
+        x.fillStyle = colores[i % colores.length];
+        x.beginPath(); x.ellipse(16 + Math.cos(a) * r, 16 + Math.sin(a) * r, 6, 3.6, a + 0.6, 0, Math.PI * 2); x.fill();
+      }
+      noise(x, 32, 32, 10, 67);
+      return c;
+    },
     glass: function () {
       var c = canvas(16, 32);
       var x = c.getContext('2d');

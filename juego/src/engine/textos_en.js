@@ -883,5 +883,6 @@ MR.TEXTOS_EN = {
  "La escuela todavía está durmiendo, pequeño.": "The school is still sleeping, little one.",
  "La lluvia hace ruido en los vidrios.": "The rain is noisy on the windows.",
  "No mires hacia afuera, quédate junto a mí.": "Don't look outside, stay close to me.",
- "A veces viene un niño. Si Pelusa está cerca, déjalo acariciarla.": "Sometimes a child comes. If Pelusa is nearby, let the child pet it."
+ "A veces viene un niño. Si Pelusa está cerca, déjalo acariciarla.": "Sometimes a child comes. If Pelusa is nearby, let the child pet it.",
+ "Ahora se ve la ropa girar por el ojo de buey.": "Now you can see the clothes spinning through the porthole."
 };
