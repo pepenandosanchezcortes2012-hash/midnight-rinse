@@ -968,6 +968,12 @@ El proyecto pasó por dos etapas:
   - el subtítulo sale la primera vez que lo ves alerta, aunque ya lo estuviera cuando te diste vuelta. Antes solo salía en el instante del cambio.
 - **QA:** prueba nueva (boletín de las fotos y posdata del teléfono). 101/101 en dos corridas seguidas. **Pendiente: verificar en vivo los Sprints 32 y 33**, cuando haya memoria para Chrome y el usuario lo pida.
 
+## 115. Sprint 34: Pelusa sale movida en las fotos y el resumen dice qué tanto te quiere
+- **Doble exposición:** si Pelusa está en cuadro (a menos de 6 m), en la foto aparece dos veces, apenas corrida. El doble existe solo durante el disparo y no queda en la escena. Antes el álbum solo decía que salía movida.
+- **El resumen del turno** suma una línea: «Pelusa: te tiene cariño · Fotos que revelaron algo: 2 de 5». Lo de Pelusa sale de su cerebro de mosca, con los mismos estados del panel «lo que recuerda».
+- **QA:** prueba nueva (doble exposición, que no quede en la escena, y el resumen). La prueba de las fotos y la radio ahora fija la noche 1: dependía de cuántas noches habían terminado las pruebas anteriores. 102/102.
+- **Aviso para la sesión del director de IA:** «Director de IA (1)» falla a veces en la suite completa («no ladeó la cabeza», con ladeo de 0,03 o 0,20 de 0,26). Fueron 2 de 3 corridas completas; corriendo sola pasó 5 de 5. El ladeo depende de cuánto espera la cara frente a la puerta bloqueada, y a veces espera menos de un segundo. No se tocó: es su código (`clientela.js`, `director.js`).
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

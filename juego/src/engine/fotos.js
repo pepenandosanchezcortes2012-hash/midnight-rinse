@@ -170,6 +170,14 @@
       var rio = !!(f && f.bridge.visible && this._inFrame(f.bridge.position.clone().setY(0.2), cam, 14));
       var lecho = rio ? f.bridgeBed.material : null;
       if (rio) { f.bridgeBed.material = this.aguaMat || (this.aguaMat = g.retro.material({ texture: 'water', color: 0x6f9fb0, emissive: 0.35 })); }
+      // Pelusa siempre sale movida: en la foto aparece dos veces, apenas corrida (doble exposición).
+      var gatoDoble = null;
+      if (!dist && g.gato && g.gato.mesh.root.visible && this._inFrame(g.gato.position(), cam, 6)) {
+        gatoDoble = g.gato.mesh.root.clone(true);
+        gatoDoble.position.x += 0.07;
+        gatoDoble.rotation.y += 0.25;
+        g.world.scene.add(gatoDoble);
+      }
       // Las máscaras negras no salen en las fotos: frente al mostrador no hay nadie.
       var mascaras = this._mascaras(cam);
       mascaras.forEach(function (m) { m.group.visible = false; });
@@ -185,6 +193,7 @@
       try { src = this.canvas.toDataURL('image/jpeg', 0.82); } catch (e) { src = ''; }
       caras.forEach(function (f) { f.mesh.material = f.guardado; }); // a la vista, otra vez lisas
       if (ridersMat) { riders.material = ridersMat; }
+      if (gatoDoble) { g.world.scene.remove(gatoDoble); }
       if (calle) { city.water.position.y = aguaY; city.water.updateMatrixWorld(); }
       if (lecho) { f.bridgeBed.material = lecho; }
       mascaras.forEach(function (m) { m.group.visible = true; });
@@ -202,6 +211,8 @@
       this._save();
       this.tonight += 1;
       // Lo que tus fotos revelaron esta noche (el teléfono y la radio lo saben: game.js).
+      if (dist || caras.length || enBus || mascaras.length || calle || rio) { this.reveladasNoche = (this.reveladasNoche || 0) + 1; }
+      foto.pelusa = !!gatoDoble;
       var rv = this.reveladas || (this.reveladas = {});
       if (dist) { rv.el = true; }
       if (caras.length || enBus) { rv.caras = true; }

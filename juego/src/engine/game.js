@@ -1000,6 +1000,8 @@
         MR.tf('Salidas al bosque: {n} · Hojas del registro: {h} de 6', { n: this.bosque.visits, h: this.bosque.pagesFound() }),
         MR.tf('Caricias a Pelusa: {c} · Bufidos de alarma: {b} · Objetos perdidos encontrados: {o}',
           { c: this.gato.pets, b: this.gato.hisses, o: this.objetos.foundTonight }),
+        MR.I18N.cat(MR.tf('Pelusa: {e}', { e: MR.t(this.gato.recuerdos().estado) }), ' · ',
+          MR.tf('Fotos que revelaron algo: {n} de {t}', { n: this.fotos.reveladasNoche || 0, t: this.fotos.tonight })),
         MR.I18N.cat(MR.tf(this.pasillo.visits === 1 ? 'Pasillo de servicio: {n} visita' : 'Pasillo de servicio: {n} visitas', { n: this.pasillo.visits }),
           ' · ', MR.t(this.pasillo.fuses ? 'Fusibles: restablecidos' : 'Fusibles: sin tocar'))
       ];

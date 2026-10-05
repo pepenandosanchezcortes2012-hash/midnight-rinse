@@ -249,3 +249,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - La radio comenta las fotos y el teléfono agrega una posdata según lo que revelaron.
 - **Decisión:** una sola posdata por llamada, por prioridad (él antes que todo). Así cada llamada sigue siendo corta y la instrucción de la hora no se pierde.
+
+## Sprint 34 — Pelusa movida y el resumen del final
+
+- Doble exposición de Pelusa en las fotos, y dos líneas nuevas en el resumen: el cariño de Pelusa y cuántas fotos revelaron algo.
+- **Decisión:** el doble es un clon temporal del modelo, en vez de un efecto de pantalla. Así sale con el mismo tramado y la misma iluminación PSX, y no hace falta otro pase de render.

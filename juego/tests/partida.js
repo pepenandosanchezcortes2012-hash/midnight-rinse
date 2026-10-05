@@ -1483,7 +1483,34 @@
       return 'máscara ausente en la foto · pasajeros con cara';
     }],
 
+    ['Pelusa sale movida en las fotos (doble exposición) y el resumen dice qué tanto te quiere', async function () {
+      var prevNights = localStorage.getItem('midnight-rinse/noches');
+      var ctx = await load();
+      var g = ctx.g;
+      var cat = g.gato;
+      start(ctx);
+      g.clientela.plan = []; cat.stared = true; g.horror.nextEvent = 9999; g.horror.customer.present = false;
+      cat.perch = null; cat.route = []; cat.state = 'sentado'; cat.timer = 999;
+      cat.mesh.root.position.set(-1, 0, -2);
+      g.player.pos.set(-1, 0, 0.2);
+      g.player.yaw = 0; g.player.pitch = -0.5;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      step(ctx, 3);
+      var antes = g.world.scene.children.length;
+      var foto = g.fotos.take({ ghost: false });
+      check(foto.pelusa, 'Pelusa no salió movida');
+      check(g.world.scene.children.length === antes, 'el doble de Pelusa quedó en la escena');
+      g.end();
+      var lista = ctx.w.document.getElementById('final-resumen').textContent;
+      check(lista.indexOf('Pelusa: no te conoce') >= 0 && lista.indexOf('Fotos que revelaron algo: 0 de 1') >= 0, 'el resumen no dice lo de Pelusa o las fotos: ' + lista.slice(-160));
+      noErrors(ctx);
+      if (prevNights === null) { localStorage.removeItem('midnight-rinse/noches'); } else { localStorage.setItem('midnight-rinse/noches', prevNights); } // terminar el turno sumó una noche
+      return 'doble exposición · resumen con Pelusa y fotos';
+    }],
+
     ['El mundo sabe de tus fotos: la radio lo comenta y el teléfono agrega una posdata', async function () {
+      var prevNights = localStorage.getItem('midnight-rinse/noches');
+      localStorage.setItem('midnight-rinse/noches', '0'); // noche 1: con locutor (no depende de cuántos turnos terminaron otras pruebas)
       var ctx = await load();
       var g = ctx.g;
       var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
@@ -1508,6 +1535,7 @@
       await wait(7000);
       check(sub().indexOf('deja de fotografiar la avenida') >= 0, 'faltó la posdata del teléfono');
       noErrors(ctx);
+      if (prevNights === null) { localStorage.removeItem('midnight-rinse/noches'); } else { localStorage.setItem('midnight-rinse/noches', prevNights); }
       return 'boletín de las fotos · posdata «deja de fotografiar la avenida»';
     }],
 

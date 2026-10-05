@@ -955,5 +955,7 @@ MR.TEXTOS_EN = {
  "Y otra cosa: no les saques fotos a los de cara blanca. No es así como quieren que los recuerden.": "And one more thing: don't take pictures of the white faces. That's not how they want to be remembered.",
  "Y otra cosa: deja de fotografiar la avenida. Ya viste lo que hay debajo.": "And one more thing: stop photographing the avenue. You've already seen what's underneath.",
  "Y otra cosa: si frente al mostrador no sale nadie en tus fotos, no insistas. A ellos no les gusta.": "And one more thing: if no one shows up at the counter in your photos, don't push it. They don't like it.",
- "Y otra cosa: el río del puente ya no corre. Lo que viste en la foto fue antes.": "And one more thing: the river under the bridge doesn't run anymore. What you saw in the photo was before."
+ "Y otra cosa: el río del puente ya no corre. Lo que viste en la foto fue antes.": "And one more thing: the river under the bridge doesn't run anymore. What you saw in the photo was before.",
+ "Pelusa: {e}": "Pelusa: {e}",
+ "Fotos que revelaron algo: {n} de {t}": "Photos that revealed something: {n} of {t}"
 };
