@@ -13,6 +13,8 @@
   var U = MR.Util;
   var LANES = [{ dir: 1, z: 8.0 }, { dir: -1, z: 9.7 }];
   var WALKS = [5.8, 11.8];
+  var BUS_STOP = 5.2;  // dónde se detiene el 86 (frente a la vidriera grande)
+  var BUS_Z = 10.3;    // pegado a la vereda de enfrente
 
   class Ciudad {
     constructor(game) {
@@ -22,6 +24,11 @@
       this.personTimer = U.rand(2, 5);
       this.vida = 1;
       this.agua = 0;
+      // El autobús 86 pasa dos veces (antes de que suba el agua); la barredora, una vez, a la 01:40.
+      this.busPlan = [U.rand(95, 118), U.rand(180, 205)];
+      this.bus = { active: false };
+      this.sweepAt = U.rand(96, 106);
+      this.sweep = { active: false };
       this.drawFacades();
     }
 
@@ -58,7 +65,7 @@
       var c = this.c;
       var inSala = !g.bosque.outside && !g.pasillo.inside;
       c.group.visible = inSala;
-      if (!inSala) { g.audio.setCity(0); return; }
+      if (!inSala) { g.audio.setCity(0); g.audio.setSweeper(0); return; }
       this.vida = this.dawn ? 1 : this.vidaAt(g.minutes);
       this.agua = this.dawn ? 0 : this.aguaAt(g.minutes);
       c.water.position.y = -0.6 + this.agua * 1.45;
@@ -71,6 +78,7 @@
       this.drawFacades();
       this._cars(dt);
       this._people(dt);
+      if (this.dawn) { c.bus.visible = false; c.sweeper.visible = false; } else { this._bus(dt); this._sweeper(dt); }
       this._rain(dt);
       g.audio.setCity(this.vida * (1 - this.agua));
     }
@@ -137,11 +145,100 @@
       pos.needsUpdate = true;
     }
 
+    /** ¿Se ve este punto de la avenida desde donde estás (y con los ojos abiertos)? */
+    _seen(x, y, z) {
+      var g = this.game;
+      if (g.player.eyesClosed) { return false; }
+      var v = (this.tmp || (this.tmp = new THREE.Vector3())).set(x, y, z).project(g.player.camera);
+      return Math.abs(v.x) < 0.9 && Math.abs(v.y) < 0.9 && v.z < 1;
+    }
+
+    /**
+     * El autobús 86: llega frenando, se detiene enfrente 10 s con el motor encendido y se va. Adentro, todas las
+     * caras son blancas; a veces bajan las que vienen a lavar (clientela.fromBus) y cruzan por delante.
+     */
+    _bus(dt) {
+      var g = this.game;
+      var b = this.bus;
+      var grp = this.c.bus;
+      if (!b.active) {
+        if (this.busPlan.length && g.minutes >= this.busPlan[0]) {
+          this.busPlan.shift();
+          if (this.agua > 0.02) { return; } // con la calle inundada ya no pasa
+          b.active = true;
+          b.phase = 'llega';
+          b.x = 27;
+          b.speed = 9;
+          grp.position.set(b.x, 0, BUS_Z);
+          grp.rotation.y = Math.PI; // va hacia -x: su lado +z (las caras, el letrero) mira la lavandería
+          grp.visible = true;
+        }
+        return;
+      }
+      if (b.phase === 'llega') {
+        b.speed = U.clamp((b.x - BUS_STOP) * 0.8, 0.6, 9);
+        b.x -= b.speed * dt;
+        if (b.x <= BUS_STOP + 0.01) {
+          b.x = BUS_STOP;
+          b.phase = 'parado';
+          b.timer = 10;
+          g.audio.frenoBus();
+          if (g.clientela) { g.clientela.fromBus(b.x); }
+        }
+      } else if (b.phase === 'parado') {
+        b.timer -= dt;
+        if (b.timer <= 0) { b.phase = 'sale'; b.speed = 0.4; g.audio.autoPasa(-1); }
+      } else {
+        b.speed = Math.min(9, b.speed + dt * 2.4);
+        b.x -= b.speed * dt;
+        if (b.x < -28) { b.active = false; grp.visible = false; }
+      }
+      grp.position.x = b.x;
+      if (!this.busSeen && b.phase !== 'sale' && this._seen(b.x, 1.8, BUS_Z)) {
+        this.busSeen = true;
+        g.ui.subtitle('(Un autobús nocturno se detiene enfrente. El letrero dice «86 · BLACKWOOD». Adentro, todas las caras son blancas.)', 6);
+        g.dread = Math.min(1, g.dread + 0.03);
+      }
+    }
+
+    /** La barredora: cruza despacio con la luz naranja girando y el roce de los cepillos. */
+    _sweeper(dt) {
+      var g = this.game;
+      var s = this.sweep;
+      var grp = this.c.sweeper;
+      if (!s.active) {
+        if (this.sweepAt !== null && g.minutes >= this.sweepAt) {
+          this.sweepAt = null;
+          if (this.agua > 0.02) { return; }
+          s.active = true;
+          s.x = -26;
+          s.t = 0;
+          grp.position.set(s.x, 0, 8.0);
+          grp.rotation.y = 0;
+          grp.visible = true;
+        }
+        return;
+      }
+      s.t += dt;
+      s.x += 2.2 * dt;
+      grp.position.x = s.x;
+      this.c.beaconMat.uniforms.uEmissive.value = Math.sin(s.t * 9) > 0 ? 1.8 : 0.25; // la luz que gira
+      this.c.brush.rotation.y += dt * 12;
+      g.audio.setSweeper(U.clamp(1 - Math.abs(s.x - 2) / 22, 0, 1));
+      if (!this.sweepSeen && this._seen(s.x, 1.2, 8.0)) {
+        this.sweepSeen = true;
+        g.ui.subtitle('(Pasa una barredora con su luz naranja girando. Limpia una calle que el agua va a cubrir.)', 5);
+      }
+      if (s.x > 26) { s.active = false; grp.visible = false; g.audio.setSweeper(0); }
+    }
+
     /** Tocar la vidriera: lo que se ve afuera a esta hora. */
     look() {
       var g = this.game;
       var t;
-      if (this.agua > 0.08) { t = '(El agua ya cubre la calle. Las farolas siguen encendidas debajo, y la cruz de la farmacia también.)'; }
+      if (this.bus.active && this.bus.phase === 'parado') {
+        t = '(El autobús 86 espera enfrente con el motor encendido. Todas las caras de adentro miran hacia la lavandería.)';
+      } else if (this.agua > 0.08) { t = '(El agua ya cubre la calle. Las farolas siguen encendidas debajo, y la cruz de la farmacia también.)'; }
       else if (this.vida > 0.6) { t = '(Afuera, la avenida sigue despierta: un taxi, alguien con paraguas, la farmacia de don Pedro encendida.)'; }
       else if (this.vida > 0.2) { t = '(La avenida se va quedando sola. Las ventanas de enfrente se apagan una por una.)'; }
       else { t = '(Ya no pasa nadie. Solo la farmacia sigue encendida, como si esperara a alguien.)'; }

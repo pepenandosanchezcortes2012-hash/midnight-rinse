@@ -155,6 +155,17 @@
           'Acaricia a Pelusa de nuestra parte antes de que termine tu turno.'
         ]
       },
+      // Lo que se dicen dos caras blancas que lavan a la vez (clientela.js, _chatter). Borrador de Gemini, revisado.
+      entre: [
+        ['El 86 venía casi lleno esta noche, todos con el abrigo empapado.', 'Nadie dijo una palabra hasta doblar la curva del viejo muelle.'],
+        ['Apoya las manos en la tapa, todavía guarda un poco de calor.', 'Se siente bien. El agua allá abajo nunca pierde ese frío pesado.'],
+        ['A veces todavía creo escuchar la campana de la escuela.', 'Es solo el agua pasando entre las ramas del sauce grande.'],
+        ['Pasamos frente a la farmacia de don Pedro antes de subir.', 'Los frascos siguen en los estantes, cubiertos de un limo suave.'],
+        ['Cruzamos el puente viejo del bosque, el que no tiene río.', 'El río seco de abajo ya olvidó el sonido de los pasos.'],
+        ['El reloj de la iglesia sigue parado, con el agua hasta las agujas.', 'Las agujas ya no se mueven entre las hierbas del fondo.'],
+        ['Pelusa no se asusta de nosotros. Nunca se asustó.', 'Los animales saben que no venimos a molestar a nadie.'],
+        ['En la 94.1 ponen música muy suave esta noche.', 'Apenas se oye entre el zumbido de los tambores.']
+      ],
       ordenes: [
         'ORDEN N.º 01: A las 02:40, la radio del mostrador debe estar en la 94.1.',
         'ORDEN N.º 04: No abra los casilleros del uno al siete bajo ninguna circunstancia.',

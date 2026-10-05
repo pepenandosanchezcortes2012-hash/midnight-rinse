@@ -97,3 +97,11 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** el puente aparece en la cuarta vuelta, después de la campana (tercera). Cada vuelta más adentro guarda algo más viejo del pueblo.
 - **Decisión:** la placa cuenta aunque la hayas conseguido en otra noche (la colección es permanente). Así el secreto no exige que en la misma noche vengan dos máscaras y además des cuatro vueltas.
 - **Decisión:** Pelusa no sufre ni huye al mirar el banco. Solo mira; el susto es el crujido, y solo si el jugador mira el banco.
+
+## Sprint 9 — La avenida tiene horario
+
+- El autobús 86 «BLACKWOOD», la barredora de la 01:40 y las conversaciones entre dos caras blancas (Gemini, revisado).
+- **Decisión:** el autobús trae a las visitas que ya estaban por venir, sin sumar visitas nuevas. Así no cambia el ritmo de la noche ni la cantidad de caras.
+- **Decisión:** en el primer 86 bajan siempre dos caras. Las conversaciones entre ellas necesitan que coincidan, y antes casi nunca pasaba (cada visita dura unos 22 s).
+- **Decisión:** se callan si te acercas. Refuerza que no hablan para ti y te invita a escuchar desde lejos.
+- **Decisión:** la barredora pasa a la 01:40 y no a las 04:20, porque desde las 03:30 la calle se inunda.

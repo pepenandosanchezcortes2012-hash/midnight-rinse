@@ -102,6 +102,7 @@
       this.rain = this._loop(this.white, [['bandpass', 1500, 0.6], ['lowpass', 3800, 0.7]], 0.05);
       this.wind = this._loop(this.brown, [['lowpass', 260, 0.7]], 0.05); // retumbo; afuera, viento
       this.cityLoop = this._loop(this.brown, [['bandpass', 140, 0.6], ['lowpass', 500, 0.7]], 0); // la avenida (ciudad.js)
+      this.sweepLoop = this._loop(this.pink, [['bandpass', 2400, 0.9], ['lowpass', 5000, 0.7]], 0); // la barredora
       // La pista zen del bosque: un bus con su filtro (setForest la sube y la baja).
       this.forestBus = ctx.createGain();
       this.forestBus.gain.value = 0;
@@ -460,6 +461,18 @@
     setCity(level) {
       if (!this.cityLoop || !this.ctx) { return; }
       this.cityLoop.gain.gain.setTargetAtTime(level * 0.05, this.ctx.currentTime, 0.6);
+    }
+
+    /** El roce de los cepillos de la barredora (0 = lejos o no pasa). */
+    setSweeper(level) {
+      if (!this.sweepLoop || !this.ctx) { return; }
+      this.sweepLoop.gain.gain.setTargetAtTime(level * 0.035, this.ctx.currentTime, 0.3);
+    }
+
+    /** El autobús frena y abre las puertas: un siseo de aire. */
+    frenoBus() {
+      this._burst(this.white, 'highpass', 2600, 0.7, 0.9, 0.09, 0.4);
+      this._tone(95, 1.2, 0.04, 'sawtooth', 80);
     }
 
     /** Un auto que pasa por la avenida mojada: siseo de llantas que cruza de un lado al otro (dir 1 = a la derecha). */

@@ -77,9 +77,9 @@
 
     // -------------------------------------------------------------------------------------------- afuera
     /** Una cara blanca cruza la avenida hacia la puerta, sin paraguas (la ves por la vidriera). */
-    _startApproach() {
+    _startApproach(start) {
       var m = this._model('cara');
-      var from = [U.rand(3.8, 7.2), 11.9];
+      var from = start || [U.rand(3.8, 7.2), 11.9];
       m.group.position.set(from[0], 0.12, from[1]);
       this.world.add(m.group);
       this.approach = { model: m, to: [0.4, 5.5] };
@@ -96,6 +96,7 @@
         this.world.scene.remove(a.model.group);
         this.approach = null;
         this.spawn('cara'); // entra (si no hay lavadora libre, hoy no vino)
+        if (this.approachNext) { var nx = this.approachNext; this.approachNext = null; this._startApproach(nx); } // la que venía detrás
         return;
       }
       pos.x += dx / d * step;
@@ -103,6 +104,59 @@
       a.model.group.rotation.y = Math.atan2(-dx, -dz);
       a.bob = (a.bob || 0) + dt * 7;
       pos.y = 0.12 + Math.abs(Math.sin(a.bob)) * 0.03;
+    }
+
+    /**
+     * Del autobús 86 bajan caras blancas (ciudad.js): la siguiente que iba a venir, si falta poco, y a veces otra con
+     * ella. Bajan por la puerta de adelante y cruzan por delante del autobús.
+     */
+    fromBus(busX) {
+      var g = this.game;
+      if (this.approach || this.visitors.length || g.epilogue) { return false; }
+      var i = -1;
+      for (var k = 0; k < this.plan.length; k += 1) {
+        if (this.plan[k].kind === 'cara' && this.plan[k].at - g.minutes < 35) { i = k; break; }
+      }
+      if (i < 0) { return false; }
+      this.plan.splice(i, 1);
+      var door = [busX - 4.0, 11.3];
+      this._startApproach(door);
+      if (!this.busRiders || Math.random() < 0.6) { this.approachNext = [door[0] + 0.3, 11.5]; } // en el primer 86, siempre dos
+      this.busRiders = (this.busRiders || 0) + 1;
+      return true;
+    }
+
+    /**
+     * Dos caras blancas lavando a la vez murmuran entre ellas (una frase y la respuesta, cada ~8 s). Si te acercas a
+     * menos de 2,2 m, se callan; cuando te alejas, siguen.
+     */
+    _chatter(dt) {
+      var g = this.game;
+      var pair = this.visitors.filter(function (v) { return v.kind === 'cara' && v.state === 'llego' && !v.talking; });
+      if (pair.length < 2) { this.chatTimer = 3; return; }
+      var near = pair.some(function (v) { return U.distXZ(g.player.pos, v.model.group.position) < 2.2; });
+      if (near) {
+        if (!this.hushSaid) { this.hushSaid = true; g.ui.subtitle('(Las dos caras blancas se callan cuando te acercas.)', 4); }
+        this.chatTimer = Math.max(this.chatTimer, 4);
+        return;
+      }
+      this.chatTimer -= dt;
+      if (this.chatTimer > 0) { return; }
+      this.chatTimer = 8;
+      var lines = MR.HISTORIA.blackwood.entre;
+      if (this.chatIndex === undefined) { this.chatIndex = Math.floor(Math.random() * lines.length); }
+      var n = this.chatIndex % lines.length;
+      this.chatIndex += 1;
+      var ex = lines[n];
+      var self = this;
+      g.ui.subtitle(MR.tf('(Una cara blanca, a la otra: «{l}»)', { l: MR.t(ex[0]) }), 4);
+      g.audio.speak(ex[0], 'cara');
+      if (g.archivo) { g.archivo.overheard(n); }
+      setTimeout(function () {
+        if (g.state !== 'playing' || pair.some(function (v) { return !self.visitors.includes(v) || v.talking; })) { return; }
+        g.ui.subtitle(MR.tf('(La otra: «{l}»)', { l: MR.t(ex[1]) }), 4);
+        g.audio.speak(ex[1], 'cara');
+      }, 3600);
     }
 
     /** La despedida: la cara blanca que lavó su ropa levanta la mano desde la vereda de enfrente (8 s). */
@@ -294,6 +348,7 @@
         if (this.waveTimer <= 0 || !inSala) { this.waver.group.visible = false; }
       }
       this._stepWatcher(inSala);
+      if (inSala) { this._chatter(dt); }
       var self = this;
       this.visitors.slice().forEach(function (v) { self._step(v, dt); });
     }

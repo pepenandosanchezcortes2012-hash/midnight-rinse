@@ -1388,6 +1388,62 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['La avenida tiene horario: del autobús 86 bajan dos caras blancas que hablan entre ellas (y se callan si te acercas); la barredora', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var ci = g.ciudad;
+      var c = g.clientela;
+      var city = g.world.city;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.horror.customer.present = false;
+      g.gato.stared = true;
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      c.plan = [{ at: g.minutes + 20, kind: 'cara' }];
+      ci.busPlan = [g.minutes];
+      ci.sweepAt = null;
+      // Desde adentro, mirando la vidriera grande.
+      g.player.pos.set(4.6, 0, 1.2); g.player.yaw = Math.PI; g.player.pitch = 0.05;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      for (var i = 0; i < 30 * 15 && ci.bus.phase !== 'parado'; i += 1) { step(ctx, 1); }
+      check(ci.bus.phase === 'parado' && city.bus.visible && Math.abs(city.bus.position.x - 5.2) < 0.05, 'el 86 no se detuvo enfrente');
+      check(sub().indexOf('86 · BLACKWOOD') >= 0, 'no notó el autobús');
+      check(c.approach && c.approachNext && !c.plan.length, 'no bajaron dos caras del autobús');
+      check(c.approach.model.group.position.x < city.bus.position.x - 3.2, 'la cara bajó atravesando el autobús');
+      g.gameplay.messageCooldown = {};
+      ci.look();
+      check(sub().indexOf('autobús 86 espera') >= 0, 'la vidriera no habló del autobús');
+      // Cruzan, entran y ponen a lavar.
+      for (var j = 0; j < 30 * 45 && !(c.visitors.length === 2 && c.visitors.every(function (v) { return v.state === 'llego'; })); j += 1) { step(ctx, 1); }
+      check(c.visitors.length === 2 && c.visitors.every(function (v) { return v.state === 'llego'; }), 'no llegaron las dos (' + c.visitors.length + ')');
+      check(!ci.bus.active && !city.bus.visible, 'el autobús no se fue');
+      // Hablan entre ellas (tú, lejos).
+      for (var k = 0; k < 30 * 6 && sub().indexOf('a la otra') < 0; k += 1) { step(ctx, 1); }
+      check(sub().indexOf('Una cara blanca, a la otra') >= 0, 'no hablaron entre ellas');
+      check(Object.keys(g.archivo.data.entre).length >= 1, 'la conversación no quedó en el Archivo');
+      await wait(3800);
+      check(sub().indexOf('La otra:') >= 0, 'la otra no contestó');
+      // Te acercas: se callan.
+      var vp = c.visitors[0].model.group.position;
+      g.player.pos.set(vp.x + 0.9, 0, vp.z + 1.2);
+      step(ctx, 2);
+      check(sub().indexOf('se callan cuando te acercas') >= 0, 'no se callaron');
+      var hushed = c.chatTimer;
+      step(ctx, 30 * 2);
+      check(c.chatTimer >= 3.9 && hushed >= 3.9, 'siguieron hablando contigo al lado');
+      // La barredora: cruza con su luz naranja girando.
+      g.player.pos.set(4.6, 0, 1.2); g.player.yaw = Math.PI;
+      ci.sweepAt = g.minutes;
+      var seen = {};
+      for (var q = 0; q < 30 * 30 && !ci.sweepSeen; q += 1) { step(ctx, 1); seen[city.beaconMat.uniforms.uEmissive.value] = true; }
+      check(ci.sweepSeen && city.sweeper.visible, 'no pasó la barredora');
+      check(seen[1.8] && seen[0.25], 'la luz de la barredora no gira');
+      for (var r = 0; r < 30 * 30 && ci.sweep.active; r += 1) { step(ctx, 1); }
+      check(!ci.sweep.active && !city.sweeper.visible, 'la barredora no terminó de pasar');
+      noErrors(ctx);
+      return '86 · dos caras · conversación · se callan · barredora';
+    }],
+
     ['Pelusa mira el banco: se sienta frente al banco vacío; si después miras el banco, cruje', async function () {
       var ctx = await load();
       var g = ctx.g;

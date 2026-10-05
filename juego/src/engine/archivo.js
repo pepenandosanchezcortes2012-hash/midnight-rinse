@@ -25,6 +25,7 @@
       d.telefono = d.telefono || {};
       d.ordenes = d.ordenes || {};
       d.charla = d.charla || {};
+      d.entre = d.entre || {};
       return d;
     }
 
@@ -38,11 +39,12 @@
     phone(i) { if (!this.data.telefono[i]) { this.data.telefono[i] = this.game.night || 1; this._save(); } }
     order(i) { if (!this.data.ordenes[i]) { this.data.ordenes[i] = this.game.night || 1; this._save(); } }
     chat(key) { if (!this.data.charla[key]) { this.data.charla[key] = this.game.night || 1; this._save(); } }
+    overheard(i) { if (!this.data.entre[i]) { this.data.entre[i] = this.game.night || 1; this._save(); } }
 
     count() { return Object.keys(this.data.paginas).length + Object.keys(this.data.radio).length + Object.keys(this.data.telefono).length +
-      Object.keys(this.data.ordenes).length + Object.keys(this.data.charla).length; }
+      Object.keys(this.data.ordenes).length + Object.keys(this.data.charla).length + Object.keys(this.data.entre).length; }
     total() { return MR.HISTORIA.paginas.length + MR.HISTORIA.radio.length + MR.HISTORIA.telefono.length +
-      MR.HISTORIA.blackwood.ordenes.length + this._chatTotal(); }
+      MR.HISTORIA.blackwood.ordenes.length + this._chatTotal() + MR.HISTORIA.blackwood.entre.length; }
 
     _chatTotal() {
       var ch = MR.HISTORIA.blackwood.charla;
@@ -82,6 +84,11 @@
           out.push({ grupo: 'Lo que dijeron las caras blancas', titulo: have ? q[1] : MR.tf('{q} · ???', { q: MR.t(q[1]) }),
             texto: line, encabezado: 'UNA CARA BLANCA, BAJITO', hecho: have });
         });
+      });
+      MR.HISTORIA.blackwood.entre.forEach(function (ex, i) {
+        var have = !!d.entre[i];
+        out.push({ grupo: 'Lo que se dicen entre ellas', titulo: have ? MR.tf('Conversación {n}', { n: i + 1 }) : MR.tf('Conversación {n} · ???', { n: i + 1 }),
+          texto: have ? MR.I18N.cat('— ', MR.t(ex[0]), '\n— ', MR.t(ex[1])) : '', encabezado: 'DOS CARAS BLANCAS, JUNTO A LAS LAVADORAS', hecho: have });
       });
       return out;
     }

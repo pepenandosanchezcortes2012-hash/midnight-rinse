@@ -730,6 +730,65 @@
         group.add(p);
         people.push({ group: p, active: false });
       });
+      // El autobús nocturno 86 (ciudad.js): se detiene enfrente; adentro, todas las caras son blancas.
+      var bus = new THREE.Group();
+      var bb = [];
+      part(bb, 0, 1.35, 0, 6.4, 2.1, 1.3);
+      bus.add(inert(new THREE.Mesh(mergeParts(bb), R.material({ texture: 'metal', color: 0x557a66, emissive: 0.22 }))));
+      var wheels = [];
+      [-2.1, 2.1].forEach(function (wx) { [-0.62, 0.62].forEach(function (wz) { part(wheels, wx, 0.32, wz, 0.62, 0.62, 0.12); }); });
+      bus.add(inert(new THREE.Mesh(mergeParts(wheels), R.material({ texture: 'white', color: 0x141517 }))));
+      var glass = [];
+      part(glass, -0.2, 1.75, 0.66, 5.2, 0.62, 0.02);
+      part(glass, -0.2, 1.75, -0.66, 5.2, 0.62, 0.02);
+      part(glass, 3.21, 1.72, 0, 0.02, 0.72, 1.1);
+      bus.add(inert(new THREE.Mesh(mergeParts(glass), R.material({ texture: 'white', color: 0xc9a85a, emissive: 0.8 }))));
+      var riders = [];
+      var shoulders = [];
+      [-2.2, -1.25, -0.35, 0.85, 1.85].forEach(function (rx, i) {
+        part(riders, rx, 1.82 + (i % 2) * 0.05, 0.676, 0.2, 0.24, 0.01); // delante del vidrio encendido (que es opaco)
+        part(shoulders, rx, 1.56, 0.673, 0.44, 0.22, 0.01);
+      });
+      bus.add(inert(new THREE.Mesh(mergeParts(riders), R.material({ texture: 'white', color: 0xffffff, emissive: 1.3 }))));
+      bus.add(inert(new THREE.Mesh(mergeParts(shoulders), R.material({ texture: 'white', color: 0x1c1e22 }))));
+      var lamps = [];
+      part(lamps, 3.21, 0.62, 0.45, 0.02, 0.14, 0.22);
+      part(lamps, 3.21, 0.62, -0.45, 0.02, 0.14, 0.22);
+      bus.add(inert(new THREE.Mesh(mergeParts(lamps), R.material({ texture: 'white', color: 0xfff4d8, emissive: 1.6 }))));
+      var busTex = MR.Textures.dynamic(128, 16);
+      busTex.ctx.fillStyle = '#0b0c0b'; busTex.ctx.fillRect(0, 0, 128, 16);
+      busTex.ctx.fillStyle = '#ffb84a'; busTex.ctx.font = 'bold 11px monospace'; busTex.ctx.textAlign = 'center';
+      busTex.ctx.fillText('86 · BLACKWOOD', 64, 12); // el nombre del pueblo no se traduce
+      busTex.texture.needsUpdate = true;
+      var busSignMat = R.material({ map: busTex.texture, emissive: 1.3 });
+      var sideSign = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 0.32), busSignMat);
+      sideSign.position.set(0.4, 2.22, 0.661);
+      bus.add(inert(sideSign));
+      var frontSign = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.15), busSignMat);
+      frontSign.rotation.y = Math.PI / 2;
+      frontSign.position.set(3.211, 2.25, 0);
+      bus.add(inert(frontSign));
+      bus.visible = false;
+      group.add(bus);
+      // La barredora (ciudad.js): pasa despacio a la 01:40, con su luz naranja girando.
+      var sweeper = new THREE.Group();
+      var sb = [];
+      part(sb, -0.4, 0.95, 0, 2.6, 1.3, 1.4);
+      part(sb, 1.25, 1.1, 0, 0.9, 1.6, 1.3);
+      sweeper.add(inert(new THREE.Mesh(mergeParts(sb), R.material({ texture: 'metal', color: 0xd9d4c4 }))));
+      var stripe = [];
+      part(stripe, -0.4, 0.55, 0.71, 2.6, 0.12, 0.02);
+      part(stripe, -0.4, 0.55, -0.71, 2.6, 0.12, 0.02);
+      sweeper.add(inert(new THREE.Mesh(mergeParts(stripe), R.material({ texture: 'white', color: 0xe0782a, emissive: 0.4 }))));
+      var brush = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.12, 8), R.material({ texture: 'white', color: 0x3a3226 }));
+      brush.position.set(1.4, 0.14, 0.55);
+      sweeper.add(inert(brush));
+      var beaconMat = R.material({ texture: 'white', color: 0xff8a1a, emissive: 1.6 });
+      var beacon = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.16, 0.22), beaconMat);
+      beacon.position.set(1.25, 2.0, 0);
+      sweeper.add(inert(beacon));
+      sweeper.visible = false;
+      group.add(sweeper);
       // Lluvia afuera: líneas de 1 px que caen entre la vidriera y la avenida (una sola geometría).
       var drops = 180;
       var rp = new Float32Array(drops * 6);
@@ -776,7 +835,8 @@
           o.material.uniforms = Object.assign({}, o.material.uniforms, { uFogNear: { value: 9 }, uFogFar: { value: 34 } });
         }
       });
-      this.city = { group: group, facades: facades, signs: signs, lampMat: lampMat, poolMat: poolMat, water: water, cars: cars, people: people, rain: rain };
+      this.city = { group: group, facades: facades, signs: signs, lampMat: lampMat, poolMat: poolMat, water: water, cars: cars, people: people, rain: rain,
+        bus: bus, sweeper: sweeper, beaconMat: beaconMat, brush: brush };
     }
 
     _lights() {

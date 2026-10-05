@@ -663,6 +663,23 @@ El proyecto pasó por dos etapas:
   - Revisado con capturas desde dos ángulos.
   - PSX: bosque 27 llamadas (unas 33 con el puente visible). 796 textos traducidos. Resultado: 77/77.
 
+## 86. Sprint 9: el autobús 86, la barredora y las caras que hablan entre ellas
+- **El autobús 86** (ciudad con horario):
+  - Pasa dos veces por noche, entre la 01:35 y la 01:58 y entre las 03:00 y las 03:25, antes de que suba el agua.
+  - Llega frenando, se detiene 10 s enfrente de la vidriera grande, con el motor encendido, y se va. El letrero dice **«86 · BLACKWOOD»** y en las ventanas encendidas hay cinco caras blancas.
+  - La primera vez que lo ves: «Adentro, todas las caras son blancas». Si tocas la vidriera mientras espera: «Todas las caras de adentro miran hacia la lavandería».
+- **Del 86 bajan las visitas:** si la siguiente cara blanca iba a venir en menos de 35 minutos, baja del autobús por la puerta de adelante y cruza por delante del vehículo. En el primer 86 de la noche baja siempre con otra; en los siguientes, al 60 %.
+- **Las caras hablan entre ellas** (Gemini, revisado):
+  - Con dos caras lavando a la vez, cada ~8 s una le dice algo a la otra y la otra contesta. Hay 8 conversaciones sobre el 86, la campana, la farmacia, el puente, el reloj de la iglesia, Pelusa, la 94.1 y el calor de las lavadoras.
+  - Si te acercas a menos de 2,2 m, **se callan**; si te alejas, siguen.
+  - Lo que oíste queda en el Archivo, en el grupo «Lo que se dicen entre ellas».
+  - De la respuesta de Gemini se corrigieron cuatro cosas: una hora inventada para el reloj de la iglesia (habría pisado el acertijo de la hora verdadera), una frase que contradecía la placa ya puesta, el género de Pelusa y la ortografía.
+- **La barredora:** a la 01:40, con la avenida todavía llena, cruza despacio con su luz naranja girando y el roce de los cepillos. «Limpia una calle que el agua va a cubrir».
+- **QA:**
+  - Prueba nueva: autobús, dos caras, conversación, se callan y barredora.
+  - Las capturas encontraron dos fallos y se corrigieron: las caras del autobús quedaban detrás del vidrio encendido (opaco) y la carrocería no se veía.
+  - Sala: 151 llamadas de dibujo (unas 158 con el autobús). 824 textos traducidos. Resultado: 78/78.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

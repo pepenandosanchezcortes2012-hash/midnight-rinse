@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 36, texto: 'Esta noche pasa el 86. Si bajan dos, escucha lo que se dicen.' },
     { id: 35, texto: 'Las caras blancas recuerdan tu noche. Y en lo hondo del bosque hay un puente sin nombre.' },
     { id: 34, texto: 'Las máscaras a veces dejan algo. Las caras blancas a veces se despiden.' },
     { id: 33, texto: 'El final verdadero ahora tiene amanecer. Ojalá lo veas.' },
