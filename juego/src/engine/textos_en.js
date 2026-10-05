@@ -924,5 +924,7 @@ MR.TEXTOS_EN = {
  "Retrato": "Portrait",
  "Una foto muestra lo que el ojo no ve.": "A photo shows what the eye can't see.",
  "(Revisas la foto. En la foto, la cara blanca tiene ojos, nariz y boca. Mira hacia otro lado.)": "(You check the photo. In the photo, the white face has eyes, a nose and a mouth. It's looking away.)",
- "Sácale una foto a una cara blanca. De frente.": "Take a photo of a white face. From the front."
+ "Sácale una foto a una cara blanca. De frente.": "Take a photo of a white face. From the front.",
+ "(Revisas la foto. Frente al mostrador no hay nadie. Solo la impresora, imprimiendo.)": "(You check the photo. There's no one at the counter. Just the printer, printing.)",
+ "(En la foto, los pasajeros del 86 tienen cara. Todos miran hacia otro lado.)": "(In the photo, the passengers on the 86 have faces. All of them are looking away.)"
 };

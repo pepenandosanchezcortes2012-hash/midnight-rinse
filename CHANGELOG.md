@@ -206,3 +206,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - En las fotos, las caras blancas (y el niño) tienen el rostro de antes. Logro oculto «Retrato».
 - **Decisión de canon:** extensión del §7. La cámara ve lo que el ojo no ve; a simple vista nada cambia. Los ojos de la foto miran hacia un lado, y la regla de que nunca te miran se mantiene.
+
+## Sprint 28 — Lo que la cámara ve (2)
+
+- Las máscaras no salen en las fotos; los pasajeros del 86 tienen cara.
+- **Decisión:** la cámara revela la naturaleza de cada uno. Las caras blancas fueron personas; las máscaras nunca estuvieron.

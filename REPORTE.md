@@ -883,6 +883,12 @@ El proyecto pasó por dos etapas:
 - **Error encontrado con la captura y corregido:** la primera versión contaba también las caras de espaldas. Ahora una cara cuenta solo si mira hacia la cámara (su normal contra la dirección a la cámara).
 - **QA:** prueba nueva (de espaldas no cuenta; de frente, al irse hacia la puerta, sí; a la vista vuelve a ser lisa; subtítulo y logro). Resultado: 89/89.
 
+## 108. Sprint 28: lo que la cámara ve (2)
+- **Las máscaras negras no salen en las fotos.** En la foto, frente al mostrador no hay nadie; solo la impresora, imprimiendo. La Administración da órdenes, pero no está. A la vista siguen ahí.
+- **Los pasajeros del 86** también tienen el rostro de antes en una foto: «Todos miran hacia otro lado».
+- Para la foto se ocultan las máscaras en cuadro y se cambia el material de los pasajeros. Después todo vuelve a como estaba (la prueba lo verifica).
+- **QA:** prueba nueva (la máscara no sale y vuelve a verse; los pasajeros salen con cara y su material vuelve). Resultado: 90/90.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

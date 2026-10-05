@@ -88,6 +88,16 @@
       return out;
     }
 
+    /** Las máscaras negras que saldrían en la foto (en cuadro y a menos de 9 m): no salen. */
+    _mascaras(cam) {
+      var g = this.game;
+      var self = this;
+      if (!g.clientela) { return []; }
+      return g.clientela.visitors.filter(function (v) {
+        return v.kind === 'mascara' && v.model.group.visible && self._inFrame(v.model.head.getWorldPosition(new THREE.Vector3()), cam, 9);
+      }).map(function (v) { return v.model; });
+    }
+
     _visibleTree(o) {
       for (; o; o = o.parent) { if (!o.visible) { return false; } }
       return true;
@@ -145,6 +155,14 @@
       var caras = this._caras(cam);
       var antiguo = this.antiguo || (this.antiguo = g.retro.material({ texture: 'rostroAntiguo', emissive: 0.35 }));
       caras.forEach(function (f) { f.guardado = f.mesh.material; f.mesh.material = antiguo; });
+      // Los pasajeros del 86, también.
+      var riders = g.world.city && g.world.city.busRiders;
+      var enBus = !!(riders && this._visibleTree(riders) && this._inFrame(g.world.city.bus.position.clone().setY(1.8), cam, 14));
+      var ridersMat = enBus ? riders.material : null;
+      if (enBus) { riders.material = antiguo; }
+      // Las máscaras negras no salen en las fotos: frente al mostrador no hay nadie.
+      var mascaras = this._mascaras(cam);
+      mascaras.forEach(function (m) { m.group.visible = false; });
       // La foto: un cuadro con flash, copiado al instante (antes de que el navegador limpie el lienzo).
       g.retro.render(g.world.scene, cam, { blink: 0, dread: g.dread, time: performance.now() / 1000, flash: 0.1, collapse: g.collapsed ? 1 : 0,
         high: g.consumables.high, crt: false, gamma: g.ui.options.brightness });
@@ -156,6 +174,8 @@
       var src = '';
       try { src = this.canvas.toDataURL('image/jpeg', 0.82); } catch (e) { src = ''; }
       caras.forEach(function (f) { f.mesh.material = f.guardado; }); // a la vista, otra vez lisas
+      if (ridersMat) { riders.material = ridersMat; }
+      mascaras.forEach(function (m) { m.group.visible = true; });
       if (saved) {
         c.group.position.copy(saved.pos);
         c.group.rotation.y = saved.rot;
@@ -163,7 +183,8 @@
         c.seated.visible = saved.seated;
         c.standing.visible = saved.standing;
       }
-      var foto = { src: src, hora: MR.Util.clockText(Math.floor(g.minutes)), noche: g.night || 1, el: !!dist, t: Date.now(), caras: caras.length };
+      var foto = { src: src, hora: MR.Util.clockText(Math.floor(g.minutes)), noche: g.night || 1, el: !!dist, t: Date.now(), caras: caras.length + (enBus ? 5 : 0),
+        mascaras: mascaras.length };
       this.list.push(foto);
       while (this.list.length > MAX) { this.list.shift(); }
       this._save();
@@ -184,6 +205,20 @@
         setTimeout(function () {
           if (g.state === 'playing') { g.ui.subtitle('(Revisas la foto: Pelusa sale movida, como en todas las fotos.)', 4); }
         }, 700);
+      }
+      if (mascaras.length && !this.masksSeen) {
+        this.masksSeen = true;
+        setTimeout(function () {
+          if (g.state !== 'playing') { return; }
+          g.ui.subtitle('(Revisas la foto. Frente al mostrador no hay nadie. Solo la impresora, imprimiendo.)', 6);
+          g.dread = Math.min(1, g.dread + 0.05);
+        }, 800);
+      }
+      if (enBus && !this.busSeen) {
+        this.busSeen = true;
+        setTimeout(function () {
+          if (g.state === 'playing') { g.ui.subtitle('(En la foto, los pasajeros del 86 tienen cara. Todos miran hacia otro lado.)', 6); }
+        }, 1600);
       }
       if (caras.length && !this.facesSeen) {
         this.facesSeen = true;

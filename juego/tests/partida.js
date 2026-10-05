@@ -1439,6 +1439,50 @@
       return 'foto con el rostro de antes · a la vista, lisa · logro «Retrato»';
     }],
 
+    ['Lo que la cámara ve (2): las máscaras no salen en las fotos; los pasajeros del 86 tienen cara', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var THREE = ctx.w.THREE;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      function mirar(p) {
+        g.player.yaw = Math.atan2(-(p.x - g.player.pos.x), -(p.z - g.player.pos.z));
+        g.player.pitch = Math.atan2(p.y - 1.62, Math.hypot(p.x - g.player.pos.x, p.z - g.player.pos.z));
+      }
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      g.gato.stared = true;
+      g.horror.nextEvent = 9999;
+      g.ciudad.busPlan = []; g.ciudad.sweepAt = null;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      // Una máscara en el mostrador: en la foto, no hay nadie.
+      var m = c.spawn('mascara');
+      for (var i = 0; i < 30 * 30 && m.state !== 'llego'; i += 1) { g.horror.nextEvent = 9999; step(ctx, 1); }
+      g.player.pos.set(3.2, 0, 2.6);
+      mirar(m.model.head.getWorldPosition(new THREE.Vector3()));
+      step(ctx, 2);
+      var foto = g.fotos.take({ ghost: false });
+      check(foto.mascaras === 1 && m.model.group.visible, 'la máscara salió en la foto (o no volvió a verse): ' + foto.mascaras);
+      await wait(1000);
+      check(sub().indexOf('Frente al mostrador no hay nadie') >= 0, 'faltó el subtítulo de la máscara');
+      c._remove(m);
+      // El 86 detenido enfrente: en la foto, sus pasajeros tienen cara.
+      var riders = g.world.city.busRiders;
+      var mat = riders.material;
+      g.ciudad.busPlan = [g.minutes];
+      g.player.pos.set(5.0, 0, 3.3);
+      for (var k = 0; k < 30 * 15 && g.ciudad.bus.phase !== 'parado'; k += 1) { g.horror.nextEvent = 9999; step(ctx, 1); }
+      mirar(new THREE.Vector3(g.world.city.bus.position.x, 1.8, 10.3));
+      step(ctx, 2);
+      g.fotos.cooldown = 0;
+      foto = g.fotos.take({ ghost: false });
+      check(foto.caras >= 5 && riders.material === mat, 'los pasajeros no salieron con cara (' + foto.caras + ')');
+      await wait(1800);
+      check(sub().indexOf('los pasajeros del 86 tienen cara') >= 0, 'faltó el subtítulo del 86');
+      noErrors(ctx);
+      return 'máscara ausente en la foto · pasajeros con cara';
+    }],
+
     ['Pelusa al amanecer: va a la puerta de vidrio; si te tiene cariño sale contigo, si no se queda mirándote irte', async function () {
       async function amanecer(carino) {
         var ctx = await load();

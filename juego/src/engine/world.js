@@ -858,7 +858,8 @@
         part(riders, rx, 1.82 + (i % 2) * 0.05, 0.72, 0.2, 0.24, 0.01); // delante del vidrio encendido (que es opaco)
         part(shoulders, rx, 1.56, 0.715, 0.44, 0.22, 0.01);
       });
-      bus.add(inert(new THREE.Mesh(mergeParts(riders), R.material({ texture: 'white', color: 0xffffff, emissive: 1.3 }))));
+      var busRiders = new THREE.Mesh(mergeParts(riders), R.material({ texture: 'white', color: 0xffffff, emissive: 1.3 }));
+      bus.add(inert(busRiders)); // en una foto, los pasajeros tienen el rostro de antes (fotos.js)
       bus.add(inert(new THREE.Mesh(mergeParts(shoulders), R.material({ texture: 'white', color: 0x1c1e22 }))));
       var lamps = [];
       part(lamps, 3.25, 0.62, 0.45, 0.02, 0.14, 0.22);
@@ -951,7 +952,7 @@
         }
       });
       this.city = { group: group, facades: facades, signs: signs, lampMat: lampMat, poolMat: poolMat, water: water, cars: cars, people: people, rain: rain,
-        bus: bus, sweeper: sweeper, beaconMat: beaconMat, brush: brush, ghostBus: ghostBus, ghostMat: ghostMat };
+        bus: bus, busRiders: busRiders, sweeper: sweeper, beaconMat: beaconMat, brush: brush, ghostBus: ghostBus, ghostMat: ghostMat };
     }
 
     _lights() {
