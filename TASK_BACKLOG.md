@@ -4,13 +4,13 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P1) Sprint 25: panel «Pelusa · lo que recuerda» (cerebro de mosca a la vista)
 
 ## Ideas (motor creativo, sin aprobar)
 
 ## Bloqueadas (necesitan decisión)
 
 ## Hechas
+- [x] (P1) Sprint 25: panel «Pelusa · lo que recuerda» (cerebro de mosca a la vista) — commit edafdc7 (2026-10-05)
 - [x] (P1) Sprint 24: el cerebro de mosca oye (Pelusa y las caras voltean hacia los sonidos) — commit da8ec2f (2026-10-05)
 - [x] (P1) Sprint 23: él inclina la cabeza mientras no lo miras; no respira — commit 0e00b77 (2026-10-05)
 - [x] (P1) Sprint 22: ventanas con vida (sombras, teles, la cara en la ventana) — commit bcf439a (2026-10-05)
