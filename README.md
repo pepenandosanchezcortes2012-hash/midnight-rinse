@@ -105,12 +105,18 @@ Si restableces la **caja de fusibles**, los apagones del resto del turno duran l
 ### Blackwood: la clientela de la noche
 La Espuma está en la orilla del embalse que cubrió **Blackwood** en 1986. De noche vienen sus vecinos:
 - **Las caras blancas** entran por la puerta de vidrio, ponen a lavar su ropa empapada (la lavadora arranca de verdad), murmuran algo y se van. Puedes hablarles. Nunca te miran a los ojos.
-- **Las máscaras negras**, de la Administración del Embalse, se paran frente al mostrador sin decir nada, y la impresora entrega una **orden**. Las órdenes quedan en el Archivo.
+- **Las máscaras negras**, de la Administración del Embalse, se paran frente al mostrador sin decir nada, y la impresora entrega una **orden**. Las órdenes quedan en el Archivo. La segunda de la noche deja además una caja sobre el mostrador.
+- **La charla recuerda tu noche:** si Pelusa se sentó con una cara blanca, si viste a alguien mirando desde la otra vereda, si tienes la placa del puente o si alguna vez viste la mañana, aparecen preguntas nuevas.
+- **Entre ellas:** si dos caras blancas lavan a la vez, murmuran entre ellas. Si te acercas, se callan. Lo que oyes queda en el Archivo.
+- **El final verdadero tiene amanecer:** vuelves a una lavandería a oscuras a las 05:13, con la avenida de día, y por primera vez la puerta de vidrio da a la calle.
 
 Los diálogos los escribió Gemini y se revisaron contra el canon. Detalles en `CHANGELOG.md`.
 
 ### La avenida por la vidriera
 La lavandería tiene dos vidrieras a la avenida de Blackwood. A la 01:10 está viva: autos que pasan sobre el asfalto mojado (se oyen cruzar de un lado al otro), gente con paraguas, ventanas encendidas, la tortillería, el hotel y la farmacia de don Pedro. A medida que avanza el turno se vacía y se apaga, y desde las 03:30 el agua sube por la calle. Toca la vidriera para mirar afuera. Por la puerta de vidrio, en cambio, se sale al bosque.
+- **El autobús 86 «BLACKWOOD»** se detiene enfrente dos veces por noche; adentro, todas las caras son blancas. A veces de él bajan las visitas y cruzan la avenida.
+- **La barredora** pasa a la 01:40 con su luz naranja girando.
+- **Radio Nocturna en vivo:** con la radio en la 94.1, el locutor lee boletines cortos a la 01:45, 02:10, 03:30 y 04:30 que comentan tu noche.
 
 ### Pelusa, el gato
 Un gato negro vive en la lavandería.
@@ -119,6 +125,7 @@ Un gato negro vive en la lavandería.
 - **Es tu alarma:** si el Cliente Inmóvil anda de pie cerca de él, **se eriza, bufa del lado donde está y huye**.
 - **El bosque:** no sale, porque llueve; te espera junto a la puerta y maúlla cuando vuelves.
 - **Su rutina:** duerme, come de su plato, se acicala, mira (y rasca) la puerta de vidrio, hace la ronda, te sigue y duerme la siesta, según la hora.
+- **Sus amistades:** a veces se sienta junto a las caras blancas, y a las máscaras negras les bufa. Y a veces se queda mirando algo que tú no ves.
 
 ### El bosque
 Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en la pausa, y sales a un bosque de pinos bajo la lluvia.
@@ -131,7 +138,7 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **El turno no se detiene:** mientras estás afuera nadie friega los charcos ni vigila las lavadoras.
 - **Seis hojas mojadas del registro** están tiradas cerca del sendero: son de quienes hicieron este turno antes que tú y cuentan qué pasa aquí. Si las juntas todas, la lavadora del claro abre un **tercer final**.
 - **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
-- **El bosque no termina:** si llegas al fondo o a los costados, parpadeas y el bosque te devuelve al otro lado. Si das dos vueltas, aparece algo entre los pinos.
+- **El bosque no termina:** si llegas al fondo o a los costados, parpadeas y el bosque te devuelve al otro lado. Cada vuelta más adentro guarda algo más viejo del pueblo: a la segunda, algo entre los pinos; a la tercera, algo que suena; a la cuarta, algo que perdió su nombre.
 - **Música:** afuera suena una pista zen lo-fi, suave, que baja cuando sube el miedo.
 
 ### Noches especiales

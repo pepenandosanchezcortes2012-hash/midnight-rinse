@@ -233,6 +233,7 @@
         return;
       }
       this.f.plaque.visible = true;
+      this.plaquePlaced = true; // el locutor lo agradece a las 03:30 (game._bulletin)
       g.audio.click();
       g.audio.rio(7);
       g.ui.subtitle('(Pones la placa de bronce en el marco. Encaja justo. Bajo el puente, por un momento, se oye correr el río.)', 6);

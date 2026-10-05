@@ -182,6 +182,7 @@
           b.x = BUS_STOP;
           b.phase = 'parado';
           b.timer = 10;
+          this.busStopped = true; // el locutor lo comenta a las 02:10 (game._bulletin)
           g.audio.frenoBus();
           if (g.clientela) { g.clientela.fromBus(b.x); }
         }
@@ -211,6 +212,7 @@
           this.sweepAt = null;
           if (this.agua > 0.02) { return; }
           s.active = true;
+          this.sweepDone = true;
           s.x = -26;
           s.t = 0;
           grp.position.set(s.x, 0, 8.0);

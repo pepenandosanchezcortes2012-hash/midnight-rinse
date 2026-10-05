@@ -33,6 +33,38 @@
       'Son las dos y cuarenta en Radio Nocturna. Grábate bien este secreto: la hora verdadera son las cinco y trece. Si logras ver ese minuto en tu reloj, tal vez vuelvas a casa.',
       'Son las dos y cuarenta en Radio Nocturna, y esta es nuestra última transmisión para ti. Ya reconoces al hombre del abrigo, ¿verdad? Buen turno eterno, amigo; de aquí ya nadie sale.'
     ],
+    // Radio Nocturna en vivo (game._bulletin): boletines cortos a otras horas, solo en la 94.1. Borrador de Gemini, revisado.
+    boletines: {
+      apertura: [
+        'La una y cuarenta y cinco en Radio Nocturna. Saludos a quienes doblan sábanas o vigilan el agua esta noche. No están solos, aunque afuera no pase nadie.',
+        'Comienza nuestro bloque de madrugada en la 94.1. Un saludo a los turnos solitarios de la avenida. El café sigue tibio y la noche apenas empieza a acomodarse.',
+        'La una y cuarenta y cinco. Gracias por sintonizar la 94.1 junto al zumbido de las máquinas. Mantengan la luz encendida; aquí los acompañamos en la penumbra.'
+      ],
+      embalse: [
+        'El reporte del embalse indica nueve centímetros de aumento. El agua ya roza la cruz del campanario de la vieja iglesia; pronto desaparecerá del todo.',
+        'Boletín hidrológico: el embalse subió seis centímetros. En lo hondo, el viejo camino de la plaza quedó bajo otra capa de sedimentos fríos.',
+        'Medición nocturna del embalse: cuatro centímetros más. El agua cubre los muros de la casa de válvulas; esas compuertas no se han movido desde 1986.',
+        'El embalse ganó otros cinco centímetros en las últimas horas. Desde la torre de la iglesia hasta la casa de válvulas, todo reposa en absoluto silencio.'
+      ],
+      bus86: [
+        'Nos informan que el autobús ochenta y seis con destino a Blackwood se detuvo hace un rato frente a la lavandería. En las ventanillas, todas las caras miraban hacia la misma vereda.',
+        'El nocturno de la línea ochenta y seis a Blackwood hizo escala en la avenida. Si vieron abrirse sus puertas, recuerden que sus pasajeros no tienen prisa.',
+        'Aviso de tránsito: el ochenta y seis hacia Blackwood esperó frente al negocio con el motor encendido. Los que bajaron no traían paraguas.'
+      ],
+      barredora: [
+        'La barredora municipal pasó hace poco por la avenida con su baliza naranja parpadeando. Dejó el asfalto reluciente y húmedo, como si viniera del fondo del lago.',
+        'Si escucharon los cepillos de la barredora a la una y cuarenta, no miren la calzada. El agua que esparce sobre la calle huele a río viejo.'
+      ],
+      puente: [
+        'Nos avisan desde el bosque que la placa de bronce regresó a su baranda en el puente viejo. Alguien tuvo la gentileza de devolverle su nombre a Blackwood.',
+        'El puente del sendero vuelve a tener su placa en el lugar correcto. Quienquiera que la haya puesto esta noche, muchas gracias. Hacía falta recordar dónde estamos.'
+      ],
+      cierre: [
+        'Son las cuatro y media. Nuestro bloque nocturno se despide por hoy. Cuiden sus pasos al salir; el agua del embalse ya está rozando el cordón de la avenida.',
+        'Cuatro y treinta en la 94.1. Apagamos micrófonos mientras el agua sube despacio sobre el pavimento. Si deben esperar adentro, procuren no mirar fijo al vidrio.',
+        'Llegan las cuatro y media y cerramos la transmisión nocturna. El agua cubre los primeros escalones de la vereda. Buenas noches a los rezagados; mantengan los pies secos.'
+      ]
+    },
     // El teléfono público a las 03:50: una llamada distinta por noche, siempre con la instrucción que importa.
     // Desde la sexta noche, la voz es la tuya.
     telefono: [

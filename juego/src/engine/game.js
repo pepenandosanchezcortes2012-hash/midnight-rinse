@@ -447,6 +447,7 @@
           (this.horror.distanceToCustomer(this.player) < 2.6 || this.minutes >= C.CUSTOMER_TALK_FALLBACK)) {
         this._customerTalks();
       }
+      C.RADIO_BOLETINES.forEach(function (at, i) { if (self._crossed(prev, at)) { self._bulletin(i); } });
       if (this._crossed(prev, C.PHONE_RINGS)) {
         this.gameplay.ring(40);
         this.ui.subtitle('[Suena el teléfono público junto a la entrada.]', 4);
@@ -470,6 +471,28 @@
         this.ui.refreshRegistry();
         if (this.horror.customer.present) { this.horror.schedule('cliente_se_va', this.horror.customer.zone || 'banco', 4); }
       }
+    }
+
+    /**
+     * Radio Nocturna en vivo: boletines cortos (solo si la radio está en la 94.1) que comentan tu noche. A las 02:10,
+     * el 86 si se detuvo, si no la barredora, si no el embalse; a las 03:30, el puente si le pusiste la placa esta
+     * noche, si no el embalse. Después de la octava noche el locutor ya no está: no hay boletines.
+     */
+    _bulletin(i) {
+      if (this.gameplay.radioProximity <= 0.35 || (this.night || 1) > MR.HISTORIA.radio.length) { return; }
+      var ci = this.ciudad;
+      var key = ['apertura', ci.busStopped ? 'bus86' : (ci.sweepDone ? 'barredora' : 'embalse'),
+        this.bosque.plaquePlaced ? 'puente' : 'embalse', 'cierre'][i];
+      var used = this.usedBulletins || (this.usedBulletins = {});
+      var list = MR.HISTORIA.boletines[key];
+      var free = list.map(function (l, n) { return n; }).filter(function (n) { return !used[key + n]; });
+      var n = free.length ? free[Math.floor(Math.random() * free.length)] : 0;
+      used[key + n] = true;
+      var line = list[n];
+      this.lastBulletin = key;
+      this.ui.subtitle(MR.tf('[Radio] {l}', { l: MR.t(line) }), 9);
+      this.audio.speak(line, 'locutor');
+      this.archivo.bulletin(key, n);
     }
 
     /** La dedicatoria de la radio (noches 3 a 6). Si diste tu nombre, se oye entre la estática. */

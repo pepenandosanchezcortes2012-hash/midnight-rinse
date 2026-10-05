@@ -1,0 +1,110 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Fuzz · Midnight Rinse</title></head><body>
+<iframe id="m" style="width:640px;height:400px"></iframe>
+<pre id="o">corriendo…</pre>
+<script>
+// Pasada de robustez: turnos completos con semilla y acciones al azar (herramientas/fuzz.py). ?n=24 turnos, ?desde=1.
+var MODS = ['ninguna', 'luna', 'niebla', 'inundacion', 'apagones', 'tormenta', 'sin_gato', 'sin_agua'];
+var DIFS = ['paseo', 'tranquilo', 'normal', 'pesadilla'];
+var N = parseInt((location.search.match(/[?&]n=(\d+)/) || [0, '24'])[1], 10);
+var DESDE = parseInt((location.search.match(/[?&]desde=(\d+)/) || [0, '1'])[1], 10);
+var out = [];
+var marco = document.getElementById('m');
+function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function visible(o) { for (; o; o = o.parent) { if (!o.visible) { return false; } } return true; }
+
+function run(seed) {
+  if (seed >= DESDE + N) { document.getElementById('o').textContent = out.join('\n') + '\nFIN'; return; }
+  var mod = MODS[seed % MODS.length];
+  var dif = DIFS[Math.floor(seed / 2) % DIFS.length];
+  var lang = seed % 3 === 0 ? 'en' : 'es';
+  marco.onload = function () {
+    var w = marco.contentWindow;
+    var errors = [];
+    w.addEventListener('error', function (e) { errors.push(e.message + ' @' + String(e.filename).split('/').pop().split('?')[0] + ':' + e.lineno); });
+    var t0 = Date.now();
+    (function poll() {
+      var g = w.midnightRinse;
+      if (!g) { if (Date.now() - t0 > 10000) { out.push('semilla ' + seed + ': no arrancó'); run(seed + 1); return; } setTimeout(poll, 50); return; }
+      w.requestAnimationFrame = function () {}; // el bucle lo llevamos nosotros
+      var rnd = mulberry(seed * 7919);
+      w.Math.random = rnd;
+      g.ui.options.difficulty = dif;
+      try { g.start(); } catch (e) { errors.push('start: ' + e.message); }
+      var THREE = w.THREE;
+      var frames = 0;
+      var trueEnd = seed % 6 === 0;
+      var forcedEnd = false;
+      var dt = 1 / 30;
+      var stats = { chats: 0, visitas: 0 };
+      function chunk() {
+        try {
+          for (var k = 0; k < 600 && g.state === 'playing'; k += 1) {
+            frames += 1;
+            var r = rnd();
+            var p = g.player;
+            if (frames % 60 === 0) {
+              if (g.bosque.outside) {
+                p.pos.set(-18 + rnd() * 36, 0, rnd() < 0.08 ? 148.6 : 102 + rnd() * 45);
+              } else if (!g.pasillo.inside) {
+                p.pos.set(-7 + rnd() * 14, 0, -3.4 + rnd() * 7.8);
+              }
+              p.yaw = rnd() * Math.PI * 2;
+              p.pitch = (rnd() - 0.5) * 0.8;
+            }
+            if (r < 0.002 && !g.bosque.travel && !g.pasillo.inside) { g.bosque.go(); }
+            else if (r < 0.003 && !g.pasillo.travel && !g.bosque.outside) { g.pasillo.unlock(true); g.pasillo.go(); }
+            else if (r < 0.006) { p.forceBlink(); }
+            else if (r < 0.008) { g.gato.pet(); }
+            else if (r < 0.009) { g.fotos.take(); }
+            else if (r < 0.012 && g.clientela.visitors.length) { g.clientela.talk(g.clientela.visitors[Math.floor(rnd() * g.clientela.visitors.length)].id); }
+            else if (r < 0.016) {
+              // Tocar algo visible y cercano (lo que permitiría el rayo).
+              var near = g.world.interactables.filter(function (o) {
+                if (!visible(o)) { return false; }
+                var v = o.getWorldPosition(new THREE.Vector3());
+                return Math.hypot(v.x - p.pos.x, v.z - p.pos.z) < 6;
+              });
+              if (near.length) { var o = near[Math.floor(rnd() * near.length)]; g.gameplay._begin(o.userData.interact, g.input); }
+            }
+            if (g.question && rnd() < 0.02) { g._answer(1 + Math.floor(rnd() * 4)); }
+            if (g.dialog && rnd() < 0.02) { g.answerChoice(1 + Math.floor(rnd() * g.dialog.options.length)); }
+            if (g.noteOpen && rnd() < 0.05) { g.closeNote(); }
+            if (g.gameplay.active && rnd() < 0.02) { g.gameplay.active = null; }
+            // Final verdadero (una de cada seis): a las 04:10, la respuesta secreta y las seis hojas.
+            if (trueEnd && !forcedEnd && g.minutes > 250) {
+              forcedEnd = true;
+              g.flags.secreto = true;
+              g.bosque.found = [true, true, true, true, true, true];
+              if (!g.bosque.outside && !g.bosque.travel) { g.bosque.go(); }
+            }
+            if (forcedEnd && g.bosque.outside && !g.epilogue && !g.bosque.ending && !g.bosque.travel) { g.bosque.touchWasher(); }
+            if (g.epilogue && g.epiTime > 6) { g.gameplay._begin({ kind: 'salirBosque', index: 0 }, g.input); }
+            stats.visitas = g.clientela.nextId - 1;
+            g.update(dt);
+            if (frames % 6 === 0) {
+              g.espejo.render();
+              g.retro.render(g.world.scene, p.camera, { blink: p.blink.amount, dread: g.dread, time: frames / 30, flash: g.horror.flash, collapse: 0, high: g.consumables.high, crt: false, gamma: 1 });
+              g.tele.frame(dt * 6, frames / 30);
+            }
+            g.input.endFrame();
+            if (frames > 60000) { errors.push('no terminó en 60000 cuadros (minuto ' + g.minutes.toFixed(1) + ')'); break; }
+          }
+        } catch (e) {
+          errors.push('excepción: ' + e.message + ' · ' + String(e.stack).split('\n').slice(1, 3).join(' ; '));
+        }
+        if (g.state === 'playing' && !errors.length) { setTimeout(chunk, 0); return; }
+        var c = g.clientela;
+        out.push('semilla ' + seed + ' (' + mod + ', ' + dif + ', ' + lang + '): ' + frames + ' cuadros, ' + g.state + ', final ' + g.ending +
+          ', visitas ' + stats.visitas + ', del 86 ' + (c.busRiders || 0) + ', charlas entre ellas ' + (c.chatIndex === undefined ? 0 : '≥1') +
+          ', vueltas ' + (g.bosque.wraps || 0) + ', puente ' + g.world.forest.bridge.visible + ', Pelusa miró ' + !!g.gato.stared +
+          (g.epilogue ? ', amanecer' : '') + (errors.length ? '\n   ERRORES: ' + errors.slice(0, 4).join(' | ') : ''));
+        document.getElementById('o').textContent = out.join('\n') + '\n…';
+        run(seed + 1);
+      }
+      chunk();
+    })();
+  };
+  marco.src = '../index.html?noche=' + mod + '&lang=' + lang + '&prueba=' + Date.now();
+}
+run(DESDE);
+</script></body></html>

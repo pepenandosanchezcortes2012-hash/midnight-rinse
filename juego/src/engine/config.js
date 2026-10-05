@@ -21,6 +21,7 @@
     PRINTER_START: 75,        // 01:15 la impresora térmica entrega el registro
     CUSTOMER_APPEARS: 140,    // 02:20 el Cliente Inmóvil aparece en el banco
     RADIO_HOST: 160,          // 02:40 el locutor nocturno
+    RADIO_BOLETINES: [105, 130, 210, 270], // 01:45 apertura · 02:10 la avenida · 03:30 el embalse · 04:30 cierre
     CUSTOMER_TALK_FALLBACK: 190, // 03:10 si el jugador nunca se acercó, el cliente habla igual
     PHONE_RINGS: 230,         // 03:50 el teléfono público
     TIME_QUESTION_FROM: 240,  // 04:00 el cliente pregunta la hora

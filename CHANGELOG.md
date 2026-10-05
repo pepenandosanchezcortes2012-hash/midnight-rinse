@@ -105,3 +105,11 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** en el primer 86 bajan siempre dos caras. Las conversaciones entre ellas necesitan que coincidan, y antes casi nunca pasaba (cada visita dura unos 22 s).
 - **Decisión:** se callan si te acercas. Refuerza que no hablan para ti y te invita a escuchar desde lejos.
 - **Decisión:** la barredora pasa a la 01:40 y no a las 04:20, porque desde las 03:30 la calle se inunda.
+
+## Sprint 10 — Radio Nocturna en vivo
+
+- Boletines del locutor a la 01:45, 02:10, 03:30 y 04:30 (solo en la 94.1) que comentan la noche: el 86, la barredora, el embalse y el puente.
+- **Decisión:** los boletines no comparten la hora de las 02:40, que sigue siendo el mensaje especial de cada noche.
+- **Decisión:** a las 02:10, prioridad para lo que viste esa noche (el 86, si no la barredora). El embalse queda de relleno, y es lo único que también puede sonar a las 03:30, cuando empieza a subir el agua.
+- **Decisión:** sin locutor (noche 9 en adelante), tampoco hay boletines. La estática de siempre.
+- Herramienta: `fuzz.py` (turnos completos con semilla) ahora vive en el repo.

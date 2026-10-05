@@ -1388,6 +1388,60 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Radio Nocturna en vivo: boletines que comentan tu noche (el 86, el puente), solo en la 94.1 y solo mientras hay locutor', async function () {
+      var B;
+      var ctx;
+      var g;
+      var prevNights = localStorage.getItem('midnight-rinse/noches');
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      function heard(key) { return B[key].some(function (l) { return sub().indexOf(ctx.w.MR.t(l).slice(0, 40)) >= 0; }); }
+      function cross(i) { g.minutes = ctx.w.MR.Config.RADIO_BOLETINES[i] - 0.01; step(ctx, 3); }
+      async function night(n) {
+        localStorage.setItem('midnight-rinse/noches', String(n - 1));
+        ctx = await load();
+        g = ctx.g;
+        B = ctx.w.MR.HISTORIA.boletines;
+        start(ctx);
+        g.clientela.plan = []; g.gato.stared = true;
+        g.ciudad.busPlan = []; g.ciudad.sweepAt = null;
+      }
+      await night(1);
+      // Sin sintonizar: nada.
+      cross(0);
+      check(!heard('apertura'), 'se oyó un boletín fuera de la 94.1');
+      g.gameplay.tuneTo(94.1); step(ctx, 2);
+      cross(0);
+      check(heard('apertura'), 'no se oyó la apertura');
+      // 02:10, con el 86 detenido esta noche: lo comenta. 03:30, con la placa puesta esta noche: lo agradece.
+      g.ciudad.busStopped = true;
+      cross(1);
+      check(heard('bus86') && g.lastBulletin === 'bus86', 'no comentó el 86 (' + g.lastBulletin + ')');
+      g.bosque.plaquePlaced = true;
+      cross(2);
+      check(heard('puente'), 'no agradeció la placa');
+      cross(3);
+      check(heard('cierre'), 'no cerró la transmisión');
+      check(Object.keys(g.archivo.data.boletin).length >= 4, 'los boletines no quedaron en el Archivo');
+      noErrors(ctx);
+      // Una noche sin nada especial: a las 02:10 y a las 03:30, el embalse, sin repetir la misma línea.
+      await night(2);
+      g.gameplay.tuneTo(94.1); step(ctx, 2);
+      cross(1);
+      check(g.lastBulletin === 'embalse', 'a las 02:10 sin nada especial no habló del embalse (' + g.lastBulletin + ')');
+      cross(2);
+      var embalse = Object.keys(g.usedBulletins).filter(function (k) { return k.indexOf('embalse') === 0; });
+      check(embalse.length === 2, 'repitió el mismo boletín del embalse');
+      noErrors(ctx);
+      // Noche 9: el locutor ya no está.
+      await night(9);
+      g.gameplay.tuneTo(94.1); step(ctx, 2);
+      cross(0);
+      check(!heard('apertura') && !g.lastBulletin, 'hubo boletín sin locutor');
+      noErrors(ctx);
+      if (prevNights === null) { localStorage.removeItem('midnight-rinse/noches'); } else { localStorage.setItem('midnight-rinse/noches', prevNights); }
+      return 'apertura · el 86 · el puente · cierre · embalse sin repetir · noche 9 en silencio';
+    }],
+
     ['La avenida tiene horario: del autobús 86 bajan dos caras blancas que hablan entre ellas (y se callan si te acercas); la barredora', async function () {
       var ctx = await load();
       var g = ctx.g;

@@ -26,6 +26,7 @@
       d.ordenes = d.ordenes || {};
       d.charla = d.charla || {};
       d.entre = d.entre || {};
+      d.boletin = d.boletin || {};
       return d;
     }
 
@@ -40,11 +41,18 @@
     order(i) { if (!this.data.ordenes[i]) { this.data.ordenes[i] = this.game.night || 1; this._save(); } }
     chat(key) { if (!this.data.charla[key]) { this.data.charla[key] = this.game.night || 1; this._save(); } }
     overheard(i) { if (!this.data.entre[i]) { this.data.entre[i] = this.game.night || 1; this._save(); } }
+    bulletin(key, n) { if (!this.data.boletin[key + n]) { this.data.boletin[key + n] = this.game.night || 1; this._save(); } }
+
+    _bulletinTotal() {
+      var B = MR.HISTORIA.boletines;
+      return Object.keys(B).reduce(function (n, k) { return n + B[k].length; }, 0);
+    }
 
     count() { return Object.keys(this.data.paginas).length + Object.keys(this.data.radio).length + Object.keys(this.data.telefono).length +
-      Object.keys(this.data.ordenes).length + Object.keys(this.data.charla).length + Object.keys(this.data.entre).length; }
+      Object.keys(this.data.ordenes).length + Object.keys(this.data.charla).length + Object.keys(this.data.entre).length +
+      Object.keys(this.data.boletin).length; }
     total() { return MR.HISTORIA.paginas.length + MR.HISTORIA.radio.length + MR.HISTORIA.telefono.length +
-      MR.HISTORIA.blackwood.ordenes.length + this._chatTotal() + MR.HISTORIA.blackwood.entre.length; }
+      MR.HISTORIA.blackwood.ordenes.length + this._chatTotal() + MR.HISTORIA.blackwood.entre.length + this._bulletinTotal(); }
 
     _chatTotal() {
       var ch = MR.HISTORIA.blackwood.charla;
@@ -83,6 +91,14 @@
           var have = !!d.charla[q[0] + i];
           out.push({ grupo: 'Lo que dijeron las caras blancas', titulo: have ? q[1] : MR.tf('{q} · ???', { q: MR.t(q[1]) }),
             texto: line, encabezado: 'UNA CARA BLANCA, BAJITO', hecho: have });
+        });
+      });
+      var temas = { apertura: 'Apertura', embalse: 'El embalse', bus86: 'El 86', barredora: 'La barredora', puente: 'El puente', cierre: 'Cierre' };
+      Object.keys(MR.HISTORIA.boletines).forEach(function (k) {
+        MR.HISTORIA.boletines[k].forEach(function (line, n) {
+          var have = !!d.boletin[k + n];
+          out.push({ grupo: 'Radio Nocturna: boletines', titulo: have ? temas[k] : MR.tf('{q} · ???', { q: MR.t(temas[k]) }),
+            texto: line, encabezado: 'RADIO NOCTURNA · 94.1', hecho: have });
         });
       });
       MR.HISTORIA.blackwood.entre.forEach(function (ex, i) {

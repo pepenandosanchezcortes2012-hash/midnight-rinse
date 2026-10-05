@@ -680,6 +680,23 @@ El proyecto pasó por dos etapas:
   - Las capturas encontraron dos fallos y se corrigieron: las caras del autobús quedaban detrás del vidrio encendido (opaco) y la carrocería no se veía.
   - Sala: 151 llamadas de dibujo (unas 158 con el autobús). 824 textos traducidos. Resultado: 78/78.
 
+## 87. Robustez: 24 turnos completos sin errores, y el fuzz ahora es una herramienta
+- **Qué hace:** después de los Sprints 6 a 9, corre 24 turnos completos con semilla (8 noches especiales × 4 dificultades, un tercio en inglés). Hace acciones al azar: caminar, parpadear, salir al bosque y al pasillo, responder, conversar, acariciar, sacar fotos y tocar lo que esté cerca. Uno de cada seis turnos va al final verdadero y cruza la puerta del amanecer.
+- **Resultado:** 24/24 terminaron sin errores ni excepciones:
+  - finales paseo, bosque, bucle y verdadero (3 con amanecer);
+  - visitas que bajaron del 86 en 6 turnos, charlas entre caras en 9 y Pelusa mirando el banco en 4.
+- **Ahora es parte del repo:** `juego/tests/fuzz.html` + `juego/herramientas/fuzz.py [n] [desde]`. Está documentado en la skill de QA. `fuzz.py 1 <semilla>` reproduce un turno.
+
+## 88. Sprint 10: Radio Nocturna en vivo
+- **Qué cambia:** con la radio en la 94.1, el locutor ya no habla solo a las 02:40. También lee **boletines cortos** que comentan tu noche (escritos con Gemini y revisados):
+  - 01:45, apertura;
+  - 02:10, el 86 si se detuvo frente a la lavandería; si no, la barredora; si no, el nivel del embalse;
+  - 03:30, el agradecimiento si esta noche le devolviste la placa al puente; si no, el embalse (sin repetir la misma línea);
+  - 04:30, cierre.
+- **Reglas:** después de la octava noche, el locutor ya no está, así que tampoco hay boletines. Ningún boletín revela la hora verdadera. Los boletines oídos quedan en el Archivo, en «Radio Nocturna: boletines».
+- **Correcciones a la respuesta de Gemini:** «ventanillas empañadas que no dejan ver rostros», «motor apagado» y «luces encendidas para nadie» contradecían lo que se ve; «los barandales del viejo puente» confundía con el puente del bosque; y un embalse no tiene «marea».
+- **QA:** prueba nueva (sin sintonizar no suena nada, el 86, el puente, el cierre, el embalse sin repetir y la noche 9 en silencio). Devuelve el contador de noches como estaba. 850 textos traducidos. Resultado: 79/79.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

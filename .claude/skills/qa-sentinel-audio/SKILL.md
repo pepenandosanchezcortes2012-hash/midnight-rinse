@@ -19,7 +19,7 @@ Su trabajo es prevenir regresiones y que GitHub Pages nunca dé 404.
 | 3 | Ningún script pide rutas absolutas (`/src…`, `C:\`, `file:`) | Pages sirve el sitio en `/midnight-rinse/` |
 | 4 | Textos en inglés completos | La versión en inglés no muestra español suelto |
 | 5 | `node juego/tests/nucleo.test.js`: el núcleo JS contra miles de vectores de Python | El **despachador de oclusión** (`src/core/dispatcher.js`) y el resto del núcleo son ports exactos |
-| 6 | `juego/herramientas/probar.py`: unas 53 partidas en Chrome sin ventana | Incluye «Audio: el primer toque despierta el ambiente…», los sustos por oclusión, turnos al azar con semilla y la versión en inglés |
+| 6 | `juego/herramientas/probar.py`: unas 79 partidas en Chrome sin ventana | Incluye «Audio: el primer toque despierta el ambiente…», los sustos por oclusión, turnos al azar con semilla y la versión en inglés |
 | 7 | (completo) `core/tests`: 203 pruebas de Python | La referencia del núcleo |
 | 8 | (completo) En vivo: cada recurso responde 200 en Pages y las pruebas pasan allá | El despliegue real, no solo el local |
 
@@ -37,3 +37,4 @@ Su trabajo es prevenir regresiones y que GitHub Pages nunca dé 404.
 - Si algo sale en rojo, no se hace commit. Se arregla y se vuelve a correr.
 - Si una prueba falla de vez en cuando, se busca la causa, no se reintenta hasta que pase. Ejemplo: un parpadeo a medias, §53 de REPORTE.
 - Después de cada push: `centinela.py completo`, o al menos `probar.py` contra la URL en vivo.
+- Cada pocos sprints, o tras sumar sistemas que se cruzan (visitas, ciudad, finales): `py juego/herramientas/fuzz.py [n] [desde]`. Corre `n` turnos completos con semilla (por defecto 24, ~1 min cada uno) en todas las noches especiales, dificultades e idiomas, con acciones al azar y el final verdadero cada seis. Falla si un turno lanza un error o no termina. Para reproducir un turno: `fuzz.py 1 <semilla>`.
