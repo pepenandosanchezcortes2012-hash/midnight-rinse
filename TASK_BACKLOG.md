@@ -4,13 +4,13 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P1) Sprint 31: lenguaje corporal de Pelusa (orejas, cola, saludo)
 
 ## Ideas (motor creativo, sin aprobar)
 
 ## Bloqueadas (necesitan decisión)
 
 ## Hechas
+- [x] (P1) Sprint 31: lenguaje corporal de Pelusa (orejas, cola, saludo) — commit 987290b (2026-10-05)
 - [x] (P1) Sprint 30: el álbum dice qué vio la cámara (pie de foto y borde dorado) — commit cb3ee58 (2026-10-05)
 - [x] (P1) Sprint 29: la cámara ve el agua (avenida inundada y río en las fotos); probar.py reintenta cortes — commit 8de7bfc (2026-10-05)
 - [x] (P1) Sprint 28: las máscaras no salen en las fotos; los pasajeros del 86 tienen cara — commit 4f0da8e (2026-10-05)
