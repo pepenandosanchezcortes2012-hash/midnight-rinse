@@ -239,3 +239,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 ## Sprint 31 — El lenguaje corporal de Pelusa
 
 - Orejas hacia lo que oye, cola que se agita con la alerta y saludo si te tiene cariño (todo sale de su cerebro de mosca).
+
+## Sprint 32 — El venado
+
+- Un venado en el bosque, con su cerebro de mosca: pasta, se alerta, huye; los ojos le brillan con la linterna.
+- **Decisión:** la vida salvaje es inofensiva y escasa (una vez por noche y no vuelve). El bosque se siente vivo sin restarle protagonismo a él.

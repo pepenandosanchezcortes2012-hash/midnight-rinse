@@ -937,6 +937,16 @@ El proyecto pasó por dos etapas:
 - **Otra sesión trabajando en el repo:** entre el Sprint 30 y este, otra sesión de Claude publicó el **director de IA** (`src/core/director.js`, skill `uncanny-ai-director`): navegación por fuerzas, utilidad, contemplación, mirada desfasada y respiración, para las caras, el niño, las máscaras y él. Convive con el cerebro de mosca: el director decide *cómo* se mueve un cuerpo; la mosca, *qué le llama la atención*. Pelusa sigue siendo de la mosca. Desde ahora, los commits de esta sesión agregan solo sus archivos y revisan `git status` antes.
 - **QA:** prueba nueva (cabeza más orejas hacia un sonido, cola que se agita, saludo solo con cariño). Las pruebas del director (`director.test.js`) también pasan. Resultado: 99/99.
 
+## 112. Sprint 32: el venado del bosque (vida salvaje con cerebro de mosca)
+- **Un ser vivo más:** algunas noches (60 %), un venado pasta entre los pinos, lejos (12–16 m), siempre en un claro (nunca dentro de un tronco). Es inofensivo. Su propio cerebro de mosca es muy miedoso: te ve y oye los sonidos.
+- **Qué hace:** si te acercas, **levanta la cabeza** y gira despacio hacia ti («Sus ojos brillan con tu linterna»). Si su miedo gana (estás cerca, caminas o lo alumbras de frente), **huye a saltos** y se pierde entre los pinos; esa noche ya no vuelve.
+- **Los ojos** brillan cuando la linterna lo alumbra de frente: de noche, dos puntos en la oscuridad y una silueta que apenas se adivina.
+- **Código:** módulo propio `src/engine/venado.js`; `game.js` solo lo crea y lo actualiza. No toca el director de IA ni la clientela.
+- **QA:**
+  - Prueba nueva: aparece a buena distancia, se pone alerta con los ojos encendidos, huye, desaparece y no vuelve esa noche.
+  - Las capturas encontraron que podía aparecer pegado a un tronco (corregido: busca un claro) y que los ojos eran de un píxel (más grandes).
+  - **Prueba número 100.** Resultado: 100/100.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

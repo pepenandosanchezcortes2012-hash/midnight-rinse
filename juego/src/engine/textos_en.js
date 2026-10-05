@@ -944,5 +944,8 @@ MR.TEXTOS_EN = {
  "(Donde él estaba parado quedó un ticket doblado. Está húmedo.)": "(Where he was standing there's a folded ticket. It's damp.)",
  "Los clientes tienen cerebro nuevo. Si miras de golpe, se quedan quietos. Si insistes, se inclinan. Y a él no lo vas a ver llegar.": "The customers have new brains. Look at them suddenly and they freeze. Insist, and they lean in. And you won't see him coming.",
  "(Pelusa te recibe con un maullido corto.)": "(Pelusa greets you with a short meow.)",
- "Si Pelusa te tiene cariño, te saluda cuando vuelves. Mira sus orejas: van hacia lo que oye.": "If Pelusa is fond of you, it greets you when you come back. Watch its ears: they turn toward what it hears."
+ "Si Pelusa te tiene cariño, te saluda cuando vuelves. Mira sus orejas: van hacia lo que oye.": "If Pelusa is fond of you, it greets you when you come back. Watch its ears: they turn toward what it hears.",
+ "(Entre los pinos, un venado levanta la cabeza. Sus ojos brillan con tu linterna.)": "(Among the pines, a deer lifts its head. Its eyes shine in your flashlight.)",
+ "(El venado se va dando saltos entre los pinos.)": "(The deer bounds away through the pines.)",
+ "En el bosque hay un venado. Acércate despacio.": "There's a deer in the forest. Approach slowly."
 };

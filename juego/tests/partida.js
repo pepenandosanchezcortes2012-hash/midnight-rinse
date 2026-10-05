@@ -1483,6 +1483,46 @@
       return 'máscara ausente en la foto · pasajeros con cara';
     }],
 
+    ['El venado del bosque: pasta lejos, levanta la cabeza si te acercas, huye a saltos y le brillan los ojos con la linterna', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var ve = g.venado;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true;
+      g.horror.customer.present = false;
+      ve.plan = true;
+      g.bosque.go(); step(ctx, 45);
+      var vp = ve.model && ve.model.group.position;
+      check(ve.active && ve.model.group.visible, 'no apareció el venado');
+      var d0 = Math.hypot(vp.x - g.player.pos.x, vp.z - g.player.pos.z);
+      check(d0 > 11 && d0 < 17, 'apareció muy cerca o muy lejos (' + d0.toFixed(1) + ' m)');
+      // Lo alumbras desde 9,5 m: levanta la cabeza y le brillan los ojos.
+      function desde(dist) {
+        var ang = Math.atan2(g.player.pos.x - vp.x, g.player.pos.z - vp.z);
+        g.player.pos.set(vp.x + Math.sin(ang) * dist, 0, vp.z + Math.cos(ang) * dist);
+        g.player.yaw = Math.atan2(-(vp.x - g.player.pos.x), -(vp.z - g.player.pos.z));
+        g.player.pitch = -0.05;
+      }
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      desde(9.5);
+      for (var i = 0; i < 30 && ve.state !== 'alerta'; i += 1) { step(ctx, 1); }
+      step(ctx, 3); // la cámara se orienta al final del cuadro: un par de cuadros y ya lo alumbra
+      check(ve.state === 'alerta' && ve.model.eyeMat.uniforms.uEmissive.value > 1, 'no levantó la cabeza o no le brillaron los ojos (' + ve.state + ')');
+      check(sub().indexOf('un venado levanta la cabeza') >= 0, 'faltó el subtítulo del venado');
+      // Te acercas a 4 m: huye a saltos y se pierde entre los pinos.
+      desde(4);
+      for (var k = 0; k < 40 && ve.state !== 'huye'; k += 1) { step(ctx, 1); }
+      check(ve.state === 'huye', 'no huyó (' + ve.state + ', ' + ve.brain.accion() + ')');
+      for (var j = 0; j < 30 * 8 && ve.active; j += 1) { step(ctx, 1); }
+      check(!ve.active && ve.gone && !ve.model.group.visible, 'no se perdió entre los pinos');
+      // Esa noche ya no vuelve.
+      g.bosque.go(); step(ctx, 40); g.bosque.go(); step(ctx, 45);
+      check(!ve.active, 'volvió en la misma noche');
+      noErrors(ctx);
+      return 'aparece a ' + d0.toFixed(1) + ' m · alerta con ojos encendidos · huye · no vuelve';
+    }],
+
     ['Lenguaje corporal de Pelusa: las orejas se orientan hacia lo que oye, la cola se agita y te saluda si te tiene cariño', async function () {
       async function preparar(carino) {
         var ctx = await load();
