@@ -1398,6 +1398,42 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Él: mientras no lo miras, su cabeza se inclina un poco más (nunca mientras lo ves); y de cerca, no respira', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true;
+      h.nextEvent = 9999; // sin otros sustos durante la prueba
+      h.placeCustomer('mostrador'); h.customer.present = true;
+      var cp = g.world.customer.group.position;
+      var mirarlo = function () {
+        g.player.yaw = Math.atan2(-(cp.x - g.player.pos.x), -(cp.z - g.player.pos.z));
+        g.player.pitch = Math.atan2(2.0 - 1.62, Math.hypot(cp.x - g.player.pos.x, cp.z - g.player.pos.z));
+      };
+      g.player.pos.set(0, 0, 0);
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      // De espaldas a él: se inclina.
+      mirarlo(); g.player.yaw += Math.PI;
+      for (var i = 0; i < 30 * 25; i += 1) { h.nextEvent = 9999; step(ctx, 1); }
+      var t1 = h.tilt;
+      check(t1 > 0.22 && Math.abs(g.world.standingHead.rotation.z - t1) < 1e-6, 'su cabeza no se inclinó (' + (t1 || 0).toFixed(2) + ')');
+      // Lo miras: lo notas, y mientras lo ves no se mueve.
+      mirarlo();
+      step(ctx, 3);
+      check(sub().indexOf('más inclinada que antes') >= 0, 'no se notó la inclinación');
+      for (var j = 0; j < 30 * 5; j += 1) { h.nextEvent = 9999; step(ctx, 1); }
+      check(h.tilt === t1, 'se movió mientras lo mirabas');
+      // De cerca: no respira.
+      g.player.pos.set(cp.x - 0.9, 0, cp.z - 0.9);
+      mirarlo();
+      step(ctx, 3);
+      check(sub().indexOf('No respira') >= 0, 'de cerca no notaste que no respira');
+      noErrors(ctx);
+      return 'inclinada ' + t1.toFixed(2) + ' rad sin mirarlo · quieta al mirarlo · no respira';
+    }],
+
     ['Ventanas con vida: sombras que cruzan, teles que titilan y una cara blanca en una ventana (si la ves, la luz se apaga)', async function () {
       var ctx = await load();
       var g = ctx.g;

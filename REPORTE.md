@@ -847,6 +847,12 @@ El proyecto pasó por dos etapas:
 - **Canon:** la cara mira hacia la lavandería, no a ti (las caras blancas nunca te miran a los ojos).
 - **QA:** prueba nueva (la sombra cruza y termina, las teles titilan, la cara aparece, se nota al mirarla y su luz se apaga sin volver). Captura revisada. Resultado: 84/84.
 
+## 103. Sprint 23: él no se mueve… mientras lo miras
+- **La cabeza que se inclina:** mientras no lo miras (fuera de cuadro o con los ojos cerrados), su cabeza se inclina despacio hacia un lado, hasta 0,36 rad. Mientras lo ves, nunca: es la misma regla de oclusión de todos los sustos. La primera vez que lo notas: «Tiene la cabeza más inclinada que antes. No lo viste moverse».
+- **No respira:** si te acercas a menos de 1,4 m mirándolo: «Estás tan cerca que lo notarías. No respira».
+- **Cómo:** se usa el giro lateral de la cabeza (`rotation.z`), así que no choca con el giro con el que te sigue con la mirada (`rotation.y`). Para saber si lo ves se usa el frustum de la cámara sobre su cabeza.
+- **QA:** prueba nueva (se inclina de espaldas, queda quieta mientras lo miras, no respira de cerca). Resultado: 85/85.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

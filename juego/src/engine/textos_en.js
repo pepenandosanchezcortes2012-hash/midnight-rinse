@@ -891,5 +891,7 @@ MR.TEXTOS_EN = {
  "CAMBIO": "CHANGE",
  "Modelos nuevos en todas partes: el teléfono, la caldera, la farola… y tus manos (con reloj).": "New models everywhere: the phone, the boiler, the streetlight… and your hands (with a watch).",
  "(En una ventana de enfrente, una cara blanca mira hacia la lavandería.)": "(In a window across the street, a white face is looking toward the laundromat.)",
- "Las ventanas de enfrente tienen vida. Mira bien: alguna noche, alguien te devuelve la mirada… casi.": "The windows across the street are alive. Look closely: some night, someone almost looks back at you."
+ "Las ventanas de enfrente tienen vida. Mira bien: alguna noche, alguien te devuelve la mirada… casi.": "The windows across the street are alive. Look closely: some night, someone almost looks back at you.",
+ "(Tiene la cabeza más inclinada que antes. No lo viste moverse.)": "(His head is tilted more than before. You didn't see him move.)",
+ "(Estás tan cerca que lo notarías. No respira.)": "(You're close enough that you'd notice. He isn't breathing.)"
 };

@@ -119,6 +119,7 @@
       this._writing(player);
       this._stare(dt, player, eye, forward);
       this._nearPulse(dt, player);
+      this._tilt(dt, player);
       this._flickers(dt);
       var door = this.world.backDoor;
       door.rotation.y += (this.backDoorTarget - door.rotation.y) * Math.min(1, dt * 2);
@@ -703,6 +704,31 @@
       this.headYaw = yaw;
       this.world.seatedHead.rotation.y = yaw;
       this.world.standingHead.rotation.y = yaw;
+    }
+
+    /**
+     * Mientras no lo miras, su cabeza se inclina un poco más hacia un lado (nunca mientras lo ves). La primera vez que
+     * lo notas, un subtítulo. Y si te acercas a menos de 1,4 m mirándolo, también lo notas: no respira.
+     */
+    _tilt(dt, player) {
+      var c = this.customer;
+      if (!c.present) { return; }
+      var p = this.customerHead(this.tmpTilt || (this.tmpTilt = new V3()));
+      var seen = !player.eyesClosed && this.frustum.containsPoint(p);
+      if (!seen) { this.tilt = Math.min(0.36, (this.tilt || 0) + dt * 0.012); }
+      this.world.seatedHead.rotation.z = this.tilt || 0;
+      this.world.standingHead.rotation.z = this.tilt || 0;
+      var g = this.game;
+      if (seen && this.tilt > 0.22 && !this.tiltSaid) {
+        this.tiltSaid = true;
+        g.ui.subtitle('(Tiene la cabeza más inclinada que antes. No lo viste moverse.)', 5);
+        g.dread = Math.min(1, g.dread + 0.04);
+      }
+      if (seen && !this.breathSaid && this.distanceToCustomer(player) < 1.4) {
+        this.breathSaid = true;
+        g.ui.subtitle('(Estás tan cerca que lo notarías. No respira.)', 5);
+        g.dread = Math.min(1, g.dread + 0.05);
+      }
     }
 
     /** De pie a menos de 3 m: una pulsación sorda cada 3–5 s, como un paso que no ves. */

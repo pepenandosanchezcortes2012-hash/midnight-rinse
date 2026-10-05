@@ -180,3 +180,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Sombras que cruzan, teles que titilan y una cara blanca en una ventana (una vez por noche).
 - **Decisión:** la cara es pequeña y se apaga al verla. Es un detalle para quien mira por la vidriera, no un susto.
+
+## Sprint 23 — Él, quieto
+
+- Su cabeza se inclina mientras no lo miras; de cerca, no respira.
+- **Decisión:** el cambio es lento y acumulativo, y nunca ocurre a la vista. El jugador lo descubre comparando, no con un salto.
