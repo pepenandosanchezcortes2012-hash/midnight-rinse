@@ -166,3 +166,7 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 ## Sprint 19 — Todos los modelos (3): el pasillo
 
 - Caldera con manómetro, válvula, rejilla y caños; etiqueta de advertencia en los fusibles.
+
+## Sprint 20 — Todos los modelos (4): el bosque
+
+- Farola con base, brazo y carcasa; fachada con alero, marco y bajantes.

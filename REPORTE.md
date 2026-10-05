@@ -826,6 +826,12 @@ El proyecto pasó por dos etapas:
 - Los casilleros ya estaban bien (rejillas, manijas e iniciales legibles).
 - **Galería:** vistas del pasillo (fondo, casilleros, caldera). Resultado: 83/83.
 
+## 100. Sprint 20: todos los modelos, 4.ª parte. El bosque
+- **La farola de sodio:** base, poste que se afina, brazo curvo y carcasa de metal sobre el vidrio encendido. Todo va en una sola malla.
+- **La fachada de la lavandería vista desde el bosque:** alero sobre las puertas, marco de las puertas y dos bajantes de lluvia (una sola malla). Su ladrillo ya estaba subdividido y separado de puertas y vidrieras desde el Sprint 17.
+- Los pinos quedan como están, conos de pocas caras que son el estilo PS1 buscado.
+- **Galería:** vistas del bosque (fachada, farola, sendero). Resultado: 83/83.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

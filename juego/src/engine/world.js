@@ -1243,12 +1243,38 @@
       var sign = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.6, 3, 1), m.sign);
       sign.position.set(0, 2.85, 100.03);
       this.add(sign);
+      // Alero sobre las puertas, su marco y las bajantes de lluvia (una sola malla).
+      var facadeParts = [];
+      function pa(x, y, z, w, h, d, rx) {
+        var mm = new THREE.Matrix4().makeTranslation(x, y, z);
+        if (rx) { mm.multiply(new THREE.Matrix4().makeRotationX(rx)); }
+        facadeParts.push({ geo: new THREE.BoxGeometry(1, 1, 1), matrix: mm.multiply(new THREE.Matrix4().makeScale(w, h, d)), su: 1, sv: 1 });
+      }
+      pa(0, 2.55, 100.5, 3.8, 0.07, 0.95, -0.12);               // el alero
+      pa(-1.62, 1.2, 100.08, 0.08, 2.5, 0.1);                   // el marco de las puertas
+      pa(1.62, 1.2, 100.08, 0.08, 2.5, 0.1);
+      pa(0, 2.44, 100.08, 3.32, 0.08, 0.1);
+      pa(-7.85, 1.7, 100.12, 0.09, 3.4, 0.09);                  // las bajantes
+      pa(7.85, 1.7, 100.12, 0.09, 3.4, 0.09);
+      this.add(inert(new THREE.Mesh(mergeParts(facadeParts), R.material({ texture: 'metal', color: 0x34383c }))));
       this.collider(-8.3, 8.3, 99.4, 100.3);
 
-      // Farola de sodio.
-      this.box(0.12, 4.0, 0.12, m.metal, -4.5, 2.0, 103.2);
-      this.box(0.5, 0.06, 0.06, m.metal, -4.27, 3.98, 103.2);
-      var lampHead = this.box(0.38, 0.12, 0.24, mt.lamp, -4.05, 3.92, 103.2);
+      // Farola de sodio: base, poste que se afina, brazo curvo y la carcasa sobre el vidrio encendido (una sola malla).
+      var Mf = THREE.Matrix4;
+      var bxf = new THREE.BoxGeometry(1, 1, 1);
+      var lampParts = [];
+      function pf(x, y, z, w, h, d, rz) {
+        var mm = new Mf().makeTranslation(x, y, z);
+        if (rz) { mm.multiply(new Mf().makeRotationZ(rz)); }
+        lampParts.push({ geo: bxf, matrix: mm.multiply(new Mf().makeScale(w, h, d)), su: 1, sv: 1 });
+      }
+      pf(-4.5, 0.15, 103.2, 0.3, 0.3, 0.3);                     // la base
+      lampParts.push({ geo: new THREE.CylinderGeometry(0.05, 0.08, 3.7, 8), matrix: new Mf().makeTranslation(-4.5, 2.15, 103.2), su: 1, sv: 2 });
+      pf(-4.42, 4.02, 103.2, 0.22, 0.06, 0.06, 0.6);            // el brazo, curvo
+      pf(-4.2, 4.08, 103.2, 0.3, 0.06, 0.06);
+      pf(-4.05, 4.0, 103.2, 0.44, 0.08, 0.3);                   // la carcasa
+      this.add(inert(new THREE.Mesh(mergeParts(lampParts), m.metal)));
+      var lampHead = this.box(0.38, 0.06, 0.24, mt.lamp, -4.05, 3.93, 103.2);
       this.collider(-4.65, -4.35, 103.05, 103.35);
       // El tendedero (solo con luna llena): uniformes colgados entre dos postes junto al sendero, que se mecen sin
       // viento (bosque.js).
