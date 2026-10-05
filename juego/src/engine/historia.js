@@ -180,6 +180,12 @@
           'Nos vamos antes de que aclare. La mañana es para los que viven arriba del agua.',
           'No. Solo conocemos el agua fría y la campana de la escuela que sigue sonando.'
         ],
+        // Una vez por noche (a veces), antes de la charla: te piden una moneda para la secadora (clientela.js).
+        moneda: {
+          pide: '¿Tienes una moneda? La secadora no acepta las nuestras.',
+          gracias: 'Gracias. Toma una de las nuestras; aquí no sirve para nada.',
+          nada: 'No importa. Nuestra ropa no se va a secar de todos modos.'
+        },
         'cierre': [
           'El agua sigue tibia. Gracias por no cerrar la puerta esta noche.',
           'Esperaremos a que termine el ciclo, sin mojarte el piso.',

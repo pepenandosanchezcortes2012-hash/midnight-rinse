@@ -469,6 +469,12 @@
       this.sweepLoop.gain.gain.setTargetAtTime(level * 0.035, this.ctx.currentTime, 0.3);
     }
 
+    /** Un motor que pasa bajo el agua: rumor grave y largo, sin agudos. */
+    rumorAgua() {
+      this._burst(this.brown, 'lowpass', 150, 0.7, 4.5, 0.22, 0);
+      this._tone(48, 4.0, 0.03, 'sine', 40);
+    }
+
     /** El autobús frena y abre las puertas: un siseo de aire. */
     frenoBus() {
       this._burst(this.white, 'highpass', 2600, 0.7, 0.9, 0.09, 0.4);

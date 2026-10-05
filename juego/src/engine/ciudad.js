@@ -29,6 +29,8 @@
       this.bus = { active: false };
       this.sweepAt = U.rand(96, 106);
       this.sweep = { active: false };
+      this.ghostAt = U.rand(272, 292); // el 86 bajo el agua (04:32–04:52), si la calle ya está inundada
+      this.ghost = { active: false };
       this.drawFacades();
     }
 
@@ -78,7 +80,7 @@
       this.drawFacades();
       this._cars(dt);
       this._people(dt);
-      if (this.dawn) { c.bus.visible = false; c.sweeper.visible = false; } else { this._bus(dt); this._sweeper(dt); }
+      if (this.dawn) { c.bus.visible = false; c.sweeper.visible = false; c.ghostBus.visible = false; } else { this._bus(dt); this._sweeper(dt); this._ghostBus(dt); }
       this._rain(dt);
       g.audio.setCity(this.vida * (1 - this.agua));
     }
@@ -200,6 +202,35 @@
         g.ui.subtitle('(Un autobús nocturno se detiene enfrente. El letrero dice «86 · BLACKWOOD». Adentro, todas las caras son blancas.)', 6);
         g.dread = Math.min(1, g.dread + 0.03);
       }
+    }
+
+    /** El 86 bajo el agua: una franja de luz que cruza por debajo de la superficie, despacio, con un rumor sordo. */
+    _ghostBus(dt) {
+      var g = this.game;
+      var s = this.ghost;
+      var m = this.c.ghostBus;
+      if (!s.active) {
+        if (this.ghostAt !== null && g.minutes >= this.ghostAt) {
+          this.ghostAt = null;
+          if (this.agua < 0.45) { return; } // sin agua suficiente, no pasa
+          s.active = true;
+          s.x = 26;
+          s.t = 0;
+          m.visible = true;
+          g.audio.rumorAgua();
+        }
+        return;
+      }
+      s.t += dt;
+      s.x -= 4.5 * dt;
+      m.position.set(s.x, this.c.water.position.y + 0.02, 9.9);
+      this.c.ghostMat.uniforms.uEmissive.value = 0.55 + Math.sin(s.t * 6) * 0.15; // el agua la deforma
+      if (!this.ghostSeen && this._seen(s.x, m.position.y, 9.9)) {
+        this.ghostSeen = true;
+        g.ui.subtitle('(Bajo el agua de la avenida pasa una franja de luz, despacio, como las ventanas de un autobús.)', 6);
+        g.dread = Math.min(1, g.dread + 0.04);
+      }
+      if (s.x < -26) { s.active = false; m.visible = false; }
     }
 
     /** La barredora: cruza despacio con la luz naranja girando y el roce de los cepillos. */

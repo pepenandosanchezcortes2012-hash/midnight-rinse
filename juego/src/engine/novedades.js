@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 38, texto: 'Si una cara blanca te pide una moneda, dásela.' },
     { id: 37, texto: 'Deja la radio en la 94.1: el locutor habla más de una vez por noche.' },
     { id: 36, texto: 'Esta noche pasa el 86. Si bajan dos, escucha lo que se dicen.' },
     { id: 35, texto: 'Las caras blancas recuerdan tu noche. Y en lo hondo del bosque hay un puente sin nombre.' },

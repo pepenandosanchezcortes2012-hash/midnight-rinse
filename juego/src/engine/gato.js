@@ -89,6 +89,7 @@
       this.waitingDoor = false;
       this.tmp = new V3();
       this.company = {}; // caras blancas a las que ya acompañó
+      this.giftOnReturn = Math.random() < 0.35; // esta noche, al volver del bosque, te trae algo
       this._placeAtPerch('secadora');
     }
 
@@ -203,6 +204,7 @@
           this.waitingDoor = true;
           this.jump = null; this.route = [];
           if (back) { root.position.set(6.4, 0, -3.4); root.rotation.y = Math.PI; } else { root.position.set(0.6, 0, 4.1); root.rotation.y = 0; }
+          this.waitedFor = back ? 'pasillo' : 'bosque';
           this.node = 'F4';
           this.perch = null;
           this.state = 'sentado';
@@ -214,6 +216,11 @@
         this.waitingDoor = false;
         this.timer = U.rand(3, 6);
         g.audio.miau(this._pan());
+        // A veces, al volver del bosque, te dejó algo a los pies (una vez por noche, desde la 01:40).
+        if (this.waitedFor === 'bosque' && this.giftOnReturn && !this.gifted && g.minutes >= 100 && root.visible) {
+          this.gifted = true;
+          g.objetos.give('hoja_pino', '(Pelusa dejó algo a tus pies: {n}. {d})');
+        }
       }
 
       // Alarma: él de pie cerca del gato.

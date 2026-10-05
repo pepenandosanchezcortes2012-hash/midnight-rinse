@@ -79,6 +79,9 @@ def medir():
     except Exception:
         ok(False, 'no hubo resultado de la medición')
         return
+    if 'error' in datos:
+        ok(False, 'la medición falló: %s' % datos['error'])
+        return
     for a in datos['areas']:
         print('    %-18s %4d llamadas · %6d triángulos · %5.2f ms (CPU, SwiftShader)' % (a['area'], a['llamadas'], a['triangulos'], a['ms']))
         ok(a['llamadas'] <= MAX_LLAMADAS and a['triangulos'] <= MAX_TRIANGULOS, '%s dentro de los umbrales del celular' % a['area'])

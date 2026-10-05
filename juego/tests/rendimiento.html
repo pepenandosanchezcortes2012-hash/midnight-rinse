@@ -20,6 +20,14 @@
     (function poll() {
       var g = w.midnightRinse;
       if (!g) { setTimeout(poll, 50); return; }
+      w.requestAnimationFrame = function () {}; // el bucle del juego, detenido: medimos solo nuestros cuadros
+      try { medirTodo(g, w); } catch (e) {
+        // Si algo falla, que se vea el porqué (antes solo quedaba «no hubo resultado»).
+        document.getElementById('resultado').textContent = JSON.stringify({ error: e.message + ' · ' + String(e.stack).split('\n').slice(1, 3).join(' ; ') });
+      }
+    })();
+  };
+  function medirTodo(g, w) {
       w.document.getElementById('btn-comenzar').click();
       function frames(n) { for (var i = 0; i < n; i += 1) { g.update(1 / 30); g.input.endFrame(); } }
       function medir(nombre) {
@@ -64,8 +72,7 @@
         programas: info.programs ? info.programs.length : null,
         resolucion: [w.MR.Config.RENDER_W, w.MR.Config.RENDER_H]
       });
-    })();
-  };
+  }
 </script>
 </body>
 </html>

@@ -697,6 +697,16 @@ El proyecto pasó por dos etapas:
 - **Correcciones a la respuesta de Gemini:** «ventanillas empañadas que no dejan ver rostros», «motor apagado» y «luces encendidas para nadie» contradecían lo que se ve; «los barandales del viejo puente» confundía con el puente del bosque; y un embalse no tiene «marea».
 - **QA:** prueba nueva (sin sintonizar no suena nada, el 86, el puente, el cierre, el embalse sin repetir y la noche 9 en silencio). Devuelve el contador de noches como estaba. 850 textos traducidos. Resultado: 79/79.
 
+## 89. Sprint 11: favores y regalos
+- **Una moneda para la secadora:** algunas noches (50 %), desde la 01:40, la primera cara blanca a la que le hablas te pide primero: «¿Tienes una moneda? La secadora no acepta las nuestras.»
+  - Si se la das, la toma sin tocarte la mano. Al rato una secadora arranca sola y te deja una de las suyas: «aquí no sirve para nada». Es la **moneda extranjera** de la colección, «de ningún país que conozcas».
+  - Si no tienes o dices que no: «Nuestra ropa no se va a secar de todos modos».
+  - En los dos casos sigue la charla de siempre. Pasa una vez por noche.
+- **Pelusa te trae algo:** algunas noches (35 %), al volver del bosque, Pelusa dejó a tus pies **una aguja de pino** («Ninguna ventana da al bosque»). Una vez por noche, desde la 01:40.
+- **El 86 bajo el agua:** entre las 04:32 y las 04:52, si la avenida ya está inundada, una franja de luz pasa despacio bajo la superficie, como las ventanas de un autobús, con un rumor sordo. Si la calle está seca, no pasa.
+- **Herramienta:** la medición PSX (`tests/rendimiento.html`) falló una vez sin decir por qué. Ahora detiene el bucle del juego (mide solo sus propios cuadros) y, si algo falla, escribe el error y `auditar_psx.py` lo muestra. Después: 3 de 3.
+- **QA:** prueba nueva. El azar de cada noche se decide al crear el objeto (`coinPlan`, `giftOnReturn`), así las pruebas lo fijan sin tocar `Math.random`. 862 textos traducidos. Resultado: 80/80.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

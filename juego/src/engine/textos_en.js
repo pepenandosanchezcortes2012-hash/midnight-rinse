@@ -851,5 +851,17 @@ MR.TEXTOS_EN = {
  "Son las cuatro y media. Nuestro bloque nocturno se despide por hoy. Cuiden sus pasos al salir; el agua del embalse ya está rozando el cordón de la avenida.": "It's four-thirty. Our late block signs off for tonight. Watch your step on the way out; the reservoir water is already lapping at the curb of the avenue.",
  "Cuatro y treinta en la 94.1. Apagamos micrófonos mientras el agua sube despacio sobre el pavimento. Si deben esperar adentro, procuren no mirar fijo al vidrio.": "Four-thirty on 94.1. We switch off the mics as the water slowly climbs over the pavement. If you have to wait inside, try not to stare at the glass.",
  "Llegan las cuatro y media y cerramos la transmisión nocturna. El agua cubre los primeros escalones de la vereda. Buenas noches a los rezagados; mantengan los pies secos.": "Four-thirty arrives and we close our night broadcast. The water covers the first steps of the sidewalk. Good night to the stragglers; keep your feet dry.",
- "Deja la radio en la 94.1: el locutor habla más de una vez por noche.": "Leave the radio on 94.1: the host speaks more than once a night."
+ "Deja la radio en la 94.1: el locutor habla más de una vez por noche.": "Leave the radio on 94.1: the host speaks more than once a night.",
+ "(Bajo el agua de la avenida pasa una franja de luz, despacio, como las ventanas de un autobús.)": "(Under the water on the avenue, a band of light passes slowly, like the windows of a bus.)",
+ "Una cara blanca, sin mirarte: «{l}»": "A white face, without looking at you: “{l}”",
+ "(Darle una moneda.)": "(Give it a coin.)",
+ "(No tengo.)": "(I don't have one.)",
+ "(Le das una moneda. La toma sin tocarte la mano.)": "(You give it a coin. It takes it without touching your hand.)",
+ "(Te da algo frío y pesado: {n}. {d})": "(It hands you something cold and heavy: {n}. {d})",
+ "(Buscas en los bolsillos. No te queda ninguna.)": "(You check your pockets. You don't have any left.)",
+ "(Pelusa dejó algo a tus pies: {n}. {d})": "(Pelusa left something at your feet: {n}. {d})",
+ "¿Tienes una moneda? La secadora no acepta las nuestras.": "Do you have a coin? The dryer won't take ours.",
+ "Gracias. Toma una de las nuestras; aquí no sirve para nada.": "Thank you. Take one of ours; it's no use here.",
+ "No importa. Nuestra ropa no se va a secar de todos modos.": "It doesn't matter. Our clothes won't dry anyway.",
+ "Si una cara blanca te pide una moneda, dásela.": "If a white face asks you for a coin, give it one."
 };

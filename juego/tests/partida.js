@@ -1388,6 +1388,72 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Favores y regalos: la moneda para la secadora, lo que trae Pelusa del bosque y el 86 bajo el agua', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var d = ctx.w.document;
+      var sub = function () { return d.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.plan = [];
+      g.gato.stared = true;
+      g.horror.customer.present = false;
+      g.ciudad.busPlan = []; g.ciudad.sweepAt = null; g.ciudad.ghostAt = null;
+      delete g.objetos.got.moneda; delete g.objetos.got.hoja_pino;
+      g.minutes = 120;
+      // Una cara blanca te pide una moneda; se la das: la secadora arranca sola y te deja una de las suyas.
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      g.gameplay.dryers.forEach(function (x) { x.running = false; });
+      g.gameplay.coins = 3;
+      c.coinPlan = true;
+      var v = c.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      g.player.pos.set(v.model.group.position.x + 1, 0, v.model.group.position.z + 1.5);
+      c.talk(v.id);
+      check(g.dialog && /moneda/.test(d.getElementById('dialogo-pregunta').textContent), 'no pidió una moneda');
+      g.answerChoice(1);
+      check(g.gameplay.coins === 2 && sub().indexOf('Le das una moneda') >= 0, 'no se dio la moneda');
+      await wait(2700);
+      check(g.gameplay.runningDryers() === 1, 'no arrancó una secadora');
+      check(g.objetos.got.moneda && sub().indexOf('Toma una de las nuestras') >= 0, 'no dejó su moneda');
+      await wait(3800);
+      check(g.dialog && d.querySelectorAll('#dialogo-opciones li').length >= 5, 'no siguió la charla después de la moneda');
+      g.closeDialog(); v.talking = false;
+      // Solo una vez por noche.
+      v.talked = false;
+      c.talk(v.id);
+      check(!/moneda/.test(d.getElementById('dialogo-pregunta').textContent), 'pidió la moneda dos veces');
+      g.closeDialog(); v.talking = false;
+      noErrors(ctx);
+      // Pelusa: al volver del bosque, a veces te trae algo.
+      g.gato.giftOnReturn = true;
+      g.bosque.go(); step(ctx, 40);
+      check(g.bosque.outside, 'no salió al bosque');
+      g.bosque.go(); step(ctx, 40);
+      check(!g.bosque.outside && g.gato.gifted && g.objetos.got.hoja_pino, 'Pelusa no trajo nada');
+      check(sub().indexOf('Pelusa dejó algo a tus pies') >= 0, 'faltó el subtítulo del regalo');
+      // El 86 bajo el agua: con la avenida inundada, una franja de luz pasa por debajo.
+      g.minutes = 285;
+      step(ctx, 2);
+      g.player.pos.set(4.6, 0, 1.2); g.player.yaw = Math.PI; g.player.pitch = -0.05;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.ciudad.ghostAt = g.minutes;
+      var city = g.world.city;
+      for (var k = 0; k < 30 * 12 && !g.ciudad.ghostSeen; k += 1) { step(ctx, 1); }
+      check(g.ciudad.ghostSeen && city.ghostBus.visible, 'no pasó el 86 bajo el agua');
+      check(Math.abs(city.ghostBus.position.y - city.water.position.y - 0.02) < 0.001, 'la luz no va sobre el agua');
+      check(sub().indexOf('como las ventanas de un autobús') >= 0, 'faltó el subtítulo');
+      for (var q = 0; q < 30 * 20 && g.ciudad.ghost.active; q += 1) { step(ctx, 1); }
+      check(!city.ghostBus.visible, 'la luz no terminó de pasar');
+      // Sin agua suficiente, no pasa.
+      g.ciudad.ghostSeen = false;
+      g.minutes = 200; step(ctx, 2);
+      g.ciudad.ghostAt = g.minutes; step(ctx, 2);
+      check(!g.ciudad.ghost.active, 'pasó con la calle seca');
+      noErrors(ctx);
+      return 'moneda → secadora y moneda extranjera · Pelusa trae una aguja · el 86 bajo el agua';
+    }],
+
     ['Radio Nocturna en vivo: boletines que comentan tu noche (el 86, el puente), solo en la 94.1 y solo mientras hay locutor', async function () {
       var B;
       var ctx;

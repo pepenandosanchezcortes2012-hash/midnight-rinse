@@ -113,3 +113,10 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** a las 02:10, prioridad para lo que viste esa noche (el 86, si no la barredora). El embalse queda de relleno, y es lo único que también puede sonar a las 03:30, cuando empieza a subir el agua.
 - **Decisión:** sin locutor (noche 9 en adelante), tampoco hay boletines. La estática de siempre.
 - Herramienta: `fuzz.py` (turnos completos con semilla) ahora vive en el repo.
+
+## Sprint 11 — Favores y regalos
+
+- La moneda para la secadora (con la moneda extranjera de regalo), Pelusa que trae una aguja de pino del bosque y el 86 que pasa bajo el agua.
+- **Decisión:** la moneda que te dan es la que ya existía en la colección («de ningún país que conozcas»). Así su descripción por fin tiene historia: es dinero de Blackwood.
+- **Decisión:** la cara pide la moneda antes de la charla y después la charla sigue. El favor no reemplaza la conversación.
+- **Decisión:** el 86 bajo el agua es solo luz y sonido. Sin el autobús entero, el agua sigue siendo opaca (el canvas no usa transparencias).

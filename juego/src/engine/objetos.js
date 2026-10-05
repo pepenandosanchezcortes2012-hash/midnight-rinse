@@ -55,14 +55,14 @@
       washer.item = pool[Math.floor(Math.random() * pool.length)].id;
     }
 
-    /** Un objeto que no sale de una lavadora (la caja de la Administración). */
-    give(id) {
+    /** Un objeto que no sale de una lavadora: la caja de la Administración, la moneda de una cara blanca, Pelusa. */
+    give(id, template) {
       var def = LIST.filter(function (o) { return o.id === id; })[0];
       var g = this.game;
       var isNew = !this.got[def.id];
       if (isNew) { this.got[def.id] = g.night || 1; this._save(); }
       this.foundTonight += 1;
-      g.ui.subtitle(MR.tf('(En la caja: {n}. {d})', { n: MR.t(def.nombre).toLowerCase(), d: MR.t(def.desc) }), 7);
+      g.ui.subtitle(MR.tf(template || '(En la caja: {n}. {d})', { n: MR.t(def.nombre).toLowerCase(), d: MR.t(def.desc) }), 7);
       g.audio.ding();
       g.ui.renderObjetos(this);
       if (g.logros && this.count() >= 6) { g.logros.unlock('objetos'); }

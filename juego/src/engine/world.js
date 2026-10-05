@@ -770,6 +770,12 @@
       bus.add(inert(frontSign));
       bus.visible = false;
       group.add(bus);
+      // El 86 bajo el agua (ciudad.js): ya inundada la avenida, una franja de luz pasa por debajo de la superficie.
+      var ghostMat = R.material({ texture: 'water', color: 0xd8b060, emissive: 0.6 });
+      var ghostBus = new THREE.Mesh(new THREE.PlaneGeometry(5.6, 0.8), ghostMat);
+      ghostBus.rotation.x = -Math.PI / 2;
+      ghostBus.visible = false;
+      group.add(inert(ghostBus));
       // La barredora (ciudad.js): pasa despacio a la 01:40, con su luz naranja girando.
       var sweeper = new THREE.Group();
       var sb = [];
@@ -836,7 +842,7 @@
         }
       });
       this.city = { group: group, facades: facades, signs: signs, lampMat: lampMat, poolMat: poolMat, water: water, cars: cars, people: people, rain: rain,
-        bus: bus, sweeper: sweeper, beaconMat: beaconMat, brush: brush };
+        bus: bus, sweeper: sweeper, beaconMat: beaconMat, brush: brush, ghostBus: ghostBus, ghostMat: ghostMat };
     }
 
     _lights() {

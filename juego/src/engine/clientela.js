@@ -23,6 +23,7 @@
       this.nextId = 1;
       this.used = { llegada: {}, tocar: {}, despedida: {}, ordenes: {}, cierre: {} };
       this.ordersToday = 0;
+      this.coinPlan = Math.random() < 0.5; // esta noche, una cara blanca te va a pedir una moneda
       // Horario de la noche: caras blancas entre 01:15 y 02:15 (3 a 5) y quizá una tardía; máscaras a las 02:50 y quizá 04:05.
       var plan = [];
       var n = 3 + Math.floor(Math.random() * 3);
@@ -277,7 +278,49 @@
       }
       if (v.talked) { g.gameplay.say('cara' + id, '(Ya no te responde. Mira el tambor girar.)', 3); return; }
       if (v.state !== 'llego') { this._say(v, 'tocar'); v.talked = true; return; } // de paso: solo un murmullo
-      this._converse(v, this._extraQuestions(v).concat(MR.HISTORIA.blackwood.charla.preguntas));
+      var questions = this._extraQuestions(v).concat(MR.HISTORIA.blackwood.charla.preguntas);
+      if (this.coinPlan && !this.coinAsked && g.minutes >= 100) { this._askCoin(v, questions); return; }
+      this._converse(v, questions);
+    }
+
+    /**
+     * «¿Tienes una moneda?»: si se la das, una secadora arranca sola al rato y te deja una de las suyas (la moneda
+     * extranjera de la colección: de ningún país que conozcas). Después sigue la charla de siempre.
+     */
+    _askCoin(v, questions) {
+      var g = this.game;
+      var self = this;
+      var M = MR.HISTORIA.blackwood.charla.moneda;
+      this.coinAsked = true;
+      v.talking = true;
+      g.audio.speak(M.pide, 'cara');
+      g.openDialog(MR.tf('Una cara blanca, sin mirarte: «{l}»', { l: MR.t(M.pide) }), ['(Darle una moneda.)', '(No tengo.)'], function (n) {
+        if (!self.visitors.includes(v)) { self._endTalk(v); return; }
+        var gp = g.gameplay;
+        if (n === 1 && gp.coins > 0) {
+          gp.coins -= 1;
+          g.audio.coin();
+          g.ui.subtitle('(Le das una moneda. La toma sin tocarte la mano.)', 3);
+          setTimeout(function () {
+            if (g.state !== 'playing') { return; }
+            var free = -1;
+            gp.dryers.forEach(function (d, i) { if (free < 0 && !d.running) { free = i; } });
+            if (free >= 0) { gp.startDryer(free); }
+            g.ui.subtitle(MR.tf('(Una cara blanca, bajito: «{l}»)', { l: MR.t(M.gracias) }), 5);
+            g.audio.speak(M.gracias, 'cara');
+            g.objetos.give('moneda', '(Te da algo frío y pesado: {n}. {d})');
+            setTimeout(function () { if (v.talking && g.state === 'playing') { self._converse(v, questions); } }, 3500);
+          }, 2400);
+          return;
+        }
+        if (n === 1) { g.ui.subtitle('(Buscas en los bolsillos. No te queda ninguna.)', 3); }
+        setTimeout(function () {
+          if (g.state !== 'playing') { return; }
+          g.ui.subtitle(MR.tf('(Una cara blanca, bajito: «{l}»)', { l: MR.t(M.nada) }), 5);
+          g.audio.speak(M.nada, 'cara');
+          setTimeout(function () { if (v.talking && g.state === 'playing') { self._converse(v, questions); } }, 3500);
+        }, n === 1 ? 1500 : 200);
+      });
     }
 
     /**
