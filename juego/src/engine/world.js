@@ -1181,8 +1181,13 @@
       port.position.set(0, 0.42, 0.32);
       wm.add(port);
       var wmLamp = this.box(0.05, 0.05, 0.02, mt.green, 0.2, 0.78, 0.32, wm);
+      // Adentro gira un uniforme como el tuyo (bosque.js lo detiene con las seis hojas).
+      var claroDrum = new THREE.Mesh(new THREE.CircleGeometry(0.17, 12), R.material({ texture: 'uniformeGira', color: 0xb8e0c4, emissive: 0.45 }));
+      claroDrum.position.set(0, 0.42, 0.343);
+      wm.add(claroDrum);
       this.interactive(body, 'lavadoraBosque');
       this.interactive(port, 'lavadoraBosque');
+      this.interactive(claroDrum, 'lavadoraBosque');
       this.collider(6.15, 7.05, 140.75, 141.65);
 
       // Seis hojas mojadas del registro, cerca del sendero (la última, sobre la lavadora del claro).
@@ -1303,6 +1308,11 @@
       var lonePort = new THREE.Mesh(new THREE.CircleGeometry(0.26, 12), R.material({ texture: 'white', color: 0xffb35a, emissive: 1.1 }));
       lonePort.position.set(0, 0.55, 0.41);
       lone.add(lonePort);
+      // La ropa seca que da vueltas adentro, bajo la luz naranja.
+      var loneDrum = new THREE.Mesh(new THREE.CircleGeometry(0.2, 12), R.material({ texture: 'ropaSeca', color: 0xffc890, emissive: 0.8 }));
+      loneDrum.position.set(0, 0.55, 0.414);
+      lone.add(loneDrum);
+      this.interactive(loneDrum, 'secadoraSola');
       this.box(0.6, 0.06, 0.04, R.material({ texture: 'white', color: 0x9a988f }), 0, 0.92, 0.41, lone);
       [loneBody, lonePort].forEach(function (o) { this.interactive(o, 'secadoraSola'); }, this);
       lone.visible = false;
@@ -1380,6 +1390,8 @@
         lampHead: lampHead,
         lamp2: lamp2,
         loneDryer: lone,
+        loneDrum: loneDrum,
+        claroDrum: claroDrum,
         bell: bell,
         bellCup: cup,
         bridge: bridge,

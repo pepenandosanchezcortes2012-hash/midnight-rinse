@@ -243,6 +243,26 @@
       noise(x, 32, 32, 10, 67);
       return c;
     },
+    // En la lavadora del claro gira un uniforme como el tuyo, con su gafete blanco.
+    uniformeGira: function () {
+      var c = canvas(32, 32);
+      var x = c.getContext('2d');
+      x.fillStyle = '#0f1d18';
+      x.fillRect(0, 0, 32, 32);
+      x.fillStyle = '#5a6b78';
+      x.beginPath(); x.ellipse(16, 16, 11, 7, 0.5, 0, Math.PI * 2); x.fill();
+      x.fillStyle = '#4a5a66';
+      x.beginPath(); x.ellipse(13, 19, 7, 4, -0.4, 0, Math.PI * 2); x.fill();
+      x.fillStyle = '#e8e4d8';
+      x.fillRect(17, 11, 5, 3); // el gafete
+      x.fillStyle = '#2a3a34';
+      x.fillRect(9, 13, 3, 1);
+      x.fillRect(20, 20, 4, 1);
+      x.fillStyle = 'rgba(200,230,210,0.25)';
+      x.fillRect(6, 5, 12, 2);
+      noise(x, 32, 32, 10, 71);
+      return c;
+    },
     glass: function () {
       var c = canvas(16, 32);
       var x = c.getContext('2d');

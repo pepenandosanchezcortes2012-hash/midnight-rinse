@@ -100,6 +100,8 @@
       this._lamp2(dt);
       this._infinite();
       this._loneDryer(dt);
+      // El uniforme de la lavadora del claro gira hasta que metes las seis hojas.
+      if (!this.ending && this.f.claroDrum) { this.f.claroDrum.rotation.z += dt * 5; }
       this._bridge(dt);
       if (this.bellSwing > 0) { this.bellSwing = Math.max(0, this.bellSwing - dt); this.f.bellCup.rotation.z = Math.sin(this.bellSwing * 9) * this.bellSwing * 0.25; }
       g.audio.setForest(1 - g.dread * 0.6);
@@ -164,6 +166,7 @@
       if (!d.visible) { return; }
       this.loneT = (this.loneT || 0) + dt;
       this.f.lonePort.material.uniforms.uEmissive.value = 1.0 + Math.sin(this.loneT * 5) * 0.15;
+      this.f.loneDrum.rotation.z += dt * 7;
       d.children[0].position.x = Math.sin(this.loneT * 40) * 0.004; // tiembla al centrifugar
       var g = this.game;
       if (!this.loneNoticed && U.distXZ(g.player.pos, d.position) < 9) {

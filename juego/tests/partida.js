@@ -298,7 +298,14 @@
       check(/1 de 6/.test(d.getElementById('subtitulos').textContent), 'la lavadora no dijo cuántas faltan');
       for (var i = 1; i < 6; i += 1) { g.bosque.takePage(i); g.closeNote(); }
       check(g.bosque.pagesFound() === 6, 'no se contaron las seis hojas');
+      var claro = g.world.forest.claroDrum;
+      var giro = claro.rotation.z;
+      step(ctx, 3);
+      check(claro.rotation.z !== giro, 'el uniforme de la lavadora del claro no gira');
       g.bosque.touchWasher();
+      giro = claro.rotation.z;
+      step(ctx, 5);
+      check(claro.rotation.z === giro, 'el uniforme no dejó de girar con las seis hojas');
       step(ctx, 30 * 4);
       check(g.state === 'ended', 'no terminó el turno');
       check(d.getElementById('final-titulo').textContent === ctx.w.MR.HISTORIA.final.titulo, 'no fue el tercer final');

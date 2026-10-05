@@ -758,6 +758,9 @@ El proyecto pasó por dos etapas:
 - **Táctil:** el disco de ropa queda delante del vidrio, así que se toca como la puerta. Si no, taparía el toque, como pasó con el parteluz de la vidriera.
 - **Rendimiento:** la sala bajó de 151 a 147 llamadas de dibujo, porque los tambores quietos ya no se dibujan.
 - Por fin es verdad lo que dicen las caras blancas: «Mira el tambor girar».
+- **En el bosque:**
+  - en la lavadora del claro gira **un uniforme como el tuyo, con su gafete blanco** (`uniformeGira`), y deja de girar cuando metes las seis hojas, como dice el texto;
+  - en la secadora solitaria da vueltas la ropa seca bajo su luz naranja.
 - **QA:** verificación nueva en la prueba de la cara blanca que pone a lavar (la ropa gira y no aparece en lavadoras quietas). Resultado: 82/82.
 
 ## Pendientes y siguiente paso
