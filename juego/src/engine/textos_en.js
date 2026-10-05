@@ -768,5 +768,21 @@ MR.TEXTOS_EN = {
  "Una placa de bronce": "A bronze plaque",
  "«PUENTE MUNICIPAL · BLACKWOOD». Huele a río.": "“MUNICIPAL BRIDGE · BLACKWOOD”. It smells of the river.",
  "(En la caja: {n}. {d})": "(In the box: {n}. {d})",
- "Las máscaras a veces dejan algo. Las caras blancas a veces se despiden.": "The masks sometimes leave something behind. The white faces sometimes say goodbye."
+ "Las máscaras a veces dejan algo. Las caras blancas a veces se despiden.": "The masks sometimes leave something behind. The white faces sometimes say goodbye.",
+ "¿Les cae bien Pelusa?": "Do you like Pelusa?",
+ "¿Quién las mira desde la otra vereda?": "Who watches you from across the street?",
+ "¿Qué es esta placa del puente?": "What is this bridge plaque?",
+ "¿Ustedes ven la mañana?": "Do you ever see the morning?",
+ "No nos tiene miedo. A veces huele a jabón seco y a ropa tibia.": "It isn't afraid of us. Sometimes it smells of dry soap and warm clothes.",
+ "Nos recuerda a los gatos que dormían en la plaza antes de que lloviera tanto.": "It reminds us of the cats that slept in the square before all that rain.",
+ "Es suave. En el fondo del agua nada tiene un pelaje tan tibio.": "It's soft. Down in the water, nothing has fur that warm.",
+ "Es una vecina nuestra. Le gusta ver las luces encendidas y saber que alguien sigue despierto.": "She's a neighbor of ours. She likes seeing the lights on and knowing someone is still awake.",
+ "No entra porque no trae ropa mojada. Solo quería despedirse de nosotros bajo la lluvia.": "She doesn't come in because she has no wet clothes. She only wanted to say goodbye to us in the rain.",
+ "A veces nos da tristeza la soledad de la calle antes de volver al fondo.": "Sometimes the empty street makes us sad before we go back down.",
+ "Pasando la puerta de vidrio, entre los árboles, hay un puente sin nombre sobre piedras secas.": "Past the glass door, among the trees, there is a nameless bridge over dry stones.",
+ "Cruza un río seco muy adentro del bosque. Olvidó quién era cuando le quitaron el bronce.": "It crosses a dry river deep in the woods. It forgot who it was when they took its bronze.",
+ "Huele al lodo de abajo. Alguien la arrancó antes de que el embalse cubriera todo.": "It smells of the mud below. Someone tore it off before the reservoir covered everything.",
+ "Para nosotros, el reloj de la iglesia se detuvo para siempre en 1986.": "For us, the church clock stopped forever in 1986.",
+ "Nos vamos antes de que aclare. La mañana es para los que viven arriba del agua.": "We leave before it gets light. Morning is for the ones who live above the water.",
+ "No. Solo conocemos el agua fría y la campana de la escuela que sigue sonando.": "No. We only know the cold water and the school bell that keeps on ringing."
 };

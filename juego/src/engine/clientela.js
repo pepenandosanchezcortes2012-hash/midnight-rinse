@@ -120,6 +120,7 @@
       this.waver.group.rotation.y = 0;
       this.waver.group.visible = true;
       this.waveTimer = 8;
+      this.watcherNoticed = true;
       g.ui.subtitle('(Del otro lado de la avenida, la cara blanca levanta la mano. Se está despidiendo.)', 5);
     }
 
@@ -143,6 +144,7 @@
       var seen = inSala && h.zoneVisible('vidriera') > 0.3 && !g.player.eyesClosed;
       if (seen && this.watcherSeen === null) {
         this.watcherSeen = h.clock;
+        this.watcherNoticed = true;
         g.ui.subtitle('(Del otro lado de la avenida, alguien de cara blanca mira hacia la lavandería. No trae paraguas.)', 6);
         g.dread = Math.min(1, g.dread + 0.04);
       }
@@ -221,7 +223,22 @@
       }
       if (v.talked) { g.gameplay.say('cara' + id, '(Ya no te responde. Mira el tambor girar.)', 3); return; }
       if (v.state !== 'llego') { this._say(v, 'tocar'); v.talked = true; return; } // de paso: solo un murmullo
-      this._converse(v, MR.HISTORIA.blackwood.charla.preguntas.slice());
+      this._converse(v, this._extraQuestions(v).concat(MR.HISTORIA.blackwood.charla.preguntas));
+    }
+
+    /**
+     * Lo que esta cara blanca sabe de tu noche: Pelusa se sentó a su lado, viste a la vigía (o la despedida), tienes la
+     * placa del puente, alguna vez viste la mañana. Como mucho dos, para que la lista quepa en el celular.
+     */
+    _extraQuestions(v) {
+      var g = this.game;
+      var ok = {
+        pelusa: !!v.catSat,
+        vigia: !!this.watcherNoticed,
+        placa: !!(g.objetos && g.objetos.got.placa),
+        manana: !!(g.historial && g.historial.d.finales && g.historial.d.finales.verdadero)
+      };
+      return MR.HISTORIA.blackwood.charla.extra.filter(function (q) { return ok[q[0]]; }).slice(0, 2);
     }
 
     /** Conversación: eliges una pregunta; responde, y puedes seguir preguntando (o dejarla en paz). */

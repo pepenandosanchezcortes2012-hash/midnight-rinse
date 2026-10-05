@@ -105,6 +105,9 @@
       // Conversación (tocar a una cara blanca): cuatro preguntas, tres respuestas posibles cada una. Gemini, revisado.
       charla: {
         preguntas: [['origen', '¿De dónde vienen?'], ['1986', '¿Qué pasó en 1986?'], ['el', '¿Conocen al hombre del sombrero?'], ['ropa', '¿Por qué su ropa nunca se seca?']],
+        // Preguntas que solo aparecen si pasó algo (clientela.js, _extraQuestions). Borrador de Gemini, revisado.
+        extra: [['pelusa', '¿Les cae bien Pelusa?'], ['vigia', '¿Quién las mira desde la otra vereda?'],
+          ['placa', '¿Qué es esta placa del puente?'], ['manana', '¿Ustedes ven la mañana?']],
         'origen': [
           'Cruzamos el puente viejo bajo el agua, pasando la farmacia de don Pedro.',
           'De la plaza de Blackwood, donde la campana aún suena bajo el lodo.',
@@ -124,6 +127,26 @@
           'El lodo del fondo es terco; tus cuatro secadoras dan calor, nada más.',
           'El jabón huele dulce, pero el agua honda de Blackwood nunca se marcha.',
           'Sigue mojada desde 1986. Solo venimos por el rumor tibio de las lavadoras.'
+        ],
+        'pelusa': [
+          'No nos tiene miedo. A veces huele a jabón seco y a ropa tibia.',
+          'Nos recuerda a los gatos que dormían en la plaza antes de que lloviera tanto.',
+          'Es suave. En el fondo del agua nada tiene un pelaje tan tibio.'
+        ],
+        'vigia': [
+          'Es una vecina nuestra. Le gusta ver las luces encendidas y saber que alguien sigue despierto.',
+          'No entra porque no trae ropa mojada. Solo quería despedirse de nosotros bajo la lluvia.',
+          'A veces nos da tristeza la soledad de la calle antes de volver al fondo.'
+        ],
+        'placa': [
+          'Pasando la puerta de vidrio, entre los árboles, hay un puente sin nombre sobre piedras secas.',
+          'Cruza un río seco muy adentro del bosque. Olvidó quién era cuando le quitaron el bronce.',
+          'Huele al lodo de abajo. Alguien la arrancó antes de que el embalse cubriera todo.'
+        ],
+        'manana': [
+          'Para nosotros, el reloj de la iglesia se detuvo para siempre en 1986.',
+          'Nos vamos antes de que aclare. La mañana es para los que viven arriba del agua.',
+          'No. Solo conocemos el agua fría y la campana de la escuela que sigue sonando.'
         ],
         'cierre': [
           'El agua sigue tibia. Gracias por no cerrar la puerta esta noche.',

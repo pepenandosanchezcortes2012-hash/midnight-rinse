@@ -1311,6 +1311,7 @@
       var opts = function () { return d.querySelectorAll('#dialogo-opciones li').length; };
       start(ctx);
       c.plan = [];
+      delete g.objetos.got.placa; g.historial.d.finales.verdadero = 0; // sin lo que dejaron otras pruebas (preguntas nuevas)
       g.player.pos.set(-6, 0, 2.5);
       g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
       var v = c.spawn('cara');
@@ -1338,6 +1339,53 @@
       check(!g.dialog && g.question && /Cliente|Customer/.test(d.getElementById('dialogo-pregunta').textContent), 'la pregunta de la hora no tuvo prioridad');
       noErrors(ctx);
       return Object.keys(g.archivo.data.charla).length + ' respuesta(s) en el Archivo';
+    }],
+
+    ['La charla recuerda tu noche: preguntas nuevas si Pelusa la acompañó, si viste a la vigía, si tienes la placa o viste la mañana', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var d = ctx.w.document;
+      var sub = function () { return d.getElementById('subtitulos').textContent; };
+      var items = function () { return Array.prototype.map.call(d.querySelectorAll('#dialogo-opciones li'), function (li) { return li.textContent; }); };
+      start(ctx);
+      c.plan = [];
+      g.player.pos.set(-6, 0, 2.5);
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      var total = g.archivo.total();
+      delete g.objetos.got.placa; g.historial.d.finales.verdadero = 0; // sin lo que dejaron otras pruebas
+      var v = c.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      g.player.pos.set(v.model.group.position.x + 1, 0, v.model.group.position.z + 1.5); // cerca: a más de 4 m deja la charla
+      // Una noche sin nada especial: las cuatro de siempre.
+      c.talk(v.id);
+      check(items().length === 5, 'sin nada especial no debería haber preguntas nuevas (' + items().length + ')');
+      g.closeDialog(); v.talked = false; v.talking = false;
+      // Pelusa se sentó a su lado y viste a la vigía: dos preguntas nuevas, primero.
+      v.catSat = true;
+      c.watcherNoticed = true;
+      g.objetos.got.placa = 1;
+      c.talk(v.id);
+      var list = items();
+      check(list.length === 7 && /Pelusa/.test(list[0]) && /otra vereda/.test(list[1]), 'faltan las preguntas nuevas: ' + list.join(' | '));
+      g.answerChoice(1);
+      check(sub().indexOf('Una cara blanca') >= 0, 'no respondió de Pelusa');
+      check(Object.keys(g.archivo.data.charla).some(function (k) { return k.indexOf('pelusa') === 0; }), 'la respuesta de Pelusa no quedó en el Archivo');
+      await wait(3700);
+      check(items().length === 6 && /otra vereda/.test(items()[0]), 'no siguió con la otra pregunta nueva: ' + items().join(' | ') + ' · diálogo ' + !!g.dialog + ' · hablando ' + v.talking);
+      g.closeDialog(); v.talked = false; v.talking = false;
+      // Sin Pelusa ni vigía, con la placa: la pista del puente.
+      v.catSat = false;
+      c.watcherNoticed = false;
+      c.talk(v.id);
+      check(/placa del puente/.test(items()[0]), 'no apareció la pregunta de la placa');
+      g.answerChoice(1);
+      check(/puente|bosque|bronce|embalse/.test(sub()), 'la respuesta de la placa no habla del puente: ' + sub());
+      // El Archivo cuenta las doce respuestas nuevas.
+      check(g.archivo.total() === total && g.archivo.view().filter(function (e) { return e.grupo === 'Lo que dijeron las caras blancas'; }).length === 24,
+        'el Archivo no cuenta las preguntas nuevas');
+      noErrors(ctx);
+      return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
     ['Bosque infinito: al fondo o al costado, un parpadeo te devuelve; a la segunda vuelta, la secadora solitaria', async function () {

@@ -637,6 +637,16 @@ El proyecto pasó por dos etapas:
 - **Canon:** las máscaras siguen sin hablar (la caja es un acto, no un mensaje), las caras siguen siendo inofensivas y él no ataca. `lore_check` sin contradicciones.
 - **QA:** prueba nueva con las tres variaciones. Revisado con captura del espejo: la cara se ve, pero con menos contraste que él (167 píxeles contra más de 300), así que esa prueba usa umbral 120. La caja se movió para no encimarse con la radio. PSX dentro de umbrales, 767/767 textos traducidos, 74/74.
 
+## 84. Sprint 8a: la charla recuerda tu noche (diálogos con Gemini)
+- Las caras blancas ahora tienen **cuatro preguntas que solo aparecen si pasó algo**, arriba de las de siempre (como mucho dos, para que la lista quepa en el celular):
+  - «¿Les cae bien Pelusa?», si Pelusa se sentó a su lado;
+  - «¿Quién las mira desde la otra vereda?», si viste a la vigía o a la que se despide;
+  - «¿Qué es esta placa del puente?», si tienes la placa: dos de las tres respuestas son la pista del secreto del puente;
+  - «¿Ustedes ven la mañana?», si alguna vez viste el amanecer.
+- **Gemini (agy, sin conexión desde la página):** escribió el borrador de las 12 respuestas con el canon en la tarea. Se revisó como dato: no traía instrucciones. Se cambiaron dos líneas (una respuesta sin lógica y una que asumía el género del empleado) y se ajustaron traducciones. `lore_check` sin contradicciones.
+- El Archivo cuenta las respuestas nuevas: su total ya no está fijo en 12, ahora se calcula.
+- **QA:** prueba nueva. De paso, las pruebas de charla ya no dependen del `localStorage` que dejan otras pruebas. Resultado: 75/75 y 784 textos traducidos.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

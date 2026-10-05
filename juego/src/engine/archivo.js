@@ -42,7 +42,12 @@
     count() { return Object.keys(this.data.paginas).length + Object.keys(this.data.radio).length + Object.keys(this.data.telefono).length +
       Object.keys(this.data.ordenes).length + Object.keys(this.data.charla).length; }
     total() { return MR.HISTORIA.paginas.length + MR.HISTORIA.radio.length + MR.HISTORIA.telefono.length +
-      MR.HISTORIA.blackwood.ordenes.length + 12; } // 12 = cuatro preguntas × tres respuestas
+      MR.HISTORIA.blackwood.ordenes.length + this._chatTotal(); }
+
+    _chatTotal() {
+      var ch = MR.HISTORIA.blackwood.charla;
+      return ch.preguntas.concat(ch.extra).reduce(function (n, q) { return n + ch[q[0]].length; }, 0);
+    }
 
     /** Entradas para el panel: [{grupo, titulo, texto, encabezado, hecho}]. */
     view() {
@@ -71,7 +76,7 @@
           texto: line, encabezado: 'ADMINISTRACIÓN DEL EMBALSE · ORDEN IMPRESA', hecho: have });
       });
       var ch = MR.HISTORIA.blackwood.charla;
-      ch.preguntas.forEach(function (q) {
+      ch.preguntas.concat(ch.extra).forEach(function (q) {
         ch[q[0]].forEach(function (line, i) {
           var have = !!d.charla[q[0] + i];
           out.push({ grupo: 'Lo que dijeron las caras blancas', titulo: have ? q[1] : MR.tf('{q} · ???', { q: MR.t(q[1]) }),

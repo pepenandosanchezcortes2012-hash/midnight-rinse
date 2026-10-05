@@ -307,6 +307,7 @@
       var me = this.mesh.root.position;
       if (Math.hypot(gp.x - me.x, gp.z - me.z) > 2.6) { return; }
       this.companyWith = null;
+      v.catSat = true; // la cara blanca ahora puede contarte de Pelusa (clientela.js)
       this.mesh.root.rotation.y = Math.atan2(gp.x - me.x, gp.z - me.z);
       this.timer = Math.max(this.timer, 8);
       if (!this.companySaid) {

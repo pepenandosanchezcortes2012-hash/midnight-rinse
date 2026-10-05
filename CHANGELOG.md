@@ -87,3 +87,9 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** la placa no sale de las lavadoras para que la caja tenga sentido como regalo. Un jugador que ya tenía los 15 objetos ve el contador subir a 16.
 - **Decisión:** la despedida y la cara del espejo son probabilísticas (50 % y 40 %), para que no se vuelvan rutina.
 - **Decisión:** en la prueba del espejo, el umbral de la cara blanca es menor que el de él. Se comprobó con captura que se ve; el abrigo pardo tiene menos contraste que el traje negro.
+
+## Sprint 8 — Lo que recuerdan, lo que mira Pelusa y el puente
+
+- 8a: preguntas condicionadas en la charla con las caras blancas (Gemini, revisado).
+- **Decisión:** como mucho dos preguntas nuevas por charla, primero las más inmediatas (Pelusa, vigía) y después las de memoria larga (placa, mañana). Con más de siete opciones la lista no cabe bien en un celular horizontal.
+- **Decisión:** las respuestas de la placa son la pista del puente del bosque. Así el secreto se puede descubrir sin guía.
