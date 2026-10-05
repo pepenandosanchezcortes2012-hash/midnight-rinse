@@ -1389,6 +1389,32 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Modelos: cada uno con su material (tus manos con tu piel, las de él pálidas, su rostro) y sus piezas', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var T = ctx.w.MR.Textures;
+      var tex = function (mesh) { return mesh.material.uniforms.map.value; };
+      start(ctx);
+      // Tus manos: la piel del jugador (en el Sprint 12 se pisó por error con la de él).
+      check(tex(g.player.left.children[0]) === T.get('skin') && tex(g.player.right.children[0]) === T.get('skin'), 'tus manos no usan tu piel');
+      // Él: manos pálidas y lisas, y el rostro nuevo solo en la cara.
+      var standing = g.world.customer.standing;
+      var pale = [];
+      standing.traverse(function (o) { if (o.isMesh && !Array.isArray(o.material) && tex(o) === T.get('paleSkin')) { pale.push(o); } });
+      check(pale.length === 2, 'él no tiene sus dos manos pálidas (' + pale.length + ')');
+      var face = g.world.standingHead.material;
+      check(Array.isArray(face) && face[5].uniforms.map.value === T.get('rostro'), 'su cara no usa el rostro');
+      // Pelusa: orejas, collar y plaquita.
+      check(g.gato.mesh.ears.length === 2, 'Pelusa sin orejas');
+      // La clientela: brazos y piernas articulados.
+      ['cara', 'mascara'].forEach(function (k) {
+        var m = g.clientela._model(k);
+        check(m.legs.length === 2 && m.armL && m.armR && m.armR.children.length >= 2, k + ': faltan articulaciones o manos');
+      });
+      noErrors(ctx);
+      return 'manos · él · rostro · Pelusa · articulaciones';
+    }],
+
     ['Favores y regalos: la moneda para la secadora, lo que trae Pelusa del bosque y el 86 bajo el agua', async function () {
       var ctx = await load();
       var g = ctx.g;

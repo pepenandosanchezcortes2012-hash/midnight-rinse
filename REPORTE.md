@@ -737,6 +737,11 @@ El proyecto pasó por dos etapas:
   - el visitante que llegaba en ese cuadro quedaba a media zancada.
 - **QA:** verificaciones nuevas (balanceo al cruzar y reposo al llegar), galería con vistas del entorno y fuzz corto de 3 turnos sin errores. Resultado: 80/80.
 
+## 93. Corrección: tus manos volvieron a tener tu piel
+- **El error:** en el Sprint 12 definí `m.skin` para las manos pálidas de él, sin ver que `m.skin` ya existía: es la piel del jugador. La definición nueva pisó la vieja, y **desde el Sprint 12 (commit 0529a4c) tus manos se veían grises y pálidas**, como las de él. Ninguna prueba lo detectó.
+- **La corrección:** las manos de él usan su propio material (`m.paleHand`), y `m.skin` vuelve a ser tu piel.
+- **Para que no se repita:** prueba nueva «Modelos». Verifica que tus manos usan la textura `skin`, que él tiene sus dos manos pálidas y lisas y el rostro nuevo en la cara, que Pelusa tiene orejas y que la clientela tiene articulaciones y manos. Resultado: 81/81.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

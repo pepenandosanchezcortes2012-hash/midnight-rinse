@@ -75,7 +75,7 @@
       m.coat = R.material({ texture: 'coat' });
       m.skin = R.material({ texture: 'skin' });
       m.face = R.material({ texture: 'rostro' });
-      m.skin = R.material({ texture: 'paleSkin' });
+      m.paleHand = R.material({ texture: 'paleSkin' }); // las manos de él (m.skin es la piel del jugador)
       m.hair = R.material({ texture: 'black' });
       m.water = R.material({ texture: 'water', emissive: 0.15 });
       m.darkWater = R.material({ texture: 'darkWater', emissive: 0.05 });
@@ -597,8 +597,8 @@
       this.box(0.52, 0.09, 0.3, m.coat, 0, 1.18, 0.02, seated);   // hombros
       this.box(0.1, 0.5, 0.12, m.coat, -0.29, 0.78, -0.06, seated);
       this.box(0.1, 0.5, 0.12, m.coat, 0.29, 0.78, -0.06, seated);
-      this.box(0.08, 0.09, 0.08, m.skin, -0.29, 0.5, -0.1, seated);  // manos sobre las rodillas
-      this.box(0.08, 0.09, 0.08, m.skin, 0.29, 0.5, -0.1, seated);
+      this.box(0.08, 0.09, 0.08, m.paleHand, -0.29, 0.5, -0.1, seated);  // manos sobre las rodillas
+      this.box(0.08, 0.09, 0.08, m.paleHand, 0.29, 0.5, -0.1, seated);
       this.box(0.3, 0.17, 0.05, m.coat, 0, 1.28, 0.13, seated);    // el cuello del abrigo, levantado
       this.box(0.05, 0.17, 0.2, m.coat, -0.14, 1.28, 0.03, seated);
       this.box(0.05, 0.17, 0.2, m.coat, 0.14, 1.28, 0.03, seated);
@@ -614,8 +614,8 @@
       this.box(0.6, 0.1, 0.34, m.coat, 0, 1.9, 0, standing);    // hombros
       this.box(0.1, 0.92, 0.12, m.coat, -0.31, 1.24, 0, standing);
       this.box(0.1, 0.92, 0.12, m.coat, 0.31, 1.24, 0, standing);
-      this.box(0.08, 0.12, 0.08, m.skin, -0.31, 0.72, 0, standing); // manos pálidas, largas
-      this.box(0.08, 0.12, 0.08, m.skin, 0.31, 0.72, 0, standing);
+      this.box(0.08, 0.12, 0.08, m.paleHand, -0.31, 0.72, 0, standing); // manos pálidas, largas
+      this.box(0.08, 0.12, 0.08, m.paleHand, 0.31, 0.72, 0, standing);
       this.box(0.3, 0.2, 0.05, m.coat, 0, 2.0, 0.13, standing);     // el cuello del abrigo, levantado hasta la cara
       this.box(0.05, 0.2, 0.22, m.coat, -0.145, 2.0, 0.02, standing);
       this.box(0.05, 0.2, 0.22, m.coat, 0.145, 2.0, 0.02, standing);
