@@ -859,6 +859,16 @@ El proyecto pasó por dos etapas:
 - **Para el jugador:** si Pelusa (o una cara) mira fijo hacia un lado, **algo pasó ahí**. Es una pista nueva que sale sola de los sistemas que ya existían.
 - **QA:** prueba nueva (Pelusa voltea hacia el golpe en la secadora y hacia el teléfono; la cara blanca, hacia un ruido a sus espaldas). La primera versión hacía que Pelusa mirara entre el teléfono y tú (el anillo promediaba). Se ajustaron los pesos del sonido. Resultado: 86/86.
 
+## 105. Sprint 25: «Pelusa · lo que recuerda» (el cerebro de mosca, a la vista)
+- **Panel nuevo en la pantalla de título:** lee el cuerpo fungiforme de su cerebro de mosca y lo dice en palabras:
+  - **cariño por ti:** «Todavía no te conoce» → «Se está acostumbrando a ti» → «Te tiene cariño» (desde ahí, a veces deja su rutina para ir contigo) → «Te adora»;
+  - **miedos:** «Le teme a las máscaras», «Le teme a él»;
+  - **el niño:** «Quiere al niño», si el niño de impermeable amarillo le hizo cariño;
+  - si nada la asustó: «No le teme a nada. Todavía.»
+- El resumen del panel muestra el estado («te tiene cariño») y se actualiza al cargar y al terminar cada turno.
+- **Texto:** Pelusa no tiene género en los textos («el gato», «le hizo cariño»). Se corrigieron tres frases que decían «la».
+- **QA:** prueba nueva (sin recuerdos dice «no te conoce»; con caricias y un susto, otra noche dice «te tiene cariño» y «le teme a las máscaras»). Captura revisada. 914 textos traducidos. Resultado: 87/87.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

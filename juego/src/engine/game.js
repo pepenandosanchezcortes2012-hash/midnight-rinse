@@ -63,6 +63,7 @@
       this.fotos = new MR.Fotos(this);
       this.ui.renderFotos(this.fotos);
       this.ui.renderHistorial(this.historial);
+      this.ui.renderPelusa(this.gato);
       this.ui.renderLogros(this.logros);
       this.ui.renderObjetos(this.objetos);
       this.ui.renderArchivo(this.archivo);
@@ -993,6 +994,7 @@
         summary.splice(1, 0, MR.tf('¡Nuevo récord en {d}!', { d: MR.t(diff.nombre) }));
       }
       this.ui.renderHistorial(this.historial);
+      this.ui.renderPelusa(this.gato);
       // Logros del final del turno.
       var L = this.logros;
       L.unlock('primer_turno');

@@ -597,6 +597,26 @@
       });
     }
 
+    /**
+     * Lo que recuerda su cerebro de mosca (el cuerpo fungiforme), para el panel «Pelusa» de la pantalla de título:
+     * cuánto cariño te tiene y qué la asusta.
+     */
+    recuerdos() {
+      var b = this.brain;
+      var C = MR.Mosca.CTX;
+      var v = b.valencia(C.jugador);
+      var nivel = v > 0.45 ? ['Te adora', 'Te sigue cuando puede y nunca se aparta de tus caricias.', 'te adora'] :
+        v > 0.25 ? ['Te tiene cariño', 'A veces deja lo que estaba haciendo para ir contigo.', 'te tiene cariño'] :
+        v > 0.08 ? ['Se está acostumbrando a ti', 'Unas caricias más y empezará a seguirte.', 'se acostumbra a ti'] :
+        ['Todavía no te conoce', 'Acaricia a Pelusa: su cerebro de mosca recuerda quién lo hace.', 'no te conoce'];
+      var lista = [{ titulo: nivel[0], desc: nivel[1], hecho: v > 0.25 }];
+      if (b.valencia(C.mascara) < -0.15) { lista.push({ titulo: 'Le teme a las máscaras', desc: 'Les bufó una vez y no lo olvida.', hecho: true }); }
+      if (b.valencia(C.el) < -0.15) { lista.push({ titulo: 'Le teme a él', desc: 'Si él anda cerca, se sube a lo alto.', hecho: true }); }
+      if (b.valencia(C.nino) > 0.1) { lista.push({ titulo: 'Quiere al niño', desc: 'El niño de impermeable amarillo le hizo cariño.', hecho: true }); }
+      if (lista.length === 1) { lista.push({ titulo: 'No le teme a nada', desc: 'Todavía.', hecho: false }); }
+      return { estado: nivel[2], lista: lista, valencia: v };
+    }
+
     /** Guarda lo que aprendió (entre noches; «Reiniciar todo» lo borra). */
     _remember() {
       try { window.localStorage.setItem(MEMORIA, JSON.stringify(this.brain.exportar())); } catch (e) { /* sin almacenamiento */ }

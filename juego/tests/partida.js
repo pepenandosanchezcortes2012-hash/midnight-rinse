@@ -1398,6 +1398,34 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Panel «Pelusa»: la pantalla de título muestra lo que recuerda su cerebro de mosca (cariño y miedos)', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var d = ctx.w.document;
+      var M = ctx.w.MR.Mosca;
+      var lista = function () { return d.getElementById('pelusa-lista').textContent; };
+      check(d.getElementById('pelusa-estado').textContent === 'no te conoce' && lista().indexOf('Todavía no te conoce') >= 0, 'sin recuerdos no dice «no te conoce»');
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true;
+      var cat = g.gato;
+      cat.perch = null; cat.route = []; cat.state = 'sentado'; cat.timer = 99;
+      cat.mesh.root.position.set(-1, 0, -2);
+      g.player.pos.set(-1.2, 0, -1.2);
+      for (var i = 0; i < 3; i += 1) { cat.petCooldown = 0; cat.pet(); step(ctx, 3); }
+      // Un susto con una máscara cerca (directo en el cuerpo fungiforme).
+      var b = cat.brain;
+      b.limpiar(); b.contexto(M.CTX.mascara, 1); b.castigar(1); b._tick(); b._tick();
+      cat._remember();
+      noErrors(ctx);
+      // Otra noche, en la pantalla de título.
+      ctx = await load('?memoria');
+      d = ctx.w.document;
+      check(d.getElementById('pelusa-estado').textContent === 'te tiene cariño', 'el panel no muestra el cariño (' + d.getElementById('pelusa-estado').textContent + ')');
+      check(lista().indexOf('Te tiene cariño') >= 0 && lista().indexOf('Le teme a las máscaras') >= 0, 'faltan recuerdos en el panel: ' + lista());
+      noErrors(ctx);
+      return '«no te conoce» → «te tiene cariño» · le teme a las máscaras';
+    }],
+
     ['El oído del cerebro de mosca: Pelusa voltea hacia donde sonó algo (una secadora, el teléfono) y las caras también', async function () {
       var ctx = await load();
       var g = ctx.g;

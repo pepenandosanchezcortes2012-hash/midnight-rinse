@@ -190,3 +190,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Los sonidos del juego entran al cerebro de mosca: Pelusa y las caras blancas voltean hacia donde sonó algo.
 - **Decisión:** el sonido pesa más y llega más lejos que lo que se ve. Así gana la competencia en el anillo, como un sobresalto.
+
+## Sprint 25 — Lo que recuerda Pelusa
+
+- Panel en la pantalla de título con lo que aprendió su cerebro de mosca: cariño, miedos y el niño.
+- **Decisión:** se muestra en palabras, no en números. El jugador entiende el cariño sin ver la neurociencia, aunque todo sale de las sinapsis del cuerpo fungiforme.

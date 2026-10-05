@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 47, texto: 'Nuevo panel: «Pelusa · lo que recuerda». ¿Ya te tiene cariño?' },
     { id: 46, texto: 'Si Pelusa mira fijo hacia un lado, algo sonó ahí.' },
     { id: 45, texto: 'Las ventanas de enfrente tienen vida. Mira bien: alguna noche, alguien te devuelve la mirada… casi.' },
     { id: 44, texto: 'Modelos nuevos en todas partes: el teléfono, la caldera, la farola… y tus manos (con reloj).' },

@@ -214,6 +214,14 @@
       this._renderList($('historial-lista'), historial.view(), '▣', '□');
     }
 
+    /** Panel «Pelusa»: lo que recuerda su cerebro de mosca (cariño y miedos). */
+    renderPelusa(gato) {
+      if (!gato || !gato.brain || !$('pelusa-lista')) { return; }
+      var r = gato.recuerdos();
+      $('pelusa-estado').textContent = MR.t(r.estado);
+      this._renderList($('pelusa-lista'), r.lista, '♥', '·');
+    }
+
     /** Panel «Fotos»: miniaturas (la más nueva primero); tocar una la abre en grande. */
     renderFotos(fotos) {
       $('fotos-cuenta').textContent = String(fotos.count());
