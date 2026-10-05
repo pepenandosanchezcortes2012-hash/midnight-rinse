@@ -224,7 +224,7 @@
       s.t += dt;
       s.x -= 4.5 * dt;
       m.position.set(s.x, this.c.water.position.y + 0.02, 9.9);
-      this.c.ghostMat.uniforms.uEmissive.value = 0.55 + Math.sin(s.t * 6) * 0.15; // el agua la deforma
+      this.c.ghostMat.uniforms.uEmissive.value = 0.7 + Math.sin(s.t * 6) * 0.18; // el agua la hace ondular
       if (!this.ghostSeen && this._seen(s.x, m.position.y, 9.9)) {
         this.ghostSeen = true;
         g.ui.subtitle('(Bajo el agua de la avenida pasa una franja de luz, despacio, como las ventanas de un autobús.)', 6);

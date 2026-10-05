@@ -275,7 +275,7 @@ Abre `juego/pruebas.html` (en local o en GitHub Pages) y pulsa **Correr pruebas*
 - **Qué cubre:** arranque, lienzo opaco, guía de controles, consumibles, enlaces de la tele, bosque (salir, caminar, chocar, volver), el Cliente Inmóvil en el bosque, un turno completo, la app instalable y «Reiniciar todo».
 - **Tus datos:** respalda y restaura lo que tengas guardado.
 - **Modo automático:** `pruebas.html?auto` arranca solo.
-- **Sin abrir el navegador:** con el servidor local corriendo (`py -m http.server 8765 --bind 127.0.0.1` desde `juego/`), `py juego/herramientas/probar.py` las corre en un Chrome sin ventana, con un perfil temporal, y muestra cuántas pasaron.
+- **Sin abrir el navegador:** `py juego/herramientas/probar.py` las corre (si no hay servidor local, levanta uno temporal) en un Chrome sin ventana, con un perfil temporal, y muestra cuántas pasaron.
 
 ## Publicar una versión nueva
 

@@ -771,7 +771,7 @@
       bus.visible = false;
       group.add(bus);
       // El 86 bajo el agua (ciudad.js): ya inundada la avenida, una franja de luz pasa por debajo de la superficie.
-      var ghostMat = R.material({ texture: 'water', color: 0xd8b060, emissive: 0.6 });
+      var ghostMat = R.material({ texture: 'white', color: 0xc9a85a, emissive: 0.75 }); // el ámbar de los vidrios del 86
       var ghostBus = new THREE.Mesh(new THREE.PlaneGeometry(5.6, 0.8), ghostMat);
       ghostBus.rotation.x = -Math.PI / 2;
       ghostBus.visible = false;

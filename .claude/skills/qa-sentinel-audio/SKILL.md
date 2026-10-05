@@ -8,7 +8,7 @@ description: Auditor de pruebas de Midnight Rinse. Úsala después de cada cambi
 Su trabajo es prevenir regresiones y que GitHub Pages nunca dé 404.
 
 - **Herramienta:** `py .claude/skills/qa-sentinel-audio/centinela.py [completo]`.
-- **Requisito:** el servidor local (`py -m http.server 8765 --bind 127.0.0.1` desde `juego/`).
+- **Servidor:** no hace falta encenderlo. Si no hay uno en 127.0.0.1:8765, las herramientas levantan uno temporal (`juego/herramientas/servidor.py`) y lo apagan al terminar.
 
 ## Qué revisa
 | Paso | Qué | Por qué |

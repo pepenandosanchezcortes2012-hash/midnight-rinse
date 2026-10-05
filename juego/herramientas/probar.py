@@ -3,7 +3,7 @@ Corre las pruebas de partida (pruebas.html?auto) en un Chrome sin ventana y mues
 
   py herramientas/probar.py [url] [--todo]   (por defecto http://127.0.0.1:8765/pruebas.html?auto; --todo muestra cada prueba)
 
-Necesita el servidor local (py -m http.server 8765 --bind 127.0.0.1 desde juego/). Usa un perfil temporal, así que no
+Si no hay servidor local en 127.0.0.1:8765, levanta uno temporal (servidor.py). Usa un perfil temporal, así que no
 toca el Chrome de todos los días. Chrome espera en tiempo virtual hasta que las pruebas terminan y entrega el HTML final.
 """
 import html
@@ -12,6 +12,8 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
+from servidor import servidor
 
 CHROMES = [Path(r'C:\Program Files\Google\Chrome\Application\chrome.exe'),
            Path(r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'),
@@ -26,7 +28,7 @@ def main():
     chrome = next((c for c in CHROMES if c.exists()), None)
     if not chrome:
         sys.exit('no encontré Chrome ni Edge')
-    with tempfile.TemporaryDirectory() as perfil:
+    with servidor(), tempfile.TemporaryDirectory() as perfil:
         p = subprocess.run([str(chrome), '--headless=new', '--no-first-run', '--no-default-browser-check', '--mute-audio',
                             '--user-data-dir=' + perfil, '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
                             '--window-size=1036,647', '--autoplay-policy=no-user-gesture-required',

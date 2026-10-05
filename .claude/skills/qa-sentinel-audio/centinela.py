@@ -101,13 +101,7 @@ def pruebas(completo):
     fal = re.search(r'fail (\d+)', p.stdout)
     ok(p.returncode == 0 and fal and fal.group(1) == '0', 'node: %s pasan, %s fallan' % (pas.group(1) if pas else '?', fal.group(1) if fal else '?'))
     print('6. Partida en Chrome sin ventana')
-    try:
-        urllib.request.urlopen('http://127.0.0.1:8765/pruebas.html', timeout=5)
-        servidor = True
-    except Exception:
-        servidor = False
-    ok(servidor, 'servidor local en 127.0.0.1:8765 (py -m http.server 8765 --bind 127.0.0.1 desde juego/)')
-    if servidor:
+    if True:  # probar.py levanta un servidor temporal si no hay uno corriendo
         p = subprocess.run([sys.executable, str(JUEGO / 'herramientas' / 'probar.py')], capture_output=True, text=True,
                            encoding='utf-8', errors='replace', timeout=900)
         print('    ' + p.stdout.strip().replace('\n', '\n    '))

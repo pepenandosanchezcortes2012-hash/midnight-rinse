@@ -62,13 +62,10 @@ def invariantes():
 
 def medir():
     print('Medición por área (Chrome sin ventana)')
-    try:
-        urllib.request.urlopen('http://127.0.0.1:8765/index.html', timeout=5)
-    except Exception:
-        ok(False, 'servidor local en 127.0.0.1:8765 (py -m http.server 8765 --bind 127.0.0.1 desde juego/)')
-        return
+    sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'juego' / 'herramientas'))
+    from servidor import servidor  # si no hay servidor local, uno temporal mientras mide
     chrome = next((c for c in CHROMES if c.exists()), None)
-    with tempfile.TemporaryDirectory() as perfil:
+    with servidor(), tempfile.TemporaryDirectory() as perfil:
         p = subprocess.run([str(chrome), '--headless=new', '--no-first-run', '--mute-audio', '--user-data-dir=' + perfil,
                             '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--window-size=1036,647',
                             '--virtual-time-budget=60000', '--dump-dom', 'http://127.0.0.1:8765/tests/rendimiento.html'],

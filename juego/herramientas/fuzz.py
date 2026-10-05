@@ -6,7 +6,7 @@ Pasada de robustez: turnos completos con semilla (tests/fuzz.html) en un Chrome 
 Cada turno combina una noche especial, una dificultad y un idioma, y hace acciones al azar: caminar, parpadear,
 salir al bosque y al pasillo, responder, conversar, acariciar al gato, sacar fotos y tocar lo que esté cerca. Uno de
 cada seis va al final verdadero y cruza la puerta del amanecer. Falla si algún turno lanza un error o no termina.
-Necesita el servidor local (py -m http.server 8765 --bind 127.0.0.1 desde juego/). Tarda ~1 minuto por turno.
+Si no hay servidor local en 127.0.0.1:8765, levanta uno temporal (servidor.py). Tarda ~1 minuto por turno.
 """
 import html
 import re
@@ -15,6 +15,7 @@ import sys
 import tempfile
 
 from probar import CHROMES
+from servidor import servidor
 
 
 def main():
@@ -25,7 +26,7 @@ def main():
     chrome = next((c for c in CHROMES if c.exists()), None)
     if not chrome:
         sys.exit('no encontré Chrome ni Edge')
-    with tempfile.TemporaryDirectory() as perfil:
+    with servidor(), tempfile.TemporaryDirectory() as perfil:
         p = subprocess.run([str(chrome), '--headless=new', '--no-first-run', '--no-default-browser-check', '--mute-audio',
                             '--user-data-dir=' + perfil, '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
                             '--autoplay-policy=no-user-gesture-required',
