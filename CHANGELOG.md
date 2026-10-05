@@ -128,3 +128,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** el rostro de él sigue siendo pequeño y está en sombra. Asusta más lo que apenas se ve, y el juego pide no mirarlo a la cara.
 - **Decisión:** el collar de Pelusa queda casi oculto bajo la cabeza, como en un gato de verdad; se ve de costado.
 - Herramientas: servidor temporal en las pruebas (ya no hace falta dejar uno encendido).
+
+## Sprint 13 — La clientela camina
+
+- Brazos y piernas con articulación: las caras blancas balancean al caminar y las máscaras caminan rígidas.
+- **Decisión:** balanceo de 0,42 rad para las caras y de 0,16 para las máscaras. La rigidez de la Administración se nota sin decir nada.

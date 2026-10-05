@@ -1534,10 +1534,15 @@
       g.gameplay.messageCooldown = {};
       ci.look();
       check(sub().indexOf('autobús 86 espera') >= 0, 'la vidriera no habló del autobús');
+      // Cruza caminando: brazos y piernas se balancean (y al llegar, quietos).
+      var swing = 0;
+      for (var sw = 0; sw < 12 && c.approach; sw += 1) { step(ctx, 1); swing = Math.max(swing, Math.abs(c.approach.model.legs[0].rotation.x)); }
+      check(swing > 0.2, 'cruzó sin mover las piernas (' + swing.toFixed(2) + ')');
       // Cruzan, entran y ponen a lavar.
       for (var j = 0; j < 30 * 45 && !(c.visitors.length === 2 && c.visitors.every(function (v) { return v.state === 'llego'; })); j += 1) { step(ctx, 1); }
       check(c.visitors.length === 2 && c.visitors.every(function (v) { return v.state === 'llego'; }), 'no llegaron las dos (' + c.visitors.length + ')');
       check(!ci.bus.active && !city.bus.visible, 'el autobús no se fue');
+      check(c.visitors.every(function (v) { return v.model.legs[0].rotation.x === 0 && v.model.armR.rotation.x === 0; }), 'siguen moviendo las piernas parados');
       // Hablan entre ellas (tú, lejos).
       for (var k = 0; k < 30 * 6 && sub().indexOf('a la otra') < 0; k += 1) { step(ctx, 1); }
       check(sub().indexOf('Una cara blanca, a la otra') >= 0, 'no hablaron entre ellas');

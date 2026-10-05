@@ -724,6 +724,19 @@ El proyecto pasó por dos etapas:
 - **Código:** el modelo de la clientela devuelve el brazo derecho por nombre (`armR`). La despedida ya no depende del orden de las piezas.
 - **QA:** dos verificaciones nuevas (las orejas hacia atrás y la mano en alto en la despedida). PSX dentro de umbrales; cada modelo suma pocas llamadas, y solo cuando está en pantalla. Resultado: 80/80.
 
+## 92. Sprint 13: la clientela camina de verdad
+- **Articulaciones:** las piernas de las caras blancas y de las máscaras ahora giran desde la cadera, y los brazos desde el hombro (con la mano o el guante colgando).
+- **Al caminar:**
+  - las caras blancas balancean brazos y piernas, también al cruzar la avenida;
+  - las máscaras caminan más rígidas, con poco balanceo;
+  - si te paras en su camino, esperan quietas. Al llegar, quedan en reposo (antes podían quedarse congeladas a media zancada).
+- **La despedida:** el brazo gira desde el hombro. Ya no hay que acomodar su altura a mano.
+- **El sombrero que queda en el banco** ahora es el mismo que lleva puesto (cinta y ala caída).
+- **Errores encontrados por las pruebas y corregidos:**
+  - con las articulaciones, la lista de objetos tocables recibía grupos sin `interact`. Ahora se registran todas las piezas del modelo, también las que cuelgan de una articulación, y se quitan igual al irse;
+  - el visitante que llegaba en ese cuadro quedaba a media zancada.
+- **QA:** verificaciones nuevas (balanceo al cruzar y reposo al llegar), galería con vistas del entorno y fuzz corto de 3 turnos sin errores. Resultado: 80/80.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

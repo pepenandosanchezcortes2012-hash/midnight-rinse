@@ -44,25 +44,40 @@
       var g = new THREE.Group();
       var head;
       var armR;
+      var armL;
+      var legs;
+      // Una articulación (cadera u hombro): lo que cuelga de ella gira con ella.
+      function joint(x, y) {
+        var j = new THREE.Group();
+        j.position.set(x, y, 0);
+        g.add(j);
+        return j;
+      }
       if (kind === 'cara') {
         var coat = R.material({ texture: 'white', color: COATS[Math.floor(Math.random() * COATS.length)] });
         var wet = R.material({ texture: 'white', color: 0x2b2f33 });
         var pale = R.material({ texture: 'white', color: 0xe9e7e0, emissive: 0.3 }); // cuello y manos, tan blancos como la cara
         var shoe = R.material({ texture: 'white', color: 0x17181a });
-        // Pantalón empapado y zapatos.
-        w.box(0.12, 0.66, 0.14, wet, -0.09, 0.41, 0, g);
-        w.box(0.12, 0.66, 0.14, wet, 0.09, 0.41, 0, g);
-        w.box(0.13, 0.08, 0.21, shoe, -0.09, 0.04, -0.03, g);
-        w.box(0.13, 0.08, 0.21, shoe, 0.09, 0.04, -0.03, g);
+        // Pantalón empapado y zapatos (cada pierna gira desde la cadera al caminar).
+        legs = [-0.09, 0.09].map(function (lx) {
+          var hip = joint(lx, 0.74);
+          w.box(0.12, 0.66, 0.14, wet, 0, -0.33, 0, hip);
+          w.box(0.13, 0.08, 0.21, shoe, 0, -0.7, -0.03, hip);
+          return hip;
+        });
         // Abrigo largo que se abre hacia abajo (seis caras, como en PS1), con hombros.
         var coatBody = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.27, 0.92, 6), coat);
         coatBody.position.set(0, 1.1, 0);
         coatBody.rotation.y = Math.PI / 6;
         g.add(coatBody);
         w.box(0.46, 0.09, 0.25, coat, 0, 1.56, 0, g);
-        var armL = w.box(0.09, 0.62, 0.11, coat, -0.255, 1.24, 0, g);
-        armR = w.box(0.09, 0.62, 0.11, coat, 0.255, 1.24, 0, g);
-        [armL, armR].forEach(function (a) { w.box(0.07, 0.09, 0.07, pale, 0, -0.355, 0, a); }); // las manos
+        // Brazos desde el hombro, con la mano pálida.
+        armL = joint(-0.255, 1.55);
+        armR = joint(0.255, 1.55);
+        [armL, armR].forEach(function (a) {
+          w.box(0.09, 0.62, 0.11, coat, 0, -0.31, 0, a);
+          w.box(0.07, 0.09, 0.07, pale, 0, -0.665, 0, a);
+        });
         var bag = w.box(0.34, 0.3, 0.22, R.material({ texture: 'white', color: 0x7a7d80 }), 0.36, 0.8, -0.05, g); // la ropa empapada
         bag.rotation.z = 0.1;
         var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.1, 6), pale);
@@ -79,14 +94,19 @@
         var lapel = R.material({ texture: 'white', color: 0x262830 });
         var shirt = R.material({ texture: 'white', color: 0xd9d7d0, emissive: 0.1 });
         var glove = R.material({ texture: 'white', color: 0x0b0b0d });
-        w.box(0.15, 1.0, 0.17, suit, -0.1, 0.5, 0, g);
-        w.box(0.15, 1.0, 0.17, suit, 0.1, 0.5, 0, g);
+        legs = [-0.1, 0.1].map(function (lx) {
+          var hip = joint(lx, 1.0);
+          w.box(0.15, 1.0, 0.17, suit, 0, -0.5, 0, hip);
+          return hip;
+        });
         w.box(0.5, 0.85, 0.3, suit, 0, 1.42, 0, g);
         w.box(0.58, 0.1, 0.33, suit, 0, 1.82, 0, g);                 // hombreras
-        w.box(0.09, 0.85, 0.11, suit, -0.3, 1.38, 0, g);
-        armR = w.box(0.09, 0.85, 0.11, suit, 0.3, 1.38, 0, g);
-        w.box(0.09, 0.11, 0.09, glove, -0.3, 0.91, 0, g);            // guantes
-        w.box(0.09, 0.11, 0.09, glove, 0.3, 0.91, 0, g);
+        armL = joint(-0.3, 1.8);
+        armR = joint(0.3, 1.8);
+        [armL, armR].forEach(function (a) {
+          w.box(0.09, 0.85, 0.11, suit, 0, -0.425, 0, a);
+          w.box(0.09, 0.11, 0.09, glove, 0, -0.89, 0, a);              // guantes
+        });
         w.box(0.18, 0.36, 0.02, shirt, 0, 1.63, -0.153, g);          // camisa blanca: la corbata y la máscara contrastan
         w.box(0.05, 0.42, 0.02, R.material({ texture: 'white', color: 0x3a3c42 }), 0, 1.55, -0.166, g); // corbata
         [-1, 1].forEach(function (s) {
@@ -101,7 +121,16 @@
         g.add(head);
       }
       g.visible = true;
-      return { group: g, head: head, armR: armR };
+      return { group: g, head: head, armR: armR, armL: armL, legs: legs };
+    }
+
+    /** Brazos y piernas al caminar (amp 0 = quietos). Las máscaras caminan más rígidas. */
+    _limbs(model, phase, amp) {
+      var s = Math.sin(phase) * amp;
+      model.legs[0].rotation.x = s;
+      model.legs[1].rotation.x = -s;
+      model.armL.rotation.x = -s * 0.8;
+      model.armR.rotation.x = s * 0.8;
     }
 
     // -------------------------------------------------------------------------------------------- afuera
@@ -133,6 +162,7 @@
       a.model.group.rotation.y = Math.atan2(-dx, -dz);
       a.bob = (a.bob || 0) + dt * 7;
       pos.y = 0.12 + Math.abs(Math.sin(a.bob)) * 0.03;
+      this._limbs(a.model, a.bob, 0.42);
     }
 
     /**
@@ -194,9 +224,7 @@
       if (g.bosque.outside || g.pasillo.inside) { return; }
       if (!this.waver) {
         this.waver = this._model('cara');
-        var arm = this.waver.armR;
-        arm.rotation.z = Math.PI;      // el brazo, arriba
-        arm.position.y = 1.78;
+        this.waver.armR.rotation.z = Math.PI; // el brazo, arriba (gira desde el hombro)
         this.world.add(this.waver.group);
       }
       this.waver.group.position.set(U.rand(3.8, 7.0), 0.12, 12.0);
@@ -261,8 +289,11 @@
       model.group.position.set(ENTRY.x, 0, ENTRY.z);
       this.world.add(model.group);
       var id = this.nextId++;
-      model.group.traverse(function (o) { if (o.isMesh) { o.userData.interact = { kind: 'visitante', index: id }; } });
-      model.group.children.forEach(function (o) { this.world.interactables.push(o); }, this);
+      // Todas sus piezas se pueden tocar (también las que cuelgan de una articulación: brazos y piernas).
+      var parts = [];
+      model.group.traverse(function (o) { if (o.isMesh) { o.userData.interact = { kind: 'visitante', index: id }; parts.push(o); } });
+      model.parts = parts;
+      Array.prototype.push.apply(this.world.interactables, parts);
       var v = { id: id, kind: kind, model: model, path: target.path.slice(), rot: target.rot, washer: target.washer, state: 'entra', timer: 0, said: false };
       this.visitors.push(v);
       g.audio.door();
@@ -273,7 +304,7 @@
       var w = this.world;
       w.scene.remove(v.model.group);
       for (var i = w.interactables.length - 1; i >= 0; i -= 1) {
-        if (v.model.group.children.indexOf(w.interactables[i]) >= 0) { w.interactables.splice(i, 1); }
+        if (v.model.parts.indexOf(w.interactables[i]) >= 0) { w.interactables.splice(i, 1); }
       }
       this.visitors = this.visitors.filter(function (x) { return x !== v; });
     }
@@ -440,6 +471,7 @@
           v.state = 'llego';
           v.timer = 0;
           grp.rotation.y = v.rot;
+          this._limbs(v.model, 0, 0); // llega y se queda quieto (no a media zancada)
           this._arrive(v);
           return;
         }
@@ -449,15 +481,17 @@
         // Si estás en su camino, espera (nunca te empuja ni te atraviesa).
         var pp = g.player.pos;
         var ahead = Math.hypot(pp.x - (pos.x + dx / Math.max(d, 0.01) * 0.5), pp.z - (pos.z + dz / Math.max(d, 0.01) * 0.5));
-        if (ahead < 0.55) { return; }
+        if (ahead < 0.55) { this._limbs(v.model, 0, 0); return; }
         var stepLen = SPEED * dt;
         if (d <= stepLen) { pos.set(tgt[0], 0, tgt[1]); v.path.shift(); }
         else { pos.x += dx / d * stepLen; pos.z += dz / d * stepLen; }
         grp.rotation.y = Math.atan2(-dx, -dz);
         v.bob = (v.bob || 0) + dt * 7;
         pos.y = Math.abs(Math.sin(v.bob)) * 0.03;
+        this._limbs(v.model, v.bob, v.kind === 'cara' ? 0.42 : 0.16);
       } else if (v.state === 'llego') {
         v.timer += dt;
+        this._limbs(v.model, 0, 0);
         if (v.kind === 'cara') {
           // Nunca te mira: si lo miras de cerca, gira la cara hacia otro lado.
           var lookAt = this._watched(v);
