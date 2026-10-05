@@ -485,8 +485,11 @@
     _bulletin(i) {
       if (this.gameplay.radioProximity <= 0.35 || (this.night || 1) > MR.HISTORIA.radio.length) { return; }
       var ci = this.ciudad;
-      var key = ['apertura', ci.busStopped ? 'bus86' : (ci.sweepDone ? 'barredora' : 'embalse'),
-        this.bosque.plaquePlaced ? 'puente' : 'embalse', 'cierre'][i];
+      // Si tus fotos revelaron algo, el locutor se entera (a las 02:10, si no pasó el 86; o a las 03:30).
+      var fotos = !!(this.fotos.reveladas && Object.keys(this.fotos.reveladas).length) && !(this.usedBulletins || {}).fotosDicho;
+      var key = ['apertura', ci.busStopped ? 'bus86' : (fotos ? 'fotos' : (ci.sweepDone ? 'barredora' : 'embalse')),
+        this.bosque.plaquePlaced ? 'puente' : (fotos ? 'fotos' : 'embalse'), 'cierre'][i];
+      if (key === 'fotos') { (this.usedBulletins || (this.usedBulletins = {})).fotosDicho = true; }
       var used = this.usedBulletins || (this.usedBulletins = {});
       var list = MR.HISTORIA.boletines[key];
       var free = list.map(function (l, n) { return n; }).filter(function (n) { return !used[key + n]; });
@@ -805,6 +808,20 @@
       this.ui.subtitle(MR.tf(n >= calls.length ? '[Teléfono, con tu propia voz] {l}' : '[Teléfono] {l}', { l: MR.t(line) }), 9);
       this.audio.speak(line, 'telefono');
       this.flags.phone = true;
+      // Posdata: si esta noche tus fotos revelaron algo, quien llama lo sabe.
+      var rv = this.fotos.reveladas || {};
+      var ps = ['el', 'caras', 'agua', 'mascaras', 'rio'].filter(function (k) { return rv[k]; })[0];
+      if (ps) {
+        var self = this;
+        var extra = MR.HISTORIA.posdata[ps];
+        var propia = n >= calls.length;
+        this.posdata = ps;
+        setTimeout(function () {
+          if (self.state !== 'playing') { return; }
+          self.ui.subtitle(MR.tf(propia ? '[Teléfono, con tu propia voz] {l}' : '[Teléfono] {l}', { l: MR.t(extra) }), 7);
+          self.audio.speak(extra, 'telefono');
+        }, 6500);
+      }
     }
 
     onPhoneMissed() { this.ui.subtitle('(El teléfono deja de sonar.)', 3); }

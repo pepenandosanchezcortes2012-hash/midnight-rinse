@@ -947,5 +947,13 @@ MR.TEXTOS_EN = {
  "Si Pelusa te tiene cariño, te saluda cuando vuelves. Mira sus orejas: van hacia lo que oye.": "If Pelusa is fond of you, it greets you when you come back. Watch its ears: they turn toward what it hears.",
  "(Entre los pinos, un venado levanta la cabeza. Sus ojos brillan con tu linterna.)": "(Among the pines, a deer lifts its head. Its eyes shine in your flashlight.)",
  "(El venado se va dando saltos entre los pinos.)": "(The deer bounds away through the pines.)",
- "En el bosque hay un venado. Acércate despacio.": "There's a deer in the forest. Approach slowly."
+ "En el bosque hay un venado. Acércate despacio.": "There's a deer in the forest. Approach slowly.",
+ "Las fotos": "The photos",
+ "Nos cuentan que alguien saca fotos esta noche en la lavandería La Espuma. Un consejo de la casa: algunas cosas se ven mejor sin flash.": "We hear someone is taking photos tonight at La Espuma laundromat. A word of advice from us: some things look better without a flash.",
+ "A quien anda con la cámara esta noche: no todo lo que sale en la foto quiere salir. Revelen con cuidado.": "To whoever is out with a camera tonight: not everything in the picture wants to be there. Develop with care.",
+ "Y otra cosa: la foto donde sale él, bórrala. No la mires otra vez.": "And one more thing: the photo he's in, delete it. Don't look at it again.",
+ "Y otra cosa: no les saques fotos a los de cara blanca. No es así como quieren que los recuerden.": "And one more thing: don't take pictures of the white faces. That's not how they want to be remembered.",
+ "Y otra cosa: deja de fotografiar la avenida. Ya viste lo que hay debajo.": "And one more thing: stop photographing the avenue. You've already seen what's underneath.",
+ "Y otra cosa: si frente al mostrador no sale nadie en tus fotos, no insistas. A ellos no les gusta.": "And one more thing: if no one shows up at the counter in your photos, don't push it. They don't like it.",
+ "Y otra cosa: el río del puente ya no corre. Lo que viste en la foto fue antes.": "And one more thing: the river under the bridge doesn't run anymore. What you saw in the photo was before."
 };

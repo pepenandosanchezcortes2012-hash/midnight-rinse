@@ -59,11 +59,23 @@
         'Nos avisan desde el bosque que la placa de bronce regresó a su baranda en el puente viejo. Alguien tuvo la gentileza de devolverle su nombre a Blackwood.',
         'El puente del sendero vuelve a tener su placa en el lugar correcto. Quienquiera que la haya puesto esta noche, muchas gracias. Hacía falta recordar dónde estamos.'
       ],
+      fotos: [
+        'Nos cuentan que alguien saca fotos esta noche en la lavandería La Espuma. Un consejo de la casa: algunas cosas se ven mejor sin flash.',
+        'A quien anda con la cámara esta noche: no todo lo que sale en la foto quiere salir. Revelen con cuidado.'
+      ],
       cierre: [
         'Son las cuatro y media. Nuestro bloque nocturno se despide por hoy. Cuiden sus pasos al salir; el agua del embalse ya está rozando el cordón de la avenida.',
         'Cuatro y treinta en la 94.1. Apagamos micrófonos mientras el agua sube despacio sobre el pavimento. Si deben esperar adentro, procuren no mirar fijo al vidrio.',
         'Llegan las cuatro y media y cerramos la transmisión nocturna. El agua cubre los primeros escalones de la vereda. Buenas noches a los rezagados; mantengan los pies secos.'
       ]
+    },
+    // Posdatas de la llamada (game.onPhoneAnswered): si esa noche tus fotos revelaron algo, quien llama lo sabe.
+    posdata: {
+      el: 'Y otra cosa: la foto donde sale él, bórrala. No la mires otra vez.',
+      caras: 'Y otra cosa: no les saques fotos a los de cara blanca. No es así como quieren que los recuerden.',
+      agua: 'Y otra cosa: deja de fotografiar la avenida. Ya viste lo que hay debajo.',
+      mascaras: 'Y otra cosa: si frente al mostrador no sale nadie en tus fotos, no insistas. A ellos no les gusta.',
+      rio: 'Y otra cosa: el río del puente ya no corre. Lo que viste en la foto fue antes.'
     },
     // El teléfono público a las 03:50: una llamada distinta por noche, siempre con la instrucción que importa.
     // Desde la sexta noche, la voz es la tuya.

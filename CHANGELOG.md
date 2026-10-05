@@ -244,3 +244,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Un venado en el bosque, con su cerebro de mosca: pasta, se alerta, huye; los ojos le brillan con la linterna.
 - **Decisión:** la vida salvaje es inofensiva y escasa (una vez por noche y no vuelve). El bosque se siente vivo sin restarle protagonismo a él.
+
+## Sprint 33 — El mundo sabe de tus fotos
+
+- La radio comenta las fotos y el teléfono agrega una posdata según lo que revelaron.
+- **Decisión:** una sola posdata por llamada, por prioridad (él antes que todo). Así cada llamada sigue siendo corta y la instrucción de la hora no se pierde.

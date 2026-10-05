@@ -1483,6 +1483,34 @@
       return 'máscara ausente en la foto · pasajeros con cara';
     }],
 
+    ['El mundo sabe de tus fotos: la radio lo comenta y el teléfono agrega una posdata', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true; g.horror.nextEvent = 9999;
+      g.ciudad.busPlan = []; g.ciudad.sweepAt = null;
+      // Sin fotos que revelen nada: ni boletín de fotos ni posdata.
+      check(!g.fotos.reveladas, 'ya había revelaciones');
+      // Una foto de la avenida: sale inundada.
+      g.player.pos.set(5.0, 0, 3.3); g.player.yaw = Math.PI; g.player.pitch = -0.05;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      step(ctx, 2);
+      g.fotos.take({ ghost: false });
+      check(g.fotos.reveladas && g.fotos.reveladas.agua, 'la foto no quedó registrada como revelación');
+      // La radio, a las 02:10 (sin el 86): el boletín de las fotos.
+      g.gameplay.tuneTo(94.1); step(ctx, 2);
+      g.minutes = ctx.w.MR.Config.RADIO_BOLETINES[1] - 0.01; step(ctx, 3);
+      check(g.lastBulletin === 'fotos', 'la radio no comentó las fotos (' + g.lastBulletin + ')');
+      // El teléfono: la llamada de la noche y, después, la posdata.
+      g.onPhoneAnswered();
+      check(g.posdata === 'agua', 'no eligió la posdata de la avenida (' + g.posdata + ')');
+      await wait(7000);
+      check(sub().indexOf('deja de fotografiar la avenida') >= 0, 'faltó la posdata del teléfono');
+      noErrors(ctx);
+      return 'boletín de las fotos · posdata «deja de fotografiar la avenida»';
+    }],
+
     ['El venado del bosque: pasta lejos, levanta la cabeza si te acercas, huye a saltos y le brillan los ojos con la linterna', async function () {
       var ctx = await load();
       var g = ctx.g;

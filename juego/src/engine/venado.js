@@ -120,7 +120,8 @@
       });
       // Miedo: tú cerca (más si caminas) y la linterna en la cara.
       var cerca = d < 8 ? (1 - d / 8) * (g.player.moving ? 1.3 : 0.9) : 0;
-      b.sentir({ amenaza: Math.min(1, cerca + (lit ? 0.25 : 0)), atraccion: 0, ruido: ruido, sueno: 0.1 });
+      // La linterna en los ojos asusta solo de cerca: de lejos, mira (con los ojos brillando); si te acercas, huye.
+      b.sentir({ amenaza: Math.min(1, cerca + (lit && d < 8 ? 0.25 : 0)), atraccion: 0, ruido: ruido, sueno: 0.1 });
     }
 
     update(dt) {
@@ -184,10 +185,11 @@
         if (this.state !== 'alerta') {
           this.state = 'alerta';
           this.timer = 0;
-          if (visto && !this.seenSaid) {
-            this.seenSaid = true;
-            g.ui.subtitle('(Entre los pinos, un venado levanta la cabeza. Sus ojos brillan con tu linterna.)', 5);
-          }
+        }
+        // La primera vez que lo ves alerta (aunque ya lo estuviera cuando te diste vuelta).
+        if (visto && !this.seenSaid) {
+          this.seenSaid = true;
+          g.ui.subtitle('(Entre los pinos, un venado levanta la cabeza. Sus ojos brillan con tu linterna.)', 5);
         }
         m.cuello.rotation.x += (-0.25 - m.cuello.rotation.x) * Math.min(1, dt * 4);
         grp.rotation.y += U.clamp(at.angulo, -1, 1) * Math.min(1, dt * 1.5);

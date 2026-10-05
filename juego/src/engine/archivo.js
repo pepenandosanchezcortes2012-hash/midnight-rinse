@@ -93,7 +93,7 @@
             texto: line, encabezado: 'UNA CARA BLANCA, BAJITO', hecho: have });
         });
       });
-      var temas = { apertura: 'Apertura', embalse: 'El embalse', bus86: 'El 86', barredora: 'La barredora', puente: 'El puente', cierre: 'Cierre' };
+      var temas = { apertura: 'Apertura', embalse: 'El embalse', bus86: 'El 86', barredora: 'La barredora', puente: 'El puente', fotos: 'Las fotos', cierre: 'Cierre' };
       Object.keys(MR.HISTORIA.boletines).forEach(function (k) {
         MR.HISTORIA.boletines[k].forEach(function (line, n) {
           var have = !!d.boletin[k + n];

@@ -201,6 +201,13 @@
       while (this.list.length > MAX) { this.list.shift(); }
       this._save();
       this.tonight += 1;
+      // Lo que tus fotos revelaron esta noche (el teléfono y la radio lo saben: game.js).
+      var rv = this.reveladas || (this.reveladas = {});
+      if (dist) { rv.el = true; }
+      if (caras.length || enBus) { rv.caras = true; }
+      if (mascaras.length) { rv.mascaras = true; }
+      if (calle) { rv.agua = true; }
+      if (rio) { rv.rio = true; }
       // Flash en pantalla (suave si se pidió reducir destellos) y obturador.
       g.horror.flash = Math.max(g.horror.flash, g.options.reduceFlashes ? 0.12 : 0.45);
       g.audio.obturador();

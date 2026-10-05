@@ -960,6 +960,14 @@ El proyecto pasó por dos etapas:
 - `centinela.py` las corre junto a las del director de IA. Sus tiempos de espera subieron a 1800 s (local) y 2400 s (en vivo): con ~100 partidas, 900 s ya no alcanzaban.
 - **Pendiente:** la verificación en vivo del Sprint 32. Las 100 pruebas pasaron en local; falta repetirlas contra el sitio cuando haya memoria.
 
+## 114. Sprint 33: el mundo sabe de tus fotos (y dos arreglos del venado)
+- **La radio:** si esa noche tus fotos revelaron algo, el locutor lo comenta a las 02:10 (si no pasó el 86) o a las 03:30 (si no le devolviste la placa al puente). Por ejemplo: «Nos cuentan que alguien saca fotos esta noche en la lavandería La Espuma. Un consejo de la casa: algunas cosas se ven mejor sin flash». Queda en el Archivo, como «Las fotos».
+- **El teléfono:** después de la llamada de cada noche, quien llama agrega una **posdata** según lo que revelaron tus fotos (por prioridad: él, las caras, la avenida, las máscaras, el río). Por ejemplo: «Y otra cosa: deja de fotografiar la avenida. Ya viste lo que hay debajo». Desde la sexta noche, también con tu propia voz.
+- **El venado, dos arreglos:**
+  - la linterna en los ojos asusta solo de cerca (menos de 8 m). Antes podía hacerlo huir desde lejos, y quedaba en el borde del umbral, a veces sí y a veces no;
+  - el subtítulo sale la primera vez que lo ves alerta, aunque ya lo estuviera cuando te diste vuelta. Antes solo salía en el instante del cambio.
+- **QA:** prueba nueva (boletín de las fotos y posdata del teléfono). 101/101 en dos corridas seguidas. **Pendiente: verificar en vivo los Sprints 32 y 33**, cuando haya memoria para Chrome y el usuario lo pida.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
