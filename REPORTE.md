@@ -947,6 +947,19 @@ El proyecto pasó por dos etapas:
   - Las capturas encontraron que podía aparecer pegado a un tronco (corregido: busca un claro) y que los ojos eran de un píxel (más grandes).
   - **Prueba número 100.** Resultado: 100/100.
 
+## 113. Pruebas del cerebro de mosca en Node (sin Chrome)
+- **Por qué ahora:** la computadora se quedó sin memoria y Claude Code detuvo la verificación en vivo del Sprint 32. Mientras tanto, se avanzó con algo liviano.
+- `juego/tests/mosca.test.js`: **10 pruebas puras** del cerebro, que corren en milisegundos:
+  - el anillo apunta al estímulo en 8 direcciones;
+  - la memoria corta y su apagado;
+  - la competencia entre estímulos y que un estímulo negativo repele;
+  - el aprendizaje separado por contexto y el olvido lento;
+  - la elección de acción (huir, descansar, explorar, acercarse);
+  - guardar y cargar la memoria (y rechazar lo malformado);
+  - el determinismo y el costo.
+- `centinela.py` las corre junto a las del director de IA. Sus tiempos de espera subieron a 1800 s (local) y 2400 s (en vivo): con ~100 partidas, 900 s ya no alcanzaban.
+- **Pendiente:** la verificación en vivo del Sprint 32. Las 100 pruebas pasaron en local; falta repetirlas contra el sitio cuando haya memoria.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
