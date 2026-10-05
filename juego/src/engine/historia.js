@@ -193,6 +193,21 @@
           'Acaricia a Pelusa de nuestra parte antes de que termine tu turno.'
         ]
       },
+      // El niño de cara blanca (clientela.js, _stepChild / touchChild). Borrador de Gemini, revisado.
+      nino: {
+        al_empleado: [
+          'El gato ronronea si no me muevo.',
+          'Aquí siempre huele a ropa calientita.',
+          'A veces escucho el timbre del recreo.'
+        ],
+        entre: [
+          ['¿Podemos quedarnos hasta que se caliente todo?', 'Solo hasta que termine el ciclo, mi amor.'],
+          ['¿Pelusa me deja tocarle las orejas?', 'Despacio, cariño, a los gatos no les gusta el ruido.'],
+          ['¿Mis calcetines amarillos ya están secos?', 'Pronto, mi cielo, no tardarán mucho más.'],
+          ['¿Cuándo va a sonar la campana?', 'La escuela todavía está durmiendo, pequeño.'],
+          ['La lluvia hace ruido en los vidrios.', 'No mires hacia afuera, quédate junto a mí.']
+        ]
+      },
       // Lo que se dicen dos caras blancas que lavan a la vez (clientela.js, _chatter). Borrador de Gemini, revisado.
       entre: [
         ['El 86 venía casi lleno esta noche, todos con el abrigo empapado.', 'Nadie dijo una palabra hasta doblar la curva del viejo muelle.'],

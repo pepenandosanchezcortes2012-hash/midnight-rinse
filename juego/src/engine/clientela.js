@@ -24,6 +24,7 @@
       this.used = { llegada: {}, tocar: {}, despedida: {}, ordenes: {}, cierre: {} };
       this.ordersToday = 0;
       this.coinPlan = Math.random() < 0.5; // esta noche, una cara blanca te va a pedir una moneda
+      this.childPlan = Math.random() < 0.3; // esta noche, una cara blanca viene con un niño
       // Horario de la noche: caras blancas entre 01:15 y 02:15 (3 a 5) y quizá una tardía; máscaras a las 02:50 y quizá 04:05.
       var plan = [];
       var n = 3 + Math.floor(Math.random() * 3);
@@ -53,8 +54,9 @@
         g.add(j);
         return j;
       }
-      if (kind === 'cara') {
-        var coat = R.material({ texture: 'white', color: COATS[Math.floor(Math.random() * COATS.length)] });
+      var kid = kind === 'nino';
+      if (kind === 'cara' || kid) {
+        var coat = R.material({ texture: 'white', color: kid ? 0xc9a43a : COATS[Math.floor(Math.random() * COATS.length)] }); // el niño: impermeable amarillo
         var wet = R.material({ texture: 'white', color: 0x2b2f33 });
         var pale = R.material({ texture: 'white', color: 0xe9e7e0, emissive: 0.3 }); // cuello y manos, tan blancos como la cara
         var shoe = R.material({ texture: 'white', color: 0x17181a });
@@ -78,8 +80,10 @@
           w.box(0.09, 0.62, 0.11, coat, 0, -0.31, 0, a);
           w.box(0.07, 0.09, 0.07, pale, 0, -0.665, 0, a);
         });
-        var bag = w.box(0.34, 0.3, 0.22, R.material({ texture: 'white', color: 0x7a7d80 }), 0.36, 0.8, -0.05, g); // la ropa empapada
-        bag.rotation.z = 0.1;
+        if (!kid) {
+          var bag = w.box(0.34, 0.3, 0.22, R.material({ texture: 'white', color: 0x7a7d80 }), 0.36, 0.8, -0.05, g); // la ropa empapada
+          bag.rotation.z = 0.1;
+        }
         var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.1, 6), pale);
         neck.position.set(0, 1.64, 0);
         g.add(neck);
@@ -120,8 +124,119 @@
         head.position.set(0, 2.08, 0);
         g.add(head);
       }
+      if (kid) { g.scale.setScalar(0.62); }
       g.visible = true;
       return { group: g, head: head, armR: armR, armL: armL, legs: legs };
+    }
+
+    // -------------------------------------------------------------------------------------------- el niño
+    /** Un niño de cara blanca acompaña a esta cara blanca: entra con ella y la sigue un paso detrás. */
+    _addChild(v) {
+      var model = this._model('nino');
+      model.group.position.set(ENTRY.x + 0.45, 0, ENTRY.z + 0.35);
+      this.world.add(model.group);
+      var parts = [];
+      model.group.traverse(function (o) { if (o.isMesh) { o.userData.interact = { kind: 'nino', index: v.id }; parts.push(o); } });
+      model.parts = parts;
+      Array.prototype.push.apply(this.world.interactables, parts);
+      var lines = MR.HISTORIA.blackwood.nino.entre;
+      v.child = { model: model, bob: 0, petted: false, petTimer: 0, talks: 0, chatTimer: 7, chatIndex: Math.floor(Math.random() * lines.length) };
+    }
+
+    /**
+     * El niño sigue al adulto un paso detrás y a la derecha. Si Pelusa anda cerca y en el piso, va, se agacha y la
+     * acaricia (una vez). Mientras el adulto lava, le pregunta cosas bajito; si te acercas, se callan.
+     */
+    _stepChild(v, dt) {
+      var g = this.game;
+      var c = v.child;
+      var grp = c.model.group;
+      var pos = grp.position;
+      var a = v.model.group;
+      if (c.petTimer > 0) {
+        c.petTimer -= dt;
+        c.model.armR.rotation.x = 1.1 + Math.sin(c.petTimer * 6) * 0.2; // la mano, sobre el lomo
+        c.model.head.rotation.x = -0.35;
+        if (c.petTimer <= 0) { c.model.armR.rotation.x = 0; c.model.head.rotation.x = 0; pos.y = 0; }
+        return;
+      }
+      var cat = g.gato.mesh.root;
+      var catNear = v.state === 'llego' && !c.petted && cat.visible && cat.position.y < 0.3 &&
+        U.distXZ(cat.position, a.position) < 3.2 && g.gato.state !== 'eriza' && g.gato.state !== 'huye';
+      var tx;
+      var tz;
+      if (catNear) {
+        tx = cat.position.x + 0.32;
+        tz = cat.position.z + 0.22;
+      } else {
+        // Un paso detrás y a la derecha del adulto (girado con él).
+        var ry = a.rotation.y;
+        tx = a.position.x + Math.cos(ry) * 0.45 + Math.sin(ry) * 0.35;
+        tz = a.position.z - Math.sin(ry) * 0.45 + Math.cos(ry) * 0.35;
+      }
+      var dx = tx - pos.x;
+      var dz = tz - pos.z;
+      var d = Math.hypot(dx, dz);
+      if (d > 0.06) {
+        var stepLen = Math.min(d, SPEED * 1.2 * dt);
+        pos.x += dx / d * stepLen;
+        pos.z += dz / d * stepLen;
+        grp.rotation.y = Math.atan2(-dx, -dz);
+        c.bob += dt * 9;
+        pos.y = Math.abs(Math.sin(c.bob)) * 0.02;
+        this._limbs(c.model, c.bob, 0.5);
+        return;
+      }
+      pos.y = 0;
+      this._limbs(c.model, 0, 0);
+      if (catNear) {
+        c.petted = true;
+        c.petTimer = 7;
+        grp.rotation.y = Math.atan2(-(cat.position.x - pos.x), -(cat.position.z - pos.z));
+        pos.y = -0.05; // agachado
+        g.ui.subtitle('(El niño de cara blanca se agacha y acaricia a Pelusa. Pelusa ronronea.)', 5);
+        g.audio.ronroneo();
+        g.gato.route = [];
+        g.gato.state = 'sentado';
+        g.gato.timer = Math.max(g.gato.timer, 7);
+        return;
+      }
+      grp.rotation.y = a.rotation.y;
+      // Mientras el adulto lava: preguntas bajitas (si estás cerca de alguno de los dos, se callan).
+      if (v.state !== 'llego' || v.talking) { return; }
+      var near = U.distXZ(g.player.pos, pos) < 2.2 || U.distXZ(g.player.pos, a.position) < 2.2;
+      if (near) { c.chatTimer = Math.max(c.chatTimer, 4); return; }
+      c.chatTimer -= dt;
+      if (c.chatTimer > 0) { return; }
+      c.chatTimer = 10;
+      var lines = MR.HISTORIA.blackwood.nino.entre;
+      var ex = lines[c.chatIndex % lines.length];
+      c.chatIndex += 1;
+      var self = this;
+      g.ui.subtitle(MR.tf('(El niño, bajito: «{l}»)', { l: MR.t(ex[0]) }), 4);
+      g.audio.speak(ex[0], 'cara');
+      setTimeout(function () {
+        if (g.state !== 'playing' || !self.visitors.includes(v) || v.talking) { return; }
+        g.ui.subtitle(MR.tf('(La cara blanca, al niño: «{l}»)', { l: MR.t(ex[1]) }), 4);
+        g.audio.speak(ex[1], 'cara');
+      }, 3400);
+    }
+
+    /** Hablarle al niño: la primera vez se esconde detrás del abrigo; después te dice algo, sin mirarte. */
+    touchChild(id) {
+      var g = this.game;
+      var v = this.visitors.filter(function (x) { return x.id === id; })[0];
+      if (!v || !v.child) { return; }
+      var c = v.child;
+      c.talks += 1;
+      if (c.talks === 1) {
+        g.gameplay.say('nino', '(El niño se esconde detrás del abrigo. Solo asoma la cara, lisa y blanca.)', 4);
+        return;
+      }
+      var lines = MR.HISTORIA.blackwood.nino.al_empleado;
+      var l = lines[(c.talks - 2) % lines.length];
+      g.gameplay.say('nino', MR.tf('(El niño, sin mirarte: «{l}»)', { l: MR.t(l) }), 4);
+      g.audio.speak(l, 'cara');
     }
 
     /** Brazos y piernas al caminar (amp 0 = quietos). Las máscaras caminan más rígidas. */
@@ -296,6 +411,7 @@
       Array.prototype.push.apply(this.world.interactables, parts);
       var v = { id: id, kind: kind, model: model, path: target.path.slice(), rot: target.rot, washer: target.washer, state: 'entra', timer: 0, said: false };
       this.visitors.push(v);
+      if (kind === 'cara' && this.childPlan && !this.childCame && g.minutes >= 90) { this.childCame = true; this._addChild(v); }
       g.audio.door();
       return v;
     }
@@ -303,6 +419,11 @@
     _remove(v) {
       var w = this.world;
       w.scene.remove(v.model.group);
+      if (v.child) {
+        var cp = v.child.model.parts;
+        w.scene.remove(v.child.model.group);
+        for (var k = w.interactables.length - 1; k >= 0; k -= 1) { if (cp.indexOf(w.interactables[k]) >= 0) { w.interactables.splice(k, 1); } }
+      }
       for (var i = w.interactables.length - 1; i >= 0; i -= 1) {
         if (v.model.parts.indexOf(w.interactables[i]) >= 0) { w.interactables.splice(i, 1); }
       }
@@ -452,7 +573,10 @@
       this._stepWatcher(inSala);
       if (inSala) { this._chatter(dt); }
       var self = this;
-      this.visitors.slice().forEach(function (v) { self._step(v, dt); });
+      this.visitors.slice().forEach(function (v) {
+        self._step(v, dt);
+        if (v.child && self.visitors.includes(v)) { self._stepChild(v, dt); }
+      });
     }
 
     _step(v, dt) {

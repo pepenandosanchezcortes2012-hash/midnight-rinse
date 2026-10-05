@@ -1389,6 +1389,58 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['El niño de cara blanca: llega con una cara blanca, acaricia a Pelusa, se esconde si le hablas y pregunta cosas bajito', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var cat = g.gato;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.plan = [];
+      g.gato.stared = true;
+      g.horror.customer.present = false;
+      g.minutes = 120;
+      c.childPlan = true; c.coinPlan = false;
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      g.player.pos.set(-6, 0, 2.5);
+      var v = c.spawn('cara');
+      check(v.child && v.child.model.group.scale.x < 0.7, 'no vino con un niño');
+      check(c.spawn('cara') === null || !c.visitors[1].child, 'vino un segundo niño');
+      while (c.visitors.length > 1) { c._remove(c.visitors[1]); }
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      step(ctx, 30);
+      var kp = v.child.model.group.position;
+      check(v.state === 'llego' && ctx.w.MR.Util.distXZ(kp, v.model.group.position) < 0.8, 'el niño no se quedó junto a su abrigo');
+      // Pelusa en el piso, cerca: el niño va, se agacha y la acaricia.
+      cat.perch = null; cat.route = []; cat.state = 'sentado'; cat.timer = 99;
+      cat.mesh.root.position.set(v.model.group.position.x + 1.0, 0, v.model.group.position.z + 0.9);
+      for (var k = 0; k < 30 * 8 && !v.child.petted; k += 1) { step(ctx, 1); }
+      check(v.child.petted && sub().indexOf('acaricia a Pelusa') >= 0, 'no acarició a Pelusa');
+      step(ctx, 30 * 8);
+      // Le hablas: primero se esconde, después te dice algo sin mirarte.
+      g.gameplay.messageCooldown = {};
+      c.touchChild(v.id);
+      check(sub().indexOf('se esconde detrás del abrigo') >= 0, 'no se escondió');
+      g.gameplay.messageCooldown = {};
+      c.touchChild(v.id);
+      check(sub().indexOf('El niño, sin mirarte') >= 0, 'no dijo nada después');
+      // Bajito, con la cara blanca (tú, lejos).
+      g.player.pos.set(-6, 0, 2.5);
+      v.child.chatTimer = 0.1;
+      for (var q = 0; q < 30 * 3 && sub().indexOf('El niño, bajito') < 0; q += 1) { step(ctx, 1); }
+      check(sub().indexOf('El niño, bajito') >= 0, 'no le preguntó nada a la cara blanca');
+      await wait(3600);
+      check(sub().indexOf('al niño:') >= 0, 'la cara blanca no le contestó');
+      // Se van juntos: el niño desaparece con todas sus piezas.
+      var parts = v.child.model.parts;
+      c._leave(v);
+      for (var r = 0; r < 30 * 30 && c.visitors.length; r += 1) { step(ctx, 1); }
+      check(!c.visitors.length && !v.child.model.group.parent, 'el niño se quedó en la lavandería');
+      check(!g.world.interactables.some(function (o) { return parts.indexOf(o) >= 0; }), 'quedaron piezas del niño tocables');
+      noErrors(ctx);
+      return 'llega · acaricia a Pelusa · se esconde · habla · pregunta bajito · se van juntos';
+    }],
+
     ['Modelos: cada uno con su material (tus manos con tu piel, las de él pálidas, su rostro) y sus piezas', async function () {
       var ctx = await load();
       var g = ctx.g;

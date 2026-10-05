@@ -133,3 +133,10 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Brazos y piernas con articulación: las caras blancas balancean al caminar y las máscaras caminan rígidas.
 - **Decisión:** balanceo de 0,42 rad para las caras y de 0,16 para las máscaras. La rigidez de la Administración se nota sin decir nada.
+
+## Sprint 14 — El niño de cara blanca
+
+- A veces una cara blanca llega con un niño de impermeable amarillo: acaricia a Pelusa, se esconde si le hablas y le pregunta cosas bajito al adulto.
+- **Decisión:** el niño es un acompañante del adulto, no un visitante. No rompe los límites de visitas ni cambia el ritmo de la noche.
+- **Decisión:** el impermeable amarillo lo hace legible de lejos en la sala gris y repite el amarillo del banco y de la placa del cambiador.
+- **Decisión:** nunca se explica qué le pasó. La melancolía queda en lo que pregunta («¿Mis calcetines ya están secos?»).

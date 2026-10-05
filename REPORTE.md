@@ -742,6 +742,16 @@ El proyecto pasó por dos etapas:
 - **La corrección:** las manos de él usan su propio material (`m.paleHand`), y `m.skin` vuelve a ser tu piel.
 - **Para que no se repita:** prueba nueva «Modelos». Verifica que tus manos usan la textura `skin`, que él tiene sus dos manos pálidas y lisas y el rostro nuevo en la cara, que Pelusa tiene orejas y que la clientela tiene articulaciones y manos. Resultado: 81/81.
 
+## 94. Sprint 14: el niño de cara blanca
+- **Quién es:** algunas noches (30 %), la primera cara blanca que llega después de la 01:30 viene con **un niño de cara blanca**, más chico y de impermeable amarillo. No lava nada: la sigue un paso detrás, con sus propias piernas y brazos.
+- **Pelusa:** si anda cerca y en el piso, el niño va, **se agacha y la acaricia** («Pelusa ronronea»), una vez. Pelusa se queda quieta mientras tanto.
+- **Si le hablas:** la primera vez se esconde detrás del abrigo («Solo asoma la cara, lisa y blanca»); después te dice algo sin mirarte («El gato ronronea si no me muevo»).
+- **Con el adulto:** mientras lava, le pregunta cosas bajito («¿Mis calcetines amarillos ya están secos?», «¿Cuándo va a sonar la campana?») y el adulto contesta. Si te acercas, se callan.
+- **Diseño:** el niño acompaña al adulto, no es un visitante más, así que no cambia el límite de visitas ni las charlas entre caras. Se va con el adulto y desaparece con todas sus piezas.
+- **Canon:** nunca se dice qué le pasó. Ata cabos que ya estaban: el calcetín de niño y el diente de leche de la colección, y la campana de la escuela. `lore_check` sin contradicciones.
+- **Gemini:** escribió las líneas del niño y del adulto; se revisaron como dato. Se corrigieron tres cosas: «la secadora cuatro» (el adulto usa una lavadora), «siéntate en la banca» (el banco es el de él) y «her ears» (Pelusa no tiene género).
+- **QA:** prueba nueva (llega, acaricia, se esconde, habla, pregunta bajito y se van juntos) y revisión con captura. 882 textos traducidos. Resultado: 82/82.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

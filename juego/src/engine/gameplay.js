@@ -137,6 +137,7 @@
       if (kind === 'lavabo') { this.game.espejo.sink(); return; }
       if (kind === 'banco') { this.game.touchBench(); return; }
       if (kind === 'visitante') { this.game.clientela.talk(target.index); return; }
+      if (kind === 'nino') { this.game.clientela.touchChild(target.index); return; }
       if (kind === 'vidriera') { this.game.ciudad.look(); return; }
       if (kind === 'secadoraSola') { this.game.bosque.touchLoneDryer(); return; }
       if (kind === 'campana') { this.game.bosque.ringBell(); return; }
