@@ -430,6 +430,13 @@
 
     /** Qué hacer ahora: lo decide la rutina de la hora (antes era al azar). */
     _decide() {
+      // Al amanecer (final verdadero): va a la puerta de vidrio y se sienta a mirar la calle.
+      if (this.game.epilogue) {
+        if (this.perch) { this._jump(null, true); return; }
+        if (this.node === 'PU') { this.state = 'sentado'; this.timer = 999; this.mesh.root.rotation.y = 0; return; }
+        this._goTo('PU');
+        return;
+      }
       var act = this.activity = routine(this.game.minutes);
       var sleeps = act === 'dormir' || act === 'siesta';
       if (this.perch && !sleeps) { this._jump(null, true); return; }   // bajar de donde esté

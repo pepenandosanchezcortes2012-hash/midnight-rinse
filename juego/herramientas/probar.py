@@ -32,9 +32,12 @@ def main():
         p = subprocess.run([str(chrome), '--headless=new', '--no-first-run', '--no-default-browser-check', '--mute-audio',
                             '--user-data-dir=' + perfil, '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
                             '--window-size=1036,647', '--autoplay-policy=no-user-gesture-required',
-                            '--virtual-time-budget=240000', '--dump-dom', url],
-                           capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=600)
+                            '--virtual-time-budget=600000', '--dump-dom', url],
+                           capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=900)
     dom = p.stdout
+    # ¿Terminó? La página escribe en #resumen «Todo bien: N/T…» o «Fallaron…» al final; mientras corre, «Corriendo…».
+    fin = re.search(r'<div id="resumen"[^>]*>(.*?)</div>', dom, re.S)
+    fin = html.unescape(fin.group(1)).strip() if fin else ''
     filas = re.findall(r'<li class="(ok|mal)"[^>]*>(.*?)</li>', dom, re.S)
     if not filas:
         print('sin resultados (¿no cargó?)')
@@ -48,6 +51,9 @@ def main():
             print('✗', texto[:400])
         elif todo:
             print('·', texto[:300])
+    if not (fin.startswith('Todo bien') or fin.startswith('Fallaron')):
+        print('la página no terminó (resumen: «%s»): solo hay %d resultados' % (fin or 'sin resumen', len(filas)))
+        sys.exit(3)
     print('pasaron %d de %d' % (len(filas) - malas, len(filas)))
     sys.exit(1 if malas else 0)
 

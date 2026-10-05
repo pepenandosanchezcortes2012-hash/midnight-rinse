@@ -916,5 +916,9 @@ MR.TEXTOS_EN = {
  "El niño de impermeable amarillo le hizo cariño.": "The child in the yellow raincoat petted it.",
  "Todavía.": "Yet.",
  "No le teme a nada": "It isn't afraid of anything",
- "Nuevo panel: «Pelusa · lo que recuerda». ¿Ya te tiene cariño?": "New panel: “Pelusa · what it remembers”. Is it fond of you yet?"
+ "Nuevo panel: «Pelusa · lo que recuerda». ¿Ya te tiene cariño?": "New panel: “Pelusa · what it remembers”. Is it fond of you yet?",
+ "(Pelusa sale contigo a la calle.)": "(Pelusa steps out onto the street with you.)",
+ "(Pelusa se queda en la puerta, mirándote irte.)": "(Pelusa stays at the door, watching you leave.)",
+ "Pelusa sale contigo.": "Pelusa comes with you.",
+ "Pelusa se queda en la puerta.": "Pelusa stays at the door."
 };

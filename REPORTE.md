@@ -869,6 +869,13 @@ El proyecto pasó por dos etapas:
 - **Texto:** Pelusa no tiene género en los textos («el gato», «le hizo cariño»). Se corrigieron tres frases que decían «la».
 - **QA:** prueba nueva (sin recuerdos dice «no te conoce»; con caricias y un susto, otra noche dice «te tiene cariño» y «le teme a las máscaras»). Captura revisada. 914 textos traducidos. Resultado: 87/87.
 
+## 106. Sprint 26: Pelusa al amanecer (y pruebas que no se cortan en silencio)
+- **El final verdadero, con Pelusa:** al empezar el amanecer, Pelusa baja de donde esté, camina hasta la puerta de vidrio y se sienta a mirar la calle. Al cruzar, decide su cerebro de mosca (lo aprendido en todas tus noches):
+  - **si te tiene cariño:** «Pelusa sale contigo a la calle», y la pantalla final termina con «Pelusa sale contigo»;
+  - **si no:** «Pelusa se queda en la puerta, mirándote irte».
+- **Herramienta:** una vez `probar.py` informó «pasaron 10 de 10» porque Chrome entregó la página antes de que terminara. Ahora lee el resumen de la página («Todo bien…» o «Fallaron…») y, si no terminó, **falla con código 3** en vez de dar por bueno un resultado parcial. El presupuesto de tiempo virtual pasó de 4 a 10 minutos.
+- **QA:** prueba nueva con los dos casos (con cariño sale contigo, sin cariño se queda en la puerta). Resultado: 88/88.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

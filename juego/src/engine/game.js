@@ -721,6 +721,8 @@
       this.retro.shared.uFogColor.value.set(0.56, 0.62, 0.68);   // lo lejano se aclara (de noche se oscurecía)
       this.retro.renderer.setClearColor(0x9fb3c4, 1);                 // el cielo, arriba de los edificios
       this.ciudad.dawn = true;
+      // Pelusa va a la puerta de vidrio (gato.js decide ir en cuanto termina lo que estaba haciendo).
+      if (this.gato.state !== 'camina' && this.gato.state !== 'salta') { this.gato.state = 'sentado'; this.gato.timer = 0.5; }
       this.ui.subtitle('(05:13. Las luces de la lavandería están apagadas. Por la vidriera entra la luz de la mañana.)', 7);
       var self = this;
       setTimeout(function () {
@@ -745,6 +747,12 @@
       if (!this.epilogue || this.epilogueDone) { return; }
       this.epilogueDone = true;
       this.audio.door();
+      // Su cerebro de mosca decide: si te tomó cariño, sale contigo a la calle.
+      var cat = this.gato;
+      if (cat.mesh.root.visible) {
+        this.pelusaSale = cat.brain.valencia(MR.Mosca.CTX.jugador) > 0.25;
+        this.ui.subtitle(this.pelusaSale ? '(Pelusa sale contigo a la calle.)' : '(Pelusa se queda en la puerta, mirándote irte.)', 5);
+      }
       this.end('bosque');
     }
 
@@ -1012,7 +1020,8 @@
       if (diff.sinSustos && reason !== 'bosque') {
         this.ui.showEnd('05:12 · Paseo nocturno', 'Recorriste la lavandería, el bosque y el pasillo sin que nadie te mirara. Afuera sigue lloviendo. Esta vez fue solo un paseo.', summary);
       } else if (truth) {
-        this.ui.showEnd(MR.HISTORIA.verdadero.titulo, MR.HISTORIA.verdadero.texto, summary);
+        var cierre = this.pelusaSale === undefined ? '' : MR.t(this.pelusaSale ? 'Pelusa sale contigo.' : 'Pelusa se queda en la puerta.');
+        this.ui.showEnd(MR.HISTORIA.verdadero.titulo, MR.I18N.cat(MR.t(MR.HISTORIA.verdadero.texto), cierre ? ' ' : '', cierre), summary);
       } else if (reason === 'bosque') {
         this.ui.showEnd(MR.HISTORIA.final.titulo, MR.HISTORIA.final.texto, summary);
       } else if (good) {

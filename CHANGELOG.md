@@ -195,3 +195,9 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Panel en la pantalla de título con lo que aprendió su cerebro de mosca: cariño, miedos y el niño.
 - **Decisión:** se muestra en palabras, no en números. El jugador entiende el cariño sin ver la neurociencia, aunque todo sale de las sinapsis del cuerpo fungiforme.
+
+## Sprint 26 — Pelusa al amanecer
+
+- En el final verdadero, Pelusa va a la puerta. Si te tiene cariño (cerebro de mosca), sale contigo a la calle.
+- **Decisión:** el cariño acumulado en todas las noches cambia el cierre del juego, en una frase. Es la recompensa de haberla cuidado.
+- `probar.py` falla si la página de pruebas no terminó.

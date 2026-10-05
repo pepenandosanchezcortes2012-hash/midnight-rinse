@@ -1398,6 +1398,34 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Pelusa al amanecer: va a la puerta de vidrio; si te tiene cariño sale contigo, si no se queda mirándote irte', async function () {
+      async function amanecer(carino) {
+        var ctx = await load();
+        var g = ctx.g;
+        start(ctx);
+        g.clientela.plan = []; g.gato.stared = true;
+        if (carino) {
+          var b = g.gato.brain;
+          var M = ctx.w.MR.Mosca;
+          for (var i = 0; i < 5; i += 1) { b.limpiar(); b.contexto(M.CTX.jugador, 1); b.recompensa(1); b._tick(); }
+        }
+        g.flags.secreto = true;
+        g.end('bosque'); // el final verdadero empieza por el amanecer
+        for (var k = 0; k < 30 * 30 && !(g.gato.node === 'PU' && g.gato.timer > 100); k += 1) { step(ctx, 1); }
+        check(g.epilogue && g.gato.node === 'PU' && g.gato.state === 'sentado', 'Pelusa no fue a la puerta (' + g.gato.node + ', ' + g.gato.state + ')');
+        g.finishEpilogue();
+        step(ctx, 5);
+        var texto = g.ui.el.endText.textContent;
+        noErrors(ctx);
+        return { sale: g.pelusaSale, texto: texto, final: g.ending };
+      }
+      var con = await amanecer(true);
+      check(con.final === 'verdadero' && con.sale && con.texto.indexOf('Pelusa sale contigo.') >= 0, 'con cariño no salió contigo: ' + con.texto.slice(-60));
+      var sin = await amanecer(false);
+      check(!sin.sale && sin.texto.indexOf('Pelusa se queda en la puerta.') >= 0, 'sin cariño: ' + sin.texto.slice(-60));
+      return 'con cariño sale contigo · sin cariño se queda en la puerta';
+    }],
+
     ['Panel «Pelusa»: la pantalla de título muestra lo que recuerda su cerebro de mosca (cariño y miedos)', async function () {
       var ctx = await load();
       var g = ctx.g;
