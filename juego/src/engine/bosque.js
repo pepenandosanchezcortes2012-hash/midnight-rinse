@@ -100,6 +100,7 @@
       this._lamp2(dt);
       this._infinite();
       this._loneDryer(dt);
+      this._bridge(dt);
       if (this.bellSwing > 0) { this.bellSwing = Math.max(0, this.bellSwing - dt); this.f.bellCup.rotation.z = Math.sin(this.bellSwing * 9) * this.bellSwing * 0.25; }
       g.audio.setForest(1 - g.dread * 0.6);
       this._clothesline(dt);
@@ -153,6 +154,7 @@
       if (this.wraps === 1) { g.ui.subtitle('(Parpadeas. El sendero sigue igual que hace un momento. Demasiado igual.)', 5); }
       if (this.wraps === 2) { this.f.loneDryer.visible = true; }
       if (this.wraps === 3) { this.f.bell.visible = true; }
+      if (this.wraps === 4) { this.showBridge(); }
       g.dread = Math.min(1, g.dread + 0.03);
     }
 
@@ -186,6 +188,76 @@
       if (g.logros) { g.logros.unlock('campana'); }
       var ordenes = MR.HISTORIA.blackwood.ordenes;
       for (var i = 0; i < ordenes.length; i += 1) { if (/N\.º 22/.test(ordenes[i])) { g.clientela.pendingOrder = i; } }
+    }
+
+    /** El puente viejo (cuarta vuelta): aparece; si ya le pusiste la placa en otra noche, sigue ahí. */
+    showBridge() {
+      var g = this.game;
+      this.f.bridge.visible = true;
+      this.f.plaque.visible = !!(g.logros && g.logros.has('puente'));
+      this.f.bridgeColliders.forEach(function (c) { c.off = false; });
+    }
+
+    /** Al acercarte la primera vez, lo notas. La cara blanca del otro lado se va al parpadear (o a los 12 s). */
+    _bridge(dt) {
+      var b = this.f.bridge;
+      if (!b.visible) { return; }
+      var g = this.game;
+      if (!this.bridgeNoticed && U.distXZ(g.player.pos, b.position) < 8) {
+        this.bridgeNoticed = true;
+        g.ui.subtitle(this.f.plaque.visible ? '(El puente viejo. La placa sigue en la baranda: «PUENTE MUNICIPAL · BLACKWOOD».)' :
+          '(Entre los pinos, un puente de madera cruza un río seco. El agua se fue hace mucho.)', 5);
+      }
+      var f = this.bowFace;
+      if (f && f.group.visible) {
+        this.bowTimer -= dt;
+        if (!this.outside || this.bowTimer <= 0 || (this.bowTimer < 9 && g.player.eyesClosed)) {
+          f.group.visible = false;
+          if (this.outside) { g.ui.subtitle('(Parpadeas. Del otro lado del puente ya no hay nadie.)', 4); }
+        }
+      }
+    }
+
+    /**
+     * Secreto: tocar la baranda. Sin la placa, el marco vacío; con la placa (la caja de la máscara), la pones: por un
+     * momento se oye correr el río y, del otro lado, una cara blanca inclina la cabeza. Se guarda (logro «puente»).
+     */
+    touchBridge() {
+      var g = this.game;
+      if (this.f.plaque.visible) {
+        g.gameplay.say('puente', '(La placa brilla un poco: «PUENTE MUNICIPAL · BLACKWOOD». Abajo, las piedras siguen secas.)', 4);
+        return;
+      }
+      if (!(g.objetos && g.objetos.got.placa)) {
+        g.gameplay.say('puente', '(En la baranda hay un marco vacío, del tamaño de una placa. Alguien le arrancó el nombre al puente.)', 5);
+        return;
+      }
+      this.f.plaque.visible = true;
+      g.audio.click();
+      g.audio.rio(7);
+      g.ui.subtitle('(Pones la placa de bronce en el marco. Encaja justo. Bajo el puente, por un momento, se oye correr el río.)', 6);
+      MR.Haptics.pulse([20, 40, 20]);
+      g.dread = Math.max(0, g.dread - 0.1);
+      if (g.logros) { g.logros.unlock('puente'); }
+      var self = this;
+      setTimeout(function () { if (g.state === 'playing' && self.outside) { self._bow(); } }, 2500);
+    }
+
+    /** Del otro lado del puente (el opuesto a ti), una cara blanca inclina la cabeza. */
+    _bow() {
+      var g = this.game;
+      if (!this.bowFace) {
+        this.bowFace = g.clientela._model('cara');
+        this.bowFace.head.rotation.x = -0.45; // la cara va en -z: inclinarse es llevar la coronilla hacia adelante
+        g.world.add(this.bowFace.group);
+      }
+      var b = this.f.bridge.position;
+      var side = g.player.pos.z < b.z ? 1 : -1;
+      this.bowFace.group.position.set(b.x, 0.12, b.z + side * 2.3);
+      this.bowFace.group.rotation.y = side > 0 ? 0 : Math.PI; // de frente al puente (y a ti)
+      this.bowFace.group.visible = true;
+      this.bowTimer = 12;
+      g.ui.subtitle('(Del otro lado del puente, una cara blanca inclina la cabeza.)', 5);
     }
 
     /** Tocar la secadora solitaria. */

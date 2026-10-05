@@ -140,6 +140,7 @@
       if (kind === 'vidriera') { this.game.ciudad.look(); return; }
       if (kind === 'secadoraSola') { this.game.bosque.touchLoneDryer(); return; }
       if (kind === 'campana') { this.game.bosque.ringBell(); return; }
+      if (kind === 'puente') { this.game.bosque.touchBridge(); return; }
       if (kind === 'cajaMostrador') { this.world.giftBox.visible = false; this.game.objetos.give('placa'); return; }
       if (kind === 'cesto') {
         var full = this.game.horror.basketLevel || 0;

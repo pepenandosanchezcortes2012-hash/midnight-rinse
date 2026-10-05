@@ -158,6 +158,9 @@
         if ((this.basketLevel || 0) < 3 && g.flags.customerSeen) { table.push(['cesto', 1]); }
         if (!this.writingDone && g.minutes > 150) { table.push(['vidriera_escrita', 0.8]); }
         if (!this.watchDone && g.minutes >= 180 && g.clientela) { table.push(['vigia', 0.9]); }
+        if (!this.customer.present && g.minutes >= 60 && g.minutes < 250 && g.gato && !g.gato.stared && g.gato.canStare()) {
+          table.push(['pelusa_mira', 0.9]);
+        }
         if (g.flags.customerSeen && !g.tele.faceArmed && (g.tele.faceSeen || 0) < 2) { table.push(['tele_rostro', 1.2]); }
         if (this.customer.present) {
           table.push(['huellas', 1], ['mano_vidrio', 1]);
@@ -211,6 +214,7 @@
         case 'cesto': this.schedule('cesto', 'cesto', 1); break;
         case 'vidriera_escrita': this.schedule('vidriera_escrita', 'vidriera', 1); break;
         case 'vigia': this.schedule('vigia', 'vidriera', 1); break;
+        case 'pelusa_mira': this.game.gato.stareAtBench(); break; // va caminando a la vista: no hace falta que no mires
         case 'tele_rostro': this.game.tele.faceArmed = true; break; // sale cuando mires la tele (tele.js)
         case 'espejo': this.game.espejo.armed = true; break; // sale cuando te mires en el espejo (espejo.js)
         case 'golpe_secadora': this.schedule('golpe_secadora', 'secadoras', 1, { index: Math.floor(Math.random() * 4) }); break;

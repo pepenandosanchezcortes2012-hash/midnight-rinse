@@ -405,6 +405,32 @@
       ring(2.2, 0.035, 0.8); // la que contesta, lejos
     }
 
+    /** El río bajo el puente: ruido rosa filtrado que sube, se queda y se va (como agua que pasa y no vuelve). */
+    rio(seconds) {
+      var ctx = this.ctx;
+      if (!ctx) { return; }
+      var t = ctx.currentTime;
+      var dur = seconds || 6;
+      var src = ctx.createBufferSource();
+      src.buffer = this.pink;
+      src.loop = true;
+      var f = ctx.createBiquadFilter();
+      f.type = 'bandpass'; f.frequency.value = 650; f.Q.value = 0.6;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.16, t + 1.2);
+      g.gain.setValueAtTime(0.16, t + dur - 2.5);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(this.master);
+      src.start(t); src.stop(t + dur + 0.1);
+    }
+
+    /** Madera que cruje, como si alguien se sentara. */
+    crujido(pan) {
+      this._tone(210, 0.4, 0.035, 'sawtooth', 130);
+      this._burst(this.brown, 'bandpass', 480, 5, 0.35, 0.14, pan || 0);
+    }
+
     /** Un pájaro al amanecer: dos o tres notas agudas que suben y bajan. */
     pajaro(pan) {
       var ctx = this.ctx;

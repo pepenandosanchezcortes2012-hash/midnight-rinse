@@ -647,6 +647,22 @@ El proyecto pasó por dos etapas:
 - El Archivo cuenta las respuestas nuevas: su total ya no está fijo en 12, ahora se calcula.
 - **QA:** prueba nueva. De paso, las pruebas de charla ya no dependen del `localStorage` que dejan otras pruebas. Resultado: 75/75 y 784 textos traducidos.
 
+## 85. Sprint 8b: Pelusa mira el banco y el puente de Blackwood (secreto)
+- **Pelusa mira el banco** (anomalía del director, «pelusa_mira», entre la 01:00 y las 04:10 y solo si él no está):
+  - Pelusa camina hasta frente al banco amarillo vacío y lo mira fijo, rígida, moviendo solo la punta de la cola.
+  - Si la ves: «con las orejas hacia atrás. No hay nadie sentado». Si después miras el banco: **cruje, como si alguien acabara de sentarse**, y Pelusa por fin aparta la vista. Acariciarla no la distrae.
+  - Una vez por noche. Anticipa al hombre del sombrero sin mostrarlo.
+- **El puente de Blackwood** (bosque infinito, cuarta vuelta): entre los pinos, un puente de madera cruza un río seco.
+  - En la baranda hay un marco vacío. Sin la placa: «Alguien le arrancó el nombre al puente».
+  - Con la placa (la caja de la segunda máscara, Sprint 7) la pones: «Encaja justo». Por un momento **se oye correr el río** (`audio.rio`) y, del otro lado, una cara blanca inclina la cabeza; al parpadear ya no está.
+  - Logro oculto «El puente de Blackwood». En las noches siguientes, el puente conserva su placa.
+  - La pista está en la charla: lo que responden las caras blancas sobre la placa (Sprint 8a).
+  - Las barandas tienen colisión solo cuando el puente existe (colisionadores con `off`, nuevo en `player._collide`).
+- **QA:**
+  - Dos pruebas nuevas. La de la rutina de Pelusa ahora apaga la anomalía, porque podía elegirla el director.
+  - Revisado con capturas desde dos ángulos.
+  - PSX: bosque 27 llamadas (unas 33 con el puente visible). 796 textos traducidos. Resultado: 77/77.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -93,3 +93,7 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - 8a: preguntas condicionadas en la charla con las caras blancas (Gemini, revisado).
 - **Decisión:** como mucho dos preguntas nuevas por charla, primero las más inmediatas (Pelusa, vigía) y después las de memoria larga (placa, mañana). Con más de siete opciones la lista no cabe bien en un celular horizontal.
 - **Decisión:** las respuestas de la placa son la pista del puente del bosque. Así el secreto se puede descubrir sin guía.
+- 8b: Pelusa mira el banco amarillo (anomalía) y el puente de Blackwood (secreto de la cuarta vuelta, con la placa).
+- **Decisión:** el puente aparece en la cuarta vuelta, después de la campana (tercera). Cada vuelta más adentro guarda algo más viejo del pueblo.
+- **Decisión:** la placa cuenta aunque la hayas conseguido en otra noche (la colección es permanente). Así el secreto no exige que en la misma noche vengan dos máscaras y además des cuatro vueltas.
+- **Decisión:** Pelusa no sufre ni huye al mirar el banco. Solo mira; el susto es el crujido, y solo si el jugador mira el banco.

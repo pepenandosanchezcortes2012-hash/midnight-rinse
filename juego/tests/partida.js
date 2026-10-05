@@ -1388,6 +1388,116 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Pelusa mira el banco: se sienta frente al banco vacío; si después miras el banco, cruje', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var cat = g.gato;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = [];
+      g.horror.customer.present = false;
+      g.minutes = 130;
+      cat._placeAtPerch('mostrador'); cat._jump(null, true); step(ctx, 30);
+      cat.mesh.root.position.set(-1.0, 0, -2.0); cat.node = 'F2'; cat.state = 'sentado'; cat.timer = 99;
+      check(cat.canStare(), 'no puede ir a mirar el banco');
+      g.horror._scheduleKind('pelusa_mira');
+      for (var i = 0; i < 30 * 20 && cat.state !== 'mira'; i += 1) { step(ctx, 1); }
+      check(cat.state === 'mira' && cat.node === 'F1', 'no fue a mirar el banco (' + cat.state + ' en ' + cat.node + ')');
+      // La miras a ella (el banco queda fuera de la vista): lo notas, pero el banco todavía no cruje.
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      var cp = cat.mesh.root.position;
+      function lookAt(x, y, z) {
+        var dx = x - g.player.pos.x;
+        var dz = z - g.player.pos.z;
+        g.player.yaw = Math.atan2(-dx, -dz);
+        g.player.pitch = Math.atan2(y - 1.62, Math.hypot(dx, dz));
+      }
+      g.player.pos.set(-7.2, 0, -1.2);
+      lookAt(cp.x, 0.2, cp.z);
+      step(ctx, 3);
+      check(sub().indexOf('mira fijo el banco amarillo') >= 0, 'no notó que Pelusa mira el banco');
+      step(ctx, 30 * 3);
+      check(!cat.creaked && cat.state === 'mira', 'el banco crujió sin mirarlo');
+      g.gameplay.messageCooldown = {};
+      cat.pet();
+      check(sub().indexOf('no aparta la vista') >= 0, 'acariciarla no la distrajo (y no debía)');
+      // Miras el banco: cruje, y Pelusa por fin aparta la vista.
+      lookAt(-3.5, 0.6, 0.62);
+      step(ctx, 2);
+      check(cat.creaked && sub().indexOf('El banco cruje') >= 0, 'el banco no crujió al mirarlo');
+      step(ctx, 30 * 4);
+      check(cat.state !== 'mira', 'Pelusa siguió mirando el banco');
+      check(!cat.stareAtBench(), 'pasó dos veces en la misma noche');
+      noErrors(ctx);
+      return 'mira · lo notas · cruje al mirar el banco';
+    }],
+
+    ['El puente de Blackwood: aparece en la cuarta vuelta; sin placa, el marco vacío; con la placa, el río y la cara que se inclina', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var f = g.world.forest;
+      var THREE = ctx.w.THREE;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = [];
+      delete g.objetos.got.placa;
+      g.bosque.go(); step(ctx, 40);
+      check(g.bosque.outside && !f.bridge.visible && f.bridgeColliders.every(function (c) { return c.off; }), 'el puente ya estaba (o sus barandas chocaban)');
+      // Cuarta vuelta: al fondo del sendero, el parpadeo te devuelve y aparece el puente.
+      g.bosque.wraps = 3;
+      g.player.pos.set(0, 0, 148.6);
+      for (var i = 0; i < 30 * 3 && g.bosque.wraps < 4; i += 1) { g.player.pos.z = Math.max(g.player.pos.z, 148.6); step(ctx, 1); }
+      check(g.bosque.wraps === 4 && f.bridge.visible && !f.plaque.visible, 'no apareció el puente en la cuarta vuelta');
+      check(f.bridgeColliders.every(function (c) { return !c.off; }), 'las barandas no chocan');
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.pos.set(-12, 0, 110.5);
+      step(ctx, 2);
+      check(sub().indexOf('cruza un río seco') >= 0, 'no notó el puente');
+      // La baranda no se atraviesa.
+      g.player.pos.set(-12.62, 0, 116);
+      g.player._collide([]); // la colisión se resuelve al moverse; aquí, directo
+      check(Math.abs(g.player.pos.x + 12.62) > 0.1, 'se atraviesa la baranda');
+      // Tocar el marco con el dedo: sin placa, vacío.
+      function tap(from) {
+        var t = f.bridgeFrame.getWorldPosition(new THREE.Vector3());
+        g.player.pos.set(from[0], 0, from[1]);
+        var dx = t.x - from[0];
+        var dz = t.z - from[1];
+        g.player.yaw = Math.atan2(-dx, -dz) + 0.2;
+        g.player.pitch = Math.atan2(t.y - 1.62, Math.hypot(dx, dz));
+        step(ctx, 1);
+        var cam = g.player.camera;
+        cam.updateMatrixWorld();
+        var v = t.clone().project(cam);
+        var hit = g.gameplay.targetAt(cam, new THREE.Vector2(v.x, v.y));
+        check(hit && hit.kind === 'puente', 'no se pudo tocar el marco (tocó ' + (hit ? hit.kind : 'nada') + ')');
+        g.gameplay._begin(hit, g.input);
+      }
+      tap([-10.3, 116.4]);
+      check(!f.plaque.visible && sub().indexOf('marco vacío') >= 0, 'sin placa debía estar vacío');
+      // Con la placa (la caja de la máscara): encaja, suena el río, y del otro lado una cara blanca se inclina.
+      g.objetos.got.placa = 1;
+      g.gameplay.messageCooldown = {};
+      tap([-10.3, 116.4]);
+      check(f.plaque.visible && g.logros.has('puente') && sub().indexOf('Encaja justo') >= 0, 'no se puso la placa');
+      await wait(2800);
+      var face = g.bosque.bowFace;
+      check(face && face.group.visible && Math.abs(face.group.position.x + 12) < 0.01 && Math.abs(face.group.position.z - 116) > 2, 'no apareció la cara del otro lado');
+      check(sub().indexOf('inclina la cabeza') >= 0, 'faltó el subtítulo de la cara');
+      step(ctx, 30 * 13);
+      check(!face.group.visible, 'la cara no se fue');
+      noErrors(ctx);
+      // En otra noche, el puente conserva su nombre.
+      ctx = await load();
+      g = ctx.g;
+      start(ctx);
+      g.bosque.go(); step(ctx, 40);
+      g.bosque.showBridge();
+      check(g.world.forest.plaque.visible, 'el puente olvidó su placa en la noche siguiente');
+      noErrors(ctx);
+      return 'cuarta vuelta · marco vacío · placa · río · cara · se guarda';
+    }],
+
     ['Bosque infinito: al fondo o al costado, un parpadeo te devuelve; a la segunda vuelta, la secadora solitaria', async function () {
       var ctx = await load();
       var g = ctx.g;
@@ -1473,6 +1583,7 @@
       start(ctx);
       g.horror.customer.present = false;
       g.clientela.plan = []; // sin visitas: Pelusa a veces las acompaña (eso tiene su propia prueba)
+      g.gato.stared = true; // sin la anomalía del banco (tiene su propia prueba)
       function at(min, frames) {
         g.minutes = min;
         cat.timer = 0;

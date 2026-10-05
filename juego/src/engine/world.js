@@ -1166,6 +1166,7 @@
         if (Math.hypot(x + 4.5, z - 103.2) < 1.5) { continue; }
         if (Math.hypot(x + 14.5, z - 129) < 2.6) { continue; }      // el claro de la secadora solitaria
         if (Math.hypot(x - 8.5, z - 121) < 2.4) { continue; }       // la campana de la escuela
+        if (Math.abs(x + 12) < 6.2 && Math.abs(z - 116) < 2.6) { continue; } // el río seco y el puente viejo
         var blocked = false;
         for (var n = 0; n < forestAnchors.length && !blocked; n += 1) {
           var an = this.anchors[forestAnchors[n]];
@@ -1232,6 +1233,44 @@
       bell.visible = false;
       this.add(bell);
 
+      // El puente viejo de Blackwood (cuarta vuelta del bosque infinito, bosque.js): un río seco y un puente de madera
+      // sin nombre. En la baranda, el marco vacío de la placa (la que deja la máscara en la caja del mostrador).
+      var bridge = new THREE.Group();
+      bridge.position.set(-12, 0, 116);
+      var bed = new THREE.Mesh(new THREE.PlaneGeometry(11, 2.2), R.material({ texture: 'white', color: 0x3b3833 }));
+      bed.rotation.x = -Math.PI / 2;
+      bed.position.y = 0.015;
+      bridge.add(inert(bed));
+      var stones = [];
+      [[-4.6, 0.5], [-3.1, -0.6], [-1.6, 0.3], [1.8, -0.4], [3.3, 0.6], [4.8, -0.2], [0.9, 0.75], [-0.9, -0.8]].forEach(function (s, i) {
+        var size = 0.12 + (i % 3) * 0.06;
+        stones.push({ geo: new THREE.DodecahedronGeometry(size, 0), matrix: new M4().makeTranslation(s[0], size * 0.4, s[1]), su: 1, sv: 1 });
+      });
+      bridge.add(inert(new THREE.Mesh(mergeParts(stones), R.material({ texture: 'white', color: 0x77736a }))));
+      var wood = R.material({ texture: 'corteza', color: 0x7a5c44 });
+      this.box(1.3, 0.1, 3.6, wood, 0, 0.12, 0, bridge);
+      var rails = [];
+      [-0.62, 0.62].forEach(function (rx) {
+        [-1.6, 1.6].forEach(function (rz) { rails.push({ geo: new THREE.BoxGeometry(0.1, 0.85, 0.1), matrix: new M4().makeTranslation(rx, 0.55, rz), su: 1, sv: 1 }); });
+        rails.push({ geo: new THREE.BoxGeometry(0.08, 0.08, 3.3), matrix: new M4().makeTranslation(rx, 0.95, 0), su: 1, sv: 3 });
+      });
+      var railMesh = new THREE.Mesh(mergeParts(rails), wood);
+      bridge.add(railMesh);
+      var frame = this.box(0.04, 0.24, 0.44, R.material({ texture: 'white', color: 0x24211d }), 0.68, 0.78, 0, bridge);
+      var plaque = this.box(0.03, 0.17, 0.36, R.material({ texture: 'metal', color: 0x9a7840, emissive: 0.25 }), 0.71, 0.78, 0, bridge);
+      plaque.visible = false;
+      [railMesh, frame, plaque].forEach(function (o) { this.interactive(o, 'puente'); }, this);
+      bridge.visible = false;
+      this.add(bridge);
+      // Las barandas: colisión solo cuando el puente existe (bosque.js las enciende).
+      var railColliders = [];
+      [-0.62, 0.62].forEach(function (rx) {
+        this.collider(-12 + rx - 0.06, -12 + rx + 0.06, 116 - 1.65, 116 + 1.65);
+        var c = this.colliders[this.colliders.length - 1];
+        c.off = true;
+        railColliders.push(c);
+      }, this);
+
       // Bordes: no se puede salir del bosque (ni rodear la fachada). El bosque infinito (bosque.js) te devuelve antes.
       this.collider(-23.5, -22.2, 98, 152);
       this.collider(22.2, 23.5, 98, 152);
@@ -1250,6 +1289,10 @@
         loneDryer: lone,
         bell: bell,
         bellCup: cup,
+        bridge: bridge,
+        bridgeFrame: frame,
+        plaque: plaque,
+        bridgeColliders: railColliders,
         lonePort: lonePort,
         clothesline: line,
         shirts: shirts,

@@ -220,6 +220,7 @@
       for (var pass = 0; pass < 2; pass += 1) {
         for (var i = 0; i < boxes.length; i += 1) {
           var b = boxes[i];
+          if (b.off) { continue; } // p. ej. las barandas del puente, antes de que aparezca
           var cx = U.clamp(p.x, b.minX, b.maxX);
           var cz = U.clamp(p.z, b.minZ, b.maxZ);
           var dx = p.x - cx;

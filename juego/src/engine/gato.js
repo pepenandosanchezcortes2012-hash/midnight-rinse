@@ -26,6 +26,7 @@
     PU: [0.6, 3.9]      // frente a la puerta de vidrio
   };
   var BOWL = [7.25, 0.42];
+  var BENCH = [-3.5, 0.62]; // el banco amarillo (lo que mira en la anomalía de horror.js)
   var PATROL = ['F1', 'F6', 'F4', 'F5', 'F9', 'F3', 'F8', 'F2', 'F7'];
 
   /** Qué toca a esta hora del turno (minutos desde la medianoche). */
@@ -168,6 +169,7 @@
     pet() {
       var g = this.game;
       if (!this.mesh.root.visible) { return; }
+      if (this.state === 'mira') { g.ui.subtitle('(Pelusa no aparta la vista del banco. Ni siquiera ronronea.)', 3); return; }
       if (this.petCooldown > 0) { g.ui.subtitle('(Pelusa te ignora con mucha dignidad.)', 2.5); return; }
       this.petCooldown = 15;
       this.pets += 1;
@@ -236,6 +238,11 @@
           this.timer -= dt;
           if (this.timer <= 0) { this._flee(); }
           break;
+        case 'mira':
+          this.timer -= dt;
+          this._stare(dt);
+          if (this.timer <= 0) { this.state = 'sentado'; this.timer = U.rand(1, 2); }
+          break;
         case 'camina':
         case 'huye':
           this._walk(dt);
@@ -296,6 +303,61 @@
           }
         }
         this.scratching = Math.max(0, (this.scratching || 0) - dt);
+      }
+    }
+
+    /** ¿Puede ir a mirar el banco? Despierta, en el piso, sin él cerca, sin estar acompañando a nadie. */
+    canStare() {
+      var ok = { sentado: 1, camina: 1, acicala: 1, ventana: 1, come: 1 };
+      return this.mesh.root.visible && !this.perch && !this.waitingDoor && !this.companyWith && !!ok[this.state];
+    }
+
+    /**
+     * Anomalía (horror.js, «pelusa_mira»): antes de que él llegue, Pelusa va a sentarse frente al banco amarillo vacío
+     * y lo mira fijo. Si la ves, lo notas; si después miras el banco, cruje como si alguien se sentara.
+     */
+    stareAtBench() {
+      if (this.stared || !this.canStare()) { return false; }
+      this.stared = true;
+      if (this.node === 'F1' && this.state !== 'camina') { this._startStare(); return true; }
+      this.staring = true;
+      this._goTo('F1');
+      return true;
+    }
+
+    _startStare() {
+      this.staring = false;
+      this.state = 'mira';
+      this.timer = 24;
+      this.stareSeenAt = null;
+      this.creaked = false;
+    }
+
+    _stare() {
+      var g = this.game;
+      var root = this.mesh.root;
+      root.rotation.y = Math.atan2(BENCH[0] - root.position.x, BENCH[1] - root.position.z);
+      if (g.player.eyesClosed || g.bosque.outside || g.pasillo.inside) { return; }
+      var cam = g.player.camera;
+      var v = this.tmp.set(root.position.x, 0.2, root.position.z).project(cam);
+      var catOnScreen = Math.abs(v.x) < 0.85 && Math.abs(v.y) < 0.85 && v.z < 1;
+      if (this.stareSeenAt === null) {
+        if (catOnScreen && U.distXZ(g.player.pos, root.position) < 6) {
+          this.stareSeenAt = this.timer;
+          this.timer = Math.max(this.timer, 12);
+          g.ui.subtitle('(Pelusa mira fijo el banco amarillo, con las orejas hacia atrás. No hay nadie sentado.)', 5);
+          g.dread = Math.min(1, g.dread + 0.03);
+        }
+        return;
+      }
+      if (this.creaked || this.stareSeenAt - this.timer < 2) { return; }
+      var b = this.tmp.set(BENCH[0], 0.6, BENCH[1]).project(cam);
+      if (Math.abs(b.x) < 0.45 && Math.abs(b.y) < 0.6 && b.z < 1) {
+        this.creaked = true;
+        g.audio.crujido(this._pan());
+        g.ui.subtitle('(El banco cruje, como si alguien acabara de sentarse.)', 5);
+        g.dread = Math.min(1, g.dread + 0.05);
+        this.timer = Math.min(this.timer, 2.5); // y Pelusa, por fin, aparta la vista
       }
     }
 
@@ -376,6 +438,8 @@
           this._jump(p, false);
           return;
         }
+        if (this.staring && this.node === 'F1' && this.state === 'camina') { this._startStare(); return; }
+        this.staring = false;
         this.state = 'sentado';
         this.timer = U.rand(1, 2.5); // al llegar, enseguida sigue con su rutina
         return;
@@ -503,6 +567,15 @@
         m.head.rotation.set(0.5, this._lookYaw(), 0);
         m.tail.rotation.set(0.9, 0.6, 0);
         m.body.scale.set(1, 1, 1);
+      } else if (s === 'mira') {
+        // Sentada, rígida, la cabeza fija al frente (hacia el banco); solo la punta de la cola se mueve.
+        m.body.position.y = 0.17;
+        m.body.rotation.x = -0.55;
+        m.head.position.set(0, 0.1, 0.19);
+        m.head.rotation.set(0.45, 0, 0);
+        m.tail.rotation.set(1.1, 0.2 + Math.sin(this.phase * 3) * 0.12, 0);
+        m.body.scale.set(1, 1, 1);
+        this.phase += 0.3;
       } else if (s === 'eriza') {
         m.body.position.y = 0.2;
         m.body.rotation.x = 0;

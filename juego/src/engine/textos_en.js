@@ -784,5 +784,18 @@ MR.TEXTOS_EN = {
  "Huele al lodo de abajo. Alguien la arrancó antes de que el embalse cubriera todo.": "It smells of the mud below. Someone tore it off before the reservoir covered everything.",
  "Para nosotros, el reloj de la iglesia se detuvo para siempre en 1986.": "For us, the church clock stopped forever in 1986.",
  "Nos vamos antes de que aclare. La mañana es para los que viven arriba del agua.": "We leave before it gets light. Morning is for the ones who live above the water.",
- "No. Solo conocemos el agua fría y la campana de la escuela que sigue sonando.": "No. We only know the cold water and the school bell that keeps on ringing."
+ "No. Solo conocemos el agua fría y la campana de la escuela que sigue sonando.": "No. We only know the cold water and the school bell that keeps on ringing.",
+ "(El puente viejo. La placa sigue en la baranda: «PUENTE MUNICIPAL · BLACKWOOD».)": "(The old bridge. The plaque is still on the railing: “MUNICIPAL BRIDGE · BLACKWOOD”.)",
+ "(Entre los pinos, un puente de madera cruza un río seco. El agua se fue hace mucho.)": "(Among the pines, a wooden bridge crosses a dry river. The water left long ago.)",
+ "(Parpadeas. Del otro lado del puente ya no hay nadie.)": "(You blink. There's no one on the other side of the bridge anymore.)",
+ "(La placa brilla un poco: «PUENTE MUNICIPAL · BLACKWOOD». Abajo, las piedras siguen secas.)": "(The plaque gleams a little: “MUNICIPAL BRIDGE · BLACKWOOD”. Below, the stones are still dry.)",
+ "(En la baranda hay un marco vacío, del tamaño de una placa. Alguien le arrancó el nombre al puente.)": "(There's an empty frame on the railing, the size of a plaque. Someone tore the bridge's name off.)",
+ "(Pones la placa de bronce en el marco. Encaja justo. Bajo el puente, por un momento, se oye correr el río.)": "(You set the bronze plaque in the frame. It fits perfectly. Under the bridge, for a moment, you hear the river running.)",
+ "(Del otro lado del puente, una cara blanca inclina la cabeza.)": "(On the other side of the bridge, a white face bows its head.)",
+ "(Pelusa no aparta la vista del banco. Ni siquiera ronronea.)": "(Pelusa won't take its eyes off the bench. It doesn't even purr.)",
+ "(Pelusa mira fijo el banco amarillo, con las orejas hacia atrás. No hay nadie sentado.)": "(Pelusa stares at the yellow bench, ears flat. No one is sitting there.)",
+ "(El banco cruje, como si alguien acabara de sentarse.)": "(The bench creaks, as if someone had just sat down.)",
+ "El puente de Blackwood": "The Blackwood bridge",
+ "Devuélvele su nombre al puente.": "Give the bridge its name back.",
+ "Las caras blancas recuerdan tu noche. Y en lo hondo del bosque hay un puente sin nombre.": "The white faces remember your night. And deep in the forest there is a bridge with no name."
 };
