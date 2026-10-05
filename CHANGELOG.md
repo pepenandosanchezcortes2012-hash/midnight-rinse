@@ -162,3 +162,7 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 ## Sprint 18 — Todos los modelos (2): la sala
 
 - Teléfono público completo, cambiador con letrero y ranura, café con vasito y luz, tele con antenas.
+
+## Sprint 19 — Todos los modelos (3): el pasillo
+
+- Caldera con manómetro, válvula, rejilla y caños; etiqueta de advertencia en los fusibles.

@@ -816,6 +816,16 @@ El proyecto pasó por dos etapas:
 - **Galería:** vistas nuevas de la tele, el café, el cambiador, el almacén, el techo y el teléfono.
 - **QA:** capturas de antes y después y letreros traducidos. Resultado: 83/83.
 
+## 99. Sprint 19: todos los modelos, 3.ª parte. El pasillo de servicio
+- **La caldera**, que al fondo era una mancha oscura, ahora se lee bajo su propia luz:
+  - franjas de remaches y un segundo caño al techo;
+  - la rejilla del quemador delante de la llama;
+  - un manómetro de esfera clara con la aguja casi en rojo;
+  - el volante rojo de la válvula.
+- **La caja de fusibles:** la etiqueta amarilla de advertencia, un rayo en un triángulo.
+- Los casilleros ya estaban bien (rejillas, manijas e iniciales legibles).
+- **Galería:** vistas del pasillo (fondo, casilleros, caldera). Resultado: 83/83.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

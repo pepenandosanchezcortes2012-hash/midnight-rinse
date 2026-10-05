@@ -1075,11 +1075,40 @@
       var flue = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.7, 8), m.metal);
       flue.position.set(X, 2.25, -5.5);
       this.add(inert(flue));
+      // La caldera de cerca: remaches, un segundo caño, la rejilla del quemador, el manómetro y el volante de la válvula.
+      var Mb = THREE.Matrix4;
+      var bxb = new THREE.BoxGeometry(1, 1, 1);
+      var boilerParts = [];
+      function pb(x, y, z, w, h, d) { boilerParts.push({ geo: bxb, matrix: new Mb().makeTranslation(x, y, z).multiply(new Mb().makeScale(w, h, d)), su: 1, sv: 1 }); }
+      pb(X, 1.55, -5.5, 1.33, 0.06, 0.83);            // franjas de remaches
+      pb(X, 0.25, -5.5, 1.33, 0.06, 0.83);
+      [-0.08, 0, 0.08].forEach(function (dy) { pb(X, 0.5 + dy, -5.075, 0.34, 0.025, 0.02); }); // la rejilla delante de la llama
+      boilerParts.push({ geo: new THREE.CylinderGeometry(0.045, 0.045, 0.75, 6), matrix: new Mb().makeTranslation(X + 0.45, 2.25, -5.7), su: 1, sv: 1 });
+      this.add(inert(new THREE.Mesh(mergeParts(boilerParts), R.material({ texture: 'metal', color: 0x3e3b36 }))));
+      var gauge = new THREE.Mesh(new THREE.CircleGeometry(0.1, 10), R.material({ texture: 'white', color: 0xe8e2d0, emissive: 0.45 }));
+      gauge.position.set(X + 0.35, 1.3, -5.088);
+      this.add(inert(gauge));
+      var needle = this.box(0.012, 0.08, 0.005, R.material({ texture: 'white', color: 0xb02018, emissive: 0.3 }), X + 0.35, 1.32, -5.084);
+      needle.rotation.z = -0.7; // casi en rojo
+      inert(needle);
+      var valve = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.018, 4, 10), R.material({ texture: 'white', color: 0x9a2a22, emissive: 0.15 }));
+      valve.position.set(X - 0.35, 1.15, -5.07);
+      this.add(inert(valve));
       this.collider(X - 0.65, X + 0.65, -6, -5.08);
       var fuse = this.box(0.12, 0.55, 0.4, R.material({ texture: 'metal', color: 0x8a8d90 }), X + 1.43, 1.5, -3);
       var fuseLed = this.box(0.02, 0.04, 0.04, R.material({ texture: 'white', color: 0xff3020, emissive: 1.3 }), X + 1.36, 1.72, -2.88);
       this.interactive(fuse, 'fusibles');
       this.interactive(fuseLed, 'fusibles');
+      // La etiqueta amarilla de advertencia (un rayo en un triángulo).
+      var warn = MR.Textures.dynamic(16, 16);
+      var wx = warn.ctx;
+      wx.fillStyle = '#e8c23a'; wx.beginPath(); wx.moveTo(8, 1); wx.lineTo(15, 14); wx.lineTo(1, 14); wx.closePath(); wx.fill();
+      wx.fillStyle = '#1a1a1a'; wx.beginPath(); wx.moveTo(9, 4); wx.lineTo(6, 9); wx.lineTo(8, 9); wx.lineTo(7, 13); wx.lineTo(10, 8); wx.lineTo(8, 8); wx.closePath(); wx.fill();
+      warn.texture.needsUpdate = true;
+      var sticker = new THREE.Mesh(new THREE.PlaneGeometry(0.14, 0.14), R.material({ map: warn.texture, emissive: 0.35 }));
+      sticker.rotation.y = -Math.PI / 2;
+      sticker.position.set(X + 1.364, 1.38, -3.0);
+      this.add(inert(sticker));
       // Bombilla colgando.
       this.box(0.01, 0.25, 0.01, m.dark, X, 2.48, 0.8);
       var bulb = this.box(0.08, 0.1, 0.08, R.material({ texture: 'white', color: 0xffe2a8, emissive: 1.3 }), X, 2.3, 0.8);
