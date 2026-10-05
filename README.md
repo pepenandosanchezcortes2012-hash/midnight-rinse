@@ -117,6 +117,7 @@ La lavandería tiene dos vidrieras a la avenida de Blackwood. A la 01:10 está v
 - **El autobús 86 «BLACKWOOD»** se detiene enfrente dos veces por noche; adentro, todas las caras son blancas. A veces de él bajan las visitas y cruzan la avenida.
 - **La barredora** pasa a la 01:40 con su luz naranja girando.
 - **Radio Nocturna en vivo:** con la radio en la 94.1, el locutor lee boletines cortos a la 01:45, 02:10, 03:30 y 04:30 que comentan tu noche.
+- **Ventanas con vida:** detrás de las ventanas encendidas cruzan sombras y las teles titilan. Una vez por noche, después de las 02:30, en una ventana hay alguien de cara blanca mirando la lavandería; si lo notas, esa luz se apaga.
 
 ### Pelusa, el gato
 Un gato negro vive en la lavandería.
@@ -126,11 +127,16 @@ Un gato negro vive en la lavandería.
 - **El bosque:** no sale, porque llueve; te espera junto a la puerta y maúlla cuando vuelves.
 - **Su rutina:** duerme, come de su plato, se acicala, mira (y rasca) la puerta de vidrio, hace la ronda, te sigue y duerme la siesta, según la hora.
 - **Sus amistades:** a veces se sienta junto a las caras blancas, y a las máscaras negras les bufa. Y a veces se queda mirando algo que tú no ves.
+- **Su lenguaje:** orienta las orejas hacia lo que oye, mueve la punta de la cola cuando está alerta y, si te tiene cariño, te recibe con un maullido cuando vuelves.
+- **Lo que recuerda:** el panel «Pelusa · lo que recuerda» de la pantalla de título dice cuánto cariño te tiene y a qué le teme.
+- **Al amanecer** (final verdadero), Pelusa va a la puerta de vidrio. Si te tiene cariño, sale contigo a la calle.
 
 ### Cerebro de mosca
 Pelusa, las caras blancas, el niño y la gente de la avenida llevan un **cerebro de mosca de la fruta en miniatura** (`src/engine/mosca.js`): unas 55 neuronas que copian los circuitos reales de *Drosophila*. El anillo del complejo central decide hacia dónde atienden; el cuerpo fungiforme aprende con dopamina; las neuronas reloj marcan el sueño; y las neuronas descendentes eligen qué hacer.
 - **Pelusa** te toma cariño si la acaricias, y a veces deja lo que estaba haciendo para ir contigo. Lo recuerda la noche siguiente. También aprende de lo que la asusta.
 - **Las caras blancas** miran a Pelusa, a su niño, su ropa girando o el autobús; nunca a ti.
+- **También oyen:** si algo suena (una secadora, el teléfono, una puerta), Pelusa y las caras voltean hacia ahí. Si Pelusa mira fijo hacia un lado, algo pasó ahí.
+- **El venado del bosque** tiene el suyo, muy miedoso: pasta lejos, levanta la cabeza si te acercas y huye a saltos.
 - Él y las máscaras no lo llevan: uno es una anomalía, las otras obedecen órdenes.
 
 ### Director de IA (cómo se mueven y deciden)
@@ -142,6 +148,7 @@ La mosca decide a qué le prestan atención; el **director de IA** (`src/core/di
 - **Las caras blancas**, mientras esperan su lavado, eligen una rutina (mirar el tambor, doblar una prenda que no está, contar monedas) o se corren al borde de tu vista. Solo cambian de pose cuando no las miras de frente. Si insistes en hablarles, señalan el tambor con un dedo largo y anguloso; si sigues, se inclinan hacia ti, muy despacio, sin mirarte.
 - **Las máscaras** te siguen con el cuello y, un segundo después, con la máscara. A veces vienen dos: una vigila la puerta de vidrio y sus pasos nunca coinciden. Desde las 03:00 se van por la puerta trasera y la dejan entreabierta.
 - **Él** nunca aparece a la vista: elige un punto ciego (al borde de tu vista, más cerca y a tu espalda, o el banco para que bajes la guardia), según cómo está la tienda: luces que fallan, estática en la radio, tu miedo. Si lo miraste, tarda en reaccionar. A veces, donde estaba parado, queda una moneda mojada o un ticket doblado. En el bosque se esconde detrás de los pinos y se corre de lado para que siempre haya un tronco entre los dos.
+- **Su cabeza** se inclina un poco más cada vez que no lo miras (nunca mientras lo ves); y si te acercas mucho, notas que no respira.
 
 ### El bosque
 Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en la pausa, y sales a un bosque de pinos bajo la lluvia.
@@ -156,6 +163,7 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
 - **El bosque no termina:** si llegas al fondo o a los costados, parpadeas y el bosque te devuelve al otro lado. Cada vuelta más adentro guarda algo más viejo del pueblo: a la segunda, algo entre los pinos; a la tercera, algo que suena; a la cuarta, algo que perdió su nombre.
 - **Música:** afuera suena una pista zen lo-fi, suave, que baja cuando sube el miedo.
+- **Un venado:** algunas noches pasta entre los pinos. Si lo alumbras, le brillan los ojos; si te acercas, huye.
 
 ### Noches especiales
 Más o menos la mitad de las noches traen algo distinto, con una **nota del gerente** al empezar y en la tablilla:
@@ -204,6 +212,8 @@ En **Opciones → Dificultad**:
 
 ### Fotos
 Saca fotos con la cámara del celular: **P** en el teclado, **Y/△** en el control o «Sacar una foto» en la pausa (en el celular). Tienen flash, asoman un momento como polaroid y se guardan las últimas 12 en el panel «Fotos» del título, desde donde puedes descargarlas o compartirlas. En el celular, «Compartir resultado» adjunta la última foto de la noche. Revísalas bien: a veces sale alguien que no estaba ahí.
+- **Lo que la cámara ve:** en una foto, las caras blancas (y los pasajeros del 86) tienen el rostro que tenían antes; las máscaras no salen; y la avenida, antes de que suba el agua, aparece inundada. En el bosque, bajo el puente corre un río.
+- En el álbum, las fotos que revelaron algo llevan el marco dorado, y el pie dice qué vieron.
 
 ### Récords
 En la pantalla de título: turnos terminados, tu mejor evaluación en cada dificultad y los cinco finales (dos están ocultos hasta que los ves). Si superas tu mejor nota, el resumen del final dice «¡Nuevo récord!».
