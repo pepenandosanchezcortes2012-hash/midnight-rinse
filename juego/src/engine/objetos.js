@@ -23,7 +23,9 @@
     { id: 'nota', nombre: 'Una nota doblada', desc: 'Con letra apretada: «No te voy a dejar salir. Me gusta tu compañía».' },
     { id: 'espejito', nombre: 'Un espejo de bolsillo', desc: 'Empañado por dentro, como si alguien hubiera respirado del otro lado.' },
     { id: 'rollo', nombre: 'Un rollo de fotos sin revelar', desc: 'Doce exposiciones. En la etiqueta, con tu letra: «no las revelen».' },
-    { id: 'llave_paso', nombre: 'Una llave de paso', desc: 'Fría y mojada. Alguien cerró el agua a propósito.' }
+    { id: 'llave_paso', nombre: 'Una llave de paso', desc: 'Fría y mojada. Alguien cerró el agua a propósito.' },
+    // Regalo de la Administración del Embalse (la caja del mostrador, clientela.js): no sale de las lavadoras.
+    { id: 'placa', nombre: 'Una placa de bronce', desc: '«PUENTE MUNICIPAL · BLACKWOOD». Huele a río.', regalo: true }
   ];
 
   class Objetos {
@@ -47,9 +49,23 @@
     /** Al terminar un ciclo: 35 % de que quede algo adentro (prefiere lo que aún no tienes). */
     onCycleEnd(washer) {
       if (washer.item || Math.random() > 0.35) { return; }
-      var missing = LIST.filter(function (o) { return !this.got[o.id]; }, this);
-      var pool = missing.length ? missing : LIST;
+      var normal = LIST.filter(function (o) { return !o.regalo; });
+      var missing = normal.filter(function (o) { return !this.got[o.id]; }, this);
+      var pool = missing.length ? missing : normal;
       washer.item = pool[Math.floor(Math.random() * pool.length)].id;
+    }
+
+    /** Un objeto que no sale de una lavadora (la caja de la Administración). */
+    give(id) {
+      var def = LIST.filter(function (o) { return o.id === id; })[0];
+      var g = this.game;
+      var isNew = !this.got[def.id];
+      if (isNew) { this.got[def.id] = g.night || 1; this._save(); }
+      this.foundTonight += 1;
+      g.ui.subtitle(MR.tf('(En la caja: {n}. {d})', { n: MR.t(def.nombre).toLowerCase(), d: MR.t(def.desc) }), 7);
+      g.audio.ding();
+      g.ui.renderObjetos(this);
+      if (g.logros && this.count() >= 6) { g.logros.unlock('objetos'); }
     }
 
     /** Al abrir la puerta de una lavadora detenida: si había algo, lo encuentras. */

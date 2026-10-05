@@ -353,6 +353,12 @@
       clothes.visible = false;
       this.add(clothes);
       this.foldedClothes = clothes;
+      // La caja que deja la segunda máscara de la noche (clientela.js): adentro, la placa del puente.
+      var gift = this.box(0.3, 0.2, 0.24, this.retro.material({ texture: 'white', color: 0x8a6d48 }), 4.78, 1.15, 2.0);
+      this.box(0.31, 0.02, 0.05, this.retro.material({ texture: 'white', color: 0xb8a37a }), 0, 0.1, 0, gift);
+      this.interactive(gift, 'cajaMostrador');
+      gift.visible = false;
+      this.giftBox = gift;
       // La hoja del registro sobre el mostrador.
       var note = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.28), m.paper);
       note.rotation.x = -Math.PI / 2;

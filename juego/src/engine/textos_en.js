@@ -761,5 +761,12 @@ MR.TEXTOS_EN = {
  "Mira la avenida: las caras blancas cruzan antes de entrar. Y Pelusa ya eligió de quién desconfiar.": "Watch the avenue: the white faces cross it before coming in. And Pelusa has already chosen whom to distrust.",
  "(05:13. Las luces de la lavandería están apagadas. Por la vidriera entra la luz de la mañana.)": "(05:13. The laundromat lights are off. Morning light is coming in through the window.)",
  "(El letrero de la puerta dice CERRADO. Por primera vez, la puerta de vidrio da a la calle.)": "(The sign on the door says CLOSED. For the first time, the glass door opens onto the street.)",
- "El final verdadero ahora tiene amanecer. Ojalá lo veas.": "The true ending now has a dawn. I hope you get to see it."
+ "El final verdadero ahora tiene amanecer. Ojalá lo veas.": "The true ending now has a dawn. I hope you get to see it.",
+ "(Del otro lado de la avenida, la cara blanca levanta la mano. Se está despidiendo.)": "(Across the avenue, the white face raises a hand. It's saying goodbye.)",
+ "(Antes de irse, deja una caja de cartón sobre el mostrador.)": "(Before leaving, it sets a cardboard box on the counter.)",
+ "(En el espejo, detrás de ti, una cara blanca mira el espejo contigo. Te das vuelta: no hay nadie.)": "(In the mirror, behind you, a white face is looking into the mirror with you. You turn around: no one is there.)",
+ "Una placa de bronce": "A bronze plaque",
+ "«PUENTE MUNICIPAL · BLACKWOOD». Huele a río.": "“MUNICIPAL BRIDGE · BLACKWOOD”. It smells of the river.",
+ "(En la caja: {n}. {d})": "(In the box: {n}. {d})",
+ "Las máscaras a veces dejan algo. Las caras blancas a veces se despiden.": "The masks sometimes leave something behind. The white faces sometimes say goodbye."
 };

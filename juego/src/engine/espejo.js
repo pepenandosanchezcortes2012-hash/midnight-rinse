@@ -99,12 +99,17 @@
         this.armed = false;
         this.ghost = GHOST_TIME;
         this.ghosts += 1;
+        // Si esa noche vino alguna cara blanca, a veces es una de ellas la que está detrás (y no él).
+        this.ghostKind = g.clientela && g.clientela.nextId > 1 && Math.random() < 0.4 ? 'cara' : 'el';
         g.audio.whisper(0);
         g.dread = Math.min(1, g.dread + 0.12);
         MR.Haptics.pulse([60, 40, 120]);
         if (g.logros) { g.logros.unlock('espejo'); }
+        var kind = this.ghostKind;
         setTimeout(function () {
-          if (g.state === 'playing') { g.ui.subtitle('(En el espejo, alguien está de pie detrás de ti. Te das vuelta: no hay nadie.)', 6); }
+          if (g.state !== 'playing') { return; }
+          g.ui.subtitle(kind === 'cara' ? '(En el espejo, detrás de ti, una cara blanca mira el espejo contigo. Te das vuelta: no hay nadie.)' :
+            '(En el espejo, alguien está de pie detrás de ti. Te das vuelta: no hay nadie.)', 6);
         }, 1300);
       } else if (this.looking > 0.6 && !this.noticed) {
         this.noticed = true;
@@ -138,7 +143,15 @@
       hidden.forEach(function (o) { o.visible = false; });
       var c = g.world.customer;
       var saved = null;
-      if (this.ghost > 0) {
+      if (this.ghost > 0 && this.ghostKind === 'cara') {
+        // Una cara blanca en el reflejo: un modelo propio que solo existe en esta pasada.
+        if (!this.face) { this.face = g.clientela._model('cara'); this.face.group.visible = false; g.world.add(this.face.group); }
+        var pf = g.player.pos;
+        var ff = g.player.forward(new V3());
+        this.face.group.position.set(pf.x - ff.x * 0.9, 0, pf.z - ff.z * 0.9);
+        this.face.group.rotation.y = Math.atan2(-ff.x, -ff.z); // mira el espejo, igual que tú (la cara va en -z)
+        this.face.group.visible = true;
+      } else if (this.ghost > 0) {
         saved = { pos: c.group.position.clone(), rot: c.group.rotation.y, vis: c.group.visible, seated: c.seated.visible, standing: c.standing.visible };
         var p = g.player.pos;
         var f = g.player.forward(new V3());
@@ -156,6 +169,7 @@
       r.render(g.world.scene, vcam);
       r.setRenderTarget(null);
       this.renders += 1;
+      if (this.face) { this.face.group.visible = false; }
       if (saved) {
         c.group.position.copy(saved.pos);
         c.group.rotation.y = saved.rot;

@@ -630,6 +630,13 @@ El proyecto pasó por dos etapas:
 - **Error real encontrado:** el parteluz de la vidriera grande (y los marcos) tapaban el rayo, así que un toque justo sobre la barra no hacía nada. Ahora los marcos son inertes y el toque llega a la vidriera.
 - Resultado: 73/73.
 
+## 83. Sprint 7b: tres variaciones de los personajes (motor creativo)
+- **La caja de la Administración:** la segunda máscara de la noche, además de imprimir su orden, deja una caja de cartón en la punta del mostrador. Adentro está **una placa de bronce: «PUENTE MUNICIPAL · BLACKWOOD». Huele a río.** Es el objeto 16 de la colección y el único que no sale de una lavadora (`objetos.give`, marcado `regalo`; `onCycleEnd` lo excluye).
+- **La despedida:** a veces (50 %), la cara blanca que acaba de irse aparece del otro lado de la avenida con la mano en alto, ocho segundos: «Se está despidiendo». Es el contrapunto amable de la vigía del Sprint 5.
+- **La cara en el espejo:** si esa noche vino alguna cara blanca, el susto del espejo a veces (40 %) muestra a una de ellas detrás de ti, mirando el espejo contigo, en vez de a él. Es un modelo propio que solo existe en la pasada del reflejo.
+- **Canon:** las máscaras siguen sin hablar (la caja es un acto, no un mensaje), las caras siguen siendo inofensivas y él no ataca. `lore_check` sin contradicciones.
+- **QA:** prueba nueva con las tres variaciones. Revisado con captura del espejo: la cara se ve, pero con menos contraste que él (167 píxeles contra más de 300), así que esa prueba usa umbral 120. La caja se movió para no encimarse con la radio. PSX dentro de umbrales, 767/767 textos traducidos, 74/74.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

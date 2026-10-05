@@ -105,6 +105,24 @@
       pos.y = 0.12 + Math.abs(Math.sin(a.bob)) * 0.03;
     }
 
+    /** La despedida: la cara blanca que lavó su ropa levanta la mano desde la vereda de enfrente (8 s). */
+    _wave() {
+      var g = this.game;
+      if (g.bosque.outside || g.pasillo.inside) { return; }
+      if (!this.waver) {
+        this.waver = this._model('cara');
+        var arm = this.waver.group.children[4];
+        arm.rotation.z = Math.PI;      // el brazo, arriba
+        arm.position.y = 1.78;
+        this.world.add(this.waver.group);
+      }
+      this.waver.group.position.set(U.rand(3.8, 7.0), 0.12, 12.0);
+      this.waver.group.rotation.y = 0;
+      this.waver.group.visible = true;
+      this.waveTimer = 8;
+      g.ui.subtitle('(Del otro lado de la avenida, la cara blanca levanta la mano. Se está despidiendo.)', 5);
+    }
+
     /** La vigía: una cara blanca parada en la vereda de enfrente, mirando la lavandería (horror.js la hace aparecer). */
     showWatcher() {
       if (!this.watcher) {
@@ -254,6 +272,10 @@
         if (p.kind === 'cara') { this._startApproach(); } else { this.spawn(p.kind); }
       }
       if (this.approach) { this._stepApproach(dt, inSala); }
+      if (this.waver && this.waver.group.visible) {
+        this.waveTimer -= dt;
+        if (this.waveTimer <= 0 || !inSala) { this.waver.group.visible = false; }
+      }
       this._stepWatcher(inSala);
       var self = this;
       this.visitors.slice().forEach(function (v) { self._step(v, dt); });
@@ -266,7 +288,12 @@
       if (v.state === 'entra' || v.state === 'sale') {
         var tgt = v.path[0];
         if (!tgt) {
-          if (v.state === 'sale') { g.audio.door(); this._remove(v); return; }
+          if (v.state === 'sale') {
+            g.audio.door();
+            this._remove(v);
+            if (v.kind === 'cara' && Math.random() < 0.5) { this._wave(); } // a veces se despide desde la otra vereda
+            return;
+          }
           v.state = 'llego';
           v.timer = 0;
           grp.rotation.y = v.rot;
@@ -330,6 +357,14 @@
         setTimeout(function () {
           if (g.state === 'playing') { g.ui.subtitle(MR.tf('[La impresora térmica imprime] {l}', { l: MR.t(l.text) }), 8); }
         }, 900);
+        // La segunda máscara de la noche deja, además, una caja sobre el mostrador.
+        if (this.ordersToday === 2 && !this.boxGiven) {
+          this.boxGiven = true;
+          this.world.giftBox.visible = true;
+          setTimeout(function () {
+            if (g.state === 'playing') { g.ui.subtitle('(Antes de irse, deja una caja de cartón sobre el mostrador.)', 5); }
+          }, 4000);
+        }
       }
     }
 

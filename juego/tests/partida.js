@@ -1043,6 +1043,79 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['Variaciones: la caja de la segunda máscara, la cara que se despide desde la avenida y la cara blanca en el espejo', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var e = g.espejo;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.plan = [];
+      g.horror.customer.present = false;
+      g.player.pos.set(-6, 0, 2.5);
+      // La placa del puente nunca sale de una lavadora.
+      for (var n = 0; n < 300; n += 1) {
+        var w = { item: null };
+        g.objetos.onCycleEnd(w);
+        check(w.item !== 'placa', 'la placa salió de una lavadora');
+      }
+      // La segunda máscara de la noche deja la caja; al tocarla, la placa entra a la colección.
+      c.ordersToday = 1;
+      var m = c.spawn('mascara');
+      for (var i = 0; i < 30 * 30 && m.state !== 'llego'; i += 1) { step(ctx, 1); }
+      check(m.state === 'llego' && c.ordersToday === 2, 'la máscara no llegó al mostrador');
+      check(g.world.giftBox.visible, 'no dejó la caja');
+      await wait(4300);
+      check(sub().indexOf('caja de cartón') >= 0, 'no avisó de la caja');
+      g.gameplay._begin({ kind: 'cajaMostrador', index: 0 }, g.input);
+      check(!g.world.giftBox.visible && g.objetos.got.placa, 'la caja no dio la placa');
+      check(sub().indexOf('PUENTE MUNICIPAL') >= 0, 'no dijo qué había en la caja');
+      check(g.objetos.view().some(function (o) { return o.titulo === 'Una placa de bronce'; }), 'la placa no aparece en la colección');
+      for (var j = 0; j < 30 * 40 && c.visitors.length; j += 1) { step(ctx, 1); }
+      // La cara blanca se despide desde la vereda de enfrente (a veces: aquí, forzado).
+      g.gameplay.washers.forEach(function (x) { x.running = false; x.credit = false; });
+      var v = c.spawn('cara');
+      for (var k = 0; k < 30 * 30 && v.state !== 'llego'; k += 1) { step(ctx, 1); }
+      c._leave(v);
+      var rnd = ctx.w.Math.random;
+      ctx.w.Math.random = function () { return 0.3; };
+      for (var q = 0; q < 30 * 30 && c.visitors.length; q += 1) { step(ctx, 1); }
+      ctx.w.Math.random = rnd;
+      check(!c.visitors.length && c.waver && c.waver.group.visible, 'no se despidió desde la avenida');
+      check(c.waver.group.position.z > 11, 'la despedida no fue del otro lado de la avenida');
+      check(sub().indexOf('Se está despidiendo') >= 0, 'faltó el subtítulo de la despedida');
+      step(ctx, 30 * 9);
+      check(!c.waver.group.visible, 'la despedida no terminó');
+      // En el espejo: una cara blanca (esa noche vino una).
+      g.flags.customerSeen = true;
+      g.pasillo.unlock(true); g.pasillo.go(); step(ctx, 40);
+      var X = e.planeX - 1.465;
+      g.player.pos.set(X + 0.3, 0, 2.2); g.player.yaw = -Math.PI / 2; g.player.pitch = 0;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 99;
+      step(ctx, 30);
+      function snap() {
+        e.render();
+        var px = new Uint8Array(192 * 144 * 4);
+        g.retro.renderer.readRenderTargetPixels(e.rt, 0, 0, 192, 144, px);
+        return px;
+      }
+      var a = snap();
+      e.armed = true;
+      ctx.w.Math.random = function () { return 0.01; };
+      step(ctx, 1);
+      ctx.w.Math.random = rnd;
+      check(e.ghost > 0 && e.ghostKind === 'cara', 'no salió la cara blanca en el espejo (' + e.ghostKind + ')');
+      var b = snap();
+      check(e.face && !e.face.group.visible, 'la cara blanca quedó visible fuera del reflejo');
+      var diff = 0;
+      for (var p = 0; p < a.length; p += 4) { if (Math.abs(a[p] - b[p]) + Math.abs(a[p + 1] - b[p + 1]) + Math.abs(a[p + 2] - b[p + 2]) > 40) { diff += 1; } }
+      check(diff > 120, 'la cara no se ve en el reflejo (' + diff + ' píxeles distintos)'); // abrigo pardo sobre casilleros: menos contraste que él
+      await wait(1500);
+      check(sub().indexOf('mira el espejo contigo') >= 0, 'faltó el subtítulo del espejo');
+      noErrors(ctx);
+      return 'caja → placa · despedida · espejo (' + diff + ' px)';
+    }],
+
     ['En el celular: lo nuevo se puede tocar con el dedo (visitante, vidriera, banco, lavabo, secadora sola y campana)', async function () {
       var ctx = await load();
       var g = ctx.g;

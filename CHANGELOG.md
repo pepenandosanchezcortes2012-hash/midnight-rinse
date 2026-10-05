@@ -79,3 +79,11 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** es la única vez que la puerta no lleva al bosque. Es la recompensa del final y cierra el contraste entre la vidriera y la puerta que se abrió en el Sprint 2.
 - **Decisión:** el reloj se queda en 05:13 y no hay sustos. Es un momento de calma; el jugador decide cuándo irse.
 - **Decisión:** la luz es gris de mañana, no un sol brillante. Mantiene la paleta PS1 apagada y el tono melancólico de Blackwood.
+
+## Sprint 7 — Tocar en el celular y variaciones de los personajes
+
+- 7a: una prueba de toques con el dedo encontró que el parteluz de la vidriera tapaba el toque. Corregido: los marcos son inertes al rayo.
+- 7b: la caja de la segunda máscara (placa del puente, objeto 16), la cara blanca que se despide desde la avenida y la cara blanca en el espejo.
+- **Decisión:** la placa no sale de las lavadoras para que la caja tenga sentido como regalo. Un jugador que ya tenía los 15 objetos ve el contador subir a 16.
+- **Decisión:** la despedida y la cara del espejo son probabilísticas (50 % y 40 %), para que no se vuelvan rutina.
+- **Decisión:** en la prueba del espejo, el umbral de la cara blanca es menor que el de él. Se comprobó con captura que se ve; el abrigo pardo tiene menos contraste que el traje negro.
