@@ -26,6 +26,7 @@
     PU: [0.6, 3.9]      // frente a la puerta de vidrio
   };
   var BOWL = [7.25, 0.42];
+  var MEMORIA = 'midnight-rinse/pelusa'; // lo que su cerebro de mosca aprendió (quién la acaricia, quién la asusta)
   var BENCH = [-3.5, 0.62]; // el banco amarillo (lo que mira en la anomalía de horror.js)
   var PATROL = ['F1', 'F6', 'F4', 'F5', 'F9', 'F3', 'F8', 'F2', 'F7'];
 
@@ -90,6 +91,10 @@
       this.tmp = new V3();
       this.company = {}; // caras blancas a las que ya acompañó
       this.giftOnReturn = Math.random() < 0.35; // esta noche, al volver del bosque, te trae algo
+      // El cerebro de mosca (mosca.js): atiende lo que importa, aprende de caricias y sustos y a veces tuerce la rutina.
+      this.brain = new MR.Mosca(1, { curiosidad: 0.6, miedo: 0.75 });
+      try { this.brain.importar(JSON.parse(window.localStorage.getItem(MEMORIA) || 'null')); } catch (e) { /* sin memoria */ }
+      this.senseAcc = 0;
       this._placeAtPerch('secadora');
     }
 
@@ -207,6 +212,8 @@
       this.pets += 1;
       if (this.state === 'camina') { this.state = 'sentado'; this.route = []; this.timer = U.rand(6, 10); }
       g.audio.ronroneo();
+      this.brain.recompensa(1); // dopamina de recompensa: te va tomando cariño
+      this._remember();
       MR.Haptics.pulse([12, 28, 12, 28, 12, 28, 12, 28, 12]);
       g.dread = Math.max(0, g.dread - 0.08);
       g.ui.subtitle(this.pets === 1 ? '(El gato ronronea. En su collar dice «Pelusa».)' : '(Pelusa ronronea.)', 3);
@@ -253,6 +260,11 @@
           g.objetos.give('hoja_pino', '(Pelusa dejó algo a tus pies: {n}. {d})');
         }
       }
+
+      // El cerebro: los sentidos, 10 veces por segundo; y piensa.
+      this.senseAcc += dt;
+      if (this.senseAcc >= 0.1) { this.senseAcc = 0; this._sense(); }
+      this.brain.pensar(dt);
 
       // Alarma: él de pie cerca del gato.
       this.alarmTimer -= dt;
@@ -432,6 +444,20 @@
         this._goTo(this._nearNode(face.model.group.position));
         return;
       }
+      // El cerebro de mosca puede torcer la rutina: si te tomó cariño, va contigo; si algo la asustó, se sube a lo alto.
+      var b = this.brain;
+      var quiere = b.accion();
+      this.brainChose = null;
+      if (!sleeps && quiere === 'acercarse' && b.valencia(MR.Mosca.CTX.jugador) > 0.25 && U.distXZ(this.game.player.pos, root.position) > 1.8) {
+        this.brainChose = 'acercarse';
+        this._goTo(this._nearPlayerNode());
+        return;
+      }
+      if (quiere === 'huir' && b.impulso('huir') > 0.5 && !this.perch) {
+        this.brainChose = 'huir';
+        this._toPerch('secadora');
+        return;
+      }
       switch (act) {
         case 'dormir': this._toPerch('secadora'); return;
         case 'siesta': {
@@ -523,6 +549,50 @@
       }
     }
 
+    /** Lo que ve y siente su cerebro: quién está cerca, en qué dirección, cuánta amenaza, cuánto sueño. */
+    _sense() {
+      var g = this.game;
+      var b = this.brain;
+      var CTX = MR.Mosca.CTX;
+      var root = this.mesh.root;
+      var me = root.position;
+      var yaw = root.rotation.y;
+      b.limpiar();
+      function ver(p, fuerza, ctx, alcance) {
+        var dx = p.x - me.x;
+        var dz = p.z - me.z;
+        var d = Math.hypot(dx, dz);
+        if (d > 9) { return; }
+        b.estimulo(Math.atan2(dx, dz) - yaw, fuerza / (1 + d * 0.4));
+        if (ctx !== undefined && d < (alcance || 4)) { b.contexto(ctx, 1 - d / (alcance || 4)); }
+      }
+      var pp = g.player.pos;
+      ver(pp, g.player.moving ? 0.8 : 0.5, CTX.jugador, 7); // a ti te reconoce desde el otro lado de la sala
+      var h = g.horror;
+      if (h.customer.present) { ver(this.world.customer.group.position, h.customer.seated ? 0.6 : 1.0, CTX.el); }
+      var cl = g.clientela;
+      if (cl) {
+        cl.visitors.forEach(function (v) {
+          var mask = v.kind === 'mascara';
+          ver(v.model.group.position, mask ? 0.9 : 0.6, mask ? CTX.mascara : CTX.cara);
+          if (v.child) { ver(v.child.model.group.position, 0.8, CTX.nino); }
+        });
+      }
+      var act = routine(g.minutes);
+      var cerca = U.distXZ(pp, me) < 2.5 && !g.player.moving;
+      b.sentir({
+        amenaza: this._threat() ? 1 : 0,
+        atraccion: cerca ? 0.5 : 0,
+        ruido: Math.min(1, g.dread * 0.8),
+        sueno: act === 'dormir' || act === 'siesta' ? 0.85 : 0.15 // las neuronas reloj (la rutina de la hora)
+      });
+    }
+
+    /** Guarda lo que aprendió (entre noches; «Reiniciar todo» lo borra). */
+    _remember() {
+      try { window.localStorage.setItem(MEMORIA, JSON.stringify(this.brain.exportar())); } catch (e) { /* sin almacenamiento */ }
+    }
+
     /** Lo que la asusta: él de pie a menos de 3.5 m, o una máscara negra a menos de 3 m. */
     _threat() {
       var h = this.game.horror;
@@ -549,6 +619,8 @@
       this.state = 'eriza';
       this.timer = 1.1;
       this.hisses += 1;
+      this.brain.castigar(1); // dopamina de castigo: recordará a quién tenía cerca
+      this._remember();
       this.mesh.root.rotation.y = Math.atan2(c.x - me.x, c.z - me.z); // le da la cara (y te avisa de dónde está)
       this.game.audio.bufido(this._pan());
       if (this.perch) { this.perch = null; }
@@ -661,8 +733,10 @@
       }
     }
 
-    /** Sentado, voltea la cabeza: hacia él si está presente, si no hacia ti. */
+    /** Sentada, voltea la cabeza hacia donde atiende su cerebro (él, una máscara, el niño, tú…); si nada, hacia ti. */
     _lookYaw() {
+      var at = this.brain.atencion();
+      if (at.fuerza > 0.12) { return U.clamp(at.angulo, -1.1, 1.1); }
       var h = this.game.horror;
       var target = h.customer.present ? this.world.customer.group.position : this.game.player.pos;
       var me = this.mesh.root;

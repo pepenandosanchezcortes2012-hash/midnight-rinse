@@ -763,6 +763,33 @@ El proyecto pasó por dos etapas:
   - en la secadora solitaria da vueltas la ropa seca bajo su luz naranja.
 - **QA:** verificación nueva en la prueba de la cara blanca que pone a lavar (la ropa gira y no aparece en lavadoras quietas). Resultado: 82/82.
 
+## 96. Sprint 16: el cerebro de mosca (pedido del usuario)
+- **El pedido:** «configura el cerebro de la mosca de la fruta para todos los NPC que se supone que pueden tener vida… optimizado».
+- **Lo que se hizo y lo que no:** el conectoma completo de *Drosophila* (FlyWire: ~140 000 neuronas y ~50 millones de sinapsis) no puede correr por personaje en un celular. `src/engine/mosca.js` es un **cerebro de mosca en miniatura**: unas 55 neuronas por personaje que reproducen, conectados como en la mosca, los circuitos mejor estudiados:
+  - **Ojos → 8 sectores** alrededor del cuerpo: cuánto llama la atención (o repele) cada dirección.
+  - **Complejo central, anillo E-PG (8 neuronas):** un atractor de anillo, con excitación entre vecinas e inhibición global. La «burbuja» marca hacia dónde atiende y dura un momento cuando el estímulo se va.
+  - **Cuerpo fungiforme:** 32 células de Kenyon con inhibición APL (solo 4 activas: código disperso) y dos salidas, MBON-acercarse y MBON-evitar. La dopamina de recompensa (una caricia) deprime las sinapsis del contexto activo hacia «evitar»; la de castigo (un susto), hacia «acercarse».
+  - **Neuronas reloj (LNv):** la presión de sueño según la hora, o sea la rutina de Pelusa.
+  - **Neuronas descendentes:** acercarse, huir, descansar, acicalarse y explorar. Se inhiben entre sí y gana una.
+  - **Cómo corre:** neuronas de tasa con fuga (tau 0,15 s), integradas a 10 Hz con arreglos tipados. En Node, 10 cerebros × 1000 pasos tardan ~9 ms (menos de 1 µs por cerebro y paso). Dentro del Chrome sin ventana el reloj virtual no mide código síncrono, así que esa prueba solo comprueba que no sea caro.
+- **Quién lo lleva:**
+  - **Pelusa:**
+    - ve a todos (a ti hasta a 7 m) y su cabeza sigue la atención del anillo: él, una máscara, el niño, tú;
+    - las caricias le enseñan cariño, y **desde unas tres caricias, a veces deja su rutina para ir contigo**;
+    - los sustos (él o una máscara cerca) le enseñan a evitar, y si el miedo gana se sube a la secadora;
+    - **lo que aprende lo recuerda entre noches** (`midnight-rinse/pelusa`; «Reiniciar todo» lo borra). Lo que no se refuerza se olvida muy despacio.
+  - **Las caras blancas:**
+    - miran lo que les llama la atención: Pelusa, su niño, su ropa girando, el autobús 86. **A ti nunca**: tu dirección les repele la atención, y si las miras de cerca siguen girando la cara;
+    - con un susto (una máscara, él, un destello) se les levantan las manos un instante;
+    - mientras esperan, apenas se balancean.
+  - **El niño:** mira sobre todo a Pelusa. Si algo lo asusta, se queda pegado al abrigo y no va a acariciarla. Cuando la acaricia, Pelusa recibe una recompensa: también le gusta.
+  - **La gente de la avenida:** cada quien con su curiosidad. Si estás junto a la vidriera, a veces alguien se detiene a mirar la lavandería y sigue su camino.
+- **Quién no:** él (una anomalía) y las máscaras (obedecen órdenes) siguen con guion. Es una decisión de lore, no un olvido.
+- **QA:**
+  - Prueba nueva: atiende a la máscara y gira la cabeza; tres caricias y va contigo en vez de acicalarse; lo recuerda otra noche; la cara mira a Pelusa; costo bajo.
+  - Las 82 pruebas anteriores pasaron sin cambios. Las pruebas ya no se pasan la memoria de Pelusa entre sí (salvo `?memoria`).
+  - Fuzz de 3 turnos completos sin errores. Resultado: 83/83.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

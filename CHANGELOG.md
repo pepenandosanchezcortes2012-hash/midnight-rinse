@@ -145,3 +145,11 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Ropa que gira por el ojo de buey de las lavadoras y en las secadoras en marcha (antes no se veía nada).
 - **Decisión:** se reemplazó la barra oculta en vez de hacer transparente el vidrio. El canvas usa alfa 0 para la tele de YouTube, así que el juego evita las transparencias.
+
+## Sprint 16 — El cerebro de mosca
+
+- `mosca.js`: un cerebro de *Drosophila* en miniatura (anillo E-PG, cuerpo fungiforme con dopamina, reloj y neuronas descendentes) para Pelusa, las caras blancas, el niño y la gente de la avenida.
+- **Decisión:** miniatura en vez del conectoma completo. Corre en el celular y conserva la estructura que da a la mosca su comportamiento: atención, aprendizaje y selección de acción.
+- **Decisión:** el cerebro tuerce la rutina sin reemplazarla. La rutina por hora sigue siendo la base (el reloj), y el cerebro decide cuando hay cariño o miedo de por medio.
+- **Decisión:** las caras blancas nunca te miran ni con cerebro: tu dirección entra como estímulo negativo, que es inhibición lateral.
+- **Decisión:** él y las máscaras no llevan cerebro, por lore.

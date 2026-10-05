@@ -30,6 +30,8 @@
       this.sweepAt = U.rand(96, 106);
       this.sweep = { active: false };
       this.ghostAt = U.rand(272, 292); // el 86 bajo el agua (04:32–04:52), si la calle ya está inundada
+      // La gente de la avenida también lleva cerebro de mosca (cada quien con su curiosidad).
+      this.c.people.forEach(function (p, i) { p.brain = new MR.Mosca(300 + i, { curiosidad: 0.3 + 0.3 * i, miedo: 0.4 }); });
       this.ghost = { active: false };
       this.drawFacades();
     }
@@ -124,15 +126,51 @@
           p.group.rotation.y = p.dir > 0 ? Math.PI / 2 : -Math.PI / 2;
           p.group.visible = true;
           p.group.children[1].visible = !this.dawn; // el paraguas, solo si llueve
+          p.looked = false;
+          p.stop = 0;
         }
       }
+      var self = this;
       this.c.people.forEach(function (k) {
         if (!k.active) { return; }
+        if (self._curious(k, dt)) { return; } // se detuvo a mirar la lavandería
         k.group.position.x += k.dir * k.speed * dt;
         k.bob = (k.bob || 0) + dt * 6;
         k.group.position.y = 0.12 + Math.abs(Math.sin(k.bob)) * 0.03;
         if (k.dir * k.group.position.x > 21) { k.active = false; k.group.visible = false; }
       });
+    }
+
+    /**
+     * El cerebro de mosca de quien pasa: si estás junto a la vidriera, a veces (según su curiosidad) se detiene a mirar
+     * la lavandería un momento y sigue su camino.
+     */
+    _curious(k, dt) {
+      var g = this.game;
+      if (k.stop > 0) {
+        k.stop -= dt;
+        k.group.rotation.y = Math.PI; // de frente a la vidriera
+        if (k.stop <= 0) { k.group.rotation.y = k.dir > 0 ? Math.PI / 2 : -Math.PI / 2; }
+        return true;
+      }
+      var b = k.brain;
+      if (!b) { return false; }
+      var pp = g.player.pos;
+      var x = k.group.position.x;
+      var junto = pp.z > 2.6 && Math.abs(pp.x - x) < 6;
+      b.limpiar();
+      if (junto) {
+        b.estimulo(Math.atan2(pp.x - x, pp.z - k.group.position.z) - k.group.rotation.y, 0.8);
+        b.contexto(MR.Mosca.CTX.vidriera, 0.8);
+      }
+      b.sentir({ atraccion: junto ? 0.6 : 0, sueno: 0, ruido: 0 });
+      b.pensar(dt);
+      if (!k.looked && junto && Math.abs(pp.x - x) < 2.5 && b.accion() === 'acercarse') {
+        k.looked = true;
+        k.stop = 2.5;
+        return true;
+      }
+      return false;
     }
 
     _rain(dt) {

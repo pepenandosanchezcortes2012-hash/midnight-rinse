@@ -884,5 +884,6 @@ MR.TEXTOS_EN = {
  "La lluvia hace ruido en los vidrios.": "The rain is noisy on the windows.",
  "No mires hacia afuera, quédate junto a mí.": "Don't look outside, stay close to me.",
  "A veces viene un niño. Si Pelusa está cerca, déjalo acariciarla.": "Sometimes a child comes. If Pelusa is nearby, let the child pet it.",
- "Ahora se ve la ropa girar por el ojo de buey.": "Now you can see the clothes spinning through the porthole."
+ "Ahora se ve la ropa girar por el ojo de buey.": "Now you can see the clothes spinning through the porthole.",
+ "Pelusa ahora tiene un cerebro de mosca de la fruta: recuerda quién la acaricia.": "Pelusa now has a fruit fly brain: it remembers who pets it."
 };

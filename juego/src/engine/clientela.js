@@ -140,7 +140,8 @@
       model.parts = parts;
       Array.prototype.push.apply(this.world.interactables, parts);
       var lines = MR.HISTORIA.blackwood.nino.entre;
-      v.child = { model: model, bob: 0, petted: false, petTimer: 0, talks: 0, chatTimer: 7, chatIndex: Math.floor(Math.random() * lines.length) };
+      v.child = { model: model, bob: 0, petted: false, petTimer: 0, talks: 0, chatTimer: 7, chatIndex: Math.floor(Math.random() * lines.length),
+        brain: new MR.Mosca(200 + v.id, { curiosidad: 0.9, miedo: 0.8 }), senseAcc: 0 };
     }
 
     /**
@@ -160,8 +161,13 @@
         if (c.petTimer <= 0) { c.model.armR.rotation.x = 0; c.model.head.rotation.x = 0; pos.y = 0; }
         return;
       }
+      // Su cerebro de mosca: si algo lo asusta (una máscara, él), se queda pegado al abrigo y no va con Pelusa.
+      c.senseAcc += dt;
+      if (c.senseAcc >= 0.1) { c.senseAcc = 0; this._senseFace(v, grp, c.brain, true); }
+      c.brain.pensar(dt);
+      var asustado = c.brain.accion() === 'huir';
       var cat = g.gato.mesh.root;
-      var catNear = v.state === 'llego' && !c.petted && cat.visible && cat.position.y < 0.3 &&
+      var catNear = !asustado && v.state === 'llego' && !c.petted && cat.visible && cat.position.y < 0.3 &&
         U.distXZ(cat.position, a.position) < 3.2 && g.gato.state !== 'eriza' && g.gato.state !== 'huye';
       var tx;
       var tz;
@@ -196,12 +202,16 @@
         pos.y = -0.05; // agachado
         g.ui.subtitle('(El niño de cara blanca se agacha y acaricia a Pelusa. Pelusa ronronea.)', 5);
         g.audio.ronroneo();
+        if (g.gato.brain) { g.gato.brain.recompensa(0.6); } // a Pelusa también le gusta
         g.gato.route = [];
         g.gato.state = 'sentado';
         g.gato.timer = Math.max(g.gato.timer, 7);
         return;
       }
       grp.rotation.y = a.rotation.y;
+      var at = c.brain.atencion(); // la cabeza, hacia lo que le llama la atención (Pelusa, sobre todo)
+      var mira = at.fuerza > 0.12 ? U.clamp(at.angulo, -1.0, 1.0) : 0;
+      c.model.head.rotation.y += (mira - c.model.head.rotation.y) * Math.min(1, dt * 3);
       // Mientras el adulto lava: preguntas bajitas (si estás cerca de alguno de los dos, se callan).
       if (v.state !== 'llego' || v.talking) { return; }
       var near = U.distXZ(g.player.pos, pos) < 2.2 || U.distXZ(g.player.pos, a.position) < 2.2;
@@ -237,6 +247,67 @@
       var l = lines[(c.talks - 2) % lines.length];
       g.gameplay.say('nino', MR.tf('(El niño, sin mirarte: «{l}»)', { l: MR.t(l) }), 4);
       g.audio.speak(l, 'cara');
+    }
+
+    // -------------------------------------------------------------------------------------------- cerebro de mosca
+    /** La cara blanca piensa (10 Hz) y devuelve hacia dónde mirar. Un susto: se le levantan las manos un instante. */
+    _mindLook(v, dt) {
+      var b = v.brain;
+      if (!b) { return 0; }
+      v.senseAcc = (v.senseAcc || 0) + dt;
+      if (v.senseAcc >= 0.1) { v.senseAcc = 0; this._senseFace(v, v.model.group, b, false); }
+      b.pensar(dt);
+      if (b.s.amenaza > 0.5) {
+        if (!v.startled) { v.startled = true; v.flinch = 0.7; }
+      } else {
+        v.startled = false;
+      }
+      if (v.flinch > 0) {
+        v.flinch = Math.max(0, v.flinch - dt);
+        var f = Math.sin(v.flinch / 0.7 * Math.PI) * 0.6;
+        v.model.armL.rotation.x = f;
+        v.model.armR.rotation.x = f;
+      }
+      // Apenas se balancea al esperar (más si está inquieta).
+      v.model.group.rotation.z = Math.sin(v.timer * 1.3) * 0.02 * (0.3 + b.impulso('explorar'));
+      var at = b.atencion();
+      return at.fuerza > 0.12 ? U.clamp(at.angulo, -1.0, 1.0) : 0;
+    }
+
+    /** Lo que ve una cara blanca (o el niño): Pelusa, el niño o su adulto, su ropa, el autobús, las amenazas. A ti, nunca. */
+    _senseFace(v, grp, b, esNino) {
+      var g = this.game;
+      var CTX = MR.Mosca.CTX;
+      var me = grp.position;
+      var yaw = grp.rotation.y;
+      b.limpiar();
+      function ver(p, fuerza, ctx) {
+        var dx = p.x - me.x;
+        var dz = p.z - me.z;
+        var d = Math.hypot(dx, dz);
+        if (d > 9) { return; }
+        b.estimulo(Math.atan2(-dx, -dz) - yaw, fuerza / (1 + d * 0.4)); // su cara va en -z
+        if (ctx !== undefined && d < 4) { b.contexto(ctx, 1 - d / 4); }
+      }
+      var cat = g.gato && g.gato.mesh.root;
+      if (cat && cat.visible) { ver(cat.position, esNino ? 1.0 : 0.8, CTX.gato); }
+      if (esNino) { ver(v.model.group.position, 0.7, CTX.cara); } else if (v.child) { ver(v.child.model.group.position, 0.9, CTX.nino); }
+      if (!esNino && v.washer !== null && v.washer !== undefined) { ver({ x: -6.75 + v.washer, z: -4.1 }, 0.35, CTX.lavadora); }
+      var bus = g.ciudad && g.ciudad.bus;
+      if (bus && bus.active && bus.phase === 'parado') { ver({ x: bus.x, z: 10.3 }, 0.6, CTX.vidriera); }
+      var amenaza = 0;
+      this.visitors.forEach(function (o) {
+        if (o.kind !== 'mascara') { return; }
+        ver(o.model.group.position, 0.7, CTX.mascara);
+        amenaza = Math.max(amenaza, 1 - U.distXZ(o.model.group.position, me) / 4);
+      });
+      if (g.horror.customer.present) {
+        var cp = this.world.customer.group.position;
+        ver(cp, 0.9, CTX.el);
+        amenaza = Math.max(amenaza, 1 - U.distXZ(cp, me) / 5);
+      }
+      if (U.distXZ(g.player.pos, me) < 4) { ver(g.player.pos, -0.9, CTX.jugador); } // tu dirección les repele la atención
+      b.sentir({ amenaza: Math.min(1, Math.max(0, amenaza) + (g.horror.flash > 0.3 ? 0.6 : 0)), ruido: Math.min(1, g.dread), sueno: 0.1 });
     }
 
     /** Brazos y piernas al caminar (amp 0 = quietos). Las máscaras caminan más rígidas. */
@@ -410,6 +481,8 @@
       model.parts = parts;
       Array.prototype.push.apply(this.world.interactables, parts);
       var v = { id: id, kind: kind, model: model, path: target.path.slice(), rot: target.rot, washer: target.washer, state: 'entra', timer: 0, said: false };
+      // Las caras blancas llevan cerebro de mosca (las máscaras no: obedecen órdenes).
+      if (kind === 'cara') { v.brain = new MR.Mosca(100 + id, { curiosidad: 0.5, miedo: 0.6 }); }
       this.visitors.push(v);
       if (kind === 'cara' && this.childPlan && !this.childCame && g.minutes >= 90) { this.childCame = true; this._addChild(v); }
       g.audio.door();
@@ -617,9 +690,11 @@
         v.timer += dt;
         this._limbs(v.model, 0, 0);
         if (v.kind === 'cara') {
-          // Nunca te mira: si lo miras de cerca, gira la cara hacia otro lado.
+          // Nunca te mira: si lo miras de cerca, gira la cara hacia otro lado. Si no, mira hacia donde atiende su
+          // cerebro de mosca (Pelusa, el niño, su ropa girando, el autobús), nunca hacia ti.
           var lookAt = this._watched(v);
-          v.model.head.rotation.y += ((lookAt ? 1.1 : 0) - v.model.head.rotation.y) * Math.min(1, dt * 3);
+          var mira = lookAt ? 1.1 : this._mindLook(v, dt);
+          v.model.head.rotation.y += (mira - v.model.head.rotation.y) * Math.min(1, dt * 3);
           if (v.timer > 2.5 && !v.loaded) {
             v.loaded = true;
             var wa = g.gameplay.washers[v.washer];

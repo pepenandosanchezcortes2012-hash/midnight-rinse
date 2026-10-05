@@ -52,6 +52,8 @@
         })();
       };
       var q = query || '';
+      // Lo que aprendió Pelusa (cerebro de mosca) no pasa de una prueba a otra, salvo que la prueba lo pida (?memoria).
+      if (q.indexOf('memoria') < 0) { localStorage.removeItem('midnight-rinse/pelusa'); }
       if (q.indexOf('noche=') < 0) { q += (q.indexOf('?') >= 0 ? '&' : '?') + 'noche=ninguna'; } // pruebas deterministas
       if (q.indexOf('lang=') < 0) { q += '&lang=es'; } // en español salvo la prueba de idioma
       marco.src = 'index.html' + q + '&prueba=' + Date.now();
@@ -1394,6 +1396,76 @@
         'el Archivo no cuenta las preguntas nuevas');
       noErrors(ctx);
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
+    }],
+
+    ['Cerebro de mosca: Pelusa atiende lo que importa, aprende de tus caricias (y lo recuerda otra noche); las caras miran a Pelusa, nunca a ti', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var M = ctx.w.MR.Mosca;
+      var U = ctx.w.MR.Util;
+      var cat = g.gato;
+      var c = g.clientela;
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      cat.stared = true;
+      g.horror.customer.present = false;
+      g.ciudad.busPlan = []; g.ciudad.sweepAt = null;
+      check(cat.brain instanceof M && cat.brain.valencia(M.CTX.jugador) === 0, 'Pelusa no tiene cerebro (o ya te conocía)');
+      // 1) El anillo E-PG: la atención va hacia una máscara a su izquierda, y la cabeza la sigue.
+      g.minutes = 130;
+      cat.perch = null; cat.route = []; cat.state = 'sentado'; cat.timer = 99; cat.node = 'F2';
+      cat.mesh.root.position.set(-1, 0, -2); cat.mesh.root.rotation.y = 0;
+      g.player.pos.set(-6, 0, 3.5);
+      var m = c.spawn('mascara');
+      m.state = 'quieta'; // que no camine: solo está ahí
+      m.model.group.position.set(2.6, 0, -2); // a +x del gato, que mira a +z: a su izquierda (+90°)
+      step(ctx, 20);
+      var at = cat.brain.atencion();
+      check(Math.abs(at.angulo - Math.PI / 2) < 0.5 && at.fuerza > 0.12, 'no atendió a la máscara (' + at.angulo.toFixed(2) + ', ' + at.fuerza.toFixed(2) + ')');
+      check(cat.mesh.head.rotation.y > 0.8, 'la cabeza no siguió a la atención (' + cat.mesh.head.rotation.y.toFixed(2) + ')');
+      c._remove(m);
+      // 2) El cuerpo fungiforme: tres caricias (dopamina de recompensa) y te toma cariño…
+      g.player.pos.set(-1.2, 0, -1.2);
+      for (var i = 0; i < 3; i += 1) { cat.petCooldown = 0; cat.pet(); step(ctx, 3); }
+      var val = cat.brain.valencia(M.CTX.jugador);
+      check(val > 0.25 && cat.brain.valencia(M.CTX.mascara) < 0.1, 'las caricias no le enseñaron (' + val.toFixed(2) + ')');
+      // … y tuerce la rutina: a las 02:10 tocaba acicalarse, pero va hacia ti.
+      g.player.pos.set(-5, 0, 3.2);
+      cat.state = 'sentado'; cat.timer = 99;
+      step(ctx, 15);
+      cat.timer = 0;
+      step(ctx, 1);
+      check(cat.brainChose === 'acercarse' && cat.state === 'camina', 'no fue contigo (' + cat.brainChose + ', ' + cat.state + ', ' + cat.brain.accion() + ')');
+      noErrors(ctx);
+      // 3) Lo recuerda otra noche.
+      ctx = await load('?memoria');
+      check(ctx.g.gato.brain.valencia(M.CTX.jugador) > 0.2, 'Pelusa te olvidó');
+      g = ctx.g; c = g.clientela; cat = g.gato;
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      cat.stared = true;
+      g.horror.customer.present = false;
+      // 4) Las caras blancas miran a Pelusa, nunca a ti.
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      g.player.pos.set(-6, 0, 3.5);
+      var v = c.spawn('cara');
+      for (var k = 0; k < 30 * 30 && v.state !== 'llego'; k += 1) { step(ctx, 1); }
+      var vp = v.model.group.position;
+      cat.perch = null; cat.route = []; cat.state = 'sentado'; cat.timer = 99;
+      cat.mesh.root.position.set(vp.x + 1.6, 0, vp.z + 0.4);
+      step(ctx, 40);
+      var rel = M.envolver(Math.atan2(-(cat.mesh.root.position.x - vp.x), -(cat.mesh.root.position.z - vp.z)) - v.model.group.rotation.y);
+      var head = v.model.head.rotation.y;
+      check(Math.abs(head - U.clamp(rel, -1, 1)) < 0.4, 'la cara blanca no mira a Pelusa (cabeza ' + head.toFixed(2) + ', Pelusa en ' + rel.toFixed(2) + ')');
+      noErrors(ctx);
+      // 5) Barato: diez cerebros, mil pasos.
+      var t0 = ctx.w.performance.now();
+      var ms = [];
+      for (var b = 0; b < 10; b += 1) { ms.push(new M(b)); }
+      for (var s = 0; s < 1000; s += 1) { ms.forEach(function (x) { x.limpiar(); x.estimulo(s * 0.01, 0.5); x.contexto(0, 0.5); x.pensar(0.1); }); }
+      var dur = ctx.w.performance.now() - t0;
+      check(dur < 200, 'el cerebro es caro (' + dur.toFixed(0) + ' ms)');
+      return 'atiende a la máscara · 3 caricias → va contigo · lo recuerda · la cara mira a Pelusa · 10×1000 pasos en ' + dur.toFixed(0) + ' ms';
     }],
 
     ['El niño de cara blanca: llega con una cara blanca, acaricia a Pelusa, se esconde si le hablas y pregunta cosas bajito', async function () {

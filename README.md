@@ -127,6 +127,12 @@ Un gato negro vive en la lavandería.
 - **Su rutina:** duerme, come de su plato, se acicala, mira (y rasca) la puerta de vidrio, hace la ronda, te sigue y duerme la siesta, según la hora.
 - **Sus amistades:** a veces se sienta junto a las caras blancas, y a las máscaras negras les bufa. Y a veces se queda mirando algo que tú no ves.
 
+### Cerebro de mosca
+Pelusa, las caras blancas, el niño y la gente de la avenida llevan un **cerebro de mosca de la fruta en miniatura** (`src/engine/mosca.js`): unas 55 neuronas que copian los circuitos reales de *Drosophila*. El anillo del complejo central decide hacia dónde atienden; el cuerpo fungiforme aprende con dopamina; las neuronas reloj marcan el sueño; y las neuronas descendentes eligen qué hacer.
+- **Pelusa** te toma cariño si la acaricias, y a veces deja lo que estaba haciendo para ir contigo. Lo recuerda la noche siguiente. También aprende de lo que la asusta.
+- **Las caras blancas** miran a Pelusa, a su niño, su ropa girando o el autobús; nunca a ti.
+- Él y las máscaras no lo llevan: uno es una anomalía, las otras obedecen órdenes.
+
 ### El bosque
 Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en la pausa, y sales a un bosque de pinos bajo la lluvia.
 - **Qué hay afuera:** la fachada iluminada, una farola de sodio y un sendero que lleva a un claro… donde hay una lavadora encendida que no está conectada a nada.
