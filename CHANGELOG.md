@@ -170,3 +170,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 ## Sprint 20 — Todos los modelos (4): el bosque
 
 - Farola con base, brazo y carcasa; fachada con alero, marco y bajantes.
+
+## Sprint 21 — Todos los modelos (5): tus manos
+
+- Dedos de dos falanges, puño de la manga y reloj de pulsera; la piel de cada mano en una sola malla (menos llamadas de dibujo).
+- **Decisión:** el reloj no muestra la hora. El juego no tiene HUD y la hora del turno vive en el reloj de pared.

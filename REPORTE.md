@@ -832,6 +832,12 @@ El proyecto pasó por dos etapas:
 - Los pinos quedan como están, conos de pocas caras que son el estilo PS1 buscado.
 - **Galería:** vistas del bosque (fachada, farola, sendero). Resultado: 83/83.
 
+## 101. Sprint 21: todos los modelos, 5.ª parte. Tus manos
+- **Las manos:** antes eran una palma con dedos rectos. Ahora los dedos tienen dos falanges y se curvan en la punta (el meñique y el índice, un poco más cortos). Tienen pulgar, manga con su puño y **un reloj de pulsera en la izquierda**, que se ve al levantar la mano para fumar. La hora no se lee de cerca; la del turno sigue en la pared.
+- **Optimización:** la piel de cada mano va en una sola malla (`MR.mergeParts`, ahora disponible fuera del mundo). Las llamadas de dibujo **bajaron**: sala de 148 a 145, bosque de 27 a 23 y pasillo de 50 a 44.
+- Los objetos que sostienes (cigarro, porro, petaca, vasito) ya tenían el detalle justo.
+- **Con esto termina la pasada por todos los modelos (Sprints 12, 13 y 17 a 21):** personajes, avenida, sala, pasillo, bosque y manos. Resultado: 83/83.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

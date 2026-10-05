@@ -51,14 +51,36 @@
       var skin = w.mat.skin;
       this.hands = new THREE.Group();
       this.camera.add(this.hands);
+      // La mano: palma, cuatro dedos de dos falanges (un poco curvados), pulgar y la manga. La piel va en una sola malla.
+      var Mh = THREE.Matrix4;
+      var bxh = new THREE.BoxGeometry(1, 1, 1);
+      function hp(list, x, y, z, sx, sy, sz, rx, ry) {
+        var mm = new Mh().makeTranslation(x, y, z);
+        if (ry) { mm.multiply(new Mh().makeRotationY(ry)); }
+        if (rx) { mm.multiply(new Mh().makeRotationX(rx)); }
+        list.push({ geo: bxh, matrix: mm.multiply(new Mh().makeScale(sx, sy, sz)), su: 1, sv: 1 });
+      }
+      var watchMat = w.retro.material({ texture: 'white', color: 0x1e1f22 });
+      var watchFace = w.retro.material({ texture: 'metal', color: 0xb9b4a6, emissive: 0.15 });
       function hand(side) {
         var g = new THREE.Group();
-        w.box(0.075, 0.025, 0.09, skin, 0, 0, 0, g);
+        var piel = [];
+        hp(piel, 0, 0, 0, 0.075, 0.025, 0.09);                                  // la palma
         for (var f = 0; f < 4; f += 1) {
-          w.box(0.014, 0.016, 0.06, skin, (f - 1.5) * 0.018, 0.002, -0.07, g);
+          var fx = (f - 1.5) * 0.018;
+          var largo = f === 0 || f === 3 ? 0.03 : 0.034;                       // el meñique (y el índice), un poco más cortos
+          hp(piel, fx, 0.002, -0.06, 0.0145, 0.016, largo);                     // primera falange
+          hp(piel, fx, -0.004, -0.06 - largo / 2 - 0.012, 0.013, 0.015, 0.026, 0.35); // la punta, curvada hacia abajo
         }
-        w.box(0.016, 0.016, 0.045, skin, side * 0.045, 0, -0.025, g).rotation.y = side * 0.6;
-        w.box(0.06, 0.05, 0.08, w.mat.coat, 0, -0.005, 0.08, g);
+        hp(piel, side * 0.045, 0, -0.025, 0.016, 0.016, 0.045, 0, side * 0.6); // el pulgar
+        g.add(new THREE.Mesh(MR.mergeParts(piel), skin));
+        w.box(0.06, 0.05, 0.08, w.mat.coat, 0, -0.005, 0.08, g);               // la manga
+        w.box(0.064, 0.012, 0.018, w.mat.coat, 0, 0.022, 0.04, g);             // el puño de la manga
+        if (side > 0) {
+          // Un reloj de pulsera en la izquierda (de cerca no se lee la hora: la del turno está en la pared).
+          w.box(0.07, 0.034, 0.016, watchMat, 0, 0, 0.047, g);
+          w.box(0.026, 0.006, 0.024, watchFace, 0, 0.019, 0.047, g);
+        }
         return g;
       }
       this.left = hand(1);

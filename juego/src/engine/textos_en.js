@@ -888,5 +888,6 @@ MR.TEXTOS_EN = {
  "Pelusa ahora tiene un cerebro de mosca de la fruta: recuerda quién la acaricia.": "Pelusa now has a fruit fly brain: it remembers who pets it.",
  "Mira por la vidriera: la avenida por fin tiene ventanas (antes eran rayas).": "Look out the window: the avenue finally has windows (they used to be stripes).",
  "TELÉFONO": "PHONE",
- "CAMBIO": "CHANGE"
+ "CAMBIO": "CHANGE",
+ "Modelos nuevos en todas partes: el teléfono, la caldera, la farola… y tus manos (con reloj).": "New models everywhere: the phone, the boiler, the streetlight… and your hands (with a watch)."
 };

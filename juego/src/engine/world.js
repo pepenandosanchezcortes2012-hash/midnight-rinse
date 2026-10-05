@@ -1561,4 +1561,5 @@
   }
 
   MR.World = World;
+  MR.mergeParts = mergeParts; // para unir piezas en una sola malla fuera del mundo (las manos, player.js)
 })(window.MR = window.MR || {});

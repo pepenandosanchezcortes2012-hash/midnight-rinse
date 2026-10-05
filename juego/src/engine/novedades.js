@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 44, texto: 'Modelos nuevos en todas partes: el teléfono, la caldera, la farola… y tus manos (con reloj).' },
     { id: 43, texto: 'Mira por la vidriera: la avenida por fin tiene ventanas (antes eran rayas).' },
     { id: 42, texto: 'Pelusa ahora tiene un cerebro de mosca de la fruta: recuerda quién la acaricia.' },
     { id: 41, texto: 'Ahora se ve la ropa girar por el ojo de buey.' },
