@@ -4,13 +4,13 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P1) Sprint 18: todos los modelos (2) — la sala (teléfono, cambiador, café, tele)
 
 ## Ideas (motor creativo, sin aprobar)
 
 ## Bloqueadas (necesitan decisión)
 
 ## Hechas
+- [x] (P1) Sprint 18: todos los modelos (2) — la sala (teléfono, cambiador, café, tele) — commit 92642ca (2026-10-05)
 - [x] (P1) Sprint 17: todos los modelos (1) — la avenida y el z-fighting de las fachadas — commit 45197e2 (2026-10-05)
 - [x] (P1) Sprint 16: cerebro de mosca (Drosophila en miniatura) para Pelusa, caras blancas, niño y gente de la avenida — commit 167bb61 (2026-10-05)
 - [x] (P1) Sprint 15: la ropa gira por el ojo de buey (lavadoras y secadoras) — commit 6e6a6a7 (2026-10-05)
