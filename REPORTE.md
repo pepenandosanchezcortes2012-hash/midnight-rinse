@@ -625,6 +625,11 @@ El proyecto pasó por dos etapas:
 - **Errores encontrados por las pruebas y corregidos:** un `end()` por la hora (el reloj fijo en 05:13 pasaba de 05:12) y `setRGB` sobre un `Vector3`. Las pruebas del final verdadero y de récords ahora cruzan la puerta.
 - Revisado con capturas: la primera versión se veía de noche; se ajustó hasta que se viera de mañana. Prueba nueva. Resultado: 72/72.
 
+## 82. Sprint 7a: todo lo nuevo se puede tocar en el celular
+- **Prueba nueva:** toca seis objetos nuevos donde aparecen en la pantalla, como un dedo, de lado y desde cerca: el visitante, la vidriera, el banco, el lavabo, la secadora solitaria y la campana. En el celular la selección usa la posición del toque (`targetAt`), no el centro de la vista.
+- **Error real encontrado:** el parteluz de la vidriera grande (y los marcos) tapaban el rayo, así que un toque justo sobre la barra no hacía nada. Ahora los marcos son inertes y el toque llega a la vidriera.
+- Resultado: 73/73.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

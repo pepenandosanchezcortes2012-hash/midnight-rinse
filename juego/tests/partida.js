@@ -1043,6 +1043,53 @@
       return 'reflejo con ' + lit + ' px de luz · él ocupa ' + diff + ' px';
     }],
 
+    ['En el celular: lo nuevo se puede tocar con el dedo (visitante, vidriera, banco, lavabo, secadora sola y campana)', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var THREE = ctx.w.THREE;
+      start(ctx);
+      g.clientela.plan = [];
+      // Toca el objeto donde aparece en la pantalla (como un dedo), desde cerca y mirándolo.
+      function tap(obj, kind, from) {
+        var t = obj.getWorldPosition(new THREE.Vector3());
+        g.player.pos.set(from[0], 0, from[1]);
+        var dx = t.x - from[0];
+        var dz = t.z - from[1];
+        g.player.yaw = Math.atan2(-dx, -dz) + 0.25; // un poco de lado: el dedo no toca el centro
+        g.player.pitch = Math.atan2(t.y - 1.62, Math.hypot(dx, dz));
+        step(ctx, 1);
+        var cam = g.player.camera;
+        cam.updateMatrixWorld();
+        var v = t.clone().project(cam);
+        var hit = g.gameplay.targetAt(cam, new THREE.Vector2(v.x, v.y));
+        check(hit && hit.kind === kind, 'no se pudo tocar: ' + kind + ' (tocó ' + (hit ? hit.kind : 'nada') + ')');
+      }
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      g.player.pos.set(-6, 0, 2.5);
+      var v = g.clientela.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      var vp = v.model.group.position;
+      tap(v.model.head, 'visitante', [vp.x + 0.6, vp.z + 1.8]);
+      var panes = g.world.city.group.children.filter(function (o) { return o.userData.interact && o.userData.interact.kind === 'vidriera'; });
+      tap(panes[1], 'vidriera', [5.0, 3.9]); // junto a la vidriera, detrás del mostrador (alcance 2,2 m)
+      var bench = g.world.interactables.filter(function (o) { return o.userData.interact.kind === 'banco'; })[0];
+      tap(bench, 'banco', [-3.2, 2.4]);
+      g.pasillo.unlock(true); g.pasillo.go(); step(ctx, 40);
+      var sink = g.world.interactables.filter(function (o) { return o.userData.interact.kind === 'lavabo'; })[0];
+      var sp = sink.getWorldPosition(new THREE.Vector3());
+      tap(sink, 'lavabo', [sp.x - 1.1, sp.z + 0.4]);
+      g.pasillo.go(); step(ctx, 40);
+      g.bosque.go(); step(ctx, 40);
+      g.world.forest.loneDryer.visible = true;
+      g.world.forest.bell.visible = true;
+      var ld = g.world.forest.loneDryer.position;
+      tap(g.world.forest.lonePort, 'secadoraSola', [ld.x + 1.0, ld.z + 1.6]);
+      var bp = g.world.forest.bell.position;
+      tap(g.world.forest.bellCup, 'campana', [bp.x - 1.4, bp.z - 1.8]);
+      noErrors(ctx);
+      return '6 objetos tocables';
+    }],
+
     ['El amanecer en Blackwood: tras el final verdadero, la lavandería a oscuras, la avenida de día y la puerta a la calle', async function () {
       var ctx = await load();
       var g = ctx.g;

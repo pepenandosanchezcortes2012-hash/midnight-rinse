@@ -155,13 +155,14 @@
         this.add(wall);
       }, this);
       // Marcos de las vidrieras (y el parteluz de la grande).
+      // Inertes al rayo: un toque sobre el marco o el parteluz llega igual a la vidriera.
       [[-6.45, 2.3], [5.55, 4.1]].forEach(function (v) {
-        this.box(v[1] + 0.1, 0.08, 0.16, m.metal, v[0], 0.95, 4.97);
-        this.box(v[1] + 0.1, 0.06, 0.1, m.metal, v[0], 2.45, 4.98);
-        this.box(0.06, 1.5, 0.1, m.metal, v[0] - v[1] / 2, 1.7, 4.98);
-        this.box(0.06, 1.5, 0.1, m.metal, v[0] + v[1] / 2, 1.7, 4.98);
+        inert(this.box(v[1] + 0.1, 0.08, 0.16, m.metal, v[0], 0.95, 4.97));
+        inert(this.box(v[1] + 0.1, 0.06, 0.1, m.metal, v[0], 2.45, 4.98));
+        inert(this.box(0.06, 1.5, 0.1, m.metal, v[0] - v[1] / 2, 1.7, 4.98));
+        inert(this.box(0.06, 1.5, 0.1, m.metal, v[0] + v[1] / 2, 1.7, 4.98));
       }, this);
-      this.box(0.06, 1.5, 0.1, m.metal, 5.55, 1.7, 4.98);
+      inert(this.box(0.06, 1.5, 0.1, m.metal, 5.55, 1.7, 4.98));
       var lintel = new THREE.Mesh(scaleUV(new THREE.PlaneGeometry(3.2, 0.6, 3, 1), 1.6, 0.2), m.wall);
       lintel.rotation.y = Math.PI;
       lintel.position.set(0, 2.7, 5);
