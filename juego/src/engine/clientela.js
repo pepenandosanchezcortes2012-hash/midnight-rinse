@@ -94,6 +94,7 @@
         faceMesh.position.set(0, -0.015, -0.1065);
         head.add(faceMesh);
       } else {
+        var faceMesh = null;
         var suit = R.material({ texture: 'white', color: 0x15161a });
         var lapel = R.material({ texture: 'white', color: 0x262830 });
         var shirt = R.material({ texture: 'white', color: 0xd9d7d0, emissive: 0.1 });
@@ -126,7 +127,7 @@
       }
       if (kid) { g.scale.setScalar(0.62); }
       g.visible = true;
-      return { group: g, head: head, armR: armR, armL: armL, legs: legs };
+      return { group: g, head: head, armR: armR, armL: armL, legs: legs, face: faceMesh };
     }
 
     // -------------------------------------------------------------------------------------------- el niño

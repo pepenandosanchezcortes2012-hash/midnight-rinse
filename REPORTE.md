@@ -876,6 +876,13 @@ El proyecto pasó por dos etapas:
 - **Herramienta:** una vez `probar.py` informó «pasaron 10 de 10» porque Chrome entregó la página antes de que terminara. Ahora lee el resumen de la página («Todo bien…» o «Fallaron…») y, si no terminó, **falla con código 3** en vez de dar por bueno un resultado parcial. El presupuesto de tiempo virtual pasó de 4 a 10 minutos.
 - **QA:** prueba nueva con los dos casos (con cariño sale contigo, sin cariño se queda en la puerta). Resultado: 88/88.
 
+## 107. Sprint 27: lo que la cámara ve
+- **En una foto, las caras blancas tienen el rostro que tenían antes:** piel, pelo oscuro, nariz, boca y unos ojos que miran hacia un lado (ni así te miran). Vale también para el niño y para las de afuera: la que cruza la avenida, la vigía y la que se despide. **A la vista siguen siendo lisas**: el rostro solo existe en la foto.
+- La primera foto de la noche con una cara: «En la foto, la cara blanca tiene ojos, nariz y boca. Mira hacia otro lado». Da el logro oculto «Retrato».
+- **Canon:** se agregó al §7 como extensión: «En las fotos (solo en las fotos) las caras blancas tienen el rostro que tenían antes». No contradice «cara lisa, sin rasgos», que sigue valiendo a simple vista.
+- **Error encontrado con la captura y corregido:** la primera versión contaba también las caras de espaldas. Ahora una cara cuenta solo si mira hacia la cámara (su normal contra la dirección a la cámara).
+- **QA:** prueba nueva (de espaldas no cuenta; de frente, al irse hacia la puerta, sí; a la vista vuelve a ser lisa; subtítulo y logro). Resultado: 89/89.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

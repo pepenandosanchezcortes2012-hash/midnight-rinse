@@ -207,6 +207,19 @@
       noise(x, 16, 16, 8, 53);
       return c;
     },
+    // En las fotos (solo en las fotos), las caras blancas tienen el rostro que tenían antes (fotos.js). Miran a un lado.
+    rostroAntiguo: function () {
+      var c = canvas(16, 20);
+      var x = c.getContext('2d');
+      x.fillStyle = '#c9a98a'; x.fillRect(0, 0, 16, 20);                 // la piel
+      x.fillStyle = '#3a2a20'; x.fillRect(0, 0, 16, 4); x.fillRect(0, 4, 2, 6); x.fillRect(14, 4, 2, 6); // el pelo
+      x.fillStyle = '#f2ede4'; x.fillRect(3, 8, 4, 2); x.fillRect(9, 8, 4, 2);     // los ojos…
+      x.fillStyle = '#2a1c14'; x.fillRect(3, 8, 2, 2); x.fillRect(9, 8, 2, 2);     // …que miran hacia un lado, no a ti
+      x.fillStyle = '#a8826a'; x.fillRect(7, 10, 2, 4);                            // la nariz
+      x.fillStyle = '#7a4a3a'; x.fillRect(6, 15, 4, 1);                            // la boca
+      noise(x, 16, 20, 8, 73);
+      return c;
+    },
     // Ropa empapada girando en el tambor: uniformes, una camisa roja, espuma (el ojo de buey de una lavadora en marcha).
     ropaGira: function () {
       var c = canvas(32, 32);

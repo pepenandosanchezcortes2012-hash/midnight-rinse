@@ -1398,6 +1398,47 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Lo que la cámara ve: en una foto, la cara blanca tiene el rostro de antes (a la vista sigue lisa)', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var c = g.clientela;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      g.gato.stared = true;
+      g.horror.nextEvent = 9999;
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      g.player.pos.set(-6, 0, 2.5);
+      var v = c.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { g.horror.nextEvent = 9999; step(ctx, 1); }
+      var lisa = v.model.face.material;
+      var THREE = ctx.w.THREE;
+      // De espaldas (lavando), su cara no sale en la foto.
+      var hp = v.model.head.getWorldPosition(new THREE.Vector3());
+      g.player.pos.set(hp.x + 0.6, 0, hp.z + 2.4);
+      g.player.yaw = Math.atan2(-(hp.x - g.player.pos.x), -(hp.z - g.player.pos.z));
+      g.player.pitch = Math.atan2(hp.y - 1.62, Math.hypot(hp.x - g.player.pos.x, hp.z - g.player.pos.z));
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      step(ctx, 2);
+      var espalda = g.fotos.take({ ghost: false });
+      check(espalda && espalda.caras === 0, 'contó una cara que estaba de espaldas');
+      // Cuando se va, camina hacia la puerta: de frente a ti, que esperas junto a la entrada.
+      c._leave(v);
+      g.player.pos.set(1.6, 0, 4.0);
+      for (var k = 0; k < 30 * 20 && v.model.group.position.z < 0.6; k += 1) { g.horror.nextEvent = 9999; step(ctx, 1); }
+      hp = v.model.head.getWorldPosition(new THREE.Vector3());
+      g.player.yaw = Math.atan2(-(hp.x - g.player.pos.x), -(hp.z - g.player.pos.z));
+      g.player.pitch = Math.atan2(hp.y - 1.62, Math.hypot(hp.x - g.player.pos.x, hp.z - g.player.pos.z));
+      g.fotos.cooldown = 0;
+      var foto = g.fotos.take({ ghost: false });
+      check(foto && foto.caras === 1, 'la foto no registró la cara (' + (foto && foto.caras) + ')');
+      check(v.model.face.material === lisa, 'a la vista la cara no volvió a ser lisa');
+      await wait(1000);
+      check(sub().indexOf('tiene ojos, nariz y boca') >= 0 && g.logros.has('retrato'), 'faltó el subtítulo o el logro');
+      noErrors(ctx);
+      return 'foto con el rostro de antes · a la vista, lisa · logro «Retrato»';
+    }],
+
     ['Pelusa al amanecer: va a la puerta de vidrio; si te tiene cariño sale contigo, si no se queda mirándote irte', async function () {
       async function amanecer(carino) {
         var ctx = await load();

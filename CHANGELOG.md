@@ -201,3 +201,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - En el final verdadero, Pelusa va a la puerta. Si te tiene cariño (cerebro de mosca), sale contigo a la calle.
 - **Decisión:** el cariño acumulado en todas las noches cambia el cierre del juego, en una frase. Es la recompensa de haberla cuidado.
 - `probar.py` falla si la página de pruebas no terminó.
+
+## Sprint 27 — Lo que la cámara ve
+
+- En las fotos, las caras blancas (y el niño) tienen el rostro de antes. Logro oculto «Retrato».
+- **Decisión de canon:** extensión del §7. La cámara ve lo que el ojo no ve; a simple vista nada cambia. Los ojos de la foto miran hacia un lado, y la regla de que nunca te miran se mantiene.

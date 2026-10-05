@@ -920,5 +920,9 @@ MR.TEXTOS_EN = {
  "(Pelusa sale contigo a la calle.)": "(Pelusa steps out onto the street with you.)",
  "(Pelusa se queda en la puerta, mirándote irte.)": "(Pelusa stays at the door, watching you leave.)",
  "Pelusa sale contigo.": "Pelusa comes with you.",
- "Pelusa se queda en la puerta.": "Pelusa stays at the door."
+ "Pelusa se queda en la puerta.": "Pelusa stays at the door.",
+ "Retrato": "Portrait",
+ "Una foto muestra lo que el ojo no ve.": "A photo shows what the eye can't see.",
+ "(Revisas la foto. En la foto, la cara blanca tiene ojos, nariz y boca. Mira hacia otro lado.)": "(You check the photo. In the photo, the white face has eyes, a nose and a mouth. It's looking away.)",
+ "Sácale una foto a una cara blanca. De frente.": "Take a photo of a white face. From the front."
 };

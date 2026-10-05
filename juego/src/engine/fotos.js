@@ -62,6 +62,37 @@
       return Math.abs(v.x) < 0.9 && Math.abs(v.y) < 0.9 && v.z < 1;
     }
 
+    /**
+     * Las caras blancas (y el niño) que salen en la foto: en cuadro, a menos de 9 m y **de frente** a la cámara (de
+     * espaldas no se ve la cara). También las de afuera: la que cruza la avenida, la vigía y la que se despide.
+     */
+    _caras(cam) {
+      var g = this.game;
+      var out = [];
+      var self = this;
+      var cl = g.clientela;
+      if (!cl) { return out; }
+      var camPos = cam.getWorldPosition(new THREE.Vector3());
+      var modelos = [];
+      cl.visitors.forEach(function (v) { modelos.push(v.model); if (v.child) { modelos.push(v.child.model); } });
+      if (cl.approach) { modelos.push(cl.approach.model); }
+      [cl.watcher, cl.waver].forEach(function (m) { if (m) { modelos.push(m); } });
+      modelos.forEach(function (m) {
+        if (!m || !m.face || !self._visibleTree(m.face)) { return; }
+        var fp = m.face.getWorldPosition(new THREE.Vector3());
+        if (!self._inFrame(fp.clone(), cam, 9)) { return; }
+        var normal = new THREE.Vector3(0, 0, 1).applyQuaternion(m.face.getWorldQuaternion(new THREE.Quaternion()));
+        var hacia = camPos.clone().sub(fp).normalize();
+        if (normal.dot(hacia) > 0.25) { out.push({ mesh: m.face }); }
+      });
+      return out;
+    }
+
+    _visibleTree(o) {
+      for (; o; o = o.parent) { if (!o.visible) { return false; } }
+      return true;
+    }
+
     /** Dónde ponerlo: frente a la cámara, sin atravesar paredes. Devuelve la distancia o 0 si no hay espacio. */
     _ghostDistance(cam, dir) {
       var g = this.game;
@@ -110,6 +141,10 @@
         c.standing.visible = true;
         c.group.visible = true;
       }
+      // Lo que la cámara ve: en la foto, las caras blancas (y el niño) tienen el rostro que tenían antes.
+      var caras = this._caras(cam);
+      var antiguo = this.antiguo || (this.antiguo = g.retro.material({ texture: 'rostroAntiguo', emissive: 0.35 }));
+      caras.forEach(function (f) { f.guardado = f.mesh.material; f.mesh.material = antiguo; });
       // La foto: un cuadro con flash, copiado al instante (antes de que el navegador limpie el lienzo).
       g.retro.render(g.world.scene, cam, { blink: 0, dread: g.dread, time: performance.now() / 1000, flash: 0.1, collapse: g.collapsed ? 1 : 0,
         high: g.consumables.high, crt: false, gamma: g.ui.options.brightness });
@@ -120,6 +155,7 @@
       x2.drawImage(g.retro.renderer.domElement, 0, 0, W, H);
       var src = '';
       try { src = this.canvas.toDataURL('image/jpeg', 0.82); } catch (e) { src = ''; }
+      caras.forEach(function (f) { f.mesh.material = f.guardado; }); // a la vista, otra vez lisas
       if (saved) {
         c.group.position.copy(saved.pos);
         c.group.rotation.y = saved.rot;
@@ -127,7 +163,7 @@
         c.seated.visible = saved.seated;
         c.standing.visible = saved.standing;
       }
-      var foto = { src: src, hora: MR.Util.clockText(Math.floor(g.minutes)), noche: g.night || 1, el: !!dist, t: Date.now() };
+      var foto = { src: src, hora: MR.Util.clockText(Math.floor(g.minutes)), noche: g.night || 1, el: !!dist, t: Date.now(), caras: caras.length };
       this.list.push(foto);
       while (this.list.length > MAX) { this.list.shift(); }
       this._save();
@@ -148,6 +184,15 @@
         setTimeout(function () {
           if (g.state === 'playing') { g.ui.subtitle('(Revisas la foto: Pelusa sale movida, como en todas las fotos.)', 4); }
         }, 700);
+      }
+      if (caras.length && !this.facesSeen) {
+        this.facesSeen = true;
+        setTimeout(function () {
+          if (g.state !== 'playing') { return; }
+          g.ui.subtitle('(Revisas la foto. En la foto, la cara blanca tiene ojos, nariz y boca. Mira hacia otro lado.)', 6);
+          g.dread = Math.min(1, g.dread + 0.04);
+          if (g.logros) { g.logros.unlock('retrato'); }
+        }, 800);
       }
       if (dist) {
         this.ghosts += 1;
