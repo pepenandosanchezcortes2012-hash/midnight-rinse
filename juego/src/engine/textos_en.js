@@ -889,5 +889,7 @@ MR.TEXTOS_EN = {
  "Mira por la vidriera: la avenida por fin tiene ventanas (antes eran rayas).": "Look out the window: the avenue finally has windows (they used to be stripes).",
  "TELÉFONO": "PHONE",
  "CAMBIO": "CHANGE",
- "Modelos nuevos en todas partes: el teléfono, la caldera, la farola… y tus manos (con reloj).": "New models everywhere: the phone, the boiler, the streetlight… and your hands (with a watch)."
+ "Modelos nuevos en todas partes: el teléfono, la caldera, la farola… y tus manos (con reloj).": "New models everywhere: the phone, the boiler, the streetlight… and your hands (with a watch).",
+ "(En una ventana de enfrente, una cara blanca mira hacia la lavandería.)": "(In a window across the street, a white face is looking toward the laundromat.)",
+ "Las ventanas de enfrente tienen vida. Mira bien: alguna noche, alguien te devuelve la mirada… casi.": "The windows across the street are alive. Look closely: some night, someone almost looks back at you."
 };

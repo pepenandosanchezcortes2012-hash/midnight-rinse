@@ -175,3 +175,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Dedos de dos falanges, puño de la manga y reloj de pulsera; la piel de cada mano en una sola malla (menos llamadas de dibujo).
 - **Decisión:** el reloj no muestra la hora. El juego no tiene HUD y la hora del turno vive en el reloj de pared.
+
+## Sprint 22 — Ventanas con vida
+
+- Sombras que cruzan, teles que titilan y una cara blanca en una ventana (una vez por noche).
+- **Decisión:** la cara es pequeña y se apaga al verla. Es un detalle para quien mira por la vidriera, no un susto.

@@ -838,6 +838,15 @@ El proyecto pasó por dos etapas:
 - Los objetos que sostienes (cigarro, porro, petaca, vasito) ya tenían el detalle justo.
 - **Con esto termina la pasada por todos los modelos (Sprints 12, 13 y 17 a 21):** personajes, avenida, sala, pasillo, bosque y manos. Resultado: 83/83.
 
+## 102. Sprint 22: ventanas con vida
+- Ahora que la avenida por fin muestra ventanas (Sprint 17), las ventanas viven:
+  - **una sombra cruza** de vez en cuando detrás de una ventana encendida (más seguido mientras la avenida está despierta);
+  - **las teles azules titilan**;
+  - **una vez por noche, después de las 02:30, en una ventana hay una cara blanca** mirando la lavandería. Si la ves: «En una ventana de enfrente, una cara blanca mira hacia la lavandería». Al rato esa luz se apaga y no vuelve a encenderse esa noche.
+- **Cómo:** las fachadas pasaron de 32×40 a 64×80 (cada ventana con su marco) y se redibujan solo cuando algo cambia. La cara se detecta proyectando la ventana exacta a la cámara.
+- **Canon:** la cara mira hacia la lavandería, no a ti (las caras blancas nunca te miran a los ojos).
+- **QA:** prueba nueva (la sombra cruza y termina, las teles titilan, la cara aparece, se nota al mirarla y su luz se apaga sin volver). Captura revisada. Resultado: 84/84.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

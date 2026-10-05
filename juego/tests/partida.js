@@ -1398,6 +1398,58 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['Ventanas con vida: sombras que cruzan, teles que titilan y una cara blanca en una ventana (si la ves, la luz se apaga)', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var ci = g.ciudad;
+      var Ciudad = ctx.w.MR.Ciudad;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true;
+      ci.busPlan = []; ci.sweepAt = null; ci.ghostAt = null;
+      var fs = g.world.city.facades;
+      // Una sombra cruza detrás de una ventana encendida, y termina de cruzar.
+      ci.faceAt = 999; ci.silTimer = 0;
+      step(ctx, 2);
+      var f = fs.filter(function (x) { return x.silueta; })[0];
+      check(f && f.silueta.tipo === 'sombra', 'no cruzó ninguna sombra');
+      var p0 = f.silueta.p;
+      step(ctx, 15);
+      check(!f.silueta || f.silueta.p > p0, 'la sombra no se movió');
+      step(ctx, 30 * 3);
+      check(!f.silueta, 'la sombra no terminó de cruzar');
+      // Las teles azules titilan.
+      var cambios = 0;
+      var antes = fs.map(function (x) { return !!x.teleBrillo; });
+      for (var t = 0; t < 30; t += 1) {
+        step(ctx, 1);
+        fs.forEach(function (x, i) { if (!!x.teleBrillo !== antes[i]) { cambios += 1; antes[i] = !!x.teleBrillo; } });
+      }
+      check(cambios > 2, 'las teles no titilan');
+      // La cara blanca en una ventana: la miras, se nota, y al rato esa luz se apaga.
+      ci.silTimer = 99;
+      g.minutes = 200; ci.faceAt = 200;
+      step(ctx, 2);
+      var fc = fs.filter(function (x) { return x.silueta && x.silueta.tipo === 'cara'; })[0];
+      check(fc, 'no apareció la cara blanca en una ventana');
+      var idx = fc.silueta.i;
+      var v = Ciudad.ventana(fc.windows[idx]);
+      var wx = fc.x - ((v.x + v.s / 2) / 64 - 0.5) * fc.w;
+      var wy = fc.cy + (0.5 - (v.y + v.s / 2) / 80) * fc.h;
+      g.player.pos.set(5.0, 0, 2.6);
+      g.player.yaw = Math.atan2(-(wx - 5.0), -(12.9 - 2.6));
+      g.player.pitch = Math.atan2(wy - 1.62, Math.hypot(wx - 5.0, 12.9 - 2.6));
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      step(ctx, 3);
+      check(ci.faceSeen && sub().indexOf('una cara blanca mira hacia la lavandería') >= 0, 'no se notó la cara en la ventana (x ' + wx.toFixed(1) + ', y ' + wy.toFixed(1) + ')');
+      step(ctx, 30 * 3);
+      check(!fc.silueta && fc.windows[idx].at === 2, 'la luz de esa ventana no se apagó');
+      step(ctx, 30 * 2);
+      check(!fs.some(function (x) { return x.silueta && x.silueta.tipo === 'cara'; }), 'la cara volvió a aparecer');
+      noErrors(ctx);
+      return 'sombra · teles (' + cambios + ' cambios) · cara en la ventana → luz apagada';
+    }],
+
     ['Cerebro de mosca: Pelusa atiende lo que importa, aprende de tus caricias (y lo recuerda otra noche); las caras miran a Pelusa, nunca a ti', async function () {
       var ctx = await load();
       var g = ctx.g;

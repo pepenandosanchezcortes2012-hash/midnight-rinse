@@ -33,6 +33,8 @@
       // La gente de la avenida también lleva cerebro de mosca (cada quien con su curiosidad).
       this.c.people.forEach(function (p, i) { p.brain = new MR.Mosca(300 + i, { curiosidad: 0.3 + 0.3 * i, miedo: 0.4 }); });
       this.ghost = { active: false };
+      this.silTimer = U.rand(6, 14);
+      this.faceAt = U.rand(155, 250); // la cara blanca en una ventana (una vez por noche, si la ves)
       this.drawFacades();
     }
 
@@ -43,25 +45,110 @@
     aguaAt(min) { return U.clamp((min - 210) / 90, 0, 1); }
 
     /** Fachadas: ventanas encendidas según la vida (se redibuja solo si cambia cuántas hay). */
+    /** Dónde está la ventana i de una fachada, en el lienzo de 64×80. */
+    static ventana(w) { return { x: 6 + w.c * 14, y: 6 + Math.round(w.r * 14.8), s: 10 }; }
+
+    /**
+     * Fachadas: ventanas encendidas según la vida. Se redibuja solo si cambia algo: cuántas hay, el amanecer, una
+     * sombra que cruza, la tele que titila o la cara blanca en una ventana.
+     */
     drawFacades() {
       var lit = this.dawn ? 0.05 : 0.12 + 0.75 * this.vida; // de día casi no hay ventanas encendidas
       var dawn = !!this.dawn;
       this.c.facades.forEach(function (f) {
         var on = f.windows.filter(function (w) { return w.at < lit; }).length;
-        if (on === f.lit && f.dawn === dawn) { return; }
+        if (on === f.lit && f.dawn === dawn && !f.sucio) { return; }
         f.dawn = dawn;
         f.lit = on;
+        f.sucio = false;
         var x = f.tex.ctx;
         x.fillStyle = dawn ? '#6e544a' : '#2a1f1c'; // de día, el ladrillo se ve
-        x.fillRect(0, 0, 32, 40);
+        x.fillRect(0, 0, 64, 80);
         f.windows.forEach(function (w, i) {
           var glow = w.at < lit;
-          // De noche: luz amarilla (o la tele azul). De día: los vidrios reflejan el cielo gris.
-          x.fillStyle = glow ? ((i + f.seed) % 7 === 0 ? '#8fb4ff' : '#ffd27a') : (dawn ? '#8fa2b3' : '#121314');
-          x.fillRect(3 + w.c * 7, 3 + w.r * 7.4, 5, 5);
+          var tele = (i + f.seed) % 7 === 0;
+          var v = Ciudad.ventana(w);
+          // De noche: luz amarilla (o la tele azul, que titila). De día: los vidrios reflejan el cielo gris.
+          x.fillStyle = glow ? (tele ? (f.teleBrillo ? '#a8c8ff' : '#6f94e0') : '#ffd27a') : (dawn ? '#8fa2b3' : '#121314');
+          x.fillRect(v.x, v.y, v.s, v.s);
+          if (glow) {
+            x.fillStyle = 'rgba(40,25,10,0.35)'; // el marco de la ventana
+            x.fillRect(v.x + 4, v.y, 1, v.s);
+          }
+          var s = f.silueta;
+          if (s && s.i === i && glow) {
+            if (s.tipo === 'cara') {
+              x.fillStyle = '#2a1f1c'; x.fillRect(v.x + 3, v.y + 6, 5, 4);      // los hombros, a contraluz
+              x.fillStyle = '#f0eee8'; x.fillRect(v.x + 4, v.y + 2, 3, 4);      // la cara blanca, lisa
+            } else {
+              var sx = v.x + Math.round(s.p * (v.s - 4));
+              x.fillStyle = '#3a2716';
+              x.fillRect(sx + 1, v.y + 2, 2, 2);                               // la cabeza
+              x.fillRect(sx, v.y + 4, 4, 6);                                   // el cuerpo
+            }
+          }
         });
         f.tex.texture.needsUpdate = true;
       });
+    }
+
+    /**
+     * Ventanas con vida: a veces una sombra cruza detrás de una ventana encendida; las teles titilan; y, una vez por
+     * noche después de las 02:30, en una ventana hay una cara blanca mirando la lavandería. Si la ves, la luz se apaga.
+     */
+    _ventanas(dt) {
+      var g = this.game;
+      var self = this;
+      var fs = this.c.facades;
+      var lit = 0.12 + 0.75 * this.vida;
+      // La tele azul titila (redibuja solo las fachadas que tienen una tele encendida).
+      this.teleT = (this.teleT || 0) - dt;
+      if (this.teleT <= 0) {
+        this.teleT = U.rand(0.15, 0.5);
+        fs.forEach(function (f) {
+          var hay = f.windows.some(function (w, i) { return (i + f.seed) % 7 === 0 && w.at < lit; });
+          if (hay) { f.teleBrillo = !f.teleBrillo; f.sucio = true; }
+        });
+      }
+      // Una sombra que cruza (o la cara blanca, que se queda).
+      var activa = fs.filter(function (f) { return f.silueta; })[0];
+      if (activa) {
+        var s = activa.silueta;
+        s.t -= dt;
+        if (s.tipo === 'sombra') { s.p = Math.min(1, s.p + dt / 2.5); activa.sucio = true; }
+        if (s.tipo === 'cara' && !this.faceSeen) {
+          var w = activa.windows[s.i];
+          var v = Ciudad.ventana(w);
+          var wx = activa.x - ((v.x + v.s / 2) / 64 - 0.5) * activa.w; // el plano está girado: u crece hacia −x
+          var wy = activa.cy + (0.5 - (v.y + v.s / 2) / 80) * activa.h;
+          if (this._seen(wx, wy, 12.9)) {
+            this.faceSeen = true;
+            s.t = Math.min(s.t, 2.5); // la miraste: en un momento, la luz se apaga
+            g.ui.subtitle('(En una ventana de enfrente, una cara blanca mira hacia la lavandería.)', 5);
+            g.dread = Math.min(1, g.dread + 0.04);
+          }
+        }
+        if (s.t <= 0) {
+          if (s.tipo === 'cara') { activa.windows[s.i].at = 2; } // esa luz ya no vuelve a encenderse
+          activa.silueta = null;
+          activa.sucio = true;
+        }
+        return;
+      }
+      this.silTimer -= dt;
+      var cara = !this.faceDone && g.minutes >= this.faceAt;
+      if (this.silTimer > 0 && !cara) { return; }
+      this.silTimer = U.rand(8, 18) / Math.max(0.3, this.vida);
+      var candidatas = [];
+      fs.forEach(function (f) {
+        f.windows.forEach(function (w, i) { if (w.at < lit && (i + f.seed) % 7 !== 0) { candidatas.push({ f: f, i: i }); } });
+      });
+      if (!candidatas.length) { return; }
+      var elegida = candidatas[Math.floor(Math.random() * candidatas.length)];
+      if (cara) { this.faceDone = true; }
+      elegida.f.silueta = { i: elegida.i, tipo: cara ? 'cara' : 'sombra', p: 0, t: cara ? 9 : 2.6 };
+      elegida.f.sucio = true;
+      self.ventanasActivas = (self.ventanasActivas || 0) + 1;
     }
 
     update(dt) {
@@ -79,6 +166,7 @@
       c.rain.visible = !this.dawn;
       c.signs.tortilleria.uniforms.uEmissive.value = this.vida > 0.4 ? 1.3 : (this.vida > 0.25 && Math.random() < 0.5 ? 0.35 : 0);
       c.signs.hotel.uniforms.uEmissive.value = this.vida > 0.15 ? 1.2 : 0;
+      if (!this.dawn) { this._ventanas(dt); }
       this.drawFacades();
       this._cars(dt);
       this._people(dt);

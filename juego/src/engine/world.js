@@ -737,15 +737,15 @@
         part(bricks, b[0], b[2] + 0.08, 13.05, b[1] + 0.2, 0.24, 0.35, b[1] / 2, 0.2); // cornisa
         part(portals, b[0] + (i % 2 ? 1.2 : -1.0), 1.05, 12.8, 1.0, 2.1, 0.2);      // la puerta de la calle
         part(portals, b[0], 0.1, 12.8, b[1], 0.2, 0.2);                             // el zócalo
-        var tex = MR.Textures.dynamic(32, 40);
-        // Subdividida (un cuadro por metro): sin eso, la deformación afín de la PS1 torcía las ventanas en diagonal.
+        var tex = MR.Textures.dynamic(64, 80); // 64×80: cabe una sombra (o una cara) detrás de una ventana (ciudad.js)
+        // Subdividida (un cuadro por metro), como en la PS1: así la deformación afín no tuerce las ventanas.
         var face = new THREE.Mesh(new THREE.PlaneGeometry(b[1] - 0.2, b[2] - 0.4, Math.ceil(b[1]), Math.ceil(b[2])), R.material({ map: tex.texture, emissive: 1.25 }));
         face.rotation.y = Math.PI;
         face.position.set(b[0], b[2] / 2 - 0.1, 12.9); // 20 cm delante del ladrillo: con 1 cm se peleaban (z-fighting)
         group.add(inert(face));
         var windows = [];
         for (var r = 0; r < 5; r += 1) { for (var c = 0; c < 4; c += 1) { windows.push({ r: r, c: c, at: Math.random() }); } }
-        facades.push({ tex: tex, windows: windows, lit: -1, seed: i });
+        facades.push({ tex: tex, windows: windows, lit: -1, seed: i, x: b[0], cy: b[2] / 2 - 0.1, w: b[1] - 0.2, h: b[2] - 0.4 });
       });
       group.add(inert(new THREE.Mesh(mergeParts(bricks), R.material({ texture: 'ladrillo', color: 0x6a5048 }))));
       group.add(inert(new THREE.Mesh(mergeParts(portals), R.material({ texture: 'white', color: 0x1d1a18, emissive: 0.05 }))));
