@@ -169,7 +169,7 @@
       lintel.position.set(0, 2.7, 5);
       this.add(lintel);
 
-      var sign = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.6), m.sign);
+      var sign = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.6, 3, 1), m.sign);
       sign.position.set(-4.2, 2.45, -4.97);
       this.add(sign);
       // Rodapié oscuro.
@@ -453,7 +453,7 @@
     _entrance() {
       var m = this.mat;
       [-0.8, 0.8].forEach(function (x) {
-        var g = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 2.4), m.glass);
+        var g = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 2.4, 2, 3), m.glass); // subdividida: sin deformación afín
         g.rotation.y = Math.PI;
         g.position.set(x, 1.2, 4.99);
         this.add(g);
@@ -670,18 +670,24 @@
       // Edificios (ladrillo) con su fachada pintada en un lienzo: ventanas que se apagan una por una (ciudad.js).
       var bricks = [];
       var facades = [];
+      var portals = [];
       [[-13, 6.5, 8], [-6.8, 5.5, 6], [-1.2, 5.2, 9], [4.4, 5.6, 7], [10.2, 5.8, 10], [16.2, 6, 7]].forEach(function (b, i) {
         part(bricks, b[0], b[2] / 2, 15.6, b[1], b[2], 5, b[1] / 2, b[2] / 2);
+        part(bricks, b[0], b[2] + 0.08, 13.05, b[1] + 0.2, 0.24, 0.35, b[1] / 2, 0.2); // cornisa
+        part(portals, b[0] + (i % 2 ? 1.2 : -1.0), 1.05, 12.8, 1.0, 2.1, 0.2);      // la puerta de la calle
+        part(portals, b[0], 0.1, 12.8, b[1], 0.2, 0.2);                             // el zócalo
         var tex = MR.Textures.dynamic(32, 40);
-        var face = new THREE.Mesh(new THREE.PlaneGeometry(b[1] - 0.2, b[2] - 0.4), R.material({ map: tex.texture, emissive: 1.25 }));
+        // Subdividida (un cuadro por metro): sin eso, la deformación afín de la PS1 torcía las ventanas en diagonal.
+        var face = new THREE.Mesh(new THREE.PlaneGeometry(b[1] - 0.2, b[2] - 0.4, Math.ceil(b[1]), Math.ceil(b[2])), R.material({ map: tex.texture, emissive: 1.25 }));
         face.rotation.y = Math.PI;
-        face.position.set(b[0], b[2] / 2 - 0.1, 13.09);
+        face.position.set(b[0], b[2] / 2 - 0.1, 12.9); // 20 cm delante del ladrillo: con 1 cm se peleaban (z-fighting)
         group.add(inert(face));
         var windows = [];
         for (var r = 0; r < 5; r += 1) { for (var c = 0; c < 4; c += 1) { windows.push({ r: r, c: c, at: Math.random() }); } }
         facades.push({ tex: tex, windows: windows, lit: -1, seed: i });
       });
       group.add(inert(new THREE.Mesh(mergeParts(bricks), R.material({ texture: 'ladrillo', color: 0x6a5048 }))));
+      group.add(inert(new THREE.Mesh(mergeParts(portals), R.material({ texture: 'white', color: 0x1d1a18, emissive: 0.05 }))));
       // Letreros: la farmacia de don Pedro (la cruz verde nunca se apaga), la tortillería y el hotel.
       function sign(text, color, x, y, w) {
         var t = MR.Textures.dynamic(64, 16);
@@ -692,7 +698,7 @@
         var mat = R.material({ map: t.texture, emissive: 1.3 });
         var s = new THREE.Mesh(new THREE.PlaneGeometry(w, w / 4), mat);
         s.rotation.y = Math.PI;
-        s.position.set(x, y, 12.95);
+        s.position.set(x, y, 12.72); // delante de la fachada (y sin pelearse con ella)
         group.add(inert(s));
         return mat;
       }
@@ -728,14 +734,24 @@
         var body = [];
         part(body, 0, 0.42, 0, 2.0, 0.5, 0.86);
         part(body, -0.1, 0.84, 0, 1.0, 0.38, 0.76);
-        car.add(inert(new THREE.Mesh(mergeParts(body), R.material({ texture: 'metal', color: col }))));
+        car.add(inert(new THREE.Mesh(mergeParts(body), R.material({ texture: 'metal', color: col, emissive: 0.12 }))));
+        var wheels = [];
+        [-0.62, 0.62].forEach(function (wx) {
+          [-0.44, 0.44].forEach(function (wz) {
+            wheels.push({ geo: new THREE.CylinderGeometry(0.2, 0.2, 0.12, 8), matrix: new M().makeTranslation(wx, 0.2, wz).multiply(new M().makeRotationX(Math.PI / 2)), su: 1, sv: 1 });
+          });
+        });
+        car.add(inert(new THREE.Mesh(mergeParts(wheels), R.material({ texture: 'white', color: 0x141517 }))));
+        var glassParts = [];
+        part(glassParts, -0.1, 0.86, 0, 1.08, 0.22, 0.84);
+        car.add(inert(new THREE.Mesh(mergeParts(glassParts), R.material({ texture: 'white', color: 0x2c3a48, emissive: 0.25 }))));
         var head = [];
-        part(head, 1.0, 0.45, 0.28, 0.04, 0.12, 0.16);
-        part(head, 1.0, 0.45, -0.28, 0.04, 0.12, 0.16);
+        part(head, 1.04, 0.45, 0.28, 0.04, 0.12, 0.16);
+        part(head, 1.04, 0.45, -0.28, 0.04, 0.12, 0.16);
         car.add(inert(new THREE.Mesh(mergeParts(head), R.material({ texture: 'white', color: 0xfff4d8, emissive: 1.6 }))));
         var tail = [];
-        part(tail, -1.0, 0.48, 0.3, 0.04, 0.1, 0.14);
-        part(tail, -1.0, 0.48, -0.3, 0.04, 0.1, 0.14);
+        part(tail, -1.04, 0.48, 0.3, 0.04, 0.1, 0.14);
+        part(tail, -1.04, 0.48, -0.3, 0.04, 0.1, 0.14);
         car.add(inert(new THREE.Mesh(mergeParts(tail), R.material({ texture: 'white', color: 0xff3a2a, emissive: 1.4 }))));
         car.visible = false;
         group.add(car);
@@ -748,11 +764,16 @@
         part(body, -0.08, 0.42, 0, 0.12, 0.84, 0.14);
         part(body, 0.08, 0.42, 0, 0.12, 0.84, 0.14);
         part(body, 0, 1.16, 0, 0.4, 0.66, 0.26);
-        part(body, 0, 1.6, 0, 0.18, 0.22, 0.18);
-        p.add(inert(new THREE.Mesh(mergeParts(body), R.material({ texture: 'coat', color: col }))));
-        var umb = new THREE.Mesh(new THREE.ConeGeometry(0.55, 0.24, 8), R.material({ texture: 'white', color: [0x1c1d22, 0x6b2a2a, 0x223a5a][i] }));
-        umb.position.y = 1.98;
+        part(body, 0.22, 1.28, 0.06, 0.09, 0.42, 0.1);   // el brazo que sostiene el paraguas
+        part(body, 0, 0.86, 0, 0.44, 0.12, 0.3);         // el abrigo se abre abajo
+        p.add(inert(new THREE.Mesh(mergeParts(body), R.material({ texture: 'coat', color: col, emissive: 0.1 }))));
+        var umbParts = [{ geo: new THREE.ConeGeometry(0.55, 0.24, 8), matrix: new M().makeTranslation(0, 1.98, 0), su: 1, sv: 1 }];
+        part(umbParts, 0.2, 1.62, 0.06, 0.025, 0.62, 0.025); // el mango
+        var umb = new THREE.Mesh(mergeParts(umbParts), R.material({ texture: 'white', color: [0x1c1d22, 0x6b2a2a, 0x223a5a][i], emissive: 0.08 }));
         p.add(inert(umb));
+        var headParts = [];
+        part(headParts, 0, 1.6, 0, 0.18, 0.22, 0.18);
+        p.add(inert(new THREE.Mesh(mergeParts(headParts), R.material({ texture: 'skin', emissive: 0.1 })))); // una persona, no una cara blanca
         p.visible = false;
         group.add(p);
         people.push({ group: p, active: false });
@@ -768,19 +789,19 @@
       var glass = [];
       part(glass, -0.2, 1.75, 0.66, 5.2, 0.62, 0.02);
       part(glass, -0.2, 1.75, -0.66, 5.2, 0.62, 0.02);
-      part(glass, 3.21, 1.72, 0, 0.02, 0.72, 1.1);
+      part(glass, 3.25, 1.72, 0, 0.02, 0.72, 1.1);
       bus.add(inert(new THREE.Mesh(mergeParts(glass), R.material({ texture: 'white', color: 0xc9a85a, emissive: 0.8 }))));
       var riders = [];
       var shoulders = [];
       [-2.2, -1.25, -0.35, 0.85, 1.85].forEach(function (rx, i) {
-        part(riders, rx, 1.82 + (i % 2) * 0.05, 0.676, 0.2, 0.24, 0.01); // delante del vidrio encendido (que es opaco)
-        part(shoulders, rx, 1.56, 0.673, 0.44, 0.22, 0.01);
+        part(riders, rx, 1.82 + (i % 2) * 0.05, 0.72, 0.2, 0.24, 0.01); // delante del vidrio encendido (que es opaco)
+        part(shoulders, rx, 1.56, 0.715, 0.44, 0.22, 0.01);
       });
       bus.add(inert(new THREE.Mesh(mergeParts(riders), R.material({ texture: 'white', color: 0xffffff, emissive: 1.3 }))));
       bus.add(inert(new THREE.Mesh(mergeParts(shoulders), R.material({ texture: 'white', color: 0x1c1e22 }))));
       var lamps = [];
-      part(lamps, 3.21, 0.62, 0.45, 0.02, 0.14, 0.22);
-      part(lamps, 3.21, 0.62, -0.45, 0.02, 0.14, 0.22);
+      part(lamps, 3.25, 0.62, 0.45, 0.02, 0.14, 0.22);
+      part(lamps, 3.25, 0.62, -0.45, 0.02, 0.14, 0.22);
       bus.add(inert(new THREE.Mesh(mergeParts(lamps), R.material({ texture: 'white', color: 0xfff4d8, emissive: 1.6 }))));
       var busTex = MR.Textures.dynamic(128, 16);
       busTex.ctx.fillStyle = '#0b0c0b'; busTex.ctx.fillRect(0, 0, 128, 16);
@@ -789,11 +810,11 @@
       busTex.texture.needsUpdate = true;
       var busSignMat = R.material({ map: busTex.texture, emissive: 1.3 });
       var sideSign = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 0.32), busSignMat);
-      sideSign.position.set(0.4, 2.22, 0.661);
+      sideSign.position.set(0.4, 2.22, 0.7);
       bus.add(inert(sideSign));
       var frontSign = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.15), busSignMat);
       frontSign.rotation.y = Math.PI / 2;
-      frontSign.position.set(3.211, 2.25, 0);
+      frontSign.position.set(3.27, 2.25, 0);
       bus.add(inert(frontSign));
       bus.visible = false;
       group.add(bus);
@@ -1113,11 +1134,11 @@
       this.add(inert(clearing));
 
       // Fachada de la lavandería (vista desde afuera), con su letrero y la puerta de vidrio iluminada.
-      this.add(inert(new THREE.Mesh(scaleUV(new THREE.BoxGeometry(16, 3.4, 0.3), 8, 1.7), mt.brick))).position.set(0, 1.7, 99.85);
+      this.add(inert(new THREE.Mesh(scaleUV(new THREE.BoxGeometry(16, 3.4, 0.3, 16, 4, 1), 8, 1.7), mt.brick))).position.set(0, 1.7, 99.7);
       this.box(16.4, 0.2, 0.7, m.dark, 0, 3.45, 100.05);
       var doors = [];
       [-0.8, 0.8].forEach(function (x) {
-        var g = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 2.4), mt.lit);
+        var g = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 2.4, 2, 3), mt.lit);
         g.position.set(x, 1.2, 100.02);
         this.add(g);
         this.interactive(g, 'entrarLavanderia');
@@ -1125,11 +1146,11 @@
       }, this);
       this.box(0.06, 2.4, 0.08, m.metal, 0, 1.2, 100.05);
       [-4.6, 4.6].forEach(function (x) {
-        var w = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.5), mt.lit);
+        var w = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.5, 4, 2), mt.lit);
         w.position.set(x, 1.55, 100.02);
         this.add(w);
       }, this);
-      var sign = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.6), m.sign);
+      var sign = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.6, 3, 1), m.sign);
       sign.position.set(0, 2.85, 100.03);
       this.add(sign);
       this.collider(-8.3, 8.3, 99.4, 100.3);

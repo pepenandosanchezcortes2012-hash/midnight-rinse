@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 43, texto: 'Mira por la vidriera: la avenida por fin tiene ventanas (antes eran rayas).' },
     { id: 42, texto: 'Pelusa ahora tiene un cerebro de mosca de la fruta: recuerda quién la acaricia.' },
     { id: 41, texto: 'Ahora se ve la ropa girar por el ojo de buey.' },
     { id: 40, texto: 'A veces viene un niño. Si Pelusa está cerca, déjalo acariciarla.' },

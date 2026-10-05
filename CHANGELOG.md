@@ -153,3 +153,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - **Decisión:** el cerebro tuerce la rutina sin reemplazarla. La rutina por hora sigue siendo la base (el reloj), y el cerebro decide cuando hay cariño o miedo de por medio.
 - **Decisión:** las caras blancas nunca te miran ni con cerebro: tu dirección entra como estímulo negativo, que es inhibición lateral.
 - **Decisión:** él y las máscaras no llevan cerebro, por lore.
+
+## Sprint 17 — Todos los modelos (1): la avenida
+
+- Se corrigió el z-fighting de las fachadas (las «rayas» eran eso) y de otras superficies lejanas. Edificios con cornisa y puertas, autos con ruedas y ventanillas, gente con cara y paraguas en la mano.
+- **Decisión:** separar las superficies según la precisión real (z²/3277 m) en vez de cambiar el buffer de profundidad. Es más seguro en celulares viejos.

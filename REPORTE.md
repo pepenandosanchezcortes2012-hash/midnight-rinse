@@ -790,6 +790,19 @@ El proyecto pasó por dos etapas:
   - Las 82 pruebas anteriores pasaron sin cambios. Las pruebas ya no se pasan la memoria de Pelusa entre sí (salvo `?memoria`).
   - Fuzz de 3 turnos completos sin errores. Resultado: 83/83.
 
+## 97. Sprint 17: todos los modelos, 1.ª parte. La avenida (y un error de siempre)
+- **El error que tapaba la avenida:** las fachadas de enfrente nunca se vieron como ventanas, sino como **rayas diagonales**. No era la textura (está bien), ni el posproceso, ni la deformación afín, aunque igual se subdividieron los planos grandes. Era **z-fighting**: la fachada pintada estaba a 1 cm delante de la caja de ladrillo. El objetivo de 320×240 tiene profundidad de 16 bits, y con el plano cercano a 0,05 m distingue unos z²/3277 m: 4 cm a 13 m. Los dos planos se peleaban píxel por píxel.
+- **La corrección:** las fachadas van 20 cm delante del ladrillo, y los letreros, puertas y zócalos delante de la fachada. Se revisaron otras superficies lejanas pegadas:
+  - el autobús (pasajeros, letreros, parabrisas y faros estaban a 1–2 cm);
+  - los autos (ventanillas y faros);
+  - la fachada del bosque (puertas y vidriera, que titilaban de lejos).
+- **Modelos de la avenida:**
+  - **Edificios:** con cornisa, puerta de calle y zócalo. Los planos grandes (fachadas, puertas de vidrio, vidriera del bosque, letreros) quedaron subdivididos como en la PS1.
+  - **Autos:** con cuatro ruedas, ventanillas y carrocería que se ve de noche.
+  - **Gente:** con la cara de piel (antes era del color del abrigo), el brazo que sostiene el paraguas, el mango y el abrigo que se abre abajo.
+- **Rendimiento:** la sala pasó de 147 a 148 llamadas (puertas y zócalos van juntos en una malla). Autos y gente suman pocas, y solo cuando pasan.
+- **QA:** captura de antes y después y medición PSX. Resultado: 83/83.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.
