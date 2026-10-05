@@ -265,6 +265,18 @@
       this.senseAcc += dt;
       if (this.senseAcc >= 0.1) { this.senseAcc = 0; this._sense(); }
       this.brain.pensar(dt);
+      // Te saluda, si te tiene cariño: cuando vuelves a acercarte después de un rato lejos, un maullido corto.
+      var dp = U.distXZ(g.player.pos, root.position);
+      if (dp > 5) {
+        this.lejos = (this.lejos || 0) + dt;
+      } else if (dp < 2) {
+        if (this.lejos > 20 && root.visible && this.state !== 'duerme' && this.brain.valencia(MR.Mosca.CTX.jugador) > 0.25) {
+          g.audio.miau(this._pan());
+          this.saludos = (this.saludos || 0) + 1;
+          if (this.saludos === 1) { g.ui.subtitle('(Pelusa te recibe con un maullido corto.)', 3); }
+        }
+        this.lejos = 0;
+      }
 
       // Alarma: él de pie cerca del gato.
       this.alarmTimer -= dt;
@@ -697,7 +709,10 @@
       var walking = s === 'camina' || s === 'huye';
       // Las orejas, hacia atrás cuando algo la inquieta (erizada o mirando el banco vacío).
       var flat = s === 'eriza' || s === 'mira';
-      m.ears.forEach(function (e) { e.rotation.x = flat ? -0.85 : 0; });
+      // Si no, se orientan hacia lo que le llama la atención (su cerebro de mosca): un sonido, tú, una máscara.
+      var at = this.brain.atencion();
+      var oreja = flat || s === 'duerme' ? 0 : U.clamp(at.angulo - (m.head.rotation.y || 0), -0.9, 0.9) * Math.min(1, at.fuerza * 2);
+      m.ears.forEach(function (e) { e.rotation.x = flat ? -0.85 : 0; e.rotation.y = oreja; });
       // Comer, acicalarse y mirar por la puerta son variantes de estar sentado.
       if (s === 'come' || s === 'acicala' || s === 'ventana') { this._poseActivity(s); return; }
       m.legs.forEach(function (leg, i) { leg.visible = s !== 'duerme'; leg.rotation.x = walking ? Math.sin(this.phase + (i % 2 ? Math.PI : 0) + (i > 1 ? Math.PI / 2 : 0)) * 0.6 : 0; }, this);
@@ -714,7 +729,10 @@
         m.body.rotation.x = -0.55;
         m.head.position.set(0, 0.1, 0.19);
         m.head.rotation.set(0.5, this._lookYaw(), 0);
-        m.tail.rotation.set(0.9, 0.6, 0);
+        // La punta de la cola se agita según qué tan alerta está (curiosidad y ruido de su cerebro).
+        this.colaT = (this.colaT || 0) + 0.45;
+        var alerta = Math.min(1, this.brain.impulso('explorar') + this.brain.s.ruido);
+        m.tail.rotation.set(0.9, 0.6 + Math.sin(this.colaT * 3) * 0.28 * alerta, 0);
         m.body.scale.set(1, 1, 1);
       } else if (s === 'mira') {
         // Sentada, rígida, la cabeza fija al frente (hacia el banco); solo la punta de la cola se mueve.

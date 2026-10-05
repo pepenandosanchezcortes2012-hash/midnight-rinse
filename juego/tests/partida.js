@@ -1483,6 +1483,57 @@
       return 'máscara ausente en la foto · pasajeros con cara';
     }],
 
+    ['Lenguaje corporal de Pelusa: las orejas se orientan hacia lo que oye, la cola se agita y te saluda si te tiene cariño', async function () {
+      async function preparar(carino) {
+        var ctx = await load();
+        var g = ctx.g;
+        var cat = g.gato;
+        start(ctx);
+        g.clientela.plan = []; cat.stared = true;
+        g.horror.customer.present = false; g.horror.nextEvent = 9999;
+        g.minutes = 130;
+        cat.perch = null; cat.route = []; cat.state = 'sentado'; cat.timer = 999; cat.node = 'F2';
+        cat.mesh.root.position.set(-1, 0, -2); cat.mesh.root.rotation.y = 0;
+        g.player.pos.set(-1.2, 0, -1.0);
+        g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+        if (carino) { for (var i = 0; i < 3; i += 1) { cat.petCooldown = 0; cat.pet(); step(ctx, 3); } }
+        return ctx;
+      }
+      var sub = function (ctx) { return ctx.w.document.getElementById('subtitulos').textContent; };
+      var ctx = await preparar(true);
+      var g = ctx.g;
+      var cat = g.gato;
+      // Las orejas: un sonido a su izquierda (+x; ella mira a +z).
+      g.player.pos.set(-1, 0, 2.5);
+      step(ctx, 20);
+      g.oir(1.8, -2, 1);
+      step(ctx, 6);
+      var oreja = cat.mesh.ears[0].rotation.y;
+      var total = cat.mesh.head.rotation.y + oreja; // las orejas cuelgan de la cabeza: suman lo que a la cabeza le falta
+      check(oreja > 0.1 && total > 1.25 && cat.mesh.ears[1].rotation.y === oreja, 'las orejas no se orientaron hacia el sonido (cabeza + orejas ' + total.toFixed(2) + ')');
+      // La cola se agita.
+      var min = 9;
+      var max = -9;
+      for (var t = 0; t < 30; t += 1) { g.horror.nextEvent = 9999; step(ctx, 1); var y = cat.mesh.tail.rotation.y; min = Math.min(min, y); max = Math.max(max, y); }
+      check(max - min > 0.05, 'la cola no se agita (' + (max - min).toFixed(3) + ')');
+      // El saludo: lejos más de 20 s y vuelves.
+      g.player.pos.set(-7, 0, 4);
+      for (var k = 0; k < 30 * 22; k += 1) { g.horror.nextEvent = 9999; step(ctx, 1); }
+      g.player.pos.set(-1.2, 0, -0.6);
+      step(ctx, 2);
+      check(cat.saludos === 1 && sub(ctx).indexOf('te recibe con un maullido') >= 0, 'no te saludó');
+      noErrors(ctx);
+      // Sin cariño, no saluda.
+      ctx = await preparar(false);
+      ctx.g.player.pos.set(-7, 0, 4);
+      for (var j = 0; j < 30 * 22; j += 1) { ctx.g.horror.nextEvent = 9999; step(ctx, 1); }
+      ctx.g.player.pos.set(-1.2, 0, -0.6);
+      step(ctx, 2);
+      check(!ctx.g.gato.saludos, 'saludó sin conocerte');
+      noErrors(ctx);
+      return 'cabeza + orejas ' + total.toFixed(2) + ' rad hacia el sonido · cola · saludo solo con cariño';
+    }],
+
     ['Lo que la cámara ve (3): en la foto, la avenida está bajo el agua y bajo el puente corre un río', async function () {
       var ctx = await load();
       var g = ctx.g;

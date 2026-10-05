@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 50, texto: 'Si Pelusa te tiene cariño, te saluda cuando vuelves. Mira sus orejas: van hacia lo que oye.' },
     { id: 50, texto: 'Los clientes tienen cerebro nuevo. Si miras de golpe, se quedan quietos. Si insistes, se inclinan. Y a él no lo vas a ver llegar.' },
     { id: 49, texto: 'Sácale una foto a la avenida antes de las 03:30. Y después mira por la vidriera.' },
     { id: 48, texto: 'Sácale una foto a una cara blanca. De frente.' },

@@ -930,6 +930,13 @@ El proyecto pasó por dos etapas:
 
 - **Herramientas:** skill `uncanny-ai-director` con `revisar_ia.py`; `centinela.py` corre también `director.test.js`; `pruebas.html?auto&solo=texto`; `rendimiento.html` mide la sala con visitas y el bosque con él.
 
+## 111. Sprint 31: el lenguaje corporal de Pelusa (y convivir con el director de IA)
+- **Orejas:** se orientan hacia lo que le llama la atención en su cerebro de mosca (un sonido, tú, una máscara). Las orejas cuelgan de la cabeza, así que suman el giro que a la cabeza le falta. Siguen echándose hacia atrás cuando se eriza o mira el banco.
+- **Cola:** sentada, la punta se agita según qué tan alerta está (curiosidad y ruido de su cerebro).
+- **El saludo:** si te tiene cariño, cuando vuelves a acercarte después de más de 20 s lejos, te recibe con un maullido corto. Sin cariño, no.
+- **Otra sesión trabajando en el repo:** entre el Sprint 30 y este, otra sesión de Claude publicó el **director de IA** (`src/core/director.js`, skill `uncanny-ai-director`): navegación por fuerzas, utilidad, contemplación, mirada desfasada y respiración, para las caras, el niño, las máscaras y él. Convive con el cerebro de mosca: el director decide *cómo* se mueve un cuerpo; la mosca, *qué le llama la atención*. Pelusa sigue siendo de la mosca. Desde ahora, los commits de esta sesión agregan solo sus archivos y revisan `git status` antes.
+- **QA:** prueba nueva (cabeza más orejas hacia un sonido, cola que se agita, saludo solo con cariño). Las pruebas del director (`director.test.js`) también pasan. Resultado: 99/99.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

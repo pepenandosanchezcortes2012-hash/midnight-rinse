@@ -235,3 +235,7 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
   - «Señalan el producto si no los atiendes»: las caras blancas no compran nada. Su comunicación sin palabras aparece cuando insistes en hablarles: señalan su tambor y después se inclinan, siempre sin mirarte («nunca te miran a los ojos»).
   - «El cuello gira siguiendo la cámara»: lo hacen las máscaras. Él solo se mueve cuando no lo miras (canon §3), y las caras blancas nunca te miran.
 - **Herramientas:** `revisar_ia.py`; `centinela.py` corre también `director.test.js`; `pruebas.html?auto&solo=texto` corre solo algunas partidas; `rendimiento.html` mide la sala con visitas y el bosque con él.
+
+## Sprint 31 — El lenguaje corporal de Pelusa
+
+- Orejas hacia lo que oye, cola que se agita con la alerta y saludo si te tiene cariño (todo sale de su cerebro de mosca).
