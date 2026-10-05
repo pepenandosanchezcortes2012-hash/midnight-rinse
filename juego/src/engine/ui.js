@@ -232,7 +232,8 @@
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'foto-mini';
-        b.title = MR.tf('Noche {n} · {h}', { n: f.noche, h: f.hora });
+        b.title = self._pieFoto(f);
+        if (MR.Fotos.revela(f).length) { b.classList.add('revela'); } // reveló algo: borde dorado
         var img = document.createElement('img');
         img.src = f.src;
         img.alt = b.title;
@@ -243,6 +244,13 @@
       $('fotos-vacio').hidden = fotos.count() > 0;
     }
 
+    /** El pie de una foto: noche, hora y lo que reveló. */
+    _pieFoto(f) {
+      var partes = [MR.tf('Noche {n} · {h}', { n: f.noche, h: f.hora })];
+      MR.Fotos.revela(f).forEach(function (x) { partes.push(' · ', MR.t(x)); });
+      return MR.I18N.cat.apply(null, partes);
+    }
+
     /** Una foto en grande, con «Descargar». showVisor(null) la cierra. */
     showVisor(f) {
       $('visor').hidden = !f;
@@ -250,7 +258,7 @@
       if (!f) { return; }
       $('btn-visor-compartir').hidden = !MR.Fotos.canShare(f);
       $('visor-img').src = f.src;
-      $('visor-pie').textContent = MR.tf('Noche {n} · {h}', { n: f.noche, h: f.hora });
+      $('visor-pie').textContent = this._pieFoto(f);
       var a = $('visor-descargar');
       a.href = f.src;
       a.download = 'midnight-rinse-noche' + f.noche + '-' + f.hora.replace(':', '') + '.jpg';

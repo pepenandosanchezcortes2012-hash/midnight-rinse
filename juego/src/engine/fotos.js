@@ -268,6 +268,17 @@
     }
   }
 
+  /** Lo que reveló una foto (lo que el ojo no ve), para su pie en el álbum. */
+  Fotos.revela = function (f) {
+    var r = [];
+    if (f.el) { r.push('él, de pie frente a ti'); }
+    if (f.caras) { r.push('caras con su rostro de antes'); }
+    if (f.mascaras) { r.push('nadie frente al mostrador'); }
+    if (f.agua) { r.push('la avenida bajo el agua'); }
+    if (f.rio) { r.push('un río bajo el puente'); }
+    return r;
+  };
+
   /** Foto → archivo JPEG para compartirlo (sin esperas: Safari pide compartir dentro del mismo toque). */
   Fotos.toFile = function (f) {
     var b64 = String(f.src).split(',')[1] || '';

@@ -929,5 +929,10 @@ MR.TEXTOS_EN = {
  "(En la foto, los pasajeros del 86 tienen cara. Todos miran hacia otro lado.)": "(In the photo, the passengers on the 86 have faces. All of them are looking away.)",
  "(En la foto, la avenida está bajo el agua. Levantas la vista: por la vidriera, está seca.)": "(In the photo, the avenue is underwater. You look up: through the window, it's dry.)",
  "(En la foto, bajo el puente corre un río.)": "(In the photo, a river runs under the bridge.)",
- "Sácale una foto a la avenida antes de las 03:30. Y después mira por la vidriera.": "Take a photo of the avenue before 3:30. Then look out the window."
+ "Sácale una foto a la avenida antes de las 03:30. Y después mira por la vidriera.": "Take a photo of the avenue before 3:30. Then look out the window.",
+ "él, de pie frente a ti": "him, standing in front of you",
+ "caras con su rostro de antes": "faces with the faces they used to have",
+ "nadie frente al mostrador": "no one at the counter",
+ "la avenida bajo el agua": "the avenue underwater",
+ "un río bajo el puente": "a river under the bridge"
 };

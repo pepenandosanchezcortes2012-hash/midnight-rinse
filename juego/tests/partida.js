@@ -1500,6 +1500,12 @@
       check(foto.agua && city.water.position.y === y0, 'la foto no mostró la avenida inundada (o el agua no volvió)');
       await wait(1400);
       check(sub().indexOf('la avenida está bajo el agua') >= 0, 'faltó el subtítulo de la avenida');
+      // En el álbum: borde dorado y, en el visor, lo que reveló.
+      var d = ctx.w.document;
+      check(d.querySelector('#fotos-lista .foto-mini.revela'), 'la miniatura no lleva la marca de revelación');
+      g.ui.showVisor(foto);
+      check(d.getElementById('visor-pie').textContent.indexOf('la avenida bajo el agua') >= 0, 'el pie del visor no dice qué reveló: ' + d.getElementById('visor-pie').textContent);
+      g.ui.showVisor(null);
       // El puente, en el bosque.
       g.bosque.go(); step(ctx, 40);
       g.bosque.showBridge();

@@ -157,6 +157,7 @@ body.tactil .solo-escritorio { display: none !important; }
 .fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 8px; }
 .foto-mini { padding: 4px 4px 10px; background: #efeadb; border: 0; cursor: pointer; }
 .foto-mini img { display: block; width: 100%; image-rendering: pixelated; }
+.foto-mini.revela { background: #e2c84b; } /* la foto reveló algo que el ojo no ve */
 .foto-mini:focus-visible, .foto-mini.foco-mando { outline: 2px solid #e2c84b; outline-offset: 2px; }
 #visor { z-index: 12; justify-content: center; }
 #visor-img { width: min(92vw, 640px); image-rendering: pixelated; border: 8px solid #efeadb; border-bottom-width: 28px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.7); }

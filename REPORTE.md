@@ -897,6 +897,11 @@ El proyecto pasó por dos etapas:
 - **Infraestructura:** el corte en el que Chrome entrega la página de pruebas a medias se repitió una vez (3 resultados) y la detección del Sprint 26 lo atrapó. Dos corridas seguidas pasaron completas, así que es intermitente y de infraestructura. Ahora `probar.py` muestra lo que dijo Chrome y **reintenta una sola vez, avisando**. Si una prueba falla, sigue fallando: el reintento no tapa fallas de pruebas.
 - **QA:** prueba nueva (avenida inundada en la foto y río bajo el puente; el agua y el lecho vuelven). Resultado: 91/91.
 
+## 110. Sprint 30: el álbum dice qué vio la cámara
+- **Pie de foto:** cada foto guarda lo que reveló. El visor lo dice en el pie («Noche 3 · 02:14 · la avenida bajo el agua»): él de pie frente a ti, caras con su rostro de antes, nadie frente al mostrador, la avenida bajo el agua, un río bajo el puente.
+- **Borde dorado:** en el panel «Fotos», las miniaturas que revelaron algo llevan el marco dorado. Las demás conservan el blanco de polaroid.
+- **QA:** la prueba de la avenida inundada ahora verifica el borde dorado y el pie del visor. La prueba de inglés encontró el pie de «él» sin traducir, y se tradujeron los cinco. Resultado: 91/91.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -217,3 +217,7 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - En las fotos, la avenida está inundada y bajo el puente corre el río.
 - **Decisión:** la cámara muestra la verdad de Blackwood (está bajo el agua). Es el cierre del tema de «lo que la cámara ve» (Sprints 27 a 29).
 - `probar.py`: un reintento avisado si Chrome entrega la página a medias.
+
+## Sprint 30 — El álbum recuerda
+
+- Pie de foto con lo que la cámara reveló y borde dorado en las fotos que revelaron algo.
