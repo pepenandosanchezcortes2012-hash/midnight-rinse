@@ -11,6 +11,9 @@
   'use strict';
 
   var U = MR.Util;
+  // Los eventos del director que suenan: los oyen Pelusa y las caras blancas (cerebro de mosca).
+  var SONOROS = ['puerta_lavadora', 'golpe_secadora', 'secadora_sola', 'puerta_trasera', 'telefono_breve', 'trapeador_movido',
+    'moneda_canto', 'susurro', 'mano_lavadora', 'cesto', 'charco', 'radio_sola', 'cierra_puerta', 'cierra_trasera'];
   var V3 = THREE.Vector3;
   var LIGHTS = 6;
 
@@ -256,6 +259,9 @@
       var w = this.world;
       var audio = g.audio;
       this.firedLog.push({ type: e.type, zone: zoneName, minute: Math.floor(g.minutes) });
+      // Lo que suena, lo oyen los que tienen cerebro de mosca (Pelusa, las caras blancas): voltean hacia ahí.
+      var zz = this.zones[zoneName];
+      if (zz && zz.center && SONOROS.indexOf(e.type) >= 0 && g.oir) { g.oir(zz.center.x, zz.center.z, 0.9); }
       switch (e.type) {
         case 'cliente_aparece':
           if (!this.customer.present && !g.flags.secreto && !(g.diff && g.diff.sinSustos)) {

@@ -893,5 +893,6 @@ MR.TEXTOS_EN = {
  "(En una ventana de enfrente, una cara blanca mira hacia la lavandería.)": "(In a window across the street, a white face is looking toward the laundromat.)",
  "Las ventanas de enfrente tienen vida. Mira bien: alguna noche, alguien te devuelve la mirada… casi.": "The windows across the street are alive. Look closely: some night, someone almost looks back at you.",
  "(Tiene la cabeza más inclinada que antes. No lo viste moverse.)": "(His head is tilted more than before. You didn't see him move.)",
- "(Estás tan cerca que lo notarías. No respira.)": "(You're close enough that you'd notice. He isn't breathing.)"
+ "(Estás tan cerca que lo notarías. No respira.)": "(You're close enough that you'd notice. He isn't breathing.)",
+ "Si Pelusa mira fijo hacia un lado, algo sonó ahí.": "If Pelusa stares off to one side, something made a sound there."
 };

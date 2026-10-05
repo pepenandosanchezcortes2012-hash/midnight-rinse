@@ -349,6 +349,7 @@
       var extra = [];
       var cc = this.horror.customerCollider();
       if (cc) { extra.push(cc); }
+      this._sonidos(dt);
       this.bosque.update(dt);
       this.espejo.update(dt);
       if (!this.epilogue) { this.clientela.update(dt); }
@@ -493,6 +494,24 @@
       this.ui.subtitle(MR.tf('[Radio] {l}', { l: MR.t(line) }), 9);
       this.audio.speak(line, 'locutor');
       this.archivo.bulletin(key, n);
+    }
+
+    /**
+     * Un sonido en el mundo (x, z) con su fuerza (0 a 1): lo oyen los cerebros de mosca durante un momento (gato.js,
+     * clientela.js). Los eventos del director que suenan y el teléfono lo emiten.
+     */
+    oir(x, z, fuerza) {
+      (this.sonidos || (this.sonidos = [])).push({ x: x, z: z, f: fuerza, t: 0.8 });
+    }
+
+    _sonidos(dt) {
+      if (this.gameplay.phoneRinging) {
+        this.ringHeard = (this.ringHeard || 0) - dt;
+        if (this.ringHeard <= 0) { this.ringHeard = 1.5; this.oir(2.7, 4.9, 0.8); }
+      }
+      if (!this.sonidos || !this.sonidos.length) { return; }
+      this.sonidos.forEach(function (s) { s.t -= dt; });
+      this.sonidos = this.sonidos.filter(function (s) { return s.t > 0; });
     }
 
     /** La dedicatoria de la radio (noches 3 a 6). Si diste tu nombre, se oye entre la estática. */

@@ -307,6 +307,13 @@
         amenaza = Math.max(amenaza, 1 - U.distXZ(cp, me) / 5);
       }
       if (U.distXZ(g.player.pos, me) < 4) { ver(g.player.pos, -0.9, CTX.jugador); } // tu dirección les repele la atención
+      // Lo que oyen: voltean hacia donde sonó algo; si sonó muy cerca, se sobresaltan.
+      (g.sonidos || []).forEach(function (s) {
+        var k = s.t / 0.8;
+        var d = Math.hypot(s.x - me.x, s.z - me.z);
+        if (d < 14) { b.estimulo(Math.atan2(-(s.x - me.x), -(s.z - me.z)) - yaw, s.f * 2.0 * k / (1 + d * 0.2)); }
+        if (d < 3) { amenaza = Math.max(amenaza, 0.6 * s.f * k); }
+      });
       b.sentir({ amenaza: Math.min(1, Math.max(0, amenaza) + (g.horror.flash > 0.3 ? 0.6 : 0)), ruido: Math.min(1, g.dread), sueno: 0.1 });
     }
 

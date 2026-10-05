@@ -578,12 +578,21 @@
           if (v.child) { ver(v.child.model.group.position, 0.8, CTX.nino); }
         });
       }
+      // Lo que oye: voltea hacia donde sonó algo (una anomalía, el teléfono). Tú puedes seguir su mirada.
+      var ruido = 0;
+      (g.sonidos || []).forEach(function (s) {
+        var k = s.t / 0.8;
+        var d = Math.hypot(s.x - me.x, s.z - me.z);
+        // Un sonido sobresalta más que algo quieto y llega más lejos: más peso y menos atenuación que lo que ve.
+        if (d < 14) { b.estimulo(Math.atan2(s.x - me.x, s.z - me.z) - yaw, s.f * 2.0 * k / (1 + d * 0.2)); }
+        ruido = Math.max(ruido, s.f * k);
+      });
       var act = routine(g.minutes);
       var cerca = U.distXZ(pp, me) < 2.5 && !g.player.moving;
       b.sentir({
         amenaza: this._threat() ? 1 : 0,
         atraccion: cerca ? 0.5 : 0,
-        ruido: Math.min(1, g.dread * 0.8),
+        ruido: Math.min(1, Math.max(g.dread * 0.8, ruido)),
         sueno: act === 'dormir' || act === 'siesta' ? 0.85 : 0.15 // las neuronas reloj (la rutina de la hora)
       });
     }

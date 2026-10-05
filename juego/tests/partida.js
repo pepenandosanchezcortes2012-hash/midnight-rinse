@@ -1398,6 +1398,53 @@
       return '2 preguntas nuevas · placa → pista del puente · Archivo ' + total;
     }],
 
+    ['El oído del cerebro de mosca: Pelusa voltea hacia donde sonó algo (una secadora, el teléfono) y las caras también', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var h = g.horror;
+      var M = ctx.w.MR.Mosca;
+      var cat = g.gato;
+      var c = g.clientela;
+      start(ctx);
+      c.plan = []; c.childPlan = false; c.coinPlan = false;
+      cat.stared = true;
+      h.customer.present = false;
+      h.nextEvent = 9999;
+      g.minutes = 130;
+      cat.perch = null; cat.route = []; cat.state = 'sentado'; cat.timer = 99; cat.node = 'F2';
+      cat.mesh.root.position.set(-1, 0, -2); cat.mesh.root.rotation.y = 0;
+      g.player.pos.set(-6, 0, 3.5);
+      function hacia(x, z, me, yaw) { return M.envolver(Math.atan2(x - me.x, z - me.z) - yaw); }
+      // Un golpe en una secadora.
+      h._apply({ type: 'golpe_secadora', index: 1 }, 'secadoras');
+      step(ctx, 6);
+      var sc = h.zones.secadoras.center;
+      var esperado = hacia(sc.x, sc.z, cat.mesh.root.position, 0);
+      var at = cat.brain.atencion();
+      check(Math.abs(M.envolver(at.angulo - esperado)) < 0.55 && at.fuerza > 0.15, 'Pelusa no volteó hacia la secadora (' + at.angulo.toFixed(2) + ' vs ' + esperado.toFixed(2) + ')');
+      // El teléfono que suena.
+      step(ctx, 40);
+      g.gameplay.ring(6);
+      step(ctx, 8);
+      var et = hacia(2.7, 4.9, cat.mesh.root.position, 0);
+      at = cat.brain.atencion();
+      check(Math.abs(M.envolver(at.angulo - et)) < 0.55, 'Pelusa no volteó hacia el teléfono (' + at.angulo.toFixed(2) + ' vs ' + et.toFixed(2) + ')');
+      g.gameplay.phoneRinging = false; g.audio.setRinging(false);
+      // Una cara blanca también voltea hacia el ruido.
+      g.gameplay.washers.forEach(function (w) { w.running = false; w.credit = false; });
+      var v = c.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { h.nextEvent = 9999; step(ctx, 1); }
+      cat.mesh.root.position.set(-6, 0, 4); // Pelusa, lejos (que no le robe la atención)
+      step(ctx, 30 * 2);
+      var vp = v.model.group.position;
+      g.oir(vp.x + 2.5, vp.z + 1.0, 1.0);
+      step(ctx, 25); // gira la cabeza despacio, como todo lo que hace
+      var rel = M.envolver(Math.atan2(-(2.5), -(1.0)) - v.model.group.rotation.y);
+      check(Math.abs(v.model.head.rotation.y - Math.max(-1, Math.min(1, rel))) < 0.45, 'la cara blanca no volteó hacia el ruido (' + v.model.head.rotation.y.toFixed(2) + ' vs ' + rel.toFixed(2) + ')');
+      noErrors(ctx);
+      return 'secadora · teléfono · la cara voltea';
+    }],
+
     ['Él: mientras no lo miras, su cabeza se inclina un poco más (nunca mientras lo ves); y de cerca, no respira', async function () {
       var ctx = await load();
       var g = ctx.g;

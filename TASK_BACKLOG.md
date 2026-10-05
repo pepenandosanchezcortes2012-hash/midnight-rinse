@@ -4,6 +4,7 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
+- [ ] (P1) Sprint 24: el cerebro de mosca oye (Pelusa y las caras voltean hacia los sonidos)
 
 ## Ideas (motor creativo, sin aprobar)
 

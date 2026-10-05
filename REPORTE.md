@@ -853,6 +853,12 @@ El proyecto pasó por dos etapas:
 - **Cómo:** se usa el giro lateral de la cabeza (`rotation.z`), así que no choca con el giro con el que te sigue con la mirada (`rotation.y`). Para saber si lo ves se usa el frustum de la cámara sobre su cabeza.
 - **QA:** prueba nueva (se inclina de espaldas, queda quieta mientras lo miras, no respira de cerca). Resultado: 85/85.
 
+## 104. Sprint 24: el cerebro de mosca también oye
+- **Qué cambia:** el cerebro de mosca ya no solo ve. Los eventos del director que suenan emiten un sonido en su zona: puerta de lavadora, golpe de secadora, secadora sola, puerta trasera, teléfono breve, trapeador, moneda de canto, susurro, mano en la lavadora, cesto, charco y radio sola. El teléfono que suena emite cada 1,5 s (`game.oir`).
+- **Pelusa y las caras blancas lo oyen:** el sonido entra a su anillo de atención y voltean hacia donde sonó. Un sonido pesa más que algo quieto y llega más lejos: fuerza × 2 / (1 + 0,2·d), contra 1 / (1 + 0,4·d) de lo que ven. Si suena muy cerca de una cara blanca, se sobresalta (manos arriba un instante).
+- **Para el jugador:** si Pelusa (o una cara) mira fijo hacia un lado, **algo pasó ahí**. Es una pista nueva que sale sola de los sistemas que ya existían.
+- **QA:** prueba nueva (Pelusa voltea hacia el golpe en la secadora y hacia el teléfono; la cara blanca, hacia un ruido a sus espaldas). La primera versión hacía que Pelusa mirara entre el teléfono y tú (el anillo promediaba). Se ajustaron los pesos del sonido. Resultado: 86/86.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

@@ -185,3 +185,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Su cabeza se inclina mientras no lo miras; de cerca, no respira.
 - **Decisión:** el cambio es lento y acumulativo, y nunca ocurre a la vista. El jugador lo descubre comparando, no con un salto.
+
+## Sprint 24 — El cerebro oye
+
+- Los sonidos del juego entran al cerebro de mosca: Pelusa y las caras blancas voltean hacia donde sonó algo.
+- **Decisión:** el sonido pesa más y llega más lejos que lo que se ve. Así gana la competencia en el anillo, como un sobresalto.
