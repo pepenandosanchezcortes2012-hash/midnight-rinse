@@ -292,12 +292,16 @@
       var hat = new THREE.Group();
       hat.position.set(-3.25, 0.51, 0.6);
       hat.rotation.y = 0.4;
-      var brim = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.02, 10), m.dark);
-      brim.position.y = 0.01;
+      // El mismo sombrero que lleva puesto (_customer): ala un poco caída, copa y cinta.
+      var brim = new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.3, 0.03, 10), m.dark);
+      brim.position.y = 0.015;
       hat.add(brim);
-      var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.15, 10), m.dark);
-      crown.position.y = 0.095;
+      var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.14, 0.17, 8), m.dark);
+      crown.position.y = 0.105;
       hat.add(crown);
+      var band = new THREE.Mesh(new THREE.CylinderGeometry(0.142, 0.142, 0.035, 8), this.retro.material({ texture: 'white', color: 0x2c2522 }));
+      band.position.y = 0.045;
+      hat.add(band);
       hat.visible = false;
       this.add(hat);
       this.loneHat = hat;

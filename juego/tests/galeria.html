@@ -9,6 +9,7 @@
 <!--
   Galería de modelos (herramienta, para revisar modelos 3D con capturas):
     tests/galeria.html?m=el | el_sentado | cara | mascara | gato    [&giro=0.6 rota el modelo, en radianes; &fov=25 acerca]
+    tests/galeria.html?m=lavadoras | secadoras | mostrador | sombrero    (vistas fijas del entorno)
   Pone el modelo en el pasillo central de la sala, iluminado, frente a la cámara y a su altura, sin manos en cuadro.
 -->
 <iframe id="m" src="../index.html?noche=ninguna&lang=es"></iframe>
@@ -61,6 +62,14 @@
       p.pos.set(T.x, 0, T.z + dist);
       p.yaw = 0;
       p.pitch = Math.atan2(alto - 1.62, dist);
+      // Vistas fijas del entorno: [x, z, yaw, pitch].
+      var VISTAS = { lavadoras: [-3.4, -2.2, 0.15, -0.35], secadoras: [2.6, -2.5, -0.1, -0.3], mostrador: [5.9, 0.3, Math.PI, -0.4],
+        sombrero: [-3.25, -0.6, Math.PI, -0.62] };
+      if (VISTAS[q]) {
+        var v = VISTAS[q];
+        if (q === 'sombrero') { g.world.loneHat.visible = true; }
+        p.pos.set(v[0], 0, v[1]); p.yaw = v[2]; p.pitch = v[3];
+      }
       p.blink.phase = 'open'; p.blink.amount = 0; p.blink.timer = 999;
       frames(6);
       if (q === 'el' || q === 'el_sentado') { g.world.customer.group.visible = true; }
