@@ -4,13 +4,13 @@ Lo maneja la skill `perpetual-task-runner` (`py .claude/skills/perpetual-task-ru
 Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas del motor creativo esperan en «Ideas» hasta aprobarse (`backlog.py aprobar`). Lo que necesita una decisión de diseño grande va a «Bloqueadas».
 
 ## Pendientes
-- [ ] (P1) Sprint 10: Radio Nocturna en vivo (boletines que comentan la noche) y fuzz.py en el repo
 
 ## Ideas (motor creativo, sin aprobar)
 
 ## Bloqueadas (necesitan decisión)
 
 ## Hechas
+- [x] (P1) Sprint 10: Radio Nocturna en vivo (boletines que comentan la noche) y fuzz.py en el repo — commit 4e820e7 (2026-10-04)
 - [x] (P1) Sprint 9: el autobús 86, la barredora y las caras que hablan entre ellas — commit 61b61a4 (2026-10-04)
 - [x] (P1) Lore: decidir las propuestas de Yesda — el embalse de 1986, las caras blancas, las órdenes de las máscaras negras, el bosque infinito y el nombre «Blackwood» (CANON.md §7). Hasta decidir, lore_check.py los rechaza en textos del juego. — aprobada por Yesda («Si»), canon §7 — commit 71eaf67 (2026-10-04)
 - [x] (P1) Sprint 8: la charla recuerda tu noche (Gemini), Pelusa mira el banco y el puente de Blackwood — commit a2343f9 (2026-10-04)
