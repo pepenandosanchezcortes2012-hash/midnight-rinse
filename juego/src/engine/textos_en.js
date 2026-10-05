@@ -926,5 +926,8 @@ MR.TEXTOS_EN = {
  "(Revisas la foto. En la foto, la cara blanca tiene ojos, nariz y boca. Mira hacia otro lado.)": "(You check the photo. In the photo, the white face has eyes, a nose and a mouth. It's looking away.)",
  "Sácale una foto a una cara blanca. De frente.": "Take a photo of a white face. From the front.",
  "(Revisas la foto. Frente al mostrador no hay nadie. Solo la impresora, imprimiendo.)": "(You check the photo. There's no one at the counter. Just the printer, printing.)",
- "(En la foto, los pasajeros del 86 tienen cara. Todos miran hacia otro lado.)": "(In the photo, the passengers on the 86 have faces. All of them are looking away.)"
+ "(En la foto, los pasajeros del 86 tienen cara. Todos miran hacia otro lado.)": "(In the photo, the passengers on the 86 have faces. All of them are looking away.)",
+ "(En la foto, la avenida está bajo el agua. Levantas la vista: por la vidriera, está seca.)": "(In the photo, the avenue is underwater. You look up: through the window, it's dry.)",
+ "(En la foto, bajo el puente corre un río.)": "(In the photo, a river runs under the bridge.)",
+ "Sácale una foto a la avenida antes de las 03:30. Y después mira por la vidriera.": "Take a photo of the avenue before 3:30. Then look out the window."
 };

@@ -1483,6 +1483,39 @@
       return 'máscara ausente en la foto · pasajeros con cara';
     }],
 
+    ['Lo que la cámara ve (3): en la foto, la avenida está bajo el agua y bajo el puente corre un río', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var THREE = ctx.w.THREE;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true; g.horror.nextEvent = 9999;
+      g.ciudad.busPlan = []; g.ciudad.sweepAt = null;
+      var city = g.world.city;
+      var y0 = city.water.position.y;
+      g.player.pos.set(5.0, 0, 3.3); g.player.yaw = Math.PI; g.player.pitch = -0.05;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      step(ctx, 2);
+      var foto = g.fotos.take({ ghost: false });
+      check(foto.agua && city.water.position.y === y0, 'la foto no mostró la avenida inundada (o el agua no volvió)');
+      await wait(1400);
+      check(sub().indexOf('la avenida está bajo el agua') >= 0, 'faltó el subtítulo de la avenida');
+      // El puente, en el bosque.
+      g.bosque.go(); step(ctx, 40);
+      g.bosque.showBridge();
+      var f = g.world.forest;
+      var lecho = f.bridgeBed.material;
+      g.player.pos.set(-12, 0, 119.2); g.player.yaw = 0; g.player.pitch = -0.35;
+      step(ctx, 2);
+      g.fotos.cooldown = 0;
+      foto = g.fotos.take({ ghost: false });
+      check(foto.rio && f.bridgeBed.material === lecho, 'la foto no mostró el río (o el lecho no volvió a estar seco)');
+      await wait(1100);
+      check(sub().indexOf('bajo el puente corre un río') >= 0, 'faltó el subtítulo del río');
+      noErrors(ctx);
+      return 'avenida inundada en la foto · río bajo el puente';
+    }],
+
     ['Pelusa al amanecer: va a la puerta de vidrio; si te tiene cariño sale contigo, si no se queda mirándote irte', async function () {
       async function amanecer(carino) {
         var ctx = await load();

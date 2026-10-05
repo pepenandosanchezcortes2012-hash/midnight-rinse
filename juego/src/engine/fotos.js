@@ -160,6 +160,16 @@
       var enBus = !!(riders && this._visibleTree(riders) && this._inFrame(g.world.city.bus.position.clone().setY(1.8), cam, 14));
       var ridersMat = enBus ? riders.material : null;
       if (enBus) { riders.material = antiguo; }
+      // Blackwood está bajo el agua, y la cámara lo ve: la avenida inundada (aunque por la vidriera esté seca) y, en el
+      // bosque, el río que corre bajo el puente.
+      var city = g.world.city;
+      var calle = !!(city && city.group.visible && g.ciudad && g.ciudad.agua < 0.5 && this._inFrame(new THREE.Vector3(5, 0.5, 9), cam, 16));
+      var aguaY = city ? city.water.position.y : 0;
+      if (calle) { city.water.position.y = 0.85; city.water.updateMatrixWorld(); }
+      var f = g.world.forest;
+      var rio = !!(f && f.bridge.visible && this._inFrame(f.bridge.position.clone().setY(0.2), cam, 14));
+      var lecho = rio ? f.bridgeBed.material : null;
+      if (rio) { f.bridgeBed.material = this.aguaMat || (this.aguaMat = g.retro.material({ texture: 'water', color: 0x6f9fb0, emissive: 0.35 })); }
       // Las máscaras negras no salen en las fotos: frente al mostrador no hay nadie.
       var mascaras = this._mascaras(cam);
       mascaras.forEach(function (m) { m.group.visible = false; });
@@ -175,6 +185,8 @@
       try { src = this.canvas.toDataURL('image/jpeg', 0.82); } catch (e) { src = ''; }
       caras.forEach(function (f) { f.mesh.material = f.guardado; }); // a la vista, otra vez lisas
       if (ridersMat) { riders.material = ridersMat; }
+      if (calle) { city.water.position.y = aguaY; city.water.updateMatrixWorld(); }
+      if (lecho) { f.bridgeBed.material = lecho; }
       mascaras.forEach(function (m) { m.group.visible = true; });
       if (saved) {
         c.group.position.copy(saved.pos);
@@ -184,7 +196,7 @@
         c.standing.visible = saved.standing;
       }
       var foto = { src: src, hora: MR.Util.clockText(Math.floor(g.minutes)), noche: g.night || 1, el: !!dist, t: Date.now(), caras: caras.length + (enBus ? 5 : 0),
-        mascaras: mascaras.length };
+        mascaras: mascaras.length, agua: calle, rio: rio };
       this.list.push(foto);
       while (this.list.length > MAX) { this.list.shift(); }
       this._save();
@@ -205,6 +217,18 @@
         setTimeout(function () {
           if (g.state === 'playing') { g.ui.subtitle('(Revisas la foto: Pelusa sale movida, como en todas las fotos.)', 4); }
         }, 700);
+      }
+      if (calle && !this.streetSeen) {
+        this.streetSeen = true;
+        setTimeout(function () {
+          if (g.state === 'playing') { g.ui.subtitle('(En la foto, la avenida está bajo el agua. Levantas la vista: por la vidriera, está seca.)', 6); }
+        }, 1200);
+      }
+      if (rio && !this.riverSeen) {
+        this.riverSeen = true;
+        setTimeout(function () {
+          if (g.state === 'playing') { g.ui.subtitle('(En la foto, bajo el puente corre un río.)', 5); }
+        }, 900);
       }
       if (mascaras.length && !this.masksSeen) {
         this.masksSeen = true;

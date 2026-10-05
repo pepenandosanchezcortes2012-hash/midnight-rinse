@@ -211,3 +211,9 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Las máscaras no salen en las fotos; los pasajeros del 86 tienen cara.
 - **Decisión:** la cámara revela la naturaleza de cada uno. Las caras blancas fueron personas; las máscaras nunca estuvieron.
+
+## Sprint 29 — La cámara ve el agua
+
+- En las fotos, la avenida está inundada y bajo el puente corre el río.
+- **Decisión:** la cámara muestra la verdad de Blackwood (está bajo el agua). Es el cierre del tema de «lo que la cámara ve» (Sprints 27 a 29).
+- `probar.py`: un reintento avisado si Chrome entrega la página a medias.

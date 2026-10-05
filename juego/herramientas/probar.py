@@ -28,16 +28,25 @@ def main():
     chrome = next((c for c in CHROMES if c.exists()), None)
     if not chrome:
         sys.exit('no encontré Chrome ni Edge')
-    with servidor(), tempfile.TemporaryDirectory() as perfil:
-        p = subprocess.run([str(chrome), '--headless=new', '--no-first-run', '--no-default-browser-check', '--mute-audio',
-                            '--user-data-dir=' + perfil, '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
-                            '--window-size=1036,647', '--autoplay-policy=no-user-gesture-required',
-                            '--virtual-time-budget=600000', '--dump-dom', url],
-                           capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=900)
-    dom = p.stdout
-    # ¿Terminó? La página escribe en #resumen «Todo bien: N/T…» o «Fallaron…» al final; mientras corre, «Corriendo…».
-    fin = re.search(r'<div id="resumen"[^>]*>(.*?)</div>', dom, re.S)
-    fin = html.unescape(fin.group(1)).strip() if fin else ''
+
+    def correr():
+        with servidor(), tempfile.TemporaryDirectory() as perfil:
+            p = subprocess.run([str(chrome), '--headless=new', '--no-first-run', '--no-default-browser-check', '--mute-audio',
+                                '--user-data-dir=' + perfil, '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
+                                '--window-size=1036,647', '--autoplay-policy=no-user-gesture-required',
+                                '--virtual-time-budget=600000', '--dump-dom', url],
+                               capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=900)
+        dom = p.stdout
+        # ¿Terminó? La página escribe en #resumen «Todo bien: N/T…» o «Fallaron…» al final; mientras corre, «Corriendo…».
+        fin = re.search(r'<div id="resumen"[^>]*>(.*?)</div>', dom, re.S)
+        fin = html.unescape(fin.group(1)).strip() if fin else ''
+        return dom, fin, p.stderr or ''
+
+    dom, fin, err = correr()
+    if not (fin.startswith('Todo bien') or fin.startswith('Fallaron')):
+        # Chrome a veces entrega la página a medias (infraestructura, no una prueba): se avisa y se reintenta una vez.
+        print('aviso: Chrome entregó la página a medias («%s»); se reintenta una vez. Chrome dijo: %s' % (fin or 'sin resumen', err.strip()[-300:] or '(nada)'))
+        dom, fin, err = correr()
     filas = re.findall(r'<li class="(ok|mal)"[^>]*>(.*?)</li>', dom, re.S)
     if not filas:
         print('sin resultados (¿no cargó?)')

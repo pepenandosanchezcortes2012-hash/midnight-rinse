@@ -1533,6 +1533,7 @@
         bell: bell,
         bellCup: cup,
         bridge: bridge,
+        bridgeBed: bed,
         bridgeFrame: frame,
         plaque: plaque,
         bridgeColliders: railColliders,

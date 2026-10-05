@@ -889,6 +889,14 @@ El proyecto pasó por dos etapas:
 - Para la foto se ocultan las máscaras en cuadro y se cambia el material de los pasajeros. Después todo vuelve a como estaba (la prueba lo verifica).
 - **QA:** prueba nueva (la máscara no sale y vuelve a verse; los pasajeros salen con cara y su material vuelve). Resultado: 90/90.
 
+## 109. Sprint 29: la cámara ve el agua (y el corte intermitente de las pruebas)
+- **Blackwood está bajo el agua, y la cámara lo ve:**
+  - en una foto de la avenida antes de que suba el agua, **la calle sale inundada hasta las veredas**: los autos desaparecen y la gente queda con el agua a la cintura. «Levantas la vista: por la vidriera, está seca»;
+  - en una foto del puente del bosque, **bajo el puente corre un río**.
+  - Todo vuelve a su lugar después de la foto (la prueba lo verifica).
+- **Infraestructura:** el corte en el que Chrome entrega la página de pruebas a medias se repitió una vez (3 resultados) y la detección del Sprint 26 lo atrapó. Dos corridas seguidas pasaron completas, así que es intermitente y de infraestructura. Ahora `probar.py` muestra lo que dijo Chrome y **reintenta una sola vez, avisando**. Si una prueba falla, sigue fallando: el reintento no tapa fallas de pruebas.
+- **QA:** prueba nueva (avenida inundada en la foto y río bajo el puente; el agua y el lecho vuelven). Resultado: 91/91.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

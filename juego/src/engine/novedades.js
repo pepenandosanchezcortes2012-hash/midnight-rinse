@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 49, texto: 'Sácale una foto a la avenida antes de las 03:30. Y después mira por la vidriera.' },
     { id: 48, texto: 'Sácale una foto a una cara blanca. De frente.' },
     { id: 47, texto: 'Nuevo panel: «Pelusa · lo que recuerda». ¿Ya te tiene cariño?' },
     { id: 46, texto: 'Si Pelusa mira fijo hacia un lado, algo sonó ahí.' },
