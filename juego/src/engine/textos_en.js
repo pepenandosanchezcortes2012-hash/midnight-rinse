@@ -960,5 +960,8 @@ MR.TEXTOS_EN = {
  "Fotos que revelaron algo: {n} de {t}": "Photos that revealed something: {n} of {t}",
  "(La lechuza abre las alas sin un ruido y se pierde entre los pinos.)": "(The barn owl spreads its wings without a sound and vanishes among the pines.)",
  "(En una rama seca, una lechuza de cara blanca. Te sigue con la cabeza.)": "(On a dead branch, a white-faced barn owl. Its head follows you.)",
- "(La lechuza gira la cabeza hasta la espalda para no dejar de mirarte.)": "(The barn owl turns its head all the way around so it never stops watching you.)"
+ "(La lechuza gira la cabeza hasta la espalda para no dejar de mirarte.)": "(The barn owl turns its head all the way around so it never stops watching you.)",
+ "En el bosque hay un árbol seco. Algunas noches, alguien te mira desde la rama.": "There's a dead tree in the forest. Some nights, someone watches you from its branch.",
+ "Pelusa siempre sale movida en las fotos. Y el resumen del turno dice cuánto te quiere.": "Pelusa always comes out blurry in photos. And the shift summary tells you how much Pelusa loves you.",
+ "Si tus fotos revelan algo, alguien se entera. Escucha la radio, y no cuelgues tan rápido el teléfono.": "If your photos reveal something, someone finds out. Listen to the radio, and don't hang up the phone so fast."
 };

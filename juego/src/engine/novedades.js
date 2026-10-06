@@ -8,6 +8,9 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 54, texto: 'En el bosque hay un árbol seco. Algunas noches, alguien te mira desde la rama.' },
+    { id: 53, texto: 'Pelusa siempre sale movida en las fotos. Y el resumen del turno dice cuánto te quiere.' },
+    { id: 52, texto: 'Si tus fotos revelan algo, alguien se entera. Escucha la radio, y no cuelgues tan rápido el teléfono.' },
     { id: 51, texto: 'En el bosque hay un venado. Acércate despacio.' },
     { id: 50, texto: 'Si Pelusa te tiene cariño, te saluda cuando vuelves. Mira sus orejas: van hacia lo que oye.' },
     { id: 50, texto: 'Los clientes tienen cerebro nuevo. Si miras de golpe, se quedan quietos. Si insistes, se inclinan. Y a él no lo vas a ver llegar.' },
