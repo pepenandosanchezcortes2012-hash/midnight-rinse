@@ -974,6 +974,19 @@ El proyecto pasó por dos etapas:
 - **QA:** prueba nueva (doble exposición, que no quede en la escena, y el resumen). La prueba de las fotos y la radio ahora fija la noche 1: dependía de cuántas noches habían terminado las pruebas anteriores. 102/102.
 - **Aviso para la sesión del director de IA:** «Director de IA (1)» falla a veces en la suite completa («no ladeó la cabeza», con ladeo de 0,03 o 0,20 de 0,26). Fueron 2 de 3 corridas completas; corriendo sola pasó 5 de 5. El ladeo depende de cuánto espera la cara frente a la puerta bloqueada, y a veces espera menos de un segundo. No se tocó: es su código (`clientela.js`, `director.js`).
 
+## 116. Sprint 35: la lechuza del árbol seco (cerebro de mosca) y modelos más livianos
+- **El árbol seco:** una sola malla (tronco y tres ramas muertas) con colisión. Está en el primero de seis sitios que quede libre de pinos, lejos del sendero y de donde se para él.
+- **La lechuza** (`src/engine/lechuza.js`, cara blanca como las lechuzas de verdad) aparece el 70 % de las noches. Su cerebro de mosca es `Mosca(500, {curiosidad: 0.9, miedo: 0.5})`.
+  - **La cabeza, a saltos:** cada 0,5–1,4 s gira de golpe hacia lo que atiende su anillo E-PG. Llega hasta ±2,75 rad, más que una lechuza de verdad. Si es curiosa, a veces ladea la cabeza.
+  - **Ve a él:** si él está en el bosque, la lechuza lo atiende antes que a ti, aunque esté escondido detrás de un pino. Es una pista para quien mire bien.
+  - **Ulula** cada 14–30 s desde su rama, con paneo estéreo y volumen según la distancia (`audio.buho(pan, fuerza)`; `_tone` acepta paneo). Llama a `game.oir`, así que el venado la oye.
+  - **Los ojos:** negros, con brillo ámbar bajo la linterna.
+  - **Se va volando:** si te acercas a menos de unos 3 m, vuela en silencio y esa noche no vuelve.
+  - **Subtítulos**, una vez cada uno: al verla, al girar la cabeza hasta la espalda y al irse.
+- **Modelos más livianos:** las piezas que se mueven juntas y comparten material se fusionan con `MR.mergeParts`. La lechuza tiene 7 mallas en vez de 13; el venado, 8 en vez de 13, con las patas de a pares porque se mueven igual. Auditoría PSX: bosque 24 llamadas de dibujo (con el árbol seco), «TODO EN ORDEN».
+- **Galería:** vistas `bosque_lechuza` (con `giro` para rodearla) y `bosque_arbolseco`. Capturada de frente y de espaldas.
+- **QA:** prueba nueva. Comprueba que te sigue con la cabeza, que le brillan los ojos, que ulula, que mira a él, que gira hasta la espalda, que se va volando y que no vuelve esa noche. 103/103 en tres corridas; el venado, 4 de 4 después de fusionar sus piezas.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

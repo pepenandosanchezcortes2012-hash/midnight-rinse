@@ -254,3 +254,9 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Doble exposición de Pelusa en las fotos, y dos líneas nuevas en el resumen: el cariño de Pelusa y cuántas fotos revelaron algo.
 - **Decisión:** el doble es un clon temporal del modelo, en vez de un efecto de pantalla. Así sale con el mismo tramado y la misma iluminación PSX, y no hace falta otro pase de render.
+
+## Sprint 35 — La lechuza del árbol seco
+
+- Lechuza de cara blanca con cerebro de mosca: cabeza a saltos que gira casi hasta la espalda, ve a él, ulula con paneo y se va volando en silencio.
+- **Decisión (lore):** su cara blanca es la de una lechuza de verdad, no una «cara blanca» del canon. Es solo un guiño, sin afirmar nada nuevo. Que ella vea a él cuando tú no lo ves sigue la regla de Pelusa: los animales notan lo que no se ve.
+- **Decisión (rendimiento):** las piezas se fusionan por material y por grupo animado. La lechuza y el venado, juntos, pasan de 26 llamadas de dibujo a 15 cuando aparecen.

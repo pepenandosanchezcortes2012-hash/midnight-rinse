@@ -137,6 +137,7 @@ Pelusa, las caras blancas, el niño y la gente de la avenida llevan un **cerebro
 - **Las caras blancas** miran a Pelusa, a su niño, su ropa girando o el autobús; nunca a ti.
 - **También oyen:** si algo suena (una secadora, el teléfono, una puerta), Pelusa y las caras voltean hacia ahí. Si Pelusa mira fijo hacia un lado, algo pasó ahí.
 - **El venado del bosque** tiene el suyo, muy miedoso: pasta lejos, levanta la cabeza si te acercas y huye a saltos.
+- **La lechuza** tiene uno muy curioso: ve a *él* aunque tú no lo veas.
 - Él y las máscaras no lo llevan: uno es una anomalía, las otras obedecen órdenes.
 
 ### Director de IA (cómo se mueven y deciden)
@@ -164,6 +165,7 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **El bosque no termina:** si llegas al fondo o a los costados, parpadeas y el bosque te devuelve al otro lado. Cada vuelta más adentro guarda algo más viejo del pueblo: a la segunda, algo entre los pinos; a la tercera, algo que suena; a la cuarta, algo que perdió su nombre.
 - **Música:** afuera suena una pista zen lo-fi, suave, que baja cuando sube el miedo.
 - **Un venado:** algunas noches pasta entre los pinos. Si lo alumbras, le brillan los ojos; si te acercas, huye.
+- **Una lechuza de cara blanca** se posa algunas noches en la rama de un árbol seco. Te sigue con la cabeza, a saltos y casi hasta la espalda, y ulula desde ahí. Si deja de mirarte y mira fijo hacia los pinos, *él* está ahí. Si te acercas al árbol, se va volando sin hacer ruido.
 
 ### Noches especiales
 Más o menos la mitad de las noches traen algo distinto, con una **nota del gerente** al empezar y en la tablilla:

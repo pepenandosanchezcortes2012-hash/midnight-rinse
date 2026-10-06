@@ -50,6 +50,7 @@
       this.tele = new MR.Tele(this);
       this.bosque = new MR.Bosque(this);
       this.venado = new MR.Venado(this); // vida salvaje del bosque (cerebro de mosca)
+      this.lechuza = new MR.Lechuza(this); // la lechuza del árbol seco (cerebro de mosca)
       this.pasillo = new MR.Pasillo(this);
       this.espejo = new MR.Espejo(this);
       this.clientela = new MR.Clientela(this);
@@ -354,6 +355,7 @@
       this._sonidos(dt);
       this.bosque.update(dt);
       this.venado.update(dt);
+      this.lechuza.update(dt);
       this.espejo.update(dt);
       if (!this.epilogue) { this.clientela.update(dt); }
       this.ciudad.update(dt);

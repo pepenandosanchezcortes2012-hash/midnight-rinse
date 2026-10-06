@@ -292,7 +292,7 @@
       return f;
     }
 
-    _tone(freq, dur, vol, type, endFreq) {
+    _tone(freq, dur, vol, type, endFreq, pan) {
       var ctx = this.ctx;
       if (!ctx) { return; }
       var t = ctx.currentTime;
@@ -303,7 +303,13 @@
       var g = ctx.createGain();
       g.gain.setValueAtTime(vol, t);
       g.gain.exponentialRampToValueAtTime(0.0005, t + dur);
-      o.connect(g); g.connect(this.master);
+      if (pan) {
+        var p = ctx.createStereoPanner();
+        p.pan.value = pan;
+        o.connect(g); g.connect(p); p.connect(this.master);
+      } else {
+        o.connect(g); g.connect(this.master);
+      }
       o.start(t); o.stop(t + dur + 0.05);
     }
 
@@ -637,11 +643,12 @@
       var self = this;
       setTimeout(function () { self._burst(self.white, 'bandpass', 1300, 2.0, 0.14, 0.26, pan); }, 90 + Math.random() * 120);
     }
-    /** Bosque: un búho lejano (dos ululatos). */
-    buho() {
-      this._tone(410, 0.34, 0.035, 'sine', 370);
+    /** Bosque: un búho (dos ululatos). Sin argumentos, lejano; la lechuza del árbol seco le da su lado y su volumen. */
+    buho(pan, fuerza) {
+      var k = fuerza || 1;
+      this._tone(410, 0.34, 0.035 * k, 'sine', 370, pan);
       var self = this;
-      setTimeout(function () { self._tone(400, 0.5, 0.03, 'sine', 350); }, 520);
+      setTimeout(function () { self._tone(400, 0.5, 0.03 * k, 'sine', 350, pan); }, 520);
     }
     lint() { this._burst(this.white, 'bandpass', 2500, 0.6, 0.2, 0.06); }
 

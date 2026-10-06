@@ -71,6 +71,19 @@
         bosque_fachada: [0.5, 109, 0, 0.08], bosque_farola: [-2.2, 105.6, 0.75, 0.32], bosque_sendero: [0, 104, Math.PI, -0.05] };
       if (q.indexOf('pasillo_') === 0) { g.pasillo.unlock(true); g.pasillo.go(); frames(40); }
       if (q.indexOf('bosque_') === 0) { g.bosque.go(); frames(40); }
+      if (q === 'bosque_lechuza' || q === 'bosque_arbolseco') {
+        // La lechuza del árbol seco, de frente (giro: rodearla); arbolseco: el árbol entero, de más lejos.
+        var le = g.lechuza;
+        le.plan = true; le.update(0);
+        var lg = le.model.group;
+        var ld = q === 'bosque_lechuza' ? 1.6 : 6;
+        var la = lg.rotation.y + giro;
+        p.pos.set(lg.position.x + Math.sin(la) * ld, 0, lg.position.z + Math.cos(la) * ld);
+        p.yaw = Math.atan2(-(lg.position.x - p.pos.x), -(lg.position.z - p.pos.z));
+        p.pitch = Math.atan2((q === 'bosque_lechuza' ? lg.position.y + 0.3 : 1.8) - 1.62, ld);
+        le.model.cabeza.rotation.set(0, 0, 0);
+        le.update = function () {}; // quieta para la foto (de tan cerca, se iría volando)
+      }
       if (VISTAS[q]) {
         var v = VISTAS[q];
         if (q === 'sombrero') { g.world.loneHat.visible = true; }

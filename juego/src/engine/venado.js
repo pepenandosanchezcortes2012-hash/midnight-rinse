@@ -32,33 +32,57 @@
       var R = w.retro;
       var pelo = R.material({ texture: 'white', color: 0x7a5639, emissive: 0.06 }); // apenas se adivina en la oscuridad
       var claro = R.material({ texture: 'white', color: 0xd8ccb4 });
+      var M4 = THREE.Matrix4;
+      // Las piezas que se mueven juntas y comparten material van en una sola malla (pocas llamadas de dibujo).
+      var cubo = new THREE.BoxGeometry(1, 1, 1);
+      function pieza(lista, x, y, z, ancho, alto, hondo, rz, geo) {
+        lista.push({ geo: geo || cubo, matrix: new M4().makeTranslation(x, y, z).multiply(new M4().makeRotationZ(rz || 0)).multiply(new M4().makeScale(ancho, alto, hondo)) });
+      }
+      function malla(lista, mat, padre) {
+        var me = new THREE.Mesh(MR.mergeParts(lista), mat);
+        me.raycast = function () {};
+        padre.add(me);
+        return me;
+      }
       var g = new THREE.Group();
-      w.box(0.36, 0.42, 0.92, pelo, 0, 1.02, 0, g);                    // el cuerpo
-      w.box(0.2, 0.12, 0.06, claro, 0, 1.12, -0.48, g);                 // la cola, blanca
+      var lomo = [];
+      pieza(lomo, 0, 1.02, 0, 0.36, 0.42, 0.92);                         // el cuerpo
+      malla(lomo, pelo, g);
+      var cola = [];
+      pieza(cola, 0, 1.12, -0.48, 0.2, 0.12, 0.06);                      // la cola, blanca
+      malla(cola, claro, g);
       var cuello = new THREE.Group();
       cuello.position.set(0, 1.18, 0.4);
       g.add(cuello);
-      w.box(0.15, 0.5, 0.17, pelo, 0, 0.24, 0.04, cuello);
+      var cuelloP = [];
+      pieza(cuelloP, 0, 0.24, 0.04, 0.15, 0.5, 0.17);
+      malla(cuelloP, pelo, cuello);
       var cabeza = new THREE.Group();
       cabeza.position.set(0, 0.5, 0.1);
       cuello.add(cabeza);
-      w.box(0.16, 0.17, 0.32, pelo, 0, 0, 0.1, cabeza);
-      w.box(0.1, 0.08, 0.1, claro, 0, -0.04, 0.27, cabeza);             // el hocico, más claro
-      [-1, 1].forEach(function (s) {
-        var oreja = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.14, 4), pelo);
-        oreja.position.set(0.08 * s, 0.11, -0.02);
-        oreja.rotation.z = -0.6 * s;
-        cabeza.add(oreja);
-      });
+      var craneo = [];
+      pieza(craneo, 0, 0, 0.1, 0.16, 0.17, 0.32);
+      var cono = new THREE.ConeGeometry(0.045, 0.14, 4);
+      [-1, 1].forEach(function (s) { pieza(craneo, 0.08 * s, 0.11, -0.02, 1, 1, 1, -0.6 * s, cono); }); // las orejas
+      malla(craneo, pelo, cabeza);
+      var hocico = [];
+      pieza(hocico, 0, -0.04, 0.27, 0.1, 0.08, 0.1);                    // el hocico, más claro
+      malla(hocico, claro, cabeza);
       var eyeMat = R.material({ texture: 'white', color: 0xdaf2c2, emissive: 0.15 });
-      [-1, 1].forEach(function (s) { w.box(0.04, 0.035, 0.02, eyeMat, 0.085 * s, 0.03, 0.17, cabeza); }); // dos puntos en la oscuridad
-      var legs = [[-0.12, 0.33], [0.12, 0.33], [-0.12, -0.33], [0.12, -0.33]].map(function (p) {
+      var ojos = [];
+      [-1, 1].forEach(function (s) { pieza(ojos, 0.085 * s, 0.03, 0.17, 0.04, 0.035, 0.02); }); // dos puntos en la oscuridad
+      malla(ojos, eyeMat, cabeza);
+      // Las patas, de a pares: delanteras y traseras se mueven igual al galopar.
+      var pares = [0.33, -0.33].map(function (z) {
         var hip = new THREE.Group();
-        hip.position.set(p[0], 0.86, p[1]);
+        hip.position.set(0, 0.86, z);
         g.add(hip);
-        w.box(0.07, 0.86, 0.07, pelo, 0, -0.43, 0, hip);
+        var patas = [];
+        [-0.12, 0.12].forEach(function (x) { pieza(patas, x, -0.43, 0, 0.07, 0.86, 0.07); });
+        malla(patas, pelo, hip);
         return hip;
       });
+      var legs = [pares[0], pares[0], pares[1], pares[1]];
       g.visible = false;
       w.add(g);
       this.model = { group: g, cuello: cuello, cabeza: cabeza, legs: legs, eyeMat: eyeMat };

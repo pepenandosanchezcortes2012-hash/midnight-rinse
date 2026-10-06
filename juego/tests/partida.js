@@ -1539,6 +1539,67 @@
       return 'boletín de las fotos · posdata «deja de fotografiar la avenida»';
     }],
 
+    ['La lechuza del árbol seco: te sigue con la cabeza a saltos (hasta la espalda), mira a él entre los pinos, ulula desde su rama y se va volando sin ruido', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var le = g.lechuza;
+      var M = ctx.w.MR.Mosca;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true; g.horror.nextEvent = 9999;
+      g.horror.customer.present = false;
+      g.venado.plan = false;
+      le.plan = true;
+      g.bosque.go(); step(ctx, 45);
+      var grp = le.model.group;
+      var op = grp.position.clone();
+      check(grp.visible, 'no está la lechuza');
+      check(Math.abs(op.y - 2.66) < 0.05, 'no está sobre la rama (' + op.y.toFixed(2) + ')');
+      // Te paras a `dist` metros, en el ángulo `rel` respecto de hacia dónde mira, y la miras.
+      function desde(dist, rel) {
+        var a = grp.rotation.y + rel;
+        g.player.pos.set(op.x + Math.sin(a) * dist, 0, op.z + Math.cos(a) * dist);
+        g.player.yaw = Math.atan2(-(op.x - g.player.pos.x), -(op.z - g.player.pos.z));
+        g.player.pitch = 0.12;
+        g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      }
+      var cab = le.model.cabeza.rotation;
+      // De frente y un poco al costado: te sigue con la cabeza; con la linterna, le brillan los ojos.
+      desde(9, 0.5);
+      le.hoot = 0;
+      var sonidos0 = (g.sonidos || []).length;
+      step(ctx, 30 * 2.5);
+      check(Math.abs(M.envolver(cab.y - 0.5)) < 0.35, 'no te siguió con la cabeza (' + cab.y.toFixed(2) + ')');
+      check(le.model.ojo.uniforms.uEmissive.value > 1, 'no le brillaron los ojos');
+      check(sub().indexOf('una lechuza de cara blanca') >= 0, 'faltó el subtítulo de la lechuza');
+      check(le.hoots >= 1, 'no ululó');
+      // Él entre los pinos (quieto, para la prueba): deja de mirarte y lo mira a él.
+      var c = g.horror.customer;
+      c.present = true; c.anchor = 'bosque_b';
+      g.horror.arbol = -1; g.horror.arbolT = 9999;
+      var ea = grp.rotation.y - 1.4;
+      g.world.customer.group.position.set(op.x + Math.sin(ea) * 7, 0, op.z + Math.cos(ea) * 7);
+      step(ctx, 30 * 3);
+      check(Math.abs(M.envolver(cab.y + 1.4)) < 0.4, 'no miró hacia él (' + cab.y.toFixed(2) + ')');
+      c.present = false; c.anchor = null;
+      // Le das la vuelta: gira la cabeza hasta la espalda para no dejar de mirarte.
+      desde(8, 2.5);
+      step(ctx, 30 * 3);
+      check(Math.abs(cab.y) > 2.3, 'no giró la cabeza hasta la espalda (' + cab.y.toFixed(2) + ')');
+      check(sub().indexOf('hasta la espalda') >= 0, 'faltó el subtítulo del giro');
+      // Te acercas al árbol: se va volando, en silencio, y esa noche no vuelve.
+      desde(2.2, 0.3);
+      for (var i = 0; i < 30 * 4 && le.state !== 'vuela'; i += 1) { step(ctx, 1); }
+      check(le.state === 'vuela', 'no se fue volando (' + le.brain.accion() + ')');
+      check(sub().indexOf('sin un ruido') >= 0, 'faltó el subtítulo del vuelo');
+      for (var k = 0; k < 30 * 6 && grp.visible; k += 1) { step(ctx, 1); }
+      check(le.gone && !grp.visible, 'no se perdió entre los pinos');
+      g.bosque.go(); step(ctx, 40); g.bosque.go(); step(ctx, 45);
+      check(!grp.visible, 'volvió en la misma noche');
+      noErrors(ctx);
+      return 'te sigue · mira a él · gira ' + (2.5).toFixed(1) + ' rad · ulula · se va volando';
+    }],
+
     ['El venado del bosque: pasta lejos, levanta la cabeza si te acercas, huye a saltos y le brillan los ojos con la linterna', async function () {
       var ctx = await load();
       var g = ctx.g;

@@ -957,5 +957,8 @@ MR.TEXTOS_EN = {
  "Y otra cosa: si frente al mostrador no sale nadie en tus fotos, no insistas. A ellos no les gusta.": "And one more thing: if no one shows up at the counter in your photos, don't push it. They don't like it.",
  "Y otra cosa: el río del puente ya no corre. Lo que viste en la foto fue antes.": "And one more thing: the river under the bridge doesn't run anymore. What you saw in the photo was before.",
  "Pelusa: {e}": "Pelusa: {e}",
- "Fotos que revelaron algo: {n} de {t}": "Photos that revealed something: {n} of {t}"
+ "Fotos que revelaron algo: {n} de {t}": "Photos that revealed something: {n} of {t}",
+ "(La lechuza abre las alas sin un ruido y se pierde entre los pinos.)": "(The barn owl spreads its wings without a sound and vanishes among the pines.)",
+ "(En una rama seca, una lechuza de cara blanca. Te sigue con la cabeza.)": "(On a dead branch, a white-faced barn owl. Its head follows you.)",
+ "(La lechuza gira la cabeza hasta la espalda para no dejar de mirarte.)": "(The barn owl turns its head all the way around so it never stops watching you.)"
 };
