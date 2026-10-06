@@ -1007,6 +1007,13 @@ El proyecto pasó por dos etapas:
 - **Lore:** `lore_check` sin contradicciones. Las notas siguen el §7: las caras no te miran, las máscaras no hablan, él pregunta la hora, y el calcetín del niño enlaza con los objetos perdidos. Revisé que Pelusa no quede con género.
 - **QA:** prueba nueva. Comprueba que nada se anota sin verlo, que se anota Pelusa al acariciarla, y que la cara blanca no cuenta de espaldas pero sí al mirarla. También que se cuenta en el título y se relee con la firma. 105/105 en dos corridas.
 
+## 119. Sprint 38: la lechuza se calla cuando él anda por el bosque
+- **Qué cambia:** la lechuza deja de ulular mientras él está entre los pinos (`elAng` no nulo, a menos de 24 m del árbol). Cuenta las veces que se calló (`callada`) y vuelve a intentarlo a los 4–8 s.
+- **Charlas nuevas:** ocho pares de líneas de las caras blancas (`historia.js`, `entre`) sobre el venado, la lechuza, el árbol seco, él y Pelusa. Una enseña la mecánica: «Esa lechuza no ulula cuando él anda cerca».
+- **Origen:** el borrador lo dejó a medias la sesión de sprints (Gemini, revisado). Lo retomé en un worktree aparte, lo revisé y lo terminé.
+- **Lore:** `lore_check` sin contradicciones. Él lleva sombrero y se sienta en el banco amarillo (§2). Pelusa sigue sin género, también en inglés. El árbol seco «ya estaba así en 1986» no agrega un hecho nuevo al canon.
+- **QA:** la prueba de la lechuza ahora comprueba que no ulula con él en el bosque. 105/105.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

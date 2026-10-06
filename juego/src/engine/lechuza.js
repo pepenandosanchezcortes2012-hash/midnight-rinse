@@ -3,7 +3,7 @@
  * - El árbol seco está siempre; la lechuza, algunas noches. Tiene la cara blanca, como las lechuzas de verdad.
  * - Te sigue con la cabeza a saltos (se queda quieta y de golpe gira), y la gira más de lo que debería: casi hasta
  *   la espalda.
- * - Ulula desde su rama: el sonido viene de ahí, y el venado lo oye.
+ * - Ulula desde su rama: el sonido viene de ahí, y el venado lo oye. Mientras él anda por el bosque, se calla.
  * - Ve a *él* entre los pinos aunque tú no: si deja de mirarte y mira fijo hacia los árboles, él está ahí.
  * - Sus ojos brillan con la linterna. Si te acercas mucho, abre las alas sin un ruido y esa noche ya no vuelve.
  */
@@ -220,7 +220,9 @@
         }
       }
       // Ulula desde su rama de vez en cuando (más cerca, más fuerte); el venado la oye.
+      // Si él anda por el bosque, se calla (las caras blancas lo saben: historia.js, entre).
       this.hoot -= dt;
+      if (this.hoot <= 0 && this.elAng !== null) { this.hoot = U.rand(4, 8); this.callada = (this.callada || 0) + 1; }
       if (this.hoot <= 0) {
         this.hoot = U.rand(14, 30);
         g.audio.buho(this._pan(), U.clamp(1.6 - d / 14, 0.35, 1.6));

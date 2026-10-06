@@ -1618,7 +1618,11 @@
       g.horror.arbol = -1; g.horror.arbolT = 9999;
       var ea = grp.rotation.y - 1.4;
       g.world.customer.group.position.set(op.x + Math.sin(ea) * 7, 0, op.z + Math.cos(ea) * 7);
-      step(ctx, 30 * 3);
+      var hoots = le.hoots;
+      step(ctx, 30 * 2);
+      le.hoot = 0;
+      step(ctx, 30);
+      check(le.hoots === hoots && le.callada >= 1, 'ululó con él en el bosque');
       check(Math.abs(M.envolver(cab.y + 1.4)) < 0.4, 'no miró hacia él (' + cab.y.toFixed(2) + ')');
       check(sub().indexOf('Mira fijo hacia los pinos') >= 0 && g.logros.has('delator'), 'no notaste que la lechuza miraba a él');
       c.present = false; c.anchor = null;

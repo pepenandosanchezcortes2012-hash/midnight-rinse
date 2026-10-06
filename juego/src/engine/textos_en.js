@@ -990,5 +990,22 @@ MR.TEXTOS_EN = {
  "En el bosque hay un venado. No le tengas miedo al venado: tenle miedo a lo que lo hace correr.\n— A.": "There's a deer in the forest. Don't be afraid of the deer: be afraid of whatever makes it run.\n— A.",
  "La lechuza": "The barn owl",
  "Vive en el árbol seco y mira lo que tú no ves. Si deja de mirarte, mira hacia donde ella mira. Pero no te acerques.\n— R.": "It lives in the dead tree and watches what you can't see. If it stops watching you, look where it's looking. But don't get close.\n— R.",
- "Nuevo en el Archivo: el cuaderno de campo. Los que estuvieron antes dejaron una nota sobre cada ser que vas a ver.": "New in the Archive: the field notebook. The ones who came before left a note about every being you are going to see."
+ "Nuevo en el Archivo: el cuaderno de campo. Los que estuvieron antes dejaron una nota sobre cada ser que vas a ver.": "New in the Archive: the field notebook. The ones who came before left a note about every being you are going to see.",
+ "El venado volvió a cruzar corriendo entre los pinos.": "The deer ran across through the pines again.",
+ "Pobrecito, todavía no aprende que aquí ya no hay adónde huir.": "Poor thing, it still hasn't learned there's nowhere left to run here.",
+ "Dicen que el venado no huye del frío, sino de lo que viene detrás.": "They say the deer isn't running from the cold, but from what comes behind it.",
+ "Qué suerte la suya, poder correr sin llevar tanta agua encima.": "Lucky thing, to be able to run without carrying so much water.",
+ "La lechuza tiene la cara tan blanca como la nuestra.": "The barn owl has a face as white as ours.",
+ "Se pasa la noche mirando fijamente lo que nadie alcanza a ver.": "It spends the night staring at what no one else can see.",
+ "Esa lechuza no ulula cuando él anda cerca.": "That owl doesn't hoot when he's nearby.",
+ "Solo parpadea despacio y se queda mirando hacia los pinos.": "It just blinks slowly and keeps staring into the pines.",
+ "Ese árbol seco ya estaba así en 1986.": "That dead tree was already like that in 1986.",
+ "Sus raíces llegan tan hondo que todavía beben del fondo.": "Its roots go so deep they still drink from the bottom.",
+ "Cuando llegue el del sombrero, no te sientes en el banco amarillo.": "When the one in the hat comes, don't sit on the yellow bench.",
+ "Y si pregunta la hora, agacha la cabeza y no voltees.": "And if he asks for the time, keep your head down and don't turn around.",
+ "Ya van tres ciclos y mi suéter sigue escurriendo agua helada.": "Three cycles now and my sweater's still dripping icy water.",
+ "El mío también; nunca se le va a quitar el olor a limo de abajo.": "Mine too; it'll never lose that smell of silt from down below.",
+ "Pelusa se sienta junto a nosotros y no le importa que goteemos.": "Pelusa sits next to us and doesn't mind that we drip.",
+ "Le gusta dormir sobre las secadoras porque extraña lo tibio.": "Pelusa likes sleeping on the dryers, missing the warmth.",
+ "La lechuza del árbol seco a veces se calla. Las caras blancas dicen por qué.": "The barn owl in the dead tree sometimes goes quiet. The white faces say why."
 };

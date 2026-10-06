@@ -241,7 +241,16 @@
         ['Cruzamos el puente viejo del bosque, el que no tiene río.', 'El río seco de abajo ya olvidó el sonido de los pasos.'],
         ['El reloj de la iglesia sigue parado, con el agua hasta las agujas.', 'Las agujas ya no se mueven entre las hierbas del fondo.'],
         ['Pelusa no se asusta de nosotros. Nunca se asustó.', 'Los animales saben que no venimos a molestar a nadie.'],
-        ['En la 94.1 ponen música muy suave esta noche.', 'Apenas se oye entre el zumbido de los tambores.']
+        ['En la 94.1 ponen música muy suave esta noche.', 'Apenas se oye entre el zumbido de los tambores.'],
+        // Sprint 38 (borrador de Gemini, revisado contra el canon): los animales del bosque, el árbol seco, él.
+        ['El venado volvió a cruzar corriendo entre los pinos.', 'Pobrecito, todavía no aprende que aquí ya no hay adónde huir.'],
+        ['Dicen que el venado no huye del frío, sino de lo que viene detrás.', 'Qué suerte la suya, poder correr sin llevar tanta agua encima.'],
+        ['La lechuza tiene la cara tan blanca como la nuestra.', 'Se pasa la noche mirando fijamente lo que nadie alcanza a ver.'],
+        ['Esa lechuza no ulula cuando él anda cerca.', 'Solo parpadea despacio y se queda mirando hacia los pinos.'],
+        ['Ese árbol seco ya estaba así en 1986.', 'Sus raíces llegan tan hondo que todavía beben del fondo.'],
+        ['Cuando llegue el del sombrero, no te sientes en el banco amarillo.', 'Y si pregunta la hora, agacha la cabeza y no voltees.'],
+        ['Ya van tres ciclos y mi suéter sigue escurriendo agua helada.', 'El mío también; nunca se le va a quitar el olor a limo de abajo.'],
+        ['Pelusa se sienta junto a nosotros y no le importa que goteemos.', 'Le gusta dormir sobre las secadoras porque extraña lo tibio.']
       ],
       ordenes: [
         'ORDEN N.º 01: A las 02:40, la radio del mostrador debe estar en la 94.1.',

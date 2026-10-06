@@ -270,3 +270,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - Ocho notas de los que estuvieron antes, una por ser, en el Archivo. Se anotan al verlo de verdad.
 - **Decisión:** las notas las escriben los seis de las hojas mojadas. Así el cuaderno se suma a esa historia en vez de abrir otra, y cada nota da una pista sin la respuesta completa (regla 6 del canon).
+
+## Sprint 38 — La lechuza se calla
+
+- Mientras él anda por el bosque, la lechuza no ulula. Ocho charlas nuevas de las caras blancas sobre el venado, la lechuza, el árbol seco, él y Pelusa.
+- **Decisión:** el silencio es la pista, no un sonido nuevo. Si dejas de oírla, algo cambió entre los pinos. Una de las charlas lo dice («Esa lechuza no ulula cuando él anda cerca»), así que se puede aprender jugando.
