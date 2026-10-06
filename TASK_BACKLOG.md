@@ -10,6 +10,7 @@ Formato: `- [ ] (P1) Título — detalle`. P1 va antes que P2 y P3. Las ideas de
 ## Bloqueadas (necesitan decisión)
 
 ## Hechas
+- [x] (P1) Sprint 38: la lechuza se calla cuando él anda por el bosque; ocho charlas nuevas de las caras blancas — commit 4d70dd1 (2026-10-06)
 - [x] (P1) Sprint 37: cuaderno de campo del Archivo (8 notas de los que estuvieron antes) — commit 79efc1f (2026-10-05)
 - [x] (P1) Sprint 36: los animales delatan a él (venado huye de él, la lechuza lo mira); tres logros — commit 47b95f3 (2026-10-05)
 - [x] (P1) Sprint 35: la lechuza del árbol seco (cerebro de mosca); lechuza y venado fusionados — commit f9da8a3 (2026-10-05)
