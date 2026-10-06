@@ -963,5 +963,14 @@ MR.TEXTOS_EN = {
  "(La lechuza gira la cabeza hasta la espalda para no dejar de mirarte.)": "(The barn owl turns its head all the way around so it never stops watching you.)",
  "En el bosque hay un árbol seco. Algunas noches, alguien te mira desde la rama.": "There's a dead tree in the forest. Some nights, someone watches you from its branch.",
  "Pelusa siempre sale movida en las fotos. Y el resumen del turno dice cuánto te quiere.": "Pelusa always comes out blurry in photos. And the shift summary tells you how much Pelusa loves you.",
- "Si tus fotos revelan algo, alguien se entera. Escucha la radio, y no cuelgues tan rápido el teléfono.": "If your photos reveal something, someone finds out. Listen to the radio, and don't hang up the phone so fast."
+ "Si tus fotos revelan algo, alguien se entera. Escucha la radio, y no cuelgues tan rápido el teléfono.": "If your photos reveal something, someone finds out. Listen to the radio, and don't hang up the phone so fast.",
+ "(La lechuza deja de mirarte. Mira fijo hacia los pinos.)": "(The barn owl stops watching you. It stares hard into the pines.)",
+ "Ojos en la oscuridad": "Eyes in the dark",
+ "Alumbra al venado del bosque.": "Shine your light on the deer in the forest.",
+ "Hasta la espalda": "All the way around",
+ "Dale la vuelta a la lechuza sin que deje de mirarte.": "Walk around the barn owl without it ever looking away from you.",
+ "Los animales saben": "The animals know",
+ "Un animal del bosque te mostró dónde estaba él.": "A forest animal showed you where he was.",
+ "(El venado huye de golpe. No de ti: de algo entre los pinos.)": "(The deer bolts. Not from you: from something among the pines.)",
+ "Los animales del bosque saben dónde está él. Fíjate de qué huyen y hacia dónde miran.": "The forest animals know where he is. Watch what they flee from and where they stare."
 };

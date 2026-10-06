@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 55, texto: 'Los animales del bosque saben dónde está él. Fíjate de qué huyen y hacia dónde miran.' },
     { id: 54, texto: 'En el bosque hay un árbol seco. Algunas noches, alguien te mira desde la rama.' },
     { id: 53, texto: 'Pelusa siempre sale movida en las fotos. Y el resumen del turno dice cuánto te quiere.' },
     { id: 52, texto: 'Si tus fotos revelan algo, alguien se entera. Escucha la radio, y no cuelgues tan rápido el teléfono.' },

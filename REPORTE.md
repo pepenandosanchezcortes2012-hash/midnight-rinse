@@ -987,6 +987,16 @@ El proyecto pasó por dos etapas:
 - **Galería:** vistas `bosque_lechuza` (con `giro` para rodearla) y `bosque_arbolseco`. Capturada de frente y de espaldas.
 - **QA:** prueba nueva. Comprueba que te sigue con la cabeza, que le brillan los ojos, que ulula, que mira a él, que gira hasta la espalda, que se va volando y que no vuelve esa noche. 103/103 en tres corridas; el venado, 4 de 4 después de fusionar sus piezas.
 
+## 117. Sprint 36: los animales delatan a él (y tres logros nuevos)
+- **El venado siente a él:** si él está en el bosque, el cerebro del venado lo atiende (CTX.el). A menos de 9 m le da más miedo que tú: `amenaza += (1 − d/9)·1,3`. Si huye por él, corre **lejos de él** y no de ti. Si lo ves, sale el subtítulo «(El venado huye de golpe. No de ti: de algo entre los pinos.)».
+- **La lechuza lo delata:** si mientras la ves deja de mirarte y fija la cabeza hacia él (a menos de 0,4 rad de él y a más de 0,8 rad de ti), sale «(La lechuza deja de mirarte. Mira fijo hacia los pinos.)».
+- **Logros:**
+  - «Ojos en la oscuridad»: alumbrar al venado;
+  - «Hasta la espalda» (oculto): darle la vuelta a la lechuza;
+  - «Los animales saben» (oculto): que un animal te muestre dónde estaba él.
+- **Novedad 55** en la pantalla de título.
+- **QA:** prueba nueva, el venado huye de él. Comprueba que a 12 m no te teme, que huye de él, que se aleja de él y que salen el subtítulo y el logro. La prueba de la lechuza ahora también comprueba su aviso y sus logros, y ambas pruebas devuelven los logros que tocan. 104/104 en dos corridas.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

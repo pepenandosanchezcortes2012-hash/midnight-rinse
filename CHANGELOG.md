@@ -260,3 +260,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 - Lechuza de cara blanca con cerebro de mosca: cabeza a saltos que gira casi hasta la espalda, ve a él, ulula con paneo y se va volando en silencio.
 - **Decisión (lore):** su cara blanca es la de una lechuza de verdad, no una «cara blanca» del canon. Es solo un guiño, sin afirmar nada nuevo. Que ella vea a él cuando tú no lo ves sigue la regla de Pelusa: los animales notan lo que no se ve.
 - **Decisión (rendimiento):** las piezas se fusionan por material y por grupo animado. La lechuza y el venado, juntos, pasan de 26 llamadas de dibujo a 15 cuando aparecen.
+
+## Sprint 36 — Los animales saben
+
+- El venado huye de él y la lechuza lo mira fijo: los dos lo delatan. Tres logros nuevos.
+- **Decisión (diseño):** él nunca aparece a la vista (director de IA), así que la pista tiene que ser indirecta. Los animales la dan sin romper esa regla: ves de qué huyen y hacia dónde miran, no a él.

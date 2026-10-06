@@ -141,10 +141,15 @@
         b.contexto(CTX.jugador, Math.max(0, 1 - d / 14));
       }
       var c = g.horror && g.horror.customer;
+      this.elAng = null;
       if (c && c.present && /^bosque_/.test(c.anchor || '')) {
         var ep = this.world.customer.group.position;
         var de = Math.hypot(ep.x - me.x, ep.z - me.z);
-        if (de < 24) { b.estimulo(Math.atan2(ep.x - me.x, ep.z - me.z) - yaw, 1.6 / (1 + de * 0.05)); b.contexto(CTX.el, 1); }
+        if (de < 24) {
+          this.elAng = MR.Mosca.envolver(Math.atan2(ep.x - me.x, ep.z - me.z) - yaw);
+          b.estimulo(this.elAng, 1.6 / (1 + de * 0.05));
+          b.contexto(CTX.el, 1);
+        }
       }
       var ruido = 0;
       (g.sonidos || []).forEach(function (s) {
@@ -203,6 +208,15 @@
         } else if (!this.giroSaid && Math.abs(h.y) > 2.3 && Math.abs(this.headTarget) > 2.3) {
           this.giroSaid = true;
           g.ui.subtitle('(La lechuza gira la cabeza hasta la espalda para no dejar de mirarte.)', 5);
+          g.logros.unlock('lechuza');
+        }
+        // Si deja de mirarte y mira fijo a otro lado (a él, entre los pinos), lo notas.
+        var tuAng = MR.Mosca.envolver(Math.atan2(dx, dz) - grp.rotation.y);
+        if (!this.elSaid && this.elAng !== null && Math.abs(MR.Mosca.envolver(h.y - this.elAng)) < 0.4 &&
+            Math.abs(MR.Mosca.envolver(tuAng - this.elAng)) > 0.8) {
+          this.elSaid = true;
+          g.ui.subtitle('(La lechuza deja de mirarte. Mira fijo hacia los pinos.)', 5);
+          g.logros.unlock('delator');
         }
       }
       // Ulula desde su rama de vez en cuando (más cerca, más fuerte); el venado la oye.

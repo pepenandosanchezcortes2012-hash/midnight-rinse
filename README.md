@@ -164,7 +164,7 @@ Toca la **puerta de vidrio** de la entrada, o pulsa **«Salir al bosque»** en l
 - **Para volver:** toca la puerta de la fachada o pulsa **«Volver a la lavandería»** en la pausa.
 - **El bosque no termina:** si llegas al fondo o a los costados, parpadeas y el bosque te devuelve al otro lado. Cada vuelta más adentro guarda algo más viejo del pueblo: a la segunda, algo entre los pinos; a la tercera, algo que suena; a la cuarta, algo que perdió su nombre.
 - **Música:** afuera suena una pista zen lo-fi, suave, que baja cuando sube el miedo.
-- **Un venado:** algunas noches pasta entre los pinos. Si lo alumbras, le brillan los ojos; si te acercas, huye.
+- **Un venado:** algunas noches pasta entre los pinos. Si lo alumbras, le brillan los ojos; si te acercas, huye. Y si huye sin que te hayas acercado, no huye de ti: *él* está cerca.
 - **Una lechuza de cara blanca** se posa algunas noches en la rama de un árbol seco. Te sigue con la cabeza, a saltos y casi hasta la espalda, y ulula desde ahí. Si deja de mirarte y mira fijo hacia los pinos, *él* está ahí. Si te acercas al árbol, se va volando sin hacer ruido.
 
 ### Noches especiales

@@ -144,8 +144,19 @@
       });
       // Miedo: tú cerca (más si caminas) y la linterna en la cara.
       var cerca = d < 8 ? (1 - d / 8) * (g.player.moving ? 1.3 : 0.9) : 0;
+      // Él, entre los pinos: el venado lo ve y lo huele aunque tú no lo veas. Cerca, le da más miedo que tú.
+      var porEl = 0;
+      this.el = null;
+      var c = g.horror && g.horror.customer;
+      if (c && c.present && /^bosque_/.test(c.anchor || '')) {
+        var ep = this.world.customer.group.position;
+        var de = Math.hypot(ep.x - me.x, ep.z - me.z);
+        if (de < 20) { b.estimulo(Math.atan2(ep.x - me.x, ep.z - me.z) - yaw, 1.4 / (1 + de * 0.1)); b.contexto(MR.Mosca.CTX.el, 1); }
+        if (de < 9) { porEl = (1 - de / 9) * 1.3; this.el = ep; }
+      }
+      this.miedoEl = porEl > cerca;
       // La linterna en los ojos asusta solo de cerca: de lejos, mira (con los ojos brillando); si te acercas, huye.
-      b.sentir({ amenaza: Math.min(1, cerca + (lit && d < 8 ? 0.25 : 0)), atraccion: 0, ruido: ruido, sueno: 0.1 });
+      b.sentir({ amenaza: Math.min(1, cerca + (lit && d < 8 ? 0.25 : 0) + porEl), atraccion: 0, ruido: ruido, sueno: 0.1 });
     }
 
     update(dt) {
@@ -179,9 +190,13 @@
       var visto = !g.player.eyesClosed && this._enCuadro(cam);
       this.timer += dt;
       if (this.state === 'huye') {
-        // A saltos, lejos de ti.
-        var sx = -dx / Math.max(d, 0.01);
-        var sz = -dz / Math.max(d, 0.01);
+        // A saltos, lejos de lo que lo asustó: tú o él.
+        var hx = dx;
+        var hz = dz;
+        if (this.huyeDe) { hx = this.huyeDe.x - grp.position.x; hz = this.huyeDe.z - grp.position.z; }
+        var hd = Math.max(Math.hypot(hx, hz), 0.01);
+        var sx = -hx / hd;
+        var sz = -hz / hd;
         grp.position.x += sx * 4.2 * dt;
         grp.position.z += sz * 4.2 * dt;
         grp.rotation.y = Math.atan2(sx, sz);
@@ -198,9 +213,16 @@
       }
       if (b.accion() === 'huir' && b.impulso('huir') > 0.45) {
         this.state = 'huye';
+        this.huyeDe = this.miedoEl && this.el ? this.el.clone() : null;
         if (visto && !this.fleeSaid) {
           this.fleeSaid = true;
-          g.ui.subtitle('(El venado se va dando saltos entre los pinos.)', 4);
+          if (this.huyeDe) {
+            // No huye de ti: huye de algo que no ves (él, entre los pinos).
+            g.ui.subtitle('(El venado huye de golpe. No de ti: de algo entre los pinos.)', 5);
+            g.logros.unlock('delator');
+          } else {
+            g.ui.subtitle('(El venado se va dando saltos entre los pinos.)', 4);
+          }
         }
         return;
       }
@@ -215,6 +237,7 @@
           this.seenSaid = true;
           g.ui.subtitle('(Entre los pinos, un venado levanta la cabeza. Sus ojos brillan con tu linterna.)', 5);
         }
+        if (visto && lit) { g.logros.unlock('venado'); }
         m.cuello.rotation.x += (-0.25 - m.cuello.rotation.x) * Math.min(1, dt * 4);
         grp.rotation.y += U.clamp(at.angulo, -1, 1) * Math.min(1, dt * 1.5);
       } else {

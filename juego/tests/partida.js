@@ -1581,12 +1581,14 @@
       g.world.customer.group.position.set(op.x + Math.sin(ea) * 7, 0, op.z + Math.cos(ea) * 7);
       step(ctx, 30 * 3);
       check(Math.abs(M.envolver(cab.y + 1.4)) < 0.4, 'no miró hacia él (' + cab.y.toFixed(2) + ')');
+      check(sub().indexOf('Mira fijo hacia los pinos') >= 0 && g.logros.has('delator'), 'no notaste que la lechuza miraba a él');
       c.present = false; c.anchor = null;
       // Le das la vuelta: gira la cabeza hasta la espalda para no dejar de mirarte.
       desde(8, 2.5);
       step(ctx, 30 * 3);
       check(Math.abs(cab.y) > 2.3, 'no giró la cabeza hasta la espalda (' + cab.y.toFixed(2) + ')');
       check(sub().indexOf('hasta la espalda') >= 0, 'faltó el subtítulo del giro');
+      check(g.logros.has('lechuza'), 'faltó el logro «Hasta la espalda»');
       // Te acercas al árbol: se va volando, en silencio, y esa noche no vuelve.
       desde(2.2, 0.3);
       for (var i = 0; i < 30 * 4 && le.state !== 'vuela'; i += 1) { step(ctx, 1); }
@@ -1596,8 +1598,53 @@
       check(le.gone && !grp.visible, 'no se perdió entre los pinos');
       g.bosque.go(); step(ctx, 40); g.bosque.go(); step(ctx, 45);
       check(!grp.visible, 'volvió en la misma noche');
+      ['delator', 'lechuza'].forEach(function (id) { delete g.logros.got[id]; });
+      g.logros._save();
       noErrors(ctx);
       return 'te sigue · mira a él · gira ' + (2.5).toFixed(1) + ' rad · ulula · se va volando';
+    }],
+
+    ['Los animales delatan a él: el venado huye de él (no de ti), y lo notas', async function () {
+      var ctx = await load();
+      var g = ctx.g;
+      var ve = g.venado;
+      var sub = function () { return ctx.w.document.getElementById('subtitulos').textContent; };
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true; g.horror.nextEvent = 9999;
+      g.horror.customer.present = false;
+      g.lechuza.plan = false;
+      ve.plan = true;
+      g.bosque.go(); step(ctx, 45);
+      check(ve.active, 'no apareció el venado');
+      var vp = ve.model.group.position;
+      // Lo miras desde 12 m, quieto: a esa distancia no le das miedo.
+      var ang = Math.atan2(g.player.pos.x - vp.x, g.player.pos.z - vp.z);
+      g.player.pos.set(vp.x + Math.sin(ang) * 12, 0, vp.z + Math.cos(ang) * 12);
+      g.player.yaw = Math.atan2(-(vp.x - g.player.pos.x), -(vp.z - g.player.pos.z));
+      g.player.pitch = -0.05;
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      step(ctx, 30 * 2);
+      check(ve.state !== 'huye', 'huyó de ti a 12 m');
+      // Él, a 4 m del venado, del otro lado (quieto, para la prueba): el venado huye de él.
+      var c = g.horror.customer;
+      c.present = true; c.anchor = 'bosque_b';
+      g.horror.arbol = -1; g.horror.arbolT = 9999;
+      var ea = ang + Math.PI * 0.75;
+      var e0 = new ctx.w.THREE.Vector3(vp.x + Math.sin(ea) * 4, 0, vp.z + Math.cos(ea) * 4);
+      g.world.customer.group.position.copy(e0);
+      for (var i = 0; i < 30 * 3 && ve.state !== 'huye'; i += 1) { step(ctx, 1); }
+      check(ve.state === 'huye' && ve.huyeDe, 'no huyó de él (' + ve.state + ')');
+      check(sub().indexOf('No de ti') >= 0, 'faltó el subtítulo: huye de algo entre los pinos');
+      check(g.logros.has('delator'), 'faltó el logro «Los animales saben»');
+      var d0 = Math.hypot(vp.x - e0.x, vp.z - e0.z);
+      step(ctx, 15);
+      var d1 = Math.hypot(vp.x - e0.x, vp.z - e0.z);
+      check(d1 > d0 + 0.5, 'no se alejó de él (' + d0.toFixed(1) + ' → ' + d1.toFixed(1) + ' m)');
+      c.present = false; c.anchor = null;
+      ['delator', 'venado'].forEach(function (id) { delete g.logros.got[id]; });
+      g.logros._save();
+      noErrors(ctx);
+      return 'huye de él · se aleja ' + (d1 - d0).toFixed(1) + ' m en medio segundo · logro';
     }],
 
     ['El venado del bosque: pasta lejos, levanta la cabeza si te acercas, huye a saltos y le brillan los ojos con la linterna', async function () {

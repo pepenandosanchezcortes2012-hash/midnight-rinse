@@ -36,7 +36,10 @@
     { id: 'album', titulo: 'Álbum de la noche', desc: 'Saca fotos en la lavandería, el bosque y el pasillo en un mismo turno.' },
     { id: 'espejo', titulo: 'Dos en el espejo', desc: 'Míralo detrás de ti en el espejo del pasillo.', oculto: true },
     { id: 'foto', titulo: 'En la foto', desc: 'Sácale una foto cuando no está.', oculto: true },
-    { id: 'casillero', titulo: 'Ya tenías casillero', desc: 'Abre el último casillero del pasillo.', oculto: true }
+    { id: 'casillero', titulo: 'Ya tenías casillero', desc: 'Abre el último casillero del pasillo.', oculto: true },
+    { id: 'venado', titulo: 'Ojos en la oscuridad', desc: 'Alumbra al venado del bosque.' },
+    { id: 'lechuza', titulo: 'Hasta la espalda', desc: 'Dale la vuelta a la lechuza sin que deje de mirarte.', oculto: true },
+    { id: 'delator', titulo: 'Los animales saben', desc: 'Un animal del bosque te mostró dónde estaba él.', oculto: true }
   ];
 
   class Logros {
