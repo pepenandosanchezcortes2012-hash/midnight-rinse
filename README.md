@@ -222,6 +222,7 @@ En la pantalla de título: turnos terminados, tu mejor evaluación en cada dific
 
 ### Archivo
 Todo lo que lees (las hojas del bosque) y escuchas (Radio Nocturna a las 02:40) queda en el **Archivo** de la pantalla de título, para releerlo cuando quieras y armar la historia completa. También guarda las llamadas del teléfono público que contestaste.
+- **Cuaderno de campo:** ocho notas al margen del registro, firmadas por los que hicieron el turno antes, sobre cada ser de La Espuma y del bosque (Pelusa, las caras blancas, el niño, las máscaras, él, el 86, el venado y la lechuza). Cada una aparece la primera vez que lo ves de verdad.
 
 ### Objetos perdidos
 Cuando una lavadora termina su ciclo, a veces queda **algo olvidado** adentro. Abre la puerta para encontrarlo. Hay **15 objetos**, algunos normales y otros no tanto, y se guardan en una colección permanente (**Objetos perdidos**, en la pantalla de título).

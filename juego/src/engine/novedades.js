@@ -8,6 +8,7 @@
   var KEY = 'midnight-rinse/novedades';
 
   MR.NOVEDADES = [
+    { id: 56, texto: 'Nuevo en el Archivo: el cuaderno de campo. Los que estuvieron antes dejaron una nota sobre cada ser que vas a ver.' },
     { id: 55, texto: 'Los animales del bosque saben dónde está él. Fíjate de qué huyen y hacia dónde miran.' },
     { id: 54, texto: 'En el bosque hay un árbol seco. Algunas noches, alguien te mira desde la rama.' },
     { id: 53, texto: 'Pelusa siempre sale movida en las fotos. Y el resumen del turno dice cuánto te quiere.' },

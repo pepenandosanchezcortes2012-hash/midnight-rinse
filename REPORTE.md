@@ -997,6 +997,16 @@ El proyecto pasó por dos etapas:
 - **Novedad 55** en la pantalla de título.
 - **QA:** prueba nueva, el venado huye de él. Comprueba que a 12 m no te teme, que huye de él, que se aleja de él y que salen el subtítulo y el logro. La prueba de la lechuza ahora también comprueba su aviso y sus logros, y ambas pruebas devuelven los logros que tocan. 104/104 en dos corridas.
 
+## 118. Sprint 37: el cuaderno de campo del Archivo
+- **Qué es:** un grupo nuevo del Archivo con ocho notas al margen del registro, firmadas por los seis que estuvieron antes (R., E., S., D., T., A.). Hay una por ser: Pelusa, las caras blancas, el niño, las máscaras negras, él, el 86, el venado y la lechuza. Cada nota da una pista y nunca la respuesta, por ejemplo: «No le tengas miedo al venado: tenle miedo a lo que lo hace correr».
+- **Cuándo se anota:** la primera vez que lo ves de verdad. `Archivo.seres(g)` corre dos veces por segundo desde `game.update` y no toca los archivos del director.
+  - Debe estar en tu vista, cerca y con los ojos abiertos: las caras y las máscaras ya en su lugar, el niño, el 86 parado enfrente.
+  - Pelusa: al acariciarla. Él: cuando te pregunta la hora. El venado y la lechuza: cuando sale su subtítulo.
+  - Así nada se anota solo porque el reloj avanza, y la prueba del Archivo que cuenta entradas sigue valiendo.
+- **Archivo:** cuenta las notas (`count`/`total`) y se relee desde el título como el resto. «Reiniciar todo» lo borra.
+- **Lore:** `lore_check` sin contradicciones. Las notas siguen el §7: las caras no te miran, las máscaras no hablan, él pregunta la hora, y el calcetín del niño enlaza con los objetos perdidos. Revisé que Pelusa no quede con género.
+- **QA:** prueba nueva. Comprueba que nada se anota sin verlo, que se anota Pelusa al acariciarla, y que la cara blanca no cuenta de espaldas pero sí al mirarla. También que se cuenta en el título y se relee con la firma. 105/105 en dos corridas.
+
 ## Pendientes y siguiente paso
 - **Coliseo:** si quieres completar las 5 arenas restantes con Gemini, hacen falta unas 3–4 ventanas de cuota. No es necesario para jugar: esas piezas ya están verificadas con pruebas de mutación y vectores dorados.
 - **Material NO VERIFICADO de tu diseño:** shader en motor nativo, arte con Midjourney/SDXL/FLUX y música con Suno/Udio. El juego no depende de él: genera sus texturas y su audio por código. Si produces ese arte y audio, se pueden integrar sustituyendo `textures.js` y los buses de `audio.js`.

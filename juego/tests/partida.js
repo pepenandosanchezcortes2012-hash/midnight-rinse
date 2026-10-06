@@ -845,6 +845,45 @@
       return 'encontrado y guardado (1/' + g.objetos.total() + ')';
     }],
 
+    ['Cuaderno de campo: cada ser queda anotado la primera vez que lo ves de verdad, y se relee desde el título', async function () {
+      var prev = localStorage.getItem('midnight-rinse/archivo');
+      localStorage.removeItem('midnight-rinse/archivo');
+      var ctx = await load();
+      var g = ctx.g;
+      start(ctx);
+      g.clientela.plan = []; g.gato.stared = true; g.horror.nextEvent = 9999;
+      step(ctx, 30);
+      check(g.archivo.count() === 0, 'anotó algo sin verlo (' + JSON.stringify(g.archivo.data.seres) + ')');
+      // Acaricias a Pelusa: la nota de E.
+      g.gato.pets = 1; step(ctx, 20);
+      check(g.archivo.data.seres.pelusa, 'no anotó a Pelusa');
+      // Una cara blanca en su lavadora, de espaldas a ti: no cuenta; la miras: cuenta.
+      var v = g.clientela.spawn('cara');
+      for (var i = 0; i < 30 * 30 && v.state !== 'llego'; i += 1) { step(ctx, 1); }
+      var vp = v.model.group.position;
+      g.player.pos.set(vp.x, 0, vp.z + 3);
+      g.player.blink.phase = 'open'; g.player.blink.amount = 0; g.player.blink.timer = 999;
+      g.player.yaw = Math.PI; g.player.pitch = 0; step(ctx, 20);
+      check(!g.archivo.data.seres.caras, 'anotó a la cara blanca sin mirarla');
+      g.player.yaw = 0; step(ctx, 20);
+      check(g.archivo.data.seres.caras, 'no anotó a la cara blanca al mirarla');
+      var n = g.archivo.count();
+      var notas = g.archivo.view().filter(function (e) { return e.grupo === 'Cuaderno de campo'; });
+      check(notas.length === 8 && notas.filter(function (e) { return e.hecho; }).length === 2, 'el cuaderno no tiene 8 notas con 2 anotadas');
+      // Desde el título: se cuenta y se relee (con su firma).
+      var ctx2 = await load();
+      var d = ctx2.w.document;
+      check(new RegExp('^' + n + '/').test(d.getElementById('archivo-cuenta').textContent), 'el título no cuenta las notas');
+      var leer = Array.prototype.filter.call(d.querySelectorAll('#archivo-lista li.leer'), function (li) { return li.textContent.indexOf('Las caras blancas') >= 0; })[0];
+      check(leer, 'no se puede releer la nota de las caras blancas');
+      leer.click();
+      check(d.getElementById('nota-texto').textContent.indexOf('— R.') >= 0, 'la nota no lleva la firma de R.');
+      d.getElementById('nota').click();
+      noErrors(ctx); noErrors(ctx2);
+      if (prev === null) { localStorage.removeItem('midnight-rinse/archivo'); } else { localStorage.setItem('midnight-rinse/archivo', prev); }
+      return '8 notas · Pelusa y las caras anotadas solo al verlas · se releen con firma';
+    }],
+
     ['Archivo: lo que lees y escuchas se guarda y se puede releer', async function () {
       localStorage.removeItem('midnight-rinse/archivo');
       var ctx = await load();

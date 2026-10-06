@@ -265,3 +265,8 @@ Juego publicado: https://pepenandosanchezcortes2012-hash.github.io/midnight-rins
 
 - El venado huye de él y la lechuza lo mira fijo: los dos lo delatan. Tres logros nuevos.
 - **Decisión (diseño):** él nunca aparece a la vista (director de IA), así que la pista tiene que ser indirecta. Los animales la dan sin romper esa regla: ves de qué huyen y hacia dónde miran, no a él.
+
+## Sprint 37 — Cuaderno de campo
+
+- Ocho notas de los que estuvieron antes, una por ser, en el Archivo. Se anotan al verlo de verdad.
+- **Decisión:** las notas las escriben los seis de las hojas mojadas. Así el cuaderno se suma a esa historia en vez de abrir otra, y cada nota da una pista sin la respuesta completa (regla 6 del canon).

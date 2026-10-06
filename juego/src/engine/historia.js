@@ -69,6 +69,18 @@
         'Llegan las cuatro y media y cerramos la transmisión nocturna. El agua cubre los primeros escalones de la vereda. Buenas noches a los rezagados; mantengan los pies secos.'
       ]
     },
+    // Cuaderno de campo (Archivo): notas al margen del registro, de los que hicieron el turno antes, sobre lo que vive
+    // (o viene) a La Espuma. Cada una se desbloquea la primera vez que lo ves de verdad (Archivo.seres).
+    seres: [
+      { id: 'pelusa', nombre: 'Pelusa', texto: 'Pelo negro, ojos verdes. Duerme donde hay calor y sabe antes que tú cuando alguien se sienta en el banco. Si bufa, no te des vuelta todavía.\n— E.' },
+      { id: 'caras', nombre: 'Las caras blancas', texto: 'Vecinos. Traen la ropa empapada y la vuelven a lavar, como si esta vez sí se fuera a secar. No te miran; no lo tomes a mal. Dales el cambio y déjalos tranquilos.\n— R.' },
+      { id: 'nino', nombre: 'El niño', texto: 'A veces viene uno chiquito, de la mano. Pone la palma abierta en el vidrio de las lavadoras. No le preguntes por su calcetín.\n— S.' },
+      { id: 'mascaras', nombre: 'Las máscaras negras', texto: 'Administración del Embalse. No hablan: habla la impresora. Lo que ordenan se hace, y lo que dice el teléfono sigue valiendo. Cuando se van, deja de oler a agua estancada.\n— D.' },
+      { id: 'el', nombre: 'Él', texto: 'Sombrero, abrigo largo, el banco amarillo. Pregunta la hora. No le contesté con la hora del reloj, y por eso puedo escribir esto. No lo mires a la cara.\n— T.' },
+      { id: 'pasajeros', nombre: 'El 86', texto: 'El autobús de Blackwood para enfrente dos veces por noche. Nunca vi a nadie subir. Los de adentro tienen la cara como los que vienen a lavar.\n— A.' },
+      { id: 'venado', nombre: 'El venado', texto: 'En el bosque hay un venado. No le tengas miedo al venado: tenle miedo a lo que lo hace correr.\n— A.' },
+      { id: 'lechuza', nombre: 'La lechuza', texto: 'Vive en el árbol seco y mira lo que tú no ves. Si deja de mirarte, mira hacia donde ella mira. Pero no te acerques.\n— R.' }
+    ],
     // Posdatas de la llamada (game.onPhoneAnswered): si esa noche tus fotos revelaron algo, quien llama lo sabe.
     posdata: {
       el: 'Y otra cosa: la foto donde sale él, bórrala. No la mires otra vez.',

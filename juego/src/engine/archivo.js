@@ -4,6 +4,7 @@
  * - Transmisiones de Radio Nocturna que escuchaste a las 02:40 (8).
  * - Llamadas del teléfono público que contestaste a las 03:50 (6).
  * - Órdenes de la Administración del Embalse que imprimió la impresora (12).
+ * - Cuaderno de campo: notas de los que estuvieron antes sobre cada ser de La Espuma y del bosque (8).
  * Se guarda en midnight-rinse/archivo; «Reiniciar todo» lo borra.
  */
 (function (MR) {
@@ -27,6 +28,7 @@
       d.charla = d.charla || {};
       d.entre = d.entre || {};
       d.boletin = d.boletin || {};
+      d.seres = d.seres || {};
       return d;
     }
 
@@ -42,6 +44,38 @@
     chat(key) { if (!this.data.charla[key]) { this.data.charla[key] = this.game.night || 1; this._save(); } }
     overheard(i) { if (!this.data.entre[i]) { this.data.entre[i] = this.game.night || 1; this._save(); } }
     bulletin(key, n) { if (!this.data.boletin[key + n]) { this.data.boletin[key + n] = this.game.night || 1; this._save(); } }
+    ser(id) { if (!this.data.seres[id]) { this.data.seres[id] = this.game.night || 1; this._save(); } }
+
+    /**
+     * Cuaderno de campo: anota a cada ser la primera vez que lo ves de verdad (en tu vista, cerca y con los ojos
+     * abiertos), o al acariciar a Pelusa, o cuando él te pregunta la hora. game.js lo llama dos veces por segundo.
+     */
+    seres(g) {
+      var s = this.data.seres;
+      var p = g.player;
+      if (p.eyesClosed) { return; }
+      var cam = p.camera;
+      var tmp = this.tmp || (this.tmp = new THREE.Vector3());
+      var ve = function (pos, alto, max) {
+        if (Math.hypot(pos.x - p.pos.x, pos.z - p.pos.z) > max) { return false; }
+        var v = tmp.set(pos.x, alto, pos.z).project(cam);
+        return Math.abs(v.x) < 0.85 && Math.abs(v.y) < 0.85 && v.z < 1;
+      };
+      var self = this;
+      if (!s.pelusa && g.gato && g.gato.pets > 0) { this.ser('pelusa'); }
+      if (!s.el && g.question) { this.ser('el'); }
+      if (!s.venado && g.venado && g.venado.seenSaid) { this.ser('venado'); }
+      if (!s.lechuza && g.lechuza && g.lechuza.seenSaid) { this.ser('lechuza'); }
+      (g.clientela ? g.clientela.visitors : []).forEach(function (v) {
+        var grp = v.model.group;
+        if (!grp.visible) { return; }
+        if (v.kind === 'cara' && !s.caras && v.state === 'llego' && ve(grp.position, 1.5, 6)) { self.ser('caras'); }
+        if (v.kind === 'mascara' && !s.mascaras && v.state === 'llego' && ve(grp.position, 1.6, 7)) { self.ser('mascaras'); }
+        if (v.child && !s.nino && v.child.model.group.visible && ve(v.child.model.group.position, 0.9, 6)) { self.ser('nino'); }
+      });
+      var ci = g.world.city;
+      if (!s.pasajeros && g.ciudad && g.ciudad.busStopped && ci && ci.bus && ci.bus.visible && ve(ci.bus.position, 1.8, 22)) { this.ser('pasajeros'); }
+    }
 
     _bulletinTotal() {
       var B = MR.HISTORIA.boletines;
@@ -50,9 +84,10 @@
 
     count() { return Object.keys(this.data.paginas).length + Object.keys(this.data.radio).length + Object.keys(this.data.telefono).length +
       Object.keys(this.data.ordenes).length + Object.keys(this.data.charla).length + Object.keys(this.data.entre).length +
-      Object.keys(this.data.boletin).length; }
+      Object.keys(this.data.boletin).length + Object.keys(this.data.seres).length; }
     total() { return MR.HISTORIA.paginas.length + MR.HISTORIA.radio.length + MR.HISTORIA.telefono.length +
-      MR.HISTORIA.blackwood.ordenes.length + this._chatTotal() + MR.HISTORIA.blackwood.entre.length + this._bulletinTotal(); }
+      MR.HISTORIA.blackwood.ordenes.length + this._chatTotal() + MR.HISTORIA.blackwood.entre.length + this._bulletinTotal() +
+      MR.HISTORIA.seres.length; }
 
     _chatTotal() {
       var ch = MR.HISTORIA.blackwood.charla;
@@ -100,6 +135,11 @@
           out.push({ grupo: 'Radio Nocturna: boletines', titulo: have ? temas[k] : MR.tf('{q} · ???', { q: MR.t(temas[k]) }),
             texto: line, encabezado: 'RADIO NOCTURNA · 94.1', hecho: have });
         });
+      });
+      MR.HISTORIA.seres.forEach(function (n, i) {
+        var have = !!d.seres[n.id];
+        out.push({ grupo: 'Cuaderno de campo', titulo: have ? n.nombre : MR.tf('Nota {n} · ???', { n: i + 1 }), texto: n.texto,
+          encabezado: 'CUADERNO DE CAMPO · AL MARGEN DEL REGISTRO', hecho: have });
       });
       MR.HISTORIA.blackwood.entre.forEach(function (ex, i) {
         var have = !!d.entre[i];

@@ -356,6 +356,8 @@
       this.bosque.update(dt);
       this.venado.update(dt);
       this.lechuza.update(dt);
+      this.seresAcc = (this.seresAcc || 0) + dt;
+      if (this.seresAcc >= 0.5) { this.seresAcc = 0; this.archivo.seres(this); }
       this.espejo.update(dt);
       if (!this.epilogue) { this.clientela.update(dt); }
       this.ciudad.update(dt);
